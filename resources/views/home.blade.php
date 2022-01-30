@@ -15,6 +15,15 @@
                     @endif
 
                     {{ __('You are logged in!') }}
+
+
+
+                    @can('read-component')
+                        <a class="btn btn-success" href="{{ route('tech.create') }}"> Create New Role</a>
+                    @endcan
+                    @auth
+                           <p class="text-center">123 </p>
+                    @endauth
                 </div>
             </div>
         </div>

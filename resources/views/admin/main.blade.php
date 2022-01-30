@@ -18,7 +18,7 @@
     @include('admin.sidebar')
     <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
-                @include('admin.content');
+                @include('admin.content')
         </div>
         <!-- /.content-wrapper -->
     @include('admin.control-sidebar')
