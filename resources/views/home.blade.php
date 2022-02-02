@@ -16,7 +16,8 @@
 
                     {{ __('You are logged in!') }}
 
-
+                        <a class="btn btn-warning" href="{{ route('link.handler', 'fuckinglinkingnotless50synBOLsehehelol') }}"> Тест ссылки 1</a>
+                        <a class="btn btn-primary" href="{{ route('link.handler', 'thislinkismysEcondtestlink') }}"> Тест ссылки 2</a>
 
                     @can('read-component')
                         <a class="btn btn-success" href="{{ route('tech.create') }}"> Create New Role</a>
