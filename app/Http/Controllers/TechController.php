@@ -26,10 +26,10 @@ class TechController extends Controller
             $user = Auth::user();
             //$user->assignRole('SuperAdmin');
             if($user->hasRole('SuperAdmin')){
-                print_r($user);
+                return 'autorized in tech';
             }
         }else{
-            print_r('Авторизируйтесь');
+            return 'not autorized';
         }
     }
 }
