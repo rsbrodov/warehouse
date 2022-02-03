@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TechController;
 
@@ -17,8 +18,9 @@ use App\Http\Controllers\TechController;
 Route::get('/', function () {
     return view('welcome');
 });
-
+//Route::get('/login', [TechController::class, 'create'])->name('login');
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/tech/create', [TechController::class, 'create'])->name('tech.create');
+Route::get('/tech/create/', [TechController::class, 'create'])->name('tech.create');
