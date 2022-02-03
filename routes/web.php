@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TechController;
-
+use App\Http\Controllers\YurkController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -23,4 +23,7 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/tech/create', [TechController::class, 'create'])->name('tech.create');
-Route::get('/tech/create/', [TechController::class, 'create'])->name('tech.create');
+
+Route::get('/yurk/link/{data}', [YurkController::class, 'linkHandler'])->name('link.handler');
+
+
