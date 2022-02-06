@@ -18,6 +18,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/yurk/user-create-view', [YurkController::class, 'userCreateView'])->name('yurk.user-create-view');
+Route::post('/yurk/user-create-form', [YurkController::class, 'userCreateForm'])->name('yurk.user-create-form');
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
