@@ -24,6 +24,13 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/tech/create', [TechController::class, 'create'])->name('tech.create');
 
+Route::get('/tech/create/', [TechController::class, 'create'])->name('tech.create');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
 Route::get('/yurk/link/{data}', [YurkController::class, 'linkHandler'])->name('link.handler');
 
 

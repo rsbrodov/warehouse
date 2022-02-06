@@ -5,6 +5,9 @@
         <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="/css/myauth.css">
+
+
+
         <section class="ftco-section">
             <div class="container">
                 <div class="row justify-content-center">
@@ -18,7 +21,6 @@
                             <div class="icon d-flex align-items-center justify-content-center">
                                 <span class="fa fa-user-o"></span>
                             </div>
-{{--                            <h3 class="text-center mb-4">Sign In</h3>--}}
                             <form method="POST" class="login-form" action="{{ route('login') }}">
                                 @csrf
                                 <div class="form-group">
@@ -64,5 +66,10 @@
 
 
     </div>
-    </div>
+
+{{--    <div id="app">--}}
+{{--        <login></login>--}}
+{{--    </div>--}}
+{{--</div>--}}
+{{--<script src="/js/app.js"></script>--}}
 @endsection
