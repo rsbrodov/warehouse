@@ -18,13 +18,17 @@ use App\Http\Controllers\YurkController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/yurk/user-create-view', [YurkController::class, 'userCreateView'])->name('yurk.user-create-view');
+Route::post('/yurk/user-create-form', [YurkController::class, 'userCreateForm'])->name('yurk.user-create-form');
+
 //Route::get('/login', [TechController::class, 'create'])->name('login');
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/tech/create', [TechController::class, 'create'])->name('tech.create');
-
-Route::get('/tech/create/', [TechController::class, 'create'])->name('tech.create');
 
 Auth::routes();
 
