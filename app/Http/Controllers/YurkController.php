@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Auth;
 
 class YurkController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function linkHandler($data)
     {
         $status = [
@@ -42,7 +47,14 @@ class YurkController extends Controller
         $users = new User;
         $users->name = $req->input('name');
         $users->email = $req->input('email');
+        $users->parent_id = Auth::id();
+        $users->status = 'MODERATED';
         //$users->save();
         return redirect()->route('home')->with('success', 'Пользователь ' . $users->name . ' был добавлен');
+    }
+
+    public function index2()
+    {
+        return view('home2');
     }
 }
