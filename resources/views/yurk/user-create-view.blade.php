@@ -1,5 +1,5 @@
 
-@extends('layouts.app')
+@extends('admin.main')
 @section('content')
 <h1>Привет, {{$user_login}}! Твой ID: {{$user_id}} </h1>
 <h1>Создание пользователя</h1>

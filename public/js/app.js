@@ -5332,7 +5332,7 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      axios.post('api/login', this.form).then(function (prevent) {
+      axios.post('api/auth/login', this.form).then(function (prevent) {
         //this.getMyHeaderLinks();
         //this.$pusher.push('/cabinet')
         console.log(123);
