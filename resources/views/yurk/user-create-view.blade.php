@@ -1,6 +1,6 @@
-
-@extends('layouts.app')
+@extends('admin.main')
 @section('content')
+    <?use Illuminate\Support\Facades\Auth;?>
 <h1>Привет, {{$user_login}}! Твой ID: {{$user_id}} </h1>
 <h1>Создание пользователя</h1>
 <form action="{{route('yurk.user-create-form')}}" method="post">
@@ -14,8 +14,7 @@
         <input type="text" name="confirm_password" placeholder="Подтвердите пароль" id="confirm_password" class="form-control">
         <label for="email">Email</label>
         <input type="text" name="email" placeholder="Введите email" id="email" class="form-control">
-        <input type="hidden" name="parent_id" id="parent_id" value="{{$user_id}}" class="form-control">
-        <input type="hidden" name="status" id="status" value="moderated" class="form-control">
+
         <button type="submit" class="btn btn-success">Создать</button>
     </div>
 </form>
@@ -36,7 +35,7 @@
         @foreach($users as $user)
         <tr>
             <td>{{$user->id}}</td>
-            <td>{{$user->parent_id}}</td>
+            <td>{{\App\Models\User::find($user->parent_id)->first()->name}}</td>
             <td>{{$user->name}}</td>
             <td>{{$user->email}}</td>
             <td>{{$user->status}}</td>
