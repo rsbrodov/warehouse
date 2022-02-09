@@ -36,7 +36,7 @@ class HomeController extends Controller
                 $user_id = Auth::id();
                 $user = Auth::user();
                 $users = User::all();
-                return view('yurk.user-create-view', ['user_id' => $user_id, 'user_login' => $user->name, 'users' => $users]);
+                return view('users.user-create-view', ['user_id' => $user_id, 'user_login' => $user->name, 'users' => $users]);
             }
         }else{
             print_r('Авторизируйтесь');

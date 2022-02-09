@@ -1,9 +1,11 @@
-@extends('admin.main')
+{{--@extends('admin.main')--}}
+@extends('layouts.app')
 @section('content')
     <?use Illuminate\Support\Facades\Auth;?>
+    <div class="container">
 <h1>Привет, {{$user_login}}! Твой ID: {{$user_id}} </h1>
 <h1>Создание пользователя</h1>
-<form action="{{route('yurk.user-create-form')}}" method="post">
+<form action="{{route('users.user-create-form')}}" method="post">
     @csrf
     <div class="form-group">
         <label for="name">Имя</label>
@@ -20,6 +22,7 @@
 </form>
 </br>
 </br>
+
 <h1>Таблица Users</h1>
 <table class="table table-bordered table-hover">
     <tr>
@@ -28,9 +31,9 @@
         <td>Имя</td>
         <td>Email</td>
         <td>Статус</td>
-        <td>Ссылка для подтверждения</td>
         <td>Создан</td>
         <td>Обновлен</td>
+        <td>Действия</td>
     </tr>
         @foreach($users as $user)
         <tr>
@@ -39,10 +42,15 @@
             <td>{{$user->name}}</td>
             <td>{{$user->email}}</td>
             <td>{{$user->status}}</td>
-            <td>{{$user->link}}</td>
             <td>{{$user->created_at}}</td>
             <td>{{$user->updated_at}}</td>
+            <td>
+                <a href="{{route('users.user-edit-view', $user->id)}}" class="btn btn-outline-primary">Редактировать</a>
+                <a href="{{route('users.user-delete-button', $user->id)}}" class="btn btn-outline-danger">Удалить</a>
+                <a href="{{route('users.user-block-button', $user->id)}}" class="btn btn-outline-warning">Заблокировать</a>
+            </td>
         </tr>
         @endforeach
 </table>
+    </div>
 @endsection
