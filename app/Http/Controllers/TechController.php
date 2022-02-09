@@ -32,4 +32,8 @@ class TechController extends Controller
             return 'not autorized';
         }
     }
+    public function index()
+    {
+        return view('home');
+    }
 }
