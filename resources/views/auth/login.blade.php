@@ -70,6 +70,6 @@
 {{--    <div id="app">--}}
 {{--        <login></login>--}}
 {{--    </div>--}}
-{{--</div>--}}
-{{--<script src="/js/app.js"></script>--}}
+</div>
+<script src="/js/app.js"></script>
 @endsection

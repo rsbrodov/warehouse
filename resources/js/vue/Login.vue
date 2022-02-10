@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form autocomplete="off" @submit.prevent="login()" method="post">
+        <form autocomplete="off" @click="login()">
             <div class="form-group">
                 <label for="email">E-mail</label>
                 <input type="email" id="email" class="form-control" placeholder="user@example.com"
@@ -31,7 +31,7 @@
                 >Пароль должен быть {{$v.form.password.$params.minLength.min}} символов. Сейчас он {{form.password.length}}</small>
             </div>
 
-            <button type="submit" class="btn btn-default">Sign in</button>
+            <button class="btn btn-default">Sign in</button>
         </form>
     </div>
 </template>
@@ -58,20 +58,21 @@ export default {
     },
     methods:{
         login(){
-            if (this.$v.$invalid) {
+            /*if (this.$v.$invalid) {
                 this.$v.$touch()
                 return
-            }
-            axios.post('api/auth/login', this.form)
-                .then(prevent =>{
+            }*/
+            //axios.post('api/auth/login', this.form)
+                //.then(prevent =>{
                     //this.getMyHeaderLinks();
                     //this.$pusher.push('/cabinet')
                     console.log(123)
-                })
-                .catch(error =>{
+                //})
+                //.catch(error =>{
 
-                })
+                //})
         }
-    }
+    },
+
 }
 </script>
