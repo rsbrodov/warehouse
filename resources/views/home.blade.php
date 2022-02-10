@@ -12,9 +12,10 @@
                     @can('read-component')
                         <a class="btn btn-success" href="{{ route('tech.create') }}"> Create New Role</a>
                     @endcan
-                    @auth
+
+                    <? if(Auth::guard('api')) {?>
                            <p class="text-center">123 </p>
-                    @endauth
+                    <?}?>
                 </div>
             </div>
     </div>

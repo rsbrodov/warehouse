@@ -4,6 +4,7 @@ use App\Http\Controllers\TechController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,5 +27,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::post('me', [AuthController::class, 'me']);
+
 });
 Route::get('/tech/create/', [TechController::class, 'create'])->name('tech.create');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index']);

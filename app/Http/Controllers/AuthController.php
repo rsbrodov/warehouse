@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use JWTAuth;
+use JWTFactory;
 
 class AuthController extends Controller
 {
+    /*use JWTAuth;
+    use JWTFactory;*/
     /**
      * Create a new AuthController instance.
      *
@@ -23,9 +27,12 @@ class AuthController extends Controller
      */
     public function login()
     {
+
+        //return 123;
         $credentials = request(['email', 'password']);
 
-        if (! $token = auth()->attempt($credentials)) {
+        //if (! $token = auth()->attempt($credentials)) {
+        if (! $token = JWTAuth::attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
@@ -76,7 +83,8 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            //'expires_in' => auth()->factory()->getTTL() * 60
+            'expires_in' => JWTFactory::getTTL() * 60
         ]);
     }
 }
