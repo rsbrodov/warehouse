@@ -2,7 +2,7 @@
 @section('content')
 {{--    <h1>Привет, {{$user_login}}! Твой ID: {{$user_id}} </h1>--}}
     <h1>Создание пользователя</h1>
-    <form action="{{route('yurk.user-create-form')}}" method="post">
+    <form action="{{route('users.user-create-form')}}" method="post">
         @csrf
         <div class="form-group">
             <label for="name">Имя</label>

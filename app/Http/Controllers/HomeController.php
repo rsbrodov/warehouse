@@ -27,12 +27,27 @@ class HomeController extends Controller
      */
     public function index()
     {
-        //return view('home');
+
         if(Auth::guard('web')->check()) {
             return view('home');
             return 'web auth';
         }elseif(Auth::guard('api')->check()) {
             return 'api auth';
+        }else{
+          return 'not auth';
+    }
+      
+    public function index2()
+    {
+        if(Auth::check()){
+            $user = Auth::user();
+            //$user->assignRole('SuperAdmin');
+            if($user->hasRole('SuperAdmin')){
+                $user_id = Auth::id();
+                $user = Auth::user();
+                $users = User::all();
+                return view('users.user-create-view', ['user_id' => $user_id, 'user_login' => $user->name, 'users' => $users]);
+            }
         }else{
             return 'not auth';
         }
