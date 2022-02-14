@@ -33,10 +33,11 @@ class HomeController extends Controller
             return 'web auth';
         }elseif(Auth::guard('api')->check()) {
             return 'api auth';
-        }else{
-          return 'not auth';
+        }else {
+            return 'not auth';
+        }
     }
-      
+
     public function index2()
     {
         if(Auth::check()){
