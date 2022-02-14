@@ -24,9 +24,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-<
-Route::get('/yurk/user-create-view', [YurkController::class, 'userCreateView'])->name('yurk.user-create-view');
-Route::post('/yurk/user-create-form', [YurkController::class, 'userCreateForm'])->name('yurk.user-create-form');
+
 
 
 Route::get('/users/user-create-view', [UsersController::class, 'userCreateView'])->name('users.user-create-view');

@@ -31,3 +31,8 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
 });
 Route::get('/tech/create/', [TechController::class, 'create'])->name('tech.create');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index']);
+
+Route::group(['middleware' => 'api'], function ($router) {
+    Route::get('/dictionary/findDictionary/', [App\Http\Controllers\DictionaryController::class, 'index']);
+    Route::post('/dictionary/createdDictionary/', [App\Http\Controllers\DictionaryController::class, 'store']);
+});
