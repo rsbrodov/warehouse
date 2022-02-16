@@ -26,6 +26,10 @@ Route::get('/users/user-edit-view/edit{id}', [UsersController::class, 'userEditV
 Route::post('/users/user-edit-view/edit{id}', [UsersController::class, 'userEditForm'])->name('users.user-edit-form');
 Route::get('/users/user-delete-button/del{id}', [UsersController::class, 'userDeleteButton'])->name('users.user-delete-button');
 Route::get('/users/user-block-button/bl{id}', [UsersController::class, 'userBlockButton'])->name('users.user-block-button');
+Route::get('/users/user-activate-button/act{id}', [UsersController::class, 'userActivateButton'])->name('users.user-activate-button');
+
+Route::get('/users/roles-create-view', [UsersController::class, 'rolesCreateView'])->name('users.roles-create-view');
+Route::post('/users/roles-create-form/{type_action}', [UsersController::class, 'rolesCreateForm'])->name('users.roles-create-form');
 
 //Route::get('/login', [TechController::class, 'create'])->name('login');
 
