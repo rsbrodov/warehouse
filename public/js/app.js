@@ -5327,16 +5327,17 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     login: function login() {
-      if (this.$v.$invalid) {
-        this.$v.$touch();
-        return;
-      }
-
-      axios.post('api/auth/login', this.form).then(function (prevent) {
-        //this.getMyHeaderLinks();
-        //this.$pusher.push('/cabinet')
-        console.log(123);
-      })["catch"](function (error) {});
+      /*if (this.$v.$invalid) {
+          this.$v.$touch()
+          return
+      }*/
+      //axios.post('api/auth/login', this.form)
+      //.then(prevent =>{
+      //this.getMyHeaderLinks();
+      //this.$pusher.push('/cabinet')
+      console.log(123); //})
+      //.catch(error =>{
+      //})
     }
   }
 });
@@ -27942,10 +27943,9 @@ var render = function () {
     _c(
       "form",
       {
-        attrs: { autocomplete: "off", method: "post" },
+        attrs: { autocomplete: "off" },
         on: {
-          submit: function ($event) {
-            $event.preventDefault()
+          click: function ($event) {
             return _vm.login()
           },
         },
@@ -28043,11 +28043,7 @@ var render = function () {
             : _vm._e(),
         ]),
         _vm._v(" "),
-        _c(
-          "button",
-          { staticClass: "btn btn-default", attrs: { type: "submit" } },
-          [_vm._v("Sign in")]
-        ),
+        _c("button", { staticClass: "btn btn-default" }, [_vm._v("Sign in")]),
       ]
     ),
   ])

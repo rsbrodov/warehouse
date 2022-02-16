@@ -28,7 +28,7 @@
             <td>Имя</td>
             <td>Email</td>
             <td>Статус</td>
-            <td>Ссылка для подтверждения</td>
+            <td class="<?if($user->status == 'Blocked'){echo 'bg-warning'}elseif ()?>">Ссылка для подтверждения</td>
             <td>Создан</td>
             <td>Обновлен</td>
         </tr>
