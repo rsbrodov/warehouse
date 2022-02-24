@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\DictionaryController;
+use App\Http\Controllers\DictionaryElementController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -24,19 +26,40 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-
-
-Route::get('/users/user-create-view', [UsersController::class, 'userCreateView'])->name('users.user-create-view');
-Route::post('/users/user-create-form', [UsersController::class, 'userCreateForm'])->name('users.user-create-form');
-Route::get('/users/user-edit-view/edit{id}', [UsersController::class, 'userEditView'])->name('users.user-edit-view');
-Route::post('/users/user-edit-view/edit{id}', [UsersController::class, 'userEditForm'])->name('users.user-edit-form');
-Route::get('/users/user-delete-button/del{id}', [UsersController::class, 'userDeleteButton'])->name('users.user-delete-button');
-Route::get('/users/user-block-button/bl{id}', [UsersController::class, 'userBlockButton'])->name('users.user-block-button');
-Route::get('/users/user-activate-button/act{id}', [UsersController::class, 'userActivateButton'])->name('users.user-activate-button');
-
+// Справочники
+Route::get('/dictionary/', [DictionaryController::class, 'index'])->name('dictionary.index');
+Route::post('/dictionary/', [DictionaryController::class, 'store'])->name('dictionary.index');
+Route::get('/dictionary/create', [DictionaryController::class, 'create'])->name('dictionary.create');
+Route::post('/dictionary/', [DictionaryController::class, 'store'])->name('dictionary.store');
+Route::get('/dictionary/{id}', [DictionaryController::class, 'show'])->name('dictionary.show');
+Route::get('/dictionary/{id}/edit', [DictionaryController::class, 'edit'])->name('dictionary.edit');
+Route::post('/dictionary/{id}', [DictionaryController::class, 'update'])->name('dictionary.update');
+Route::delete('/dictionary/{id}', [DictionaryController::class, 'destroy'])->name('dictionary.destroy');
+Route::get('/dictionary/{id}/archive', [DictionaryController::class, 'archive'])->name('dictionary.archive');
+Route::get('/dictionary/{id}/delete', [DictionaryController::class, 'delete'])->name('dictionary.delete');
+// Элементы справочника
+Route::get('dictionary/{dic_id}/dictionary_element/', [DictionaryElementController::class, 'index'])->name('dictionary_element.index');
+Route::get('dictionary/{dic_id}/dictionary_element/create', [DictionaryElementController::class, 'create'])->name('dictionary_element.create');
+Route::post('dictionary/{dic_id}/dictionary_element/', [DictionaryElementController::class, 'store'])->name('dictionary_element.store');
+Route::get('dictionary/{dic_id}/dictionary_element/{id}', [DictionaryElementController::class, 'show'])->name('dictionary_element.show');
+Route::get('dictionary/{dic_id}/dictionary_element/{id}/edit', [DictionaryElementController::class, 'edit'])->name('dictionary_element.edit');
+Route::post('dictionary/{dic_id}/dictionary_element/{id}', [DictionaryElementController::class, 'update'])->name('dictionary_element.update');
+Route::delete('dictionary/{dic_id}/dictionary_element/{id}', [DictionaryElementController::class, 'destroy'])->name('dictionary_element.destroy');
+//Route::resource('users', 'usersController'); // это надо вообще? в инструкции было так, но с этой строчкой странно работает:)
 Route::get('/users/roles-create-view', [UsersController::class, 'rolesCreateView'])->name('users.roles-create-view');
 Route::post('/users/roles-create-form/{type_action}', [UsersController::class, 'rolesCreateForm'])->name('users.roles-create-form');
+Route::get('/users/', [UsersController::class, 'index'])->name('users.index');
+Route::get('/users/create', [UsersController::class, 'create'])->name('users.create');
+Route::post('/users/', [UsersController::class, 'store'])->name('users.store');
+Route::get('/users/{id}', [UsersController::class, 'show'])->name('users.show');
+Route::get('/users/{id}/edit', [UsersController::class, 'edit'])->name('users.edit');
+Route::post('/users/{id}', [UsersController::class, 'update'])->name('users.update'); // put почему-то не работает
+Route::delete('/users/{id}', [UsersController::class, 'destroy'])->name('users.destroy');
+Route::get('/users/{id}/activate', [UsersController::class, 'activate'])->name('users.activate');
+Route::get('/users/{id}/block', [UsersController::class, 'block'])->name('users.block');
+Route::get('/users/{id}/delete', [UsersController::class, 'delete'])->name('users.delete');
+
+
 
 
 Auth::routes();

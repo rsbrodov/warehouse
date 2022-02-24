@@ -4,7 +4,7 @@
     <?use Illuminate\Support\Facades\Auth;?>
     <div class="container">
         <h1>Редактирование данных пользователя {{$edit_user->name}}</h1>
-        <form action="{{route('users.user-edit-view', [$edit_user])}}" method="post">
+        <form action="{{route('users.update', [$edit_user])}}" method="post">
             @csrf
             <div class="form-group">
                 <label for="name">Имя</label>
