@@ -34,5 +34,16 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index']);
 
 Route::group(['middleware' => 'api'], function ($router) {
     Route::get('/dictionary/findDictionary/', [App\Http\Controllers\DictionaryController::class, 'index']);
-    Route::post('/dictionary/createdDictionary/', [App\Http\Controllers\DictionaryController::class, 'store']);
+    Route::post('/dictionary/createdDictionary/', [App\Http\Controllers\DictionaryController::class, 'store'])->middleware('auth:api');
+    Route::put('/dictionary/updatedDictionary/{id}', [App\Http\Controllers\DictionaryController::class, 'update'])->middleware('auth:api');
+    Route::delete('/dictionary/deletedDictionary/{id}', [App\Http\Controllers\DictionaryController::class, 'destroy'])->middleware('auth:api');
+});
+
+
+Route::group(['middleware' => 'api'], function ($router) {
+    Route::get('/dictionary/findElementDictionaryID/{id}', [App\Http\Controllers\DictionaryElementController::class, 'index']);//получение элементов по dictionary_id
+    Route::get('/dictionary/findElementDictionaryCode/{code}', [App\Http\Controllers\DictionaryElementController::class, 'indexCode']);//получение элементов по dictionary_id
+    Route::post('/dictionary/createdElementDictionary/', [App\Http\Controllers\DictionaryElementController::class, 'store'])->middleware('auth:api');
+    Route::put('/dictionary/updatedElementDictionary/{id}', [App\Http\Controllers\DictionaryElementController::class, 'update'])->middleware('auth:api');
+    Route::delete('/dictionary/deletedElementDictionary/{id}', [App\Http\Controllers\DictionaryElementController::class, 'destroy'])->middleware('auth:api');
 });

@@ -30,7 +30,7 @@ class HomeController extends Controller
 
         if(Auth::guard('web')->check()) {
             return view('home');
-            return 'web auth';
+            //return 'web auth';
         }elseif(Auth::guard('api')->check()) {
             return 'api auth';
         }else {

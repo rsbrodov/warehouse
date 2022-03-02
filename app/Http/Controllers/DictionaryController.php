@@ -32,8 +32,8 @@ class DictionaryController extends Controller
             }
             return view('dictionary.index', ['dictionaries' => $dictionary]);
         } else if (Auth::guard('api')->check()) {
-            $dictionary = Dictionary::with('user')->get();
-            return $dictionary;
+            $dictionary = Dictionary::where(['archive'=> 0, 'created_author' => Auth::guard('api')->user()->id])->with('created_author:id,name')->with('updated_author:id,name')->get();
+            return response()->json($dictionary);
         } else {
             return 'not auth';
         }
@@ -44,6 +44,7 @@ class DictionaryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function create()
     {
         if (Auth::guard('web')->check()) {
@@ -59,10 +60,14 @@ class DictionaryController extends Controller
      */
     public function store(Request $request)
     {
-        if (Auth::guard('web')->check()) {
-            $request->validate([
-                'name' => 'required',
+        $request->validate([
+                'name' => 'required|max:255',
+                'code' => 'required',
+                'archive' => 'boolean',
+                'description' => 'nullable',
+
             ]);
+        if (Auth::guard('web')->check()) {
             $new_dictionary = Dictionary::create([
                 'code' => $request->input('code'),
                 'name' => $request->input('name'),
@@ -71,14 +76,16 @@ class DictionaryController extends Controller
                 'created_author' => Auth::guard('web')->user()->id,
                 'updated_author' => Auth::guard('web')->user()->id
             ]);
-
             return redirect()->route('dictionary.index')->with('success', 'Справочник ' . $new_dictionary->name . ' был добавлен');
         } else if (Auth::guard('api')->check()) {
-            $dic = Dictionary::create(['code' => $request['code'], 'name' => $request['name'], 'description' => $request['description'], 'archive' => $request['archive'], 'created_author' => Auth::guard('api')->user()->id, 'updated_author' => Auth::guard('api')->user()->id]);
-            return $request;
+            
+            $dic = Dictionary::create(['code'=>$request['code'], 'name'=> $request['name'], 'description'=> $request['description'], 'archive'=>$request['archive'], 'created_author'=>Auth::guard('api')->user()->id, 'updated_author'=>Auth::guard('api')->user()->id]);
+            $dictionary = Dictionary::find($dic->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
+            return response()->json($dictionary);
         } else {
             return 'not auth';
         }
+
     }
 
     /**
@@ -121,10 +128,18 @@ class DictionaryController extends Controller
      */
     public function update(Request $request, $id)
     {
+      
+        $request->validate([
+            'name' => 'required|max:255',
+            'code' => 'required',
+            'archive' => 'boolean',
+            'description' => 'nullable',
+
+        ]);
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
-                $edit_dictionary = Dictionary::where('id', $id)->first();
+                $edit_dictionary = Dictionary::find($id);
                 $edit_dictionary->name = $request->input('name');
                 $edit_dictionary->description = $request->input('description');
                 $edit_dictionary->code = $request->input('code');
@@ -132,9 +147,22 @@ class DictionaryController extends Controller
                 $edit_dictionary->save();
                 return redirect()->route('dictionary.index')->with('success', 'Справочник ' . $edit_dictionary->name . ' был отредактирован');
             }
-        } else {
-            print_r('Авторизируйтесь');
+        }else if (Auth::guard('api')->check()) {
+
+        
+          $dictionary = Dictionary::find($id);
+          $dictionary->name = $request['name'];
+          $dictionary->code = $request['code'];
+          $dictionary->description = $request['description'];
+          $dictionary->archive = $request['archive'];
+          $dictionary->updated_author = Auth::guard('api')->user()->id;
+          $dictionary->save();
+          $dictionary = Dictionary::find($id)->with('created_author:id,name')->with('updated_author:id,name')->get();
+          return response()->json($dictionary);
+        }else {
+            return 'not auth';
         }
+
     }
 
     /**
@@ -163,15 +191,22 @@ class DictionaryController extends Controller
     }
     public function destroy($id)
     {
+
         if (Auth::guard('web')->check()) {
                 $user = Auth::guard('web')->user();
                 if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
-                $dictionary = Dictionary::find($id);
-                $dictionary->delete();
+                  $dictionary = Dictionary::find($id);
+                  $dictionary->delete();
                 return redirect()->route('dictionary.index')->with('success', 'Справочник ' . $dictionary->name . ' был уничтожен');
-            }
-        } else {
-            print_r('Авторизируйтесь');
+                }
+        }else if (Auth::guard('api')->check()) {
+          $dictionary = Dictionary::find($id);
+          if($dictionary){
+              $dictionary->delete();
+              return response()->json('item was deleted');
+          }
+        }else{
+              return response()->json('item not found');
         }
     }
 }

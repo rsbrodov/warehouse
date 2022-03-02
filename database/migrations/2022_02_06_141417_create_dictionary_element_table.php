@@ -17,7 +17,7 @@ class CreateDictionaryElementTable extends Migration
             $table->uuid('id')->primary();
             //$table->uuid('dictionary_id')->unsigned()->index();
             $table->uuid('dictionary_id')->nullable(false);
-            $table->foreign('dictionary_id')->references('id')->on('dictionary');
+            $table->foreign('dictionary_id')->references('id')->on('dictionary')->onDelete('cascade');;
             $table->string('value', 250);
             $table->dateTime('created_at');
             $table->bigInteger('created_author')->unsigned()->index();
