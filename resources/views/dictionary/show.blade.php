@@ -22,9 +22,9 @@
             @endif
                 ">{{ $dictionary->archive?'Да':'Нет' }}</div>
             <strong>Содержит элементов:</strong> {{ \App\Models\DictionaryElement::where('dictionary_id', $dictionary->id)->count() }}<br>
-            <strong>Кем создан:</strong> {{ User::where('id', $dictionary->created_author)->first()->name }}<br>
+            <strong>Кем создан:</strong> {{ \App\Models\User::where('id', $dictionary->created_author)->first()->name }}<br>
             <strong>Время создания:</strong> {{ $dictionary->created_at }}<br>
-            <strong>Кем обновлен:</strong> {{ User::where('id', $dictionary->updated_author)->first()->name }}<br>
+            <strong>Кем обновлен:</strong> {{ \App\Models\User::where('id', $dictionary->updated_author)->first()->name }}<br>
             <strong>Время обновления:</strong> {{ $dictionary->updated_at }}<br>
 
             <a href="{{route('dictionary.index')}}" class="btn btn-primary form-control">Вернуться</a>

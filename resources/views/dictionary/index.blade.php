@@ -1,6 +1,7 @@
-<? use \App\Models\User; ?>
+
 @extends('admin.main')
 @section('content')
+
     <div>
         <a class="btn btn-info" href="{{ route('home') }}"> Домой</a>
         <div class="d-flex justify-content-center"><h1>Справочники</h1></div>
@@ -23,9 +24,9 @@
                     <td>{{$dictionary->name}}</td>
                     <td>{{$dictionary->description}}</td>
                     <td>{{$dictionary->archive?'Да':'Нет'}}</td>
-                    <td {{$dictionary->created_author == Auth::guard('web')->user()->id?'class="bg-danger"':''}}>{{User::where('id', $dictionary->created_author)->first()->name}}</td>
+                    <td {{$dictionary->created_author == Auth::guard('web')->user()->id?'class="bg-danger"':''}}>{{\App\Models\User::where('id', $dictionary->created_author)->first()->name}}</td>
                     <td>{{$dictionary->created_at}}</td>
-                    <td>{{User::where('id', $dictionary->updated_author)->first()->name}}</td>
+                    <td>{{\App\Models\User::where('id', $dictionary->updated_author)->first()->name}}</td>
                     <td>{{$dictionary->updated_at}}</td>
                     <td>
                         <a href="{{route('dictionary.show', ($dictionary->id))}}"
