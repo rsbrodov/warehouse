@@ -157,7 +157,7 @@ class UsersController extends Controller
     }
 
 
-     public function destroy($id)
+    public function destroy($id)
     {
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
@@ -199,12 +199,54 @@ class UsersController extends Controller
                         $role->givePermissionTo($permission);
                     }
                 } else if ($type_action == 'permission') {
-                    Permission::create(['name' => $req->input('permission')]);
+                    //dd($req->input());
+                    $permission = Permission::create(['name' => $req->input('permission')]);
+                    $roles = Role::all();
+                    //dd($roles);
+                    foreach ($roles as $role) {
+                        foreach ($req->input('roles') as $r) {
+                            if ($role->name == $r) {
+                                //print_r($role->name.' == '. $r.'</br>');
+                                $role->givePermissionTo($req->input('permission'));
+                            }
+                        }
+                    }
                 }
                 return redirect()->route('users.roles-create-view');
             }
         } else {
             print_r('Авторизируйтесь');
         }
+    }
+
+    public function assignRole(Request $req)
+    {
+        //todo:
+        if (Auth::guard('web')->check()) {
+            $user = Auth::guard('web')->user();
+            if ($user->hasRole('SuperAdmin')) {
+
+                foreach ($req->input('users') as $user_id) {
+                    dd($user_id);
+                    $users = User::where('id', $user_id)->first();
+                    $users->assignRole($req->input('role'));
+                }
+                return redirect()->route('users.roles-create-view');
+            }
+        } else {
+            print_r('Авторизируйтесь');
+        }
+    }
+
+    public function deleteRole($id)
+    {
+        Role::where('id', $id)->delete();
+        return redirect()->route('users.roles-create-view');
+    }
+
+    public function deletePermission($id)
+    {
+        Permission::where('id', $id)->delete();
+        return redirect()->route('users.roles-create-view');
     }
 }

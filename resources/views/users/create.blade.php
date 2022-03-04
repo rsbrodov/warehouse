@@ -1,6 +1,5 @@
 <?use \App\Models\User;?>
-{{--@extends('admin.main')--}}
-@extends('layouts.app')
+@extends('admin.main')
 @section('content')
 <div class="container">
 

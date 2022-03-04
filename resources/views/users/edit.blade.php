@@ -1,5 +1,4 @@
-{{--@extends('admin.main')--}}
-@extends('layouts.app')
+@extends('admin.main')
 @section('content')
     <?use Illuminate\Support\Facades\Auth;?>
     <div class="container">

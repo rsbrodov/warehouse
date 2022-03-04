@@ -1,8 +1,7 @@
 <? use \App\Models\User; ?>
-{{--@extends('admin.main')--}}
-@extends('layouts.app')
+@extends('admin.main')
 @section('content')
-    <div>
+    <div class="container">
         <a href="{{route('dictionary.index')}}" class="btn btn-outline-info form-control">Вернуться</a>
         <div class="d-flex justify-content-center"><h1>Элементы справочника {{\App\Models\Dictionary::where('id', $dictionary_id)->first()->name}}</h1></div>
         <table class="table table-bordered table-hover">
@@ -23,7 +22,7 @@
                     <td>{{User::where('id', $dictionary_element->updated_author)->first()->name}}</td>
                     <td>{{$dictionary_element->updated_at}}</td>
                     <td>
-                        <a href="{{route('dictionary_element.show', [$dictionary_id, $dictionary_element->id])}}"
+                        <a href="{{route('dictionary_element.show', [$dictionary_element->id])}}"
                            class="btn btn-success ">
                             <img src="{{asset('images/show.png')}}" width="32" height="32" alt="">
                         </a>

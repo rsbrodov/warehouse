@@ -1,7 +1,7 @@
 <? use \App\Models\User; ?>
 @extends('admin.main')
 @section('content')
-    <div>
+    <div class="container" xmlns:white-space="http://www.w3.org/1999/xhtml">
         <a class="btn btn-info" href="{{ route('home') }}"> Домой</a>
         <div class="d-flex justify-content-center"><h1>Пользователи</h1></div>
         <table class="table table-bordered table-hover">
@@ -34,7 +34,7 @@
                         ">{{$user->status}}</td>
                     <td>{{$user->created_at}}</td>
                     <td>{{$user->updated_at}}</td>
-                    <td>
+                    <td nowrap>
                         <a href="{{route('users.show', ($user->id))}}"
                            class="btn btn-success ">
                             <img src="{{asset('images/show.png')}}" width="32" height="32" alt="">

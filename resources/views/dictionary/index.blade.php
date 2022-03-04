@@ -2,7 +2,7 @@
 @extends('admin.main')
 @section('content')
 
-    <div>
+    <div class="container">
         <a class="btn btn-info" href="{{ route('home') }}"> Домой</a>
         <div class="d-flex justify-content-center"><h1>Справочники</h1></div>
         <table class="table table-bordered table-hover">
@@ -28,7 +28,7 @@
                     <td>{{$dictionary->created_at}}</td>
                     <td>{{\App\Models\User::where('id', $dictionary->updated_author)->first()->name}}</td>
                     <td>{{$dictionary->updated_at}}</td>
-                    <td>
+                    <td nowrap>
                         <a href="{{route('dictionary.show', ($dictionary->id))}}"
                            class="btn btn-info ">
                             <img src="{{asset('images/show.png')}}" width="32" height="32" alt="">
