@@ -1,10 +1,8 @@
 <?use \App\Models\User;?>
-{{--@extends('admin.main')--}}
-@extends('layouts.app')
+@extends('admin.main')
 @section('content')
     <div class="container">
-
-        <h1>Создание элемента справочника {{$dictionary_id}}</h1>
+        <h1>Создание элемента справочника {{\App\Models\Dictionary::find($dictionary_id)->name}}</h1>
         <form action="{{route('dictionary_element.store', $dictionary_id)}}" method="post">
             @csrf
             <div class="form-group row">

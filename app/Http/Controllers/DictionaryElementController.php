@@ -80,6 +80,7 @@ class DictionaryElementController extends Controller
                 'created_author' => Auth::guard('web')->user()->id,
                 'updated_author' => Auth::guard('web')->user()->id
             ]);
+
             return redirect()->route('dictionary_element.index', $dictionary_id)->with('success', 'Элемент ' . $new_dictionary_element->value . ' был добавлен');
         } else if (Auth::guard('api')->check()) {
             $dictionary = Dictionary::where(['id' => $request['dictionary_id']])->first();
