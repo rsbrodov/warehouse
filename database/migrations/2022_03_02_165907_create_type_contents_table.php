@@ -15,15 +15,19 @@ class CreateTypeContentsTable extends Migration
     {
         Schema::create('type_contents', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('id_global')->nullable();
+            $table->uuid('id_global');
             $table->string('name', 150);
-            $table->string('description', 500);
+            $table->string('description', 500)->nullable();
+            $table->uuid('owner')->nullable();
+            $table->string('icon', 150)->nullable();
+            $table->dateTime('active_from')->nullable();
+            $table->dateTime('active_after')->nullable();
             $table->enum('status', ['Draft', 'Published', 'Archive'])->default('Draft');
             $table->integer('version_major')->default('1');
-            $table->integer('version_minor')->default('1');
+            $table->integer('version_minor')->default('0');
             $table->string('api_url', 150)->unique();
-            $table->string('body', 1000);
-            $table->uuid('previous_template')->nullable();
+            $table->string('body', 1000)->nullable();
+            $table->uuid('based_type')->nullable();
             $table->dateTime('created_at');
             $table->bigInteger('created_author')->unsigned()->index();
             $table->foreign('created_author')->references('id')->on('users');
