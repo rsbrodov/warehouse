@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Traits\Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Traits\Uuids;
@@ -9,6 +10,9 @@ class TypeContent extends Model
 {
     use Uuids;
     use HasFactory;
+    use Uuids;
+    protected $table = 'type_contents';
+    
     protected $fillable = [
         'id_global',
         'name',
@@ -18,12 +22,19 @@ class TypeContent extends Model
         'active_from',
         'active_after',
         'status',
-        'version_major',
-        'version_minor',
         'api_url',
         'body',
-        'based_type',
+        'version_major',
+        'version_minor',
         'created_author',
         'updated_author',
     ];
+  
+    public function created_author() {
+        return $this->belongsTo(User::class, 'created_author');
+    }
+
+    public function updated_author() {
+        return $this->belongsTo(User::class, 'updated_author');
+    }
 }

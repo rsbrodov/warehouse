@@ -61,7 +61,7 @@ class DictionaryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-                'name' => 'required|max:255',
+                'name' => 'required|max:150',
                 'code' => 'required',
                 'archive' => 'boolean',
                 'description' => 'nullable',
@@ -78,7 +78,7 @@ class DictionaryController extends Controller
             ]);
             return redirect()->route('dictionary.index')->with('success', 'Справочник ' . $new_dictionary->name . ' был добавлен');
         } else if (Auth::guard('api')->check()) {
-            
+
             $dic = Dictionary::create(['code'=>$request['code'], 'name'=> $request['name'], 'description'=> $request['description'], 'archive'=>$request['archive'], 'created_author'=>Auth::guard('api')->user()->id, 'updated_author'=>Auth::guard('api')->user()->id]);
             $dictionary = Dictionary::find($dic->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
             return response()->json($dictionary);
@@ -128,7 +128,7 @@ class DictionaryController extends Controller
      */
     public function update(Request $request, $id)
     {
-      
+
         $request->validate([
             'name' => 'required|max:255',
             'code' => 'required',
@@ -149,7 +149,7 @@ class DictionaryController extends Controller
             }
         }else if (Auth::guard('api')->check()) {
 
-        
+
           $dictionary = Dictionary::find($id);
           $dictionary->name = $request['name'];
           $dictionary->code = $request['code'];
