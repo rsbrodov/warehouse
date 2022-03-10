@@ -26,11 +26,11 @@
                            class="btn btn-success ">
                             <img src="{{asset('images/show.png')}}" width="32" height="32" alt="">
                         </a>
-                        <a href="{{route('dictionary_element.edit', [$dictionary_id, $dictionary_element->id])}}"
+                        <a href="{{route('dictionary_element.edit', $dictionary_element->id)}}"
                            class="btn btn-primary ">
                             <img src="{{asset('images/edit.png')}}" width="32" height="32" alt="">
                         </a>
-                        <form action="/dictionary/{{$dictionary_id}}/dictionary_element/{{$dictionary_element->id}}" method="POST">
+                        <form action="dictionary_element/{{$dictionary_element->id}}" method="POST">
                             @method('DELETE')
                             @csrf
                             <button type="submit" class="btn btn-danger"><img src="{{asset('images/delete.png')}}" width="32" height="32" alt=""></button>
