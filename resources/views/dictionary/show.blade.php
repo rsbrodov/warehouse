@@ -1,6 +1,5 @@
 <? use \App\Models\User; ?>
-{{--@extends('admin.main')--}}
-@extends('layouts.app')
+@extends('admin.main')
 @section('content')
     <div class="container">
         <h1> {{ $dictionary->name }}</h1>

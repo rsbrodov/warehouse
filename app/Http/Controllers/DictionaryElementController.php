@@ -80,6 +80,7 @@ class DictionaryElementController extends Controller
                 'created_author' => Auth::guard('web')->user()->id,
                 'updated_author' => Auth::guard('web')->user()->id
             ]);
+            //dd(123);
             return redirect()->route('dictionary_element.index', $dictionary_id)->with('success', 'Элемент ' . $new_dictionary_element->value . ' был добавлен');
         } else if (Auth::guard('api')->check()) {
             $dictionary = Dictionary::where(['id' => $request['dictionary_id']])->first();
@@ -118,6 +119,7 @@ class DictionaryElementController extends Controller
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
                 $edit_element_dictionary = DictionaryElement::where('id', $id)->first();
+                //dd($edit_element_dictionary);
                 return view('dictionary_element.edit', ['edit_element_dictionary' => $edit_element_dictionary]);
             }
         } else {
@@ -138,15 +140,14 @@ class DictionaryElementController extends Controller
             'dictionary_id' => 'required|max:255',
             'value' => 'required|max:255',
         ]);
-
-
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
                 $edit_element_dictionary = DictionaryElement::where('id', $id)->first();
                 $edit_element_dictionary->value = $request->input('value');
                 $edit_element_dictionary->save();
-                return redirect()->route('dictionary_element.index', $id)->with('success', 'Элемент ' . $edit_element_dictionary->value . ' был отредактирован');
+                //dd($edit_element_dictionary);
+                return redirect()->route('dictionary_element.index', $edit_element_dictionary->dictionary_id)->with('success', 'Элемент ' . $edit_element_dictionary->value . ' был отредактирован');
             }
         } else if (Auth::guard('api')->check()) {
             $dictionary_element = DictionaryElement::find($id);
@@ -175,7 +176,7 @@ class DictionaryElementController extends Controller
             if($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
                 $element_dictionary = DictionaryElement::find($id);
                 $element_dictionary->delete();
-                return redirect()->route('dictionary_element.index', $id)->with('success', 'Справочник ' . $element_dictionary->value . ' был уничтожен');
+                return redirect()->route('dictionary_element.index', $element_dictionary->dictionary_id)->with('success', 'Справочник ' . $element_dictionary->value . ' был уничтожен');
             }else {
                 print_r('Авторизируйтесь');
             }

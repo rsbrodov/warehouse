@@ -1,5 +1,4 @@
-{{--@extends('admin.main')--}}
-@extends('layouts.app')
+@extends('admin.main')
 @section('content')
     <?use Illuminate\Support\Facades\Auth;?>
     <div class="container">
@@ -16,11 +15,12 @@
                 <label for="code">Код</label>
                 <input type="text" class="form-control" id="code" name="code" placeholder="Введите код"
                        value="{{$edit_dictionary->code}}">
-                <label for="archive" class="col-md-4 col-form-label text-md-right">Архив</label>
+                <label for="archive">Архив</label>
                 <select id="archive" type="text" class="form-control" name="archive">
                     <option {{$edit_dictionary->archive?'':'selected'}} value="0">Нет</option>
                     <option {{$edit_dictionary->archive?'selected':''}} value="1">Да</option>
                 </select>
+                <br>
                 <button type="submit" class="btn btn-success">Редактировать</button>
             </div>
         </form>
