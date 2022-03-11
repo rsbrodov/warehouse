@@ -26,14 +26,14 @@ class TypeContentController extends Controller
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin')) {
-                $type_content = TypeContent::all();
+                $type_contents =TypeContent::where('created_author', Auth::guard('web')->user()->id)->with('created_authors:id,name')->with('updated_authors:id,name')->get();
             } else if ($user->hasRole('Admin')) {
-                $type_content = TypeContent::where('created_author', Auth::id())->orWhere('id', Auth::id())->get();
+                $type_contents = TypeContent::where('created_author',Auth::guard('web')->user()->id)->with('created_authors:id,name')->with('updated_authors:id,name')->get();
             }
-            return view('type_content.index')->with('type_content', $type_content);
+            return view('type_content.index')->with('type_contents', $type_contents);
         } else if (Auth::guard('api')->check()) {
-            $type_content = TypeContent::where(['created_author' => Auth::guard('api')->user()->id])->with('created_author:id,name')->with('updated_author:id,name')->get();
-            return response()->json($type_content);
+            $type_contents = TypeContent::where(['created_author' => Auth::guard('api')->user()->id])->with('created_authors:id,name')->with('updated_authors:id,name')->get();
+            return response()->json($type_contents);
         } else {
             return 'not auth';
         }
