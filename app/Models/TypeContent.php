@@ -5,14 +5,12 @@ namespace App\Models;
 use App\Http\Traits\Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Http\Traits\Uuids;
 class TypeContent extends Model
 {
     use Uuids;
     use HasFactory;
-    use Uuids;
     protected $table = 'type_contents';
-    
+
     protected $fillable = [
         'id_global',
         'name',
@@ -29,7 +27,7 @@ class TypeContent extends Model
         'created_author',
         'updated_author',
     ];
-  
+
     public function created_author() {
         return $this->belongsTo(User::class, 'created_author');
     }

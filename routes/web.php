@@ -62,7 +62,7 @@ Route::get('/users/{id}/block', [UsersController::class, 'block'])->name('users.
 Route::get('/users/{id}/delete', [UsersController::class, 'delete'])->name('users.delete');
 // СПРАВОЧНИКИ
 Route::get('/dictionary/', [DictionaryController::class, 'index'])->name('dictionary.index');
-Route::post('/dictionary/', [DictionaryController::class, 'store'])->name('dictionary.index');
+Route::post('/dictionary/', [DictionaryController::class, 'store'])->name('dictionary.store');
 Route::get('/dictionary/create', [DictionaryController::class, 'create'])->name('dictionary.create');
 Route::post('/dictionary/', [DictionaryController::class, 'store'])->name('dictionary.store');
 Route::get('/dictionary/{id}', [DictionaryController::class, 'show'])->name('dictionary.show');
@@ -72,9 +72,9 @@ Route::delete('/dictionary/{id}', [DictionaryController::class, 'destroy'])->nam
 Route::get('/dictionary/{id}/archive', [DictionaryController::class, 'archive'])->name('dictionary.archive');
 Route::get('/dictionary/{id}/delete', [DictionaryController::class, 'delete'])->name('dictionary.delete');
 // ЭЛЕМЕНТЫ СПРАВОЧНИКОВ
-Route::get('dictionary/{dic_id}/dictionary_element/', [DictionaryElementController::class, 'index'])->name('dictionary_element.index');
-Route::get('dictionary/{dic_id}/dictionary_element/create', [DictionaryElementController::class, 'create'])->name('dictionary_element.create');
-Route::post('dictionary/{dic_id}/dictionary_element/', [DictionaryElementController::class, 'store'])->name('dictionary_element.store');
+Route::get('dictionary/{id}/dictionary_element/', [DictionaryElementController::class, 'index'])->name('dictionary_element.index');
+Route::get('dictionary/{id}/dictionary_element/create', [DictionaryElementController::class, 'create'])->name('dictionary_element.create');
+Route::post('dictionary/{id}/dictionary_element/', [DictionaryElementController::class, 'store'])->name('dictionary_element.store');
 Route::get('dictionary_element/{id}', [DictionaryElementController::class, 'show'])->name('dictionary_element.show');
 Route::get('dictionary_element/{id}/edit', [DictionaryElementController::class, 'edit'])->name('dictionary_element.edit');
 Route::post('dictionary_element/{id}', [DictionaryElementController::class, 'update'])->name('dictionary_element.update');

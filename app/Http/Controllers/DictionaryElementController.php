@@ -69,7 +69,6 @@ class DictionaryElementController extends Controller
     public function store(Request $request, $dictionary_id)
     {
         $request->validate([
-            'dictionary_id' => 'required|max:255',
             'value' => 'required|max:255',
 
         ]);
@@ -80,7 +79,7 @@ class DictionaryElementController extends Controller
                 'created_author' => Auth::guard('web')->user()->id,
                 'updated_author' => Auth::guard('web')->user()->id
             ]);
-            //dd(123);
+
             return redirect()->route('dictionary_element.index', $dictionary_id)->with('success', 'Элемент ' . $new_dictionary_element->value . ' был добавлен');
         } else if (Auth::guard('api')->check()) {
             $dictionary = Dictionary::where(['id' => $request['dictionary_id']])->first();
@@ -137,7 +136,6 @@ class DictionaryElementController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'dictionary_id' => 'required|max:255',
             'value' => 'required|max:255',
         ]);
         if (Auth::guard('web')->check()) {
