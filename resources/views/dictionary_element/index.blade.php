@@ -30,7 +30,7 @@
                            class="btn btn-primary ">
                             <img src="{{asset('images/edit.png')}}" width="32" height="32" alt="">
                         </a>
-                        <form action="dictionary_element/{{$dictionary_element->id}}" method="POST">
+                        <form action="{{ route('dictionary_element.destroy', $dictionary_element->id) }}" method="POST">
                             @method('DELETE')
                             @csrf
                             <button type="submit" class="btn btn-danger"><img src="{{asset('images/delete.png')}}" width="32" height="32" alt=""></button>
