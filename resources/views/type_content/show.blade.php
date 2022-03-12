@@ -33,7 +33,7 @@
             <strong>Кем создан:</strong>{{\App\Models\User::where('id', $type_content->created_author)->first()->name}}<br>
             <strong>Обновлен:</strong> {{ $type_content->updated_at }}<br>
             <strong>Кем обновлен:</strong> {{\App\Models\User::where('id', $type_content->updated_author)->first()->name}}<br>
-            <a href="{{route('type_content.index')}}" class="btn btn-primary form-control">Вернуться</a>
+            <a href="{{route('type-content.index')}}" class="btn btn-primary form-control">Вернуться</a>
         </div>
     </div>
 @endsection

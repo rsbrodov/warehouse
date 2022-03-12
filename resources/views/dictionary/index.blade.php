@@ -36,7 +36,7 @@
                         <a href="{{route('dictionary.edit', ($dictionary->id))}}" class="btn btn-primary">
                             <img src="{{asset('images/edit.png')}}" width="32" height="32" alt="">
                         </a>
-                        <a href="{{route('dictionary_element.index', $dictionary->id)}}" class="btn btn-success">
+                        <a href="{{route('dictionary-element.index', $dictionary->id)}}" class="btn btn-success">
                             <img src="{{asset('images/add.png')}}" width="32" height="32" alt="">
                         </a>
                         <a href="{{route('dictionary.archive', $dictionary->id)}}" class="btn btn-secondary">
