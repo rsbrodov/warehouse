@@ -3,6 +3,7 @@
 @section('content')
     <div class="" xmlns:white-space="http://www.w3.org/1999/xhtml">
         <div class="d-flex justify-content-center"><h1>Типы контента</h1></div>
+
         <table class="table table-bordered table-hover">
             <tr>
 {{--                <th>ID</th>--}}
@@ -24,9 +25,9 @@
                 <th>Обновитель</th>
                 <th>Действия</th>
             </tr>
-            @foreach($type_content as $type_content)
+            @foreach($type_contents as $type_content)
                 <tr>
-                    <td>{{$type_content->id}}</td>
+                    <td>{{$type_content['id']}}</td>
                     <td>{{$type_content->id_global}}</td>
                     <td>{{$type_content->name}}</td>
                     <td>{{$type_content->description}}</td>
@@ -50,9 +51,9 @@
                     <td>{{$type_content->body}}</td>
                     <td>{{$type_content->based_type}}</td>
                     <td>{{$type_content->created_at}}</td>
-                    <td>{{\App\Models\User::where('id', $type_content->created_author)->first()->name}}</td>
+                    <td>@if(!empty($type_content->created_authors)) {{$type_content->created_authors->name}}@endif</td>
                     <td>{{$type_content->updated_at}}</td>
-                    <td>{{\App\Models\User::where('id', $type_content->updated_author)->first()->name}}</td>
+                    <td>@if(!empty($type_content->updated_authors)) {{$type_content->updated_authors->name}}@endif</td>
                     <td nowrap>
                         <a href="{{route('type-content.show', ($type_content->id))}}"
                            class="btn btn-success ">
