@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TypeContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Nette\Utils\Type;
 
@@ -26,16 +27,22 @@ class TypeContentController extends Controller
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin')) {
-                $type_contents =TypeContent::where('created_author', Auth::guard('web')->user()->id)->with('created_authors:id,name')->with('updated_authors:id,name')->get();
-            } else if ($user->hasRole('Admin')) {
-                $type_contents = TypeContent::where('created_author',Auth::guard('web')->user()->id)->with('created_authors:id,name')->with('updated_authors:id,name')->get();
+                $type_contents = TypeContent::where('created_author',
+                    Auth::guard('web')->user()->id)->with('created_authors:id,name')->with('updated_authors:id,name')->get();
+            } else {
+                if ($user->hasRole('Admin')) {
+                    $type_contents = TypeContent::where('created_author',
+                        Auth::guard('web')->user()->id)->with('created_authors:id,name')->with('updated_authors:id,name')->get();
+                }
             }
             return view('type_content.index')->with('type_contents', $type_contents);
-        } else if (Auth::guard('api')->check()) {
-            $type_contents = TypeContent::where(['created_author' => Auth::guard('api')->user()->id])->with('created_authors:id,name')->with('updated_authors:id,name')->get();
-            return response()->json($type_contents);
         } else {
-            return 'not auth';
+            if (Auth::guard('api')->check()) {
+                $type_contents = TypeContent::where(['created_author' => Auth::guard('api')->user()->id])->with('created_authors:id,name')->with('updated_authors:id,name')->get();
+                return response()->json($type_contents);
+            } else {
+                return 'not auth';
+            }
         }
     }
 
@@ -89,7 +96,8 @@ class TypeContentController extends Controller
                 'created_author' => $user->id,
                 'updated_author' => $user->id
             ]);
-            return redirect()->route('type-content.index')->with('success', 'Тип контента ' . $new_type_content->name . ' был создан');
+            return redirect()->route('type-content.index')->with('success',
+                'Тип контента ' . $new_type_content->name . ' был создан');
         } elseif (Auth::guard('api')->check()) {
 
             $new_type_content = TypeContent::create([
@@ -181,25 +189,28 @@ class TypeContentController extends Controller
                 $type->body = $request['body'];
                 $type->updated_author = Auth::guard('web')->user()->id;
                 $type->save();
-                return redirect()->route('type-content.index')->with('success', 'Тип ' . $type->name . ' был отредактирован');
+                return redirect()->route('type-content.index')->with('success',
+                    'Тип ' . $type->name . ' был отредактирован');
             }
-        } else if (Auth::guard('api')->check()) {
-            $type = TypeContent::find($id);
-            //print_r($id);exit;
-            $type->name = $request['name'];
-            $type->description = $request['description'];
-            $type->owner = $request['owner'];
-            $type->icon = $request['icon'];
-            $type->active_from = $request['active_from'];
-            $type->active_after = $request['active_after'];
-            $type->api_url = $request['api_url'];
-            $type->body = $request['body'];
-            $type->updated_author = Auth::guard('api')->user()->id;
-            $type->save();
-            $type_content = TypeContent::find($type->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
-            return response()->json($type_content);
         } else {
-            return 'not auth';
+            if (Auth::guard('api')->check()) {
+                $type = TypeContent::find($id);
+                //print_r($id);exit;
+                $type->name = $request['name'];
+                $type->description = $request['description'];
+                $type->owner = $request['owner'];
+                $type->icon = $request['icon'];
+                $type->active_from = $request['active_from'];
+                $type->active_after = $request['active_after'];
+                $type->api_url = $request['api_url'];
+                $type->body = $request['body'];
+                $type->updated_author = Auth::guard('api')->user()->id;
+                $type->save();
+                $type_content = TypeContent::find($type->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
+                return response()->json($type_content);
+            } else {
+                return 'not auth';
+            }
         }
     }
 
@@ -213,14 +224,16 @@ class TypeContentController extends Controller
     {
         if (Auth::guard('web')->check()) {
             //...
-        } else if (Auth::guard('api')->check()) {
-            $type_content = TypeContent::find($id);
-            if ($type_content) {
-                $type_content->delete();
-                return response()->json('item was deleted');
-            }
         } else {
-            return response()->json('item not found');
+            if (Auth::guard('api')->check()) {
+                $type_content = TypeContent::find($id);
+                if ($type_content) {
+                    $type_content->delete();
+                    return response()->json('item was deleted');
+                }
+            } else {
+                return response()->json('item not found');
+            }
         }
     }
 
@@ -229,11 +242,44 @@ class TypeContentController extends Controller
         if (Auth::guard('web')->check()) {
             $type_contents = TypeContent::where('id_global', $id)->get();
             return view('type_content.all-version-type-content')->with('type_contents', $type_contents);
-        } else if (Auth::guard('api')->check()) {
-            $type_content = TypeContent::where('id_global', $id)->get();
-            return response()->json($type_content);
         } else {
-            return response()->json('item not found');
+            if (Auth::guard('api')->check()) {
+                $type_content = TypeContent::where('id_global', $id)->get();
+                return response()->json($type_content);
+            } else {
+                return response()->json('item not found');
+            }
+        }
+    }
+
+    public function createNewVersion($id, $parametr)
+    {
+        if ($parametr == 'major' || $parametr == 'minor') {
+           /* $TypeContent = TypeContent::where('id_global', $id)->get();
+            $TypeContent2 = TypeContent::find($TypeContent->id);*/
+            //$users = DB::table('type_contents')->where('id_global', $id)->get();
+            /*
+             * ЧЕМ ЭТОТ КОД $TypeContent = TypeContent::where('id_global', $id)->get();
+             * ОТЛИЧАЕТСЯ ОТ ЭТОГО??? $flight = TypeContent::where('id_global', $id)->orderBy($fer, 'desc')->first()
+             * В YII2 НИЧЕМ БЫ НЕ ОТЛИЧАЛСЯ
+             * А ТУТ ВЕРХНИЙ НЕ РАБОТАЕТ
+             * А НИЖНИЙ РАБОТАЕТ
+             * ИДИОТИЗМ В ЧИСТОМ ВИДЕ
+             * Laravel помойка!
+             * */
+            $parametrDb = ($parametr == 'major') ? 'version_major' : 'version_minor';
+            $typeContent = TypeContent::where('id_global', $id)->orderBy($parametrDb, 'desc')->first();
+            $newTypeContent = $typeContent->replicate();
+            $newTypeContent->$parametrDb = $newTypeContent->$parametrDb + 1;
+            $newTypeContent->api_url = $newTypeContent->api_url. '.' . $parametrDb . '.' . $newTypeContent->$parametrDb;
+
+            if($newTypeContent->save()){
+                return redirect()->route('type-content.get-all-version', $typeContent->id_global)->with('success', 'Новая версия успешно создана');
+            } else {
+                return redirect()->back()->with('error', 'Что-то пошло не так');
+            }
+        } else {
+            return redirect()->back()->with('error', 'Что-то пошло не так');
         }
     }
 }
