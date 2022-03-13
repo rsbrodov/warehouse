@@ -272,7 +272,6 @@ class TypeContentController extends Controller
             $newTypeContent = $typeContent->replicate();
             $newTypeContent->$parametrDb = $newTypeContent->$parametrDb + 1;
             $newTypeContent->api_url = $newTypeContent->api_url. '.' . $parametrDb . '.' . $newTypeContent->$parametrDb;
-
             if($newTypeContent->save()){
                 return redirect()->route('type-content.get-all-version', $typeContent->id_global)->with('success', 'Новая версия успешно создана');
             } else {
