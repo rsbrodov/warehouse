@@ -8,25 +8,32 @@
             <div class="form-group row">
                 <label for="name" class="col-md-4 col-form-label text-md-right">Название</label>
                 <div class="col-md-6">
-                    <input type="text" name="name" placeholder="Введите название" id="name" class="form-control">
+                    <input autofocus type="text" name="name" placeholder="Введите название" id="name"
+                           class="form-control">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="api_url" class="col-md-4 col-form-label text-md-right">API URL</label>
+                <div class="col-md-6">
+                    <input type="text" name="api_url" placeholder="Automatic..." id="api_url" class="form-control">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="description" class="col-md-4 col-form-label text-md-right">Описание</label>
                 <div class="col-md-6">
-                    <input type="text" name="description" placeholder="Введите описание" id="description" class="form-control">
+                    <textarea name="description" placeholder="Введите описание" id="description" class="form-control"></textarea>
                 </div>
             </div>
             <div class="form-group row">
                 <label for="active_from" class="col-md-4 col-form-label text-md-right">Активен с...</label>
                 <div class="col-md-6">
-                    <input type="date" name="active_from" placeholder="Введите активен с" id="active_from" class="form-control">
+                    <input type="datetime-local" name="active_from" placeholder="Введите активен с" id="active_from" class="form-control">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="active_after" class="col-md-4 col-form-label text-md-right">Активен по...</label>
                 <div class="col-md-6">
-                    <input type="date" name="active_after" placeholder="Введите активен по" id="active_after" class="form-control">
+                    <input type="datetime-local" name="active_after" placeholder="Введите активен по" id="active_after" class="form-control">
                 </div>
             </div>
             <?php $icons_array = ['one', 'two', 'three']; ?>
@@ -40,7 +47,35 @@
                     </select>
                 </div>
             </div>
-            <button type="submit" class="btn btn-success">Создать</button>
+            <button id="btn1" type="submit" class="btn btn-success">Создать</button>
         </form>
     </div>
+    <script>
+        //todo: убрать перед загрузкой:)
+        let focus = 0;
+        $('#name').focusout(function () {
+            focus++;
+            if (focus >= 5) {
+                $('#btn1').text('Ты серьезно? Уже ' + focus + ' исправлений...');
+            }
+        });
+        function urlLit(w, v) {
+            var tr = 'a b v g d e ["zh","j"] z i y k l m n o p r s t u f h c ch sh ["shh","shch"] ~ y ~ e yu ya ~ ["jo","e"]'.split(' ');
+            var ww = '';
+            w = w.toLowerCase();
+            for (i = 0; i < w.length; ++i) {
+                cc = w.charCodeAt(i);
+                ch = (cc >= 1072 ? tr[cc - 1072] : w[i]);
+                if (ch.length < 3) ww += ch; else ww += eval(ch)[v];
+            }
+            return (ww.replace(/[^a-zA-Z0-9\-]/g, '-').replace(/[-]{2,}/gim, '-').replace(/^\-+/g, '').replace(/\-+$/g, ''));
+        }
+        $(document).ready(function () {
+            $('#name').bind('change keyup input click', function () {
+                $('#api_url').val(urlLit($('#name').val(), 0))
+            });
+        });
+    </script>
 @endsection
+
+

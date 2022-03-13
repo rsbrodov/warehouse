@@ -8,7 +8,7 @@
             <div class="form-group row">
                 <label for="value" class="col-md-4 col-form-label text-md-right">Значение</label>
                 <div class="col-md-6">
-                    <input type="text" name="value" placeholder="Введите значение" id="value" class="form-control">
+                    <input autofocus type="text" name="value" placeholder="Введите значение" id="value" class="form-control">
                 </div>
             </div>
             <button type="submit" class="btn btn-success">Создать</button>

@@ -84,8 +84,10 @@ Route::get('/type-content/', [TypeContentController::class, 'index'])->name('typ
 Route::get('/type-content/shablon-version-index', [TypeContentController::class, 'shablonVersionIndex'])->name('type-content.shablon-version-index');
 Route::get('/type-content/create', [TypeContentController::class, 'create'])->name('type-content.create');
 Route::post('/type-content/', [TypeContentController::class, 'store'])->name('type-content.store');
+Route::get('/all-version-type-content/{id}', [TypeContentController::class, 'getAllVersionTypeContent'])->name('type-content.get-all-version'); // норм что здесь нет type_content?
 Route::get('/type-content/{id}', [TypeContentController::class, 'show'])->name('type-content.show');
 Route::get('/type-content/{id}/edit', [TypeContentController::class, 'edit'])->name('type-content.edit');
+
 Route::post('/type-content/{id}', [TypeContentController::class, 'update'])->name('type-content.update');
 Route::delete('/type-content/{id}', [TypeContentController::class, 'destroy'])->name('type-content.destroy');
 
