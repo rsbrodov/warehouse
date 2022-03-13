@@ -64,8 +64,10 @@
                     <div class="col-md-6">
                         <textarea name="body" placeholder="Введите..." id="body" class="form-control">{{$type_content->body}}</textarea>
                     </div>
-                </div>
+                </div>\
                 <button type="submit" class="btn btn-success">Редактировать</button>
+                <a class="btn btn-primary" href="{{ route('users.show', $user) }}">{{ $user->email }}</a>
+                <a class="btn btn-primary" href="{{ route('users.show', $user) }}">{{ $user->email }}</a>
             </div>
         </form>
     </div>

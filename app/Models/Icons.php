@@ -10,5 +10,10 @@ class Icons extends Model
 {
     use HasFactory, Uuids;
 
+    protected $table = 'icons';
+    protected $fillable = [
+        'code',
+        'name',
+    ];
 
 }
