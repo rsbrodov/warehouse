@@ -89,7 +89,7 @@ class TypeContentController extends Controller
                 'created_author' => $user->id,
                 'updated_author' => $user->id
             ]);
-            return redirect()->route('type-content.index')->with('success', 'Тип контента ' . $new_type_content->name . ' был создан');
+            return redirect()->route('type-content.index')->with('success', 'Тип контента ' . $new_type_content->name . ' успешно создан');
         } elseif (Auth::guard('api')->check()) {
 
             $new_type_content = TypeContent::create([
@@ -181,7 +181,7 @@ class TypeContentController extends Controller
                 $type->body = $request['body'];
                 $type->updated_author = Auth::guard('web')->user()->id;
                 $type->save();
-                return redirect()->route('type-content.index')->with('success', 'Тип ' . $type->name . ' был отредактирован');
+                return redirect()->route('type-content.index')->with('success', 'Тип ' . $type->name . ' успешно отредактирован');
             }
         } else if (Auth::guard('api')->check()) {
             $type = TypeContent::find($id);

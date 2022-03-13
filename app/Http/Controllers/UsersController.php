@@ -60,7 +60,7 @@ class UsersController extends Controller
             } else if ($user->hasRole('Admin')) {
                 $new_user->assignRole($req->input('role')); //назначить роль юзеру
             }
-            return redirect()->route('users.index')->with('success', 'Пользователь ' . $new_user->name . ' был добавлен');
+            return redirect()->route('users.index')->with('success', 'Пользователь ' . $new_user->name . ' успешно добавлен');
         } else {
             print_r('Авторизируйтесь');
         }
@@ -94,7 +94,7 @@ class UsersController extends Controller
                 $edit_user->name = $req->input('name');
                 $edit_user->email = $req->input('email');
                 $edit_user->save();
-                return redirect()->route('users.index')->with('success', 'Пользователь ' . $edit_user->name . ' был отредактирован');
+                return redirect()->route('users.index')->with('success', 'Пользователь ' . $edit_user->name . ' успешно отредактирован');
             }
         } else {
             print_r('Авторизируйтесь');
@@ -111,7 +111,7 @@ class UsersController extends Controller
                     $act_user->status = 'ACTIVATED';
                 }
                 $act_user->save();
-                return redirect()->route('users.index')->with('success', 'Пользователь ' . $act_user->name . ' был активирован');
+                return redirect()->route('users.index')->with('success', 'Пользователь ' . $act_user->name . ' активирован!');
             }
         } else {
             print_r('Авторизируйтесь');
@@ -124,13 +124,17 @@ class UsersController extends Controller
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
                 $del_user = User::where('id', $id)->first();
+                $message = ''; $type_message = 'success';
                 if ($del_user->status == 'BLOCKED') {
                     $del_user->status = 'MODERATED';
+                    $message = 'Пользователь ' . $del_user->name . ' разблокирован и находится на модерации';
                 } else {
                     $del_user->status = 'BLOCKED';
+                    $message = 'Пользователь ' . $del_user->name . ' заблокирован!';
+                    $type_message = 'warning';
                 }
                 $del_user->save();
-                return redirect()->route('users.index')->with('success', 'Пользователь ' . $del_user->name . ' был заблокирован');
+                return redirect()->route('users.index')->with($type_message, $message);
             }
         } else {
             print_r('Авторизируйтесь');
@@ -143,13 +147,17 @@ class UsersController extends Controller
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
                 $del_user = User::where('id', $id)->first();
+                $message = ''; $type_message = 'success';
                 if ($del_user->status == 'DELETED') {
                     $del_user->status = 'MODERATED';
+                    $message = 'Пользователь ' . $del_user->name . ' восстановлен и находится на модерации';
                 } else {
                     $del_user->status = 'DELETED';
+                    $message = 'Пользователь ' . $del_user->name . ' удален!';
+                    $type_message = 'info';
                 }
                 $del_user->save();
-                return redirect()->route('users.index')->with('success', 'Пользователь ' . $del_user->name . ' был удален');
+                return redirect()->route('users.index')->with($type_message, $message);
             }
         } else {
             print_r('Авторизируйтесь');
@@ -174,7 +182,6 @@ class UsersController extends Controller
 
     public function rolesCreateView()
     {
-        //dd(123);
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin')) {
@@ -193,26 +200,30 @@ class UsersController extends Controller
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin')) {
+                $message = ''; $type_message = 'success';
                 if ($type_action == 'role') {
                     $role = Role::create(['name' => $req->input('role')]);
+                    $message = 'Роль '. $role->name. ' успешно создана. Роли даны полномочия: ';
                     foreach ($req->input('permissions') as $permission) {
                         $role->givePermissionTo($permission);
+                        $message .= $permission.', ';
                     }
+                    $message = substr($message, 0, -2);
                 } else if ($type_action == 'permission') {
-                    //dd($req->input());
                     $permission = Permission::create(['name' => $req->input('permission')]);
                     $roles = Role::all();
-                    //dd($roles);
+                    $message = 'Полномочие '. $permission->name. ' успешно создано. Полномочие присвоено следующим ролям: ';
                     foreach ($roles as $role) {
                         foreach ($req->input('roles') as $r) {
                             if ($role->name == $r) {
-                                //print_r($role->name.' == '. $r.'</br>');
                                 $role->givePermissionTo($req->input('permission'));
+                                $message .= $role->name.', ';
                             }
                         }
                     }
+                    $message = substr($message, 0, -2);
                 }
-                return redirect()->route('users.roles-create-view');
+                return redirect()->route('users.roles-create-view')->with($type_message, $message);
             }
         } else {
             print_r('Авторизируйтесь');
@@ -225,13 +236,15 @@ class UsersController extends Controller
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin')) {
-
+                $message = ''; $type_message = 'success';
+                $message = 'Роль '. $req->input('role'). ' выдана следующим пользователям: ';
                 foreach ($req->input('users') as $user_id) {
-                    dd($user_id);
                     $users = User::where('id', $user_id)->first();
                     $users->assignRole($req->input('role'));
+                    $message .= $user_id.', ';
                 }
-                return redirect()->route('users.roles-create-view');
+                $message = substr($message, 0, -2);
+                return redirect()->route('users.roles-create-view')->with($type_message, $message);
             }
         } else {
             print_r('Авторизируйтесь');

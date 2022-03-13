@@ -24,16 +24,16 @@
                     <td>
                         <a href="{{route('dictionary-element.show', [$dictionary_element->id])}}"
                            class="btn btn-success ">
-                            <img src="{{asset('images/show.png')}}" width="32" height="32" alt="">
+                            <i class="fa fa-eye fa-lg" aria-hidden="true"></i>
                         </a>
                         <a href="{{route('dictionary-element.edit', $dictionary_element->id)}}"
                            class="btn btn-primary ">
-                            <img src="{{asset('images/edit.png')}}" width="32" height="32" alt="">
+                            <i class="fa fa-edit fa-lg" aria-hidden="true"></i>
                         </a>
                         <form action="{{ route('dictionary-element.destroy', $dictionary_element->id) }}" method="POST">
                             @method('DELETE')
                             @csrf
-                            <button type="submit" class="btn btn-danger"><img src="{{asset('images/delete.png')}}" width="32" height="32" alt=""></button>
+                            <button type="submit" class="btn btn-danger"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></button>
                         </form>
                     </td>
                 </tr>

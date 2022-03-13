@@ -62,7 +62,7 @@
                                 <label for="users">{{$user->name}}</label>
                             </div>
                         @endforeach
-                        <button type="submit" class="btn btn-success">Создать</button>
+                        <button type="submit" class="btn btn-success">Выполнить</button>
                     </div>
                 </form>
             </div>
@@ -87,7 +87,7 @@
                             <td>{{$role->updated_at}}</td>
                             <td><a href="{{route('users.delete-role', ($role->id))}}"
                                    class="btn btn-success ">
-                                    <img src="{{asset('images/delete.png')}}" width="32" height="32" alt="">
+                                    <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
                                 </a></td>
                         </tr>
                     @endforeach
@@ -110,7 +110,7 @@
                             <td>{{$permission->updated_at}}</td>
                             <td><a href="{{route('users.delete-permission', ($permission->id))}}"
                                    class="btn btn-success ">
-                                    <img src="{{asset('images/delete.png')}}" width="32" height="32" alt="">
+                                    <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
                                 </a></td>
                         </tr>
                     @endforeach

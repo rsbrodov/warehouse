@@ -37,7 +37,7 @@
 
                 <li class="nav-item">
                     <a href="{{ route('users.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-users"></i>
+                        <i class="fa fa-users fa-lg" aria-hidden="true"></i>
                         <p>Пользователи{{--<i class="right fas fa-angle-left"></i>--}}
                         </p>
                     </a>
@@ -59,19 +59,19 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('dictionary.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-book-open"></i>
+                        <i class="fa fa-folder-open fa-lg" aria-hidden="true"></i>
                         <p>Справочники</p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('users.roles-create-view') }}" class="nav-link">
-                        <i class="nav-icon fas fa-hand-holding"></i>
+                        <i class="fa fa-puzzle-piece fa-lg" aria-hidden="true"></i>
                         <p>Роли/полномочия</p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('type-content.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-concierge-bell"></i>
+                        <i class="fa fa-coffee fa-lg" aria-hidden="true"></i>
                         <p>Сервис формирования контента</p>
                     </a>
                 </li>
@@ -136,7 +136,7 @@
                 <li class="nav-header">НАСТРОЙКИ</li>
                 <li class="nav-item">
                     <a href="../gallery.html" class="nav-link">
-                        <i class="nav-icon far fa-comment"></i>
+                        <i class="fa fa-comment-o fa-lg" aria-hidden="true"></i>
                         <p>
                             Чат
                         </p>
