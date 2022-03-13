@@ -13,7 +13,7 @@
                 <a class="btn btn-success" href="{{ route('tech.create') }}"> Create New Role</a>
             @endcan
             @auth
-                <p class="text-center">123 </p>
+                <p class="text-center">Auth </p>
             @endauth
         </div>
     </div>
