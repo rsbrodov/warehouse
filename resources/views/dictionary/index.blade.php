@@ -3,6 +3,7 @@
 @section('content')
 
     <div class="container">
+        <p></p>
         <a class="btn btn-info" href="{{ route('home') }}"> Домой</a>
         <div class="d-flex justify-content-center"><h1>Справочники</h1></div>
         <table class="table table-bordered table-hover">
