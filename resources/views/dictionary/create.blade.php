@@ -9,7 +9,7 @@
             <div class="form-group row">
                 <label for="name" class="col-md-4 col-form-label text-md-right">Название</label>
                 <div class="col-md-6">
-                    <input type="text" name="name" placeholder="Введите название" id="name" class="form-control">
+                    <input autofocus type="text" name="name" placeholder="Введите название" id="name" class="form-control">
                 </div>
             </div>
             <div class="form-group row">

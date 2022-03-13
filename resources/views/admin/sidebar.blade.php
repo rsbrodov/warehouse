@@ -70,7 +70,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('type_content.index') }}" class="nav-link">
+                    <a href="{{ route('type-content.index') }}" class="nav-link">
                         <i class="nav-icon fas fa-concierge-bell"></i>
                         <p>Сервис формирования контента</p>
                     </a>

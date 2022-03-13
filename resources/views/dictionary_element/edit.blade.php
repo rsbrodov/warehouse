@@ -3,7 +3,7 @@
     <?use Illuminate\Support\Facades\Auth;?>
     <div class="container">
         <h1>Редактирование элемента справочника {{$edit_element_dictionary->value}}</h1>
-        <form action="{{route('dictionary_element.update', [$edit_element_dictionary])}}" method="post">
+        <form action="{{route('dictionary-element.update', [$edit_element_dictionary])}}" method="post">
             @csrf
             <div class="form-group">
                 <label for="value">Значение</label>

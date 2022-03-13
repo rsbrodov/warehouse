@@ -22,15 +22,15 @@
                     <td>{{User::where('id', $dictionary_element->updated_author)->first()->name}}</td>
                     <td>{{$dictionary_element->updated_at}}</td>
                     <td>
-                        <a href="{{route('dictionary_element.show', [$dictionary_element->id])}}"
+                        <a href="{{route('dictionary-element.show', [$dictionary_element->id])}}"
                            class="btn btn-success ">
                             <img src="{{asset('images/show.png')}}" width="32" height="32" alt="">
                         </a>
-                        <a href="{{route('dictionary_element.edit', $dictionary_element->id)}}"
+                        <a href="{{route('dictionary-element.edit', $dictionary_element->id)}}"
                            class="btn btn-primary ">
                             <img src="{{asset('images/edit.png')}}" width="32" height="32" alt="">
                         </a>
-                        <form action="{{ route('dictionary_element.destroy', $dictionary_element->id) }}" method="POST">
+                        <form action="{{ route('dictionary-element.destroy', $dictionary_element->id) }}" method="POST">
                             @method('DELETE')
                             @csrf
                             <button type="submit" class="btn btn-danger"><img src="{{asset('images/delete.png')}}" width="32" height="32" alt=""></button>
@@ -39,6 +39,6 @@
                 </tr>
             @endforeach
         </table>
-        <a href="{{route('dictionary_element.create', $dictionary_id)}}" class="btn btn-primary form-control">Создать</a>
+        <a href="{{route('dictionary-element.create', $dictionary_id)}}" class="btn btn-primary form-control">Создать</a>
     </div>
 @endsection

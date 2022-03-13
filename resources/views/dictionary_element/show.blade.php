@@ -14,7 +14,7 @@
             <strong>Кем обновлен:</strong> {{ User::where('id', $dictionary_element->updated_author)->first()->name }}<br>
             <strong>Время обновления:</strong> {{ $dictionary_element->updated_at }}<br>
 
-            <a href="{{route('dictionary_element.index', $dictionary_element->dictionary_id)}}" class="btn btn-primary form-control">Вернуться</a>
+            <a href="{{route('dictionary-element.index', $dictionary_element->dictionary_id)}}" class="btn btn-primary form-control">Вернуться</a>
         </div>
     </div>
 @endsection

@@ -1,0 +1,72 @@
+@extends('admin.main')
+@section('content')
+    <?use Illuminate\Support\Facades\Auth;?>
+    <div class="container">
+        <h1>Редактирование типа контента {{$type_content->name}}</h1>
+        <form action="{{route('type-content.update', [$type_content])}}" method="post">
+            @csrf
+            <div class="form-group">
+                <div class="form-group row">
+                    <label for="name" class="col-md-4 col-form-label text-md-right">Наименование</label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Введите имя" value="{{$type_content->name}}">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="api_url" class="col-md-4 col-form-label text-md-right">API URL</label>
+                    <div class="col-md-6">
+                        <input type="text" name="api_url" placeholder="Automatic..." id="api_url" class="form-control" value="{{$type_content->api_url}}">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="description" class="col-md-4 col-form-label text-md-right">Описание</label>
+                    <div class="col-md-6">
+                    <textarea name="description" placeholder="Введите описание" id="description" class="form-control">{{$type_content->description}}</textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="active_from" class="col-md-4 col-form-label text-md-right">Активен с...</label>
+                    <div class="col-md-6">
+                        <input type="datetime-local" name="active_from" id="active_from" class="form-control"
+                               value="{{date('Y-m-d\TH:i', strtotime($type_content->active_from))}}">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="active_after" class="col-md-4 col-form-label text-md-right">Активен по...</label>
+                    <div class="col-md-6">
+                        <input type="datetime-local" name="active_after" id="active_after" class="form-control" value="{{date('Y-m-d\TH:i', strtotime($type_content->active_after))}}">
+                    </div>
+                </div>
+                <?php $status_array = ['Draft', 'Published', 'Archive']; ?>
+                <div class="form-group row">
+                    <label for="status" class="col-md-4 col-form-label text-md-right">Статус</label>
+                    <div class="col-md-6">
+                        <select id="status" type="text" class="form-control" name="status">
+                            @foreach($status_array as $status)
+                                <option @if($type_content->status === $status) selected @endif value="{{$status}}">{{$status}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <?php $icons_array = ['one', 'two', 'three']; ?>
+                <div class="form-group row">
+                    <label for="icon" class="col-md-4 col-form-label text-md-right">Иконка</label>
+                    <div class="col-md-6">
+                        <select id="icon" type="text" class="form-control" name="icon">
+                            @foreach($icons_array as $icon)
+                                <option @if($type_content->icon === $icon) selected @endif value="{{$icon}}">{{$icon}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="body" class="col-md-4 col-form-label text-md-right">Тело</label>
+                    <div class="col-md-6">
+                        <textarea name="body" placeholder="Введите..." id="body" class="form-control">{{$type_content->body}}</textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">Редактировать</button>
+            </div>
+        </form>
+    </div>
+@endsection

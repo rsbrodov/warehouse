@@ -89,7 +89,7 @@ class TypeContentController extends Controller
                 'created_author' => $user->id,
                 'updated_author' => $user->id
             ]);
-            return redirect()->route('type_content.index')->with('success', 'Тип контента ' . $new_type_content->name . ' был создан');
+            return redirect()->route('type-content.index')->with('success', 'Тип контента ' . $new_type_content->name . ' был создан');
         } elseif (Auth::guard('api')->check()) {
 
             $new_type_content = TypeContent::create([
@@ -135,9 +135,17 @@ class TypeContentController extends Controller
      * @param \App\Models\TypeContent $typeContent
      * @return \Illuminate\Http\Response
      */
-    public function edit(TypeContent $typeContent)
+    public function edit(TypeContent $typeContent, $id)
     {
-        //
+        if (Auth::guard('web')->check()) {
+            $user = Auth::guard('web')->user();
+            if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
+                $type_content = TypeContent::where('id', $id)->first();
+                return view('type_content.edit', ['type_content' => $type_content]);
+            }
+        } else {
+            print_r('Авторизируйтесь');
+        }
     }
 
     /**
@@ -155,11 +163,27 @@ class TypeContentController extends Controller
             'icon' => 'nullable|max:150',
             'active_from' => 'nullable|date',
             'active_after' => 'nullable|date',
-            'api_url' => 'required|max:150',
+            'api_url' => 'required|alpha_dash|max:150',
             'body' => 'nullable|max:1000',
 
         ]);
-        if (Auth::guard('api')->check()) {
+        if (Auth::guard('web')->check()) {
+            $user = Auth::guard('web')->user();
+            if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
+                $type = TypeContent::find($id);
+                $type->name = $request['name'];
+                $type->api_url = $request['api_url'];
+                $type->description = $request['description'];
+                $type->active_from = $request['active_from'];
+                $type->active_after = $request['active_after'];
+                $type->status = $request['status'];
+                $type->icon = $request['icon'];
+                $type->body = $request['body'];
+                $type->updated_author = Auth::guard('web')->user()->id;
+                $type->save();
+                return redirect()->route('type-content.index')->with('success', 'Тип ' . $type->name . ' был отредактирован');
+            }
+        } else if (Auth::guard('api')->check()) {
             $type = TypeContent::find($id);
             //print_r($id);exit;
             $type->name = $request['name'];
@@ -203,7 +227,8 @@ class TypeContentController extends Controller
     public function getAllVersionTypeContent($id)
     {
         if (Auth::guard('web')->check()) {
-            //...
+            $type_contents = TypeContent::where('id_global', $id)->get();
+            return view('type_content.all-version-type-content')->with('type_contents', $type_contents);
         } else if (Auth::guard('api')->check()) {
             $type_content = TypeContent::where('id_global', $id)->get();
             return response()->json($type_content);

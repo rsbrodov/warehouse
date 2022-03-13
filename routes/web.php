@@ -72,21 +72,23 @@ Route::delete('/dictionary/{id}', [DictionaryController::class, 'destroy'])->nam
 Route::get('/dictionary/{id}/archive', [DictionaryController::class, 'archive'])->name('dictionary.archive');
 Route::get('/dictionary/{id}/delete', [DictionaryController::class, 'delete'])->name('dictionary.delete');
 // ЭЛЕМЕНТЫ СПРАВОЧНИКОВ
-Route::get('dictionary/{id}/dictionary_element/', [DictionaryElementController::class, 'index'])->name('dictionary_element.index');
-Route::get('dictionary/{id}/dictionary_element/create', [DictionaryElementController::class, 'create'])->name('dictionary_element.create');
-Route::post('dictionary/{id}/dictionary_element/', [DictionaryElementController::class, 'store'])->name('dictionary_element.store');
-Route::get('dictionary_element/{id}', [DictionaryElementController::class, 'show'])->name('dictionary_element.show');
-Route::get('dictionary_element/{id}/edit', [DictionaryElementController::class, 'edit'])->name('dictionary_element.edit');
-Route::post('dictionary_element/{id}', [DictionaryElementController::class, 'update'])->name('dictionary_element.update');
-Route::delete('dictionary_element/{id}', [DictionaryElementController::class, 'destroy'])->name('dictionary_element.destroy');
+Route::get('dictionary/{id}/dictionary-element/', [DictionaryElementController::class, 'index'])->name('dictionary-element.index');
+Route::get('dictionary/{id}/dictionary-element/create', [DictionaryElementController::class, 'create'])->name('dictionary-element.create');
+Route::post('dictionary/{id}/dictionary-element/', [DictionaryElementController::class, 'store'])->name('dictionary-element.store');
+Route::get('dictionary-element/{id}', [DictionaryElementController::class, 'show'])->name('dictionary-element.show');
+Route::get('dictionary-element/{id}/edit', [DictionaryElementController::class, 'edit'])->name('dictionary-element.edit');
+Route::post('dictionary-element/{id}', [DictionaryElementController::class, 'update'])->name('dictionary-element.update');
+Route::delete('dictionary-element/{id}', [DictionaryElementController::class, 'destroy'])->name('dictionary-element.destroy');
 // ТИПЫ КОНТЕНТА
-Route::get('/type_content/', [TypeContentController::class, 'index'])->name('type_content.index');
-Route::get('/type_content/shablon-version-index', [TypeContentController::class, 'shablonVersionIndex'])->name('type_content.shablon-version-index');
-Route::get('/type_content/create', [TypeContentController::class, 'create'])->name('type_content.create');
-Route::post('/type_content/', [TypeContentController::class, 'store'])->name('type_content.store');
-Route::get('/type_content/{id}', [TypeContentController::class, 'show'])->name('type_content.show');
-Route::get('/type_content/{id}/edit', [TypeContentController::class, 'edit'])->name('type_content.edit');
-Route::post('/type_content/{id}', [TypeContentController::class, 'update'])->name('type_content.update');
-Route::delete('/type_content/{id}', [TypeContentController::class, 'destroy'])->name('type_content.destroy');
+Route::get('/type-content/', [TypeContentController::class, 'index'])->name('type-content.index');
+Route::get('/type-content/shablon-version-index', [TypeContentController::class, 'shablonVersionIndex'])->name('type-content.shablon-version-index');
+Route::get('/type-content/create', [TypeContentController::class, 'create'])->name('type-content.create');
+Route::post('/type-content/', [TypeContentController::class, 'store'])->name('type-content.store');
+Route::get('/all-version-type-content/{id}', [TypeContentController::class, 'getAllVersionTypeContent'])->name('type-content.get-all-version'); // норм что здесь нет type_content?
+Route::get('/type-content/{id}', [TypeContentController::class, 'show'])->name('type-content.show');
+Route::get('/type-content/{id}/edit', [TypeContentController::class, 'edit'])->name('type-content.edit');
+
+Route::post('/type-content/{id}', [TypeContentController::class, 'update'])->name('type-content.update');
+Route::delete('/type-content/{id}', [TypeContentController::class, 'destroy'])->name('type-content.destroy');
 
 
