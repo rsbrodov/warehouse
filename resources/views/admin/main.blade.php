@@ -22,6 +22,7 @@
 <!-- AdminLTE App -->
 <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
 <div class="wrapper">
+
 @include('admin.navbar')
 @include('admin.sidebar')
 <!-- Content Wrapper. Contains page content -->
@@ -30,7 +31,7 @@
 
 
 
-
+    @include('flash-message')
     <!-- Content Header (Page header) -->
         <div class="content-header">
             <div class="container-fluid">
@@ -51,8 +52,11 @@
 
         <!-- Main content -->
         <div class="content">
+
             <div class="container-fluid">
+
                 <div class="row">
+
                     @yield('content')
                 </div>
                 <!-- /.row -->
