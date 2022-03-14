@@ -87,6 +87,7 @@ Route::post('/type-content/', [TypeContentController::class, 'store'])->name('ty
 Route::get('/all-version-type-content/{id}', [TypeContentController::class, 'getAllVersionTypeContent'])->name('type-content.get-all-version'); // норм что здесь нет type_content?
 Route::get('/type-content/{id}', [TypeContentController::class, 'show'])->name('type-content.show');
 Route::get('/type-content/{id}/edit', [TypeContentController::class, 'edit'])->name('type-content.edit');
+Route::get('/type-content/{id}/{parametr}', [TypeContentController::class, 'createNewVersion'])->name('type-content.create-new-version');
 
 Route::post('/type-content/{id}', [TypeContentController::class, 'update'])->name('type-content.update');
 Route::delete('/type-content/{id}', [TypeContentController::class, 'destroy'])->name('type-content.destroy');
