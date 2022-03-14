@@ -66,14 +66,13 @@ class TypeContentController extends Controller
      */
     public function store(Request $request)
     {
-
         $request->validate([
             'name' => 'required|max:255',
             'description' => 'nullable|max:500',
             'icon' => 'nullable|max:150',
             'active_from' => 'nullable|date',
             'active_after' => 'nullable|date',
-            'api_url' => 'required|unique:type_contents|max:150',
+            'api_url' => 'required|max:150',
             'body' => 'nullable|max:1000',
 
         ]);
@@ -194,6 +193,7 @@ class TypeContentController extends Controller
             }
         } else {
             if (Auth::guard('api')->check()) {
+
                 $type = TypeContent::find($id);
                 //print_r($id);exit;
                 $type->name = $request['name'];
@@ -254,30 +254,28 @@ class TypeContentController extends Controller
 
     public function createNewVersion($id, $parametr)
     {
+        //проверка параметров
         if ($parametr == 'major' || $parametr == 'minor') {
-           /* $TypeContent = TypeContent::where('id_global', $id)->get();
-            $TypeContent2 = TypeContent::find($TypeContent->id);*/
-            //$users = DB::table('type_contents')->where('id_global', $id)->get();
-            /*
-             * ЧЕМ ЭТОТ КОД $TypeContent = TypeContent::where('id_global', $id)->get();
-             * ОТЛИЧАЕТСЯ ОТ ЭТОГО??? $flight = TypeContent::where('id_global', $id)->orderBy($fer, 'desc')->first()
-             * В YII2 НИЧЕМ БЫ НЕ ОТЛИЧАЛСЯ
-             * А ТУТ ВЕРХНИЙ НЕ РАБОТАЕТ
-             * А НИЖНИЙ РАБОТАЕТ
-             * ИДИОТИЗМ В ЧИСТОМ ВИДЕ
-             * Laravel помойка!
-             * */
-            $parametrDb = ($parametr == 'major') ? 'version_major' : 'version_minor';
-            $typeContent = TypeContent::where('id_global', $id)->orderBy($parametrDb, 'desc')->first();
-            $newTypeContent = $typeContent->replicate();
-            $newTypeContent->$parametrDb = $newTypeContent->$parametrDb + 1;
-            $newTypeContent->api_url = $newTypeContent->api_url. '.' . $parametrDb . '.' . $newTypeContent->$parametrDb;
+           if($parametr == 'major'){
+               //если мажор то мы просто создаем дубликат наивысшей строки по version_major
+               $typeContent = TypeContent::where('id_global', $id)->orderBy('version_major', 'desc')->first();
+               //replicate - встроенный метод дублирования в laravel
+               $newTypeContent = $typeContent->replicate();//тут лежит наш новый объект
+               $newTypeContent->version_major = $typeContent->version_major + 1;//изменяем объект с учетом наших параметров затем сохраняем
+               $newTypeContent->version_minor = 0;
+           } else {
+               //если минор то просто ищим наивысшей строки по version_major и version_minor ну и изменяем версию
+               $typeContent = TypeContent::where('id_global', $id)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first();
+               $newTypeContent = $typeContent->replicate();
+               $newTypeContent->version_minor = $typeContent->version_minor + 1;
+           }
             if($newTypeContent->save()){
                 return redirect()->route('type-content.get-all-version', $typeContent->id_global)->with('success', 'Новая версия успешно создана');
             } else {
                 return redirect()->back()->with('error', 'Что-то пошло не так');
             }
-        } else {
+        }
+        else {
             return redirect()->back()->with('error', 'Что-то пошло не так');
         }
     }
