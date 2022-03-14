@@ -10,7 +10,7 @@ use App\Http\Controllers\TechController;
 
 use App\Http\Controllers\YurkController;
 use App\Http\Controllers\TestController;
-
+use App\Http\Livewire\Select2Dropdown;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +22,6 @@ use App\Http\Controllers\TestController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -30,6 +29,7 @@ Route::get('/', function () {
 
 
 Auth::routes();
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/tech/create', [TechController::class, 'create'])->name('tech.create');
 Route::get('/tech/index', [TechController::class, 'index'])->name('tech.index');
