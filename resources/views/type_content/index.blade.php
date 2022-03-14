@@ -3,7 +3,6 @@
 @section('content')
     <div class="container" xmlns:white-space="http://www.w3.org/1999/xhtml">
         <div class="d-flex justify-content-center"><h1>Типы контента</h1></div>
-
         <table class="table table-bordered table-hover">
             <tr>
                 {{--                <th>ID</th>--}}

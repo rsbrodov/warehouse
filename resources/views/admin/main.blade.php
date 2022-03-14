@@ -12,7 +12,10 @@
     <link type="text/css" rel="stylesheet" href="{{ mix('css/app.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{asset('dist/css/adminlte.min.css')}}">
-    {{--    <link href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" rel="stylesheet">--}}
+{{--    <link href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" rel="stylesheet">--}}
+
+<!-- SELECT2 -->
+    <link rel="stylesheet" href="{{asset('plugins/select2/css/select2.css')}}">
 </head>
 <body class="hold-transition sidebar-mini">
 <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
@@ -20,6 +23,8 @@
 <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
+<!-- SELECT2 -->
+<script src="{{ asset('plugins/select2/js/select2.js') }}"></script>
 <div class="wrapper">
 
 @include('admin.navbar')
@@ -27,10 +32,8 @@
 <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
     {{--                @include('admin.content')--}}
-
-
-
     @include('flash-message')
+
     <!-- Content Header (Page header) -->
         <div class="content-header">
             <div class="container-fluid">
@@ -51,11 +54,8 @@
 
         <!-- Main content -->
         <div class="content">
-
             <div class="container-fluid">
-
                 <div class="row">
-
                     @yield('content')
                 </div>
                 <!-- /.row -->
@@ -75,4 +75,5 @@
 
 
 </body>
+
 </html>
