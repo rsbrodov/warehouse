@@ -60,7 +60,7 @@
 {{--                        </a>--}}
                         <a href="{{route('type-content.get-all-version', $type_content->id_global)}}"
                            class="btn btn-success">
-                            <img src="{{asset('images/add.png')}}" width="32" height="32" alt="">
+                            <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
                         </a>
                     </td>
                 </tr>

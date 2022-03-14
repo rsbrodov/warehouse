@@ -80,7 +80,7 @@ class DictionaryElementController extends Controller
                 'updated_author' => Auth::guard('web')->user()->id
             ]);
 
-            return redirect()->route('dictionary-element.index', $dictionary_id)->with('success', 'Элемент ' . $new_dictionary_element->value . ' был добавлен');
+            return redirect()->route('dictionary-element.index', $dictionary_id)->with('success', 'Элемент ' . $new_dictionary_element->value . ' успешно добавлен');
         } else if (Auth::guard('api')->check()) {
             $dictionary = Dictionary::where(['id' => $request['dictionary_id']])->first();
             if (empty($dictionary)) {
@@ -145,7 +145,7 @@ class DictionaryElementController extends Controller
                 $edit_element_dictionary->value = $request->input('value');
                 $edit_element_dictionary->save();
                 //dd($edit_element_dictionary);
-                return redirect()->route('dictionary-element.index', $edit_element_dictionary->dictionary_id)->with('success', 'Элемент ' . $edit_element_dictionary->value . ' был отредактирован');
+                return redirect()->route('dictionary-element.index', $edit_element_dictionary->dictionary_id)->with('success', 'Элемент ' . $edit_element_dictionary->value . ' успешно отредактирован');
             }
         } else if (Auth::guard('api')->check()) {
             $dictionary_element = DictionaryElement::find($id);
@@ -174,7 +174,7 @@ class DictionaryElementController extends Controller
             if($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
                 $element_dictionary = DictionaryElement::find($id);
                 $element_dictionary->delete();
-                return redirect()->route('dictionary-element.index', $element_dictionary->dictionary_id)->with('success', 'Справочник ' . $element_dictionary->value . ' был уничтожен');
+                return redirect()->route('dictionary-element.index', $element_dictionary->dictionary_id)->with('info', 'Элемент ' . $element_dictionary->value . ' уничтожен');
             }else {
                 print_r('Авторизируйтесь');
             }

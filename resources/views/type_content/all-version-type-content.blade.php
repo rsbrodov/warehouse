@@ -32,11 +32,11 @@
                                 <td nowrap>
                                     <a href="{{route('type-content.show', ($type_content->id))}}"
                                        class="btn btn-success ">
-                                        <img src="{{asset('images/show.png')}}" width="32" height="32" alt="">
+                                        <i class="fa fa-eye fa-lg" aria-hidden="true"></i>
                                     </a>
                                     <a href="{{route('type-content.edit', $type_content->id)}}"
-                                       class="btn btn-success">
-                                        <img src="{{asset('images/edit.png')}}" width="32" height="32" alt="">
+                                       class="btn btn-primary">
+                                        <i class="fa fa-edit fa-lg" aria-hidden="true"></i>
                                     </a>
                                 </td>
                 </tr>

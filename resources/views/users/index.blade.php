@@ -37,33 +37,33 @@
                     <td nowrap>
                         <a href="{{route('users.show', ($user->id))}}"
                            class="btn btn-success ">
-                            <img src="{{asset('images/show.png')}}" width="32" height="32" alt="">
+                            <i class="fa fa-eye fa-lg" aria-hidden="true"></i>
                         </a>
                         @if($user->status != 'MODERATED')
                             <a href="{{route('users.edit', ($user->id))}}"
                                class="btn btn-primary @if($user->status == 'DELETED' or $user->status == 'BLOCKED') disabled @endif ">
-                                <img src="{{asset('images/edit.png')}}" width="32" height="32" alt="">
+                                <i class="fa fa-edit fa-lg" aria-hidden="true"></i>
                             </a>
                         @else
                             <a href="{{route('users.activate', ($user->id))}}"
                                class="btn btn-success @if($user->status == 'DELETED' or $user->status == 'BLOCKED') disabled @endif ">
-                                <img src="{{asset('images/ok.png')}}" width="32" height="32" alt="">
+                                <i class="fa fa-check-circle fa-lg" aria-hidden="true"></i>
                             </a>
                         @endif
                         @if($user->id != \Illuminate\Support\Facades\Auth::id())
-                            <a href="{{route('users.delete', $user->id)}}" class="btn btn-secondary">
+                            <a href="{{route('users.delete', $user->id)}}" class="btn btn-danger">
                                 @if($user->status == 'DELETED')
-                                    <img src="{{asset('images/revive.png')}}" width="32" height="32" alt="">
+                                    <i class="fa fa-history fa-lg" aria-hidden="true"></i>
                                 @else
-                                    <img src="{{asset('images/delete.png')}}" width="32" height="32" alt="">
+                                    <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
                                 @endif
                             </a>
                             <a href="{{route('users.block', $user->id)}}"
                                class="btn btn-secondary @if($user->status == 'DELETED') disabled @endif">
                                 @if($user->status == 'BLOCKED')
-                                    <img src="{{asset('images/revive.png')}}" width="32" height="32" alt="">
+                                    <i class="fa fa-history fa-lg" aria-hidden="true"></i>
                                 @else
-                                    <img src="{{asset('images/block.png')}}" width="32" height="32" alt="">
+                                    <i class="fa fa-recycle fa-lg" aria-hidden="true"></i>
                                 @endif
                             </a>
                         @endif

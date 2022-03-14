@@ -31,20 +31,20 @@
                     <td>{{$dictionary->updated_at}}</td>
                     <td nowrap>
                         <a href="{{route('dictionary.show', ($dictionary->id))}}"
-                           class="btn btn-info ">
-                            <img src="{{asset('images/show.png')}}" width="32" height="32" alt="">
+                           class="btn btn-success ">
+                            <i class="fa fa-eye fa-lg" aria-hidden="true"></i>
                         </a>
                         <a href="{{route('dictionary.edit', ($dictionary->id))}}" class="btn btn-primary">
-                            <img src="{{asset('images/edit.png')}}" width="32" height="32" alt="">
+                            <i class="fa fa-edit fa-lg" aria-hidden="true"></i>
                         </a>
                         <a href="{{route('dictionary-element.index', $dictionary->id)}}" class="btn btn-success">
-                            <img src="{{asset('images/add.png')}}" width="32" height="32" alt="">
+                            <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
                         </a>
                         <a href="{{route('dictionary.archive', $dictionary->id)}}" class="btn btn-secondary">
                             @if(\App\Models\Dictionary::find($dictionary->id)->archive == '1')
-                                <img src="{{asset('images/revive.png')}}" width="32" height="32" alt="">
+                                <i class="fa fa-history fa-lg" aria-hidden="true"></i>
                             @else
-                                <img src="{{asset('images/archive.png')}}" width="32" height="32" alt="">
+                                <i class="fa fa-file-archive-o fa-lg" aria-hidden="true"></i>
                             @endif
                         </a>
                     </td>
