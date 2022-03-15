@@ -82,26 +82,31 @@ class TypeContentController extends Controller
         ]);
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
-
-            $new_type_content = TypeContent::create([
-                'id_global' => Str::uuid()->toString(),
-                'name' => $request->input('name'),
-                'description' => $request->input('description'),
-                'owner' => '7856',
-                'active_from' => $request->input('active_from'),
-                'active_after' => $request->input('active_after'),
-                'status' => 'DRAFT',
-                'version_major' => '1',
-                'version_minor' => '0',
-                'icon' => $request->input('icon'),
-                'api_url' => str_slug($request->input('name')),
-                'based_type' => null,
-                'created_author' => $user->id,
-                'updated_author' => $user->id
-            ]);
-
-            return redirect()->route('type-content.index')->with('success', 'Тип контента ' . $new_type_content->name . ' успешно создан');
-
+            $model = new TypeContent();
+            $apiUrl = str_slug($request->input('name'));
+            //$idGlobal = Str::uuid()->toString();
+            if (!$model->checkingApiUrl($apiUrl)) {
+                $new_type_content = TypeContent::create([
+                    'id_global' => Str::uuid()->toString(),
+                    'name' => $request->input('name'),
+                    'description' => $request->input('description'),
+                    'owner' => '7856',
+                    'active_from' => $request->input('active_from'),
+                    'active_after' => $request->input('active_after'),
+                    'status' => 'DRAFT',
+                    'version_major' => '1',
+                    'version_minor' => '0',
+                    'icon' => $request->input('icon'),
+                    'api_url' => $apiUrl,
+                    'based_type' => null,
+                    'created_author' => $user->id,
+                    'updated_author' => $user->id
+                ]);
+                return redirect()->route('type-content.index')->with('success',
+                    'Тип контента ' . $new_type_content->name . ' успешно создан');
+            } else {
+                return redirect()->back()->with('error', 'Что-то пошло не так');
+            }
         } elseif (Auth::guard('api')->check()) {
 
             $new_type_content = TypeContent::create([
@@ -172,25 +177,28 @@ class TypeContentController extends Controller
             'active_after' => 'nullable|date',
             'api_url' => 'required|alpha_dash|max:150',
             'body' => 'nullable|max:1000',
-
         ]);
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
+                //$idGlobal = Str::uuid()->toString();
                 $type = TypeContent::find($id);
-                $type->name = $request['name'];
-                $type->api_url = $request['api_url'];
-                $type->description = $request['description'];
-                $type->active_from = $request['active_from'];
-                $type->active_after = $request['active_after'];
-                $type->status = $request['status'];
-                $type->icon = $request['icon'];
-                $type->body = $request['body'];
-                $type->updated_author = Auth::guard('web')->user()->id;
-                $type->save();
-
-                return redirect()->route('type-content.index')->with('success', 'Тип ' . $type->name . ' успешно отредактирован');
-
+                if (!$type->checkingApiUrl($request['api_url'], $type['id_global'])) {
+                    $type->name = $request['name'];
+                    $type->api_url = $request['api_url'];
+                    $type->description = $request['description'];
+                    $type->active_from = $request['active_from'];
+                    $type->active_after = $request['active_after'];
+                    $type->status = $request['status'];
+                    $type->icon = $request['icon'];
+                    $type->body = $request['body'];
+                    $type->updated_author = Auth::guard('web')->user()->id;
+                    $type->save();
+                    return redirect()->route('type-content.index')->with('success',
+                        'Тип ' . $type->name . ' успешно отредактирован');
+                } else {
+                    return redirect()->back()->with('error', 'Что-то пошло не так');
+                }
             }
         } else {
             if (Auth::guard('api')->check()) {
@@ -266,12 +274,16 @@ class TypeContentController extends Controller
                 $newTypeContent->version_minor = 0;
             } else {
                 //если минор то просто ищим наивысшей строки по version_major и version_minor ну и изменяем версию
+
                 $typeContent = TypeContent::where('id_global', $id)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first();
+
                 $newTypeContent = $typeContent->replicate();
                 $newTypeContent->version_minor = $typeContent->version_minor + 1;
             }
             if ($newTypeContent->save()) {
+
                 return redirect()->route('type-content.get-all-version', $typeContent->id_global)->with('success', 'Новая версия успешно создана');
+
             } else {
                 return redirect()->back()->with('error', 'Что-то пошло не так');
             }

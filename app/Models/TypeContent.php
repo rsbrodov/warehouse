@@ -35,4 +35,16 @@ class TypeContent extends Model
     public function updated_authors() {
         return $this->belongsTo(User::class, 'updated_author');
     }
+
+    public function checkingApiUrl($apiUrl, $idGlobal = null) {
+       if($idGlobal){
+           if(($typeContentExistence = TypeContent::where('api_url', $apiUrl)->whereNotIn('id_global', [$idGlobal])->first()) !== null){
+               return 'error';
+           }
+       } else {
+           if(($typeContentExistence = TypeContent::where('api_url', $apiUrl)->first()) !== null){
+               return 'error';
+           }
+       }
+    }
 }
