@@ -57,7 +57,7 @@
                 <div class="form-group row">
                     <label for="icon" class="col-md-4 col-form-label text-md-right">Иконка</label>
                     <div class="col-md-6">
-                        <select id="icon" type="text" class="form-control" name="icon"></select>
+                        <select id="icon" type="text" class="form-control select2icon" name="icon"></select>
                     </div>
                 </div>
                 {{--                <?php $icons_array = ['one', 'two', 'three']; ?>--}}
@@ -89,13 +89,13 @@
     </div>
     <script>
         //todo: убрать перед загрузкой:)
-        let focus = 0;
-        $('#name').focusout(function () {
-            focus++;
-            if (focus >= 5) {
-                $('#btn1').text('Ты серьезно? Уже ' + focus + ' исправлений...');
-            }
-        });
+        //let focus = 0;
+        // $('#name').focusout(function () {
+        //     focus++;
+        //     if (focus >= 5) {
+        //         $('#btn1').text('Ты серьезно? Уже ' + focus + ' исправлений...');
+        //     }
+        // });
 
         function urlLit(w, v) {
             var tr = 'a b v g d e ["zh","j"] z i y k l m n o p r s t u f h c ch sh ["shh","shch"] ~ y ~ e yu ya ~ ["jo","e"]'.split(' ');
@@ -130,6 +130,18 @@
                 theme: 'classic',
                 data: icons_array,
             });
+            let data_selected = {
+                full_name: $('#icon_selected').val(),
+                id: $('#icon_selected').val()
+            };
+            let option = new Option(data_selected.name, data_selected.id, true, true);
+            $icon.append(option);
+            $icon.trigger({
+                type: 'select2:select',
+                params: {
+                    data: data_selected
+                }
+            });
             $icon.on('change', function () {
                 $('.fa').hover(function () {
                     $(this).addClass('fa-spin');
@@ -137,21 +149,9 @@
                     $(this).removeClass('fa-spin');
                 });
             });
-            $icon.trigger('change');
-            let data_selected = {
-                full_name: $('#icon_selected').val(),
-                id: $('#icon_selected').val()
-            };
-            let option = new Option(data_selected.name, data_selected.id, true, true);
-            $icon.append(option).trigger('change');
-            $icon.trigger({
-                type: 'select2:select',
-                params: {
-                    data: data_selected
-                }
-            });
-
-
+            setTimeout(function () {
+                $icon.trigger('change');
+            }, 10);
         });
     </script>
 @endsection

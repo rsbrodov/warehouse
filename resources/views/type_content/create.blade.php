@@ -52,13 +52,13 @@
     </div>
     <script>
         //todo: убрать перед загрузкой:)
-        let focus = 0;
-        $('#name').focusout(function () {
-            focus++;
-            if (focus >= 5) {
-                $('#btn1').text('Ты серьезно? Уже ' + focus + ' исправлений...');
-            }
-        });
+        // let focus = 0;
+        // $('#name').focusout(function () {
+        //     focus++;
+        //     if (focus >= 5) {
+        //         $('#btn1').text('Ты серьезно? Уже ' + focus + ' исправлений...');
+        //     }
+        // });
 
         function urlLit(w, v) {
             var tr = 'a b v g d e ["zh","j"] z i y k l m n o p r s t u f h c ch sh ["shh","shch"] ~ y ~ e yu ya ~ ["jo","e"]'.split(' ');
@@ -76,11 +76,31 @@
             $('#name').bind('change keyup input click', function () {
                 $('#api_url').val(urlLit($('#name').val(), 0))
             });
-            let icons_array = ['edit', 'eye', 'plus-circle'];
+            {{--$.ajaxSetup({--}}
+            {{--    headers: {--}}
+            {{--        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')--}}
+            {{--    }--}}
+            {{--});--}}
+            {{--$.ajax({--}}
+            {{--    url: '{{route('type-content.get-icons')}}',--}}
+            {{--    type: 'POST',--}}
+            {{--    data: {--}}
+            {{--        "_token": "{{ csrf_token() }}"--}}
+            {{--    },--}}
+            {{--    success: function (response) {--}}
+            {{--        console.log(response);--}}
+            {{--    },error:function(){--}}
+            {{--        console.log("err");--}}
+            {{--    }--}}
+            {{--});--}}
+             let icons_array = ['fa-edit', 'fa-eye', 'fa-plus-circle'];
 
+            {{--let icons_array = '<?php echo json_encode($icons_array);?>';--}}
             function formatState(state) {
-                if (!state.id) {return state.text;}
-                let $state = $('<span class="fa fa-' + state.id.toLowerCase() + ' fa-lg" aria-hidden="true"></span><span>' + state.id + '</span>');
+                if (!state.id) {
+                    return state.text;
+                }
+                let $state = $('<span class="fa ' + state.id.toLowerCase() + ' fa-lg" aria-hidden="true"></span><span>' + state.id + '</span>');
                 return $state;
             };
             $("#icon").select2({

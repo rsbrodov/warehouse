@@ -80,8 +80,10 @@ Route::get('dictionary-element/{id}/edit', [DictionaryElementController::class, 
 Route::post('dictionary-element/{id}', [DictionaryElementController::class, 'update'])->name('dictionary-element.update');
 Route::delete('dictionary-element/{id}', [DictionaryElementController::class, 'destroy'])->name('dictionary-element.destroy');
 // ТИПЫ КОНТЕНТА
+Route::get('/type-content/create-icons', [TypeContentController::class, 'createIcons'])->name('type-content.create-icons');
+Route::post('/type-content/get-icons', [TypeContentController::class, 'getIcons'])->name('type-content.get-icons');
+
 Route::get('/type-content/', [TypeContentController::class, 'index'])->name('type-content.index');
-Route::get('/type-content/shablon-version-index', [TypeContentController::class, 'shablonVersionIndex'])->name('type-content.shablon-version-index');
 Route::get('/type-content/create', [TypeContentController::class, 'create'])->name('type-content.create');
 Route::post('/type-content/', [TypeContentController::class, 'store'])->name('type-content.store');
 Route::get('/all-version-type-content/{id}', [TypeContentController::class, 'getAllVersionTypeContent'])->name('type-content.get-all-version'); // норм что здесь нет type_content?
