@@ -479,3 +479,11 @@
 
 .select2-container--classic.select2-container--open .select2-dropdown {
   border-color: #5897fb; }
+
+/* ЧТОБЫ ОКОШЕЧКИ БЫЛИ ПОБОЛЬШЕ!!!
+/*.select2-container .select2-selection,*/
+/*.select2-selection__rendered,*/
+/*.select2-selection__arrow {*/
+/*    height: 40px !important;*/
+/*    line-height: 40px !important;*/
+/*}*/

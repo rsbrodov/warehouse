@@ -66,5 +66,6 @@
             @endforeach
         </table>
         <a href="{{route('type-content.create')}}" class="btn btn-primary form-control">Создать</a>
+{{--        <a href="{{route('type-content.create-icons')}}" class="btn btn-warning form-control">Сделать крутые иконки!</a>--}}
     </div>
 @endsection
