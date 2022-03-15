@@ -78,7 +78,12 @@
                                   class="form-control">{{$type_content->body}}</textarea>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-success">Редактировать</button>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success">Редактировать</button>
+                    <a class="btn btn-primary ml-3" href="{{ route('type-content.create-new-version', [$type_content->id_global, 'major']) }}">Версия первого порядка</a>
+                    <a class="btn btn-primary ml-3" href="{{ route('type-content.create-new-version', [$type_content->id_global, 'minor']) }}">Версия второго порядка</a>
+                </div>
+
             </div>
         </form>
     </div>
