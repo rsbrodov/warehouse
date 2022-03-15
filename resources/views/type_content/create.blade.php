@@ -77,18 +77,18 @@
                 $('#api_url').val(urlLit($('#name').val(), 0))
             });
             let icons_array = ['edit', 'eye', 'plus-circle'];
-            let style = '';
+
             function formatState(state) {
                 if (!state.id) {return state.text;}
-                let $state = $('<span style="'+style+'" class="fa fa-' + state.id.toLowerCase() + ' fa-lg" aria-hidden="true"></span><span>' + state.id + '</span>');
+                let $state = $('<span class="fa fa-' + state.id.toLowerCase() + ' fa-lg" aria-hidden="true"></span><span>' + state.id + '</span>');
                 return $state;
             };
             $("#icon").select2({
                 templateSelection: formatState,
                 templateResult: formatState,
                 allowHtml: true,
-                //theme: 'classic',
-                data: icons_array
+                theme: 'classic',
+                data: icons_array,
             });
             $('#icon').on('change', function () {
                 $('.fa').hover(function () {
