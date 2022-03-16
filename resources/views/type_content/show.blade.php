@@ -46,8 +46,10 @@
                                 bg-danger text-white
                             @endif
                                 ">{{$type_content->$db_name}}</td>
-                        @else
-                            <td>{{$type_content->$db_name}}</td>
+                            @elseif($db_name =='icon')
+                                <td><span class="fa fa-{{$type_content->$db_name}} fa-lg" aria-hidden="true"></span> {{$type_content->$db_name}}</td>
+                            @else
+                                <td>{{$type_content->$db_name}}</td>
                         @endif
                     </tr>
                 @endforeach

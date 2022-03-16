@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -39,26 +40,22 @@ class UsersController extends Controller
         }
     }
 
-    public function store(Request $req)
+    public function store(UserRequest $request)
     {
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
-            $req->validate([
-                'name' => 'required',
-                'email' => 'required|string|email|max:255'/*|unique:users,email,' . $user->id*/,
-                'password' => 'required|confirmed|min:6'
-            ]);
+
             $new_user = User::create([
-                'name' => $req->input('name'),
-                'email' => $req->input('email'),
-                'password' => Hash::make($req->input('password')),
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'password' => Hash::make($request->input('password')),
                 'status' => 'MODERATED',
                 'parent_id' => Auth::id()
             ]);
             if ($user->hasRole('SuperAdmin')) {
                 $new_user->assignRole('Admin'); //назначить роль юзеру
             } else if ($user->hasRole('Admin')) {
-                $new_user->assignRole($req->input('role')); //назначить роль юзеру
+                $new_user->assignRole($request->input('role')); //назначить роль юзеру
             }
             return redirect()->route('users.index')->with('success', 'Пользователь ' . $new_user->name . ' успешно добавлен');
         } else {
@@ -85,14 +82,14 @@ class UsersController extends Controller
         return view('users.show')->with('user', $user);
     }
 
-    public function update(Request $req, $id)
+    public function update(UserRequest $request, $id)
     {
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
                 $edit_user = User::where('id', $id)->first();
-                $edit_user->name = $req->input('name');
-                $edit_user->email = $req->input('email');
+                $edit_user->name = $request->input('name');
+                $edit_user->email = $request->input('email');
                 $edit_user->save();
                 return redirect()->route('users.index')->with('success', 'Пользователь ' . $edit_user->name . ' успешно отредактирован');
             }

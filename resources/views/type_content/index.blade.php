@@ -3,7 +3,6 @@
 @section('content')
     <div class="container" xmlns:white-space="http://www.w3.org/1999/xhtml">
         <div class="d-flex justify-content-center"><h1>Типы контента</h1></div>
-
         <table class="table table-bordered table-hover">
             <tr>
                 {{--                <th>ID</th>--}}
@@ -67,5 +66,6 @@
             @endforeach
         </table>
         <a href="{{route('type-content.create')}}" class="btn btn-primary form-control">Создать</a>
+{{--        <a href="{{route('type-content.create-icons')}}" class="btn btn-warning form-control">Сделать крутые иконки!</a>--}}
     </div>
 @endsection
