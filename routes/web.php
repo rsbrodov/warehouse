@@ -55,7 +55,7 @@ Route::get('/users/create', [UsersController::class, 'create'])->name('users.cre
 Route::post('/users/', [UsersController::class, 'store'])->name('users.store');
 Route::get('/users/{id}', [UsersController::class, 'show'])->name('users.show');
 Route::get('/users/{id}/edit', [UsersController::class, 'edit'])->name('users.edit');
-Route::post('/users/{id}', [UsersController::class, 'update'])->name('users.update'); // put почему-то не работает
+Route::put('/users/{id}', [UsersController::class, 'update'])->name('users.update'); // put работает, если в форму добавить @method('PUT')
 Route::delete('/users/{id}', [UsersController::class, 'destroy'])->name('users.destroy');
 Route::get('/users/{id}/activate', [UsersController::class, 'activate'])->name('users.activate');
 Route::get('/users/{id}/block', [UsersController::class, 'block'])->name('users.block');
@@ -67,7 +67,7 @@ Route::get('/dictionary/create', [DictionaryController::class, 'create'])->name(
 Route::post('/dictionary/', [DictionaryController::class, 'store'])->name('dictionary.store');
 Route::get('/dictionary/{id}', [DictionaryController::class, 'show'])->name('dictionary.show');
 Route::get('/dictionary/{id}/edit', [DictionaryController::class, 'edit'])->name('dictionary.edit');
-Route::post('/dictionary/{id}', [DictionaryController::class, 'update'])->name('dictionary.update');
+Route::put('/dictionary/{id}', [DictionaryController::class, 'update'])->name('dictionary.update');
 Route::delete('/dictionary/{id}', [DictionaryController::class, 'destroy'])->name('dictionary.destroy');
 Route::get('/dictionary/{id}/archive', [DictionaryController::class, 'archive'])->name('dictionary.archive');
 Route::get('/dictionary/{id}/delete', [DictionaryController::class, 'delete'])->name('dictionary.delete');
@@ -77,7 +77,7 @@ Route::get('dictionary/{id}/dictionary-element/create', [DictionaryElementContro
 Route::post('dictionary/{id}/dictionary-element/', [DictionaryElementController::class, 'store'])->name('dictionary-element.store');
 Route::get('dictionary-element/{id}', [DictionaryElementController::class, 'show'])->name('dictionary-element.show');
 Route::get('dictionary-element/{id}/edit', [DictionaryElementController::class, 'edit'])->name('dictionary-element.edit');
-Route::post('dictionary-element/{id}', [DictionaryElementController::class, 'update'])->name('dictionary-element.update');
+Route::put('dictionary-element/{id}', [DictionaryElementController::class, 'update'])->name('dictionary-element.update');
 Route::delete('dictionary-element/{id}', [DictionaryElementController::class, 'destroy'])->name('dictionary-element.destroy');
 // ТИПЫ КОНТЕНТА
 Route::get('/type-content/create-icons', [TypeContentController::class, 'createIcons'])->name('type-content.create-icons');
@@ -90,8 +90,7 @@ Route::get('/all-version-type-content/{id}', [TypeContentController::class, 'get
 Route::get('/type-content/{id}', [TypeContentController::class, 'show'])->name('type-content.show');
 Route::get('/type-content/{id}/edit', [TypeContentController::class, 'edit'])->name('type-content.edit');
 Route::get('/type-content/{id}/{parametr}', [TypeContentController::class, 'createNewVersion'])->name('type-content.create-new-version');
-
-Route::post('/type-content/{id}', [TypeContentController::class, 'update'])->name('type-content.update');
+Route::put('/type-content/{id}', [TypeContentController::class, 'update'])->name('type-content.update');
 Route::delete('/type-content/{id}', [TypeContentController::class, 'destroy'])->name('type-content.destroy');
 
 

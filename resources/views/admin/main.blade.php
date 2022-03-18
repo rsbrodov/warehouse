@@ -34,7 +34,7 @@
     {{--                @include('admin.content')--}}
     @include('flash-message')
     {{--подключаем файл с уведомлениями--}}
-    @include('validate-message')
+{{--    @include('validate-message')--}}
 
     <!-- Content Header (Page header) -->
         <div class="content-header">

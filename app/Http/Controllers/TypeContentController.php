@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TypeContentRequest;
 use App\Models\Icons;
 use App\Models\TypeContent;
 use Illuminate\Http\Request;
@@ -28,10 +29,9 @@ class TypeContentController extends Controller
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin')) {
-                $type_contents = TypeContent::where('created_author',
-                    Auth::guard('web')->user()->id)->with('created_authors:id,name')->with('updated_authors:id,name')->get();
+                $type_contents = TypeContent::where(['created_author' => Auth::guard('web')->user()->id])->with('created_authors:id,name')->with('updated_authors:id,name')->get();
             } elseif ($user->hasRole('Admin')) {
-                $type_contents = TypeContent::where('created_author', Auth::guard('web')->user()->id)->with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('name', 'desc')->get();
+                $type_contents = TypeContent::where(['created_author' => Auth::guard('web')->user()->id])->with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('name', 'desc')->get();
             }
             return view('type_content.index')->with('type_contents', $type_contents);
         } else {
@@ -68,18 +68,8 @@ class TypeContentController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TypeContentRequest $request)
     {
-        $request->validate([
-            'name' => 'required|max:255',
-            'description' => 'nullable|max:500',
-            'icon' => 'nullable|max:150',
-            'active_from' => 'nullable|date',
-            'active_after' => 'nullable|date',
-            'api_url' => 'required|max:150',
-            'body' => 'nullable|max:1000',
-
-        ]);
         $model = new TypeContent();
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
@@ -131,6 +121,22 @@ class TypeContentController extends Controller
                 ], 422);
             }
 
+
+            $new_type_content = TypeContent::create([
+                'id_global' => Str::uuid()->toString(),
+                'name' => $request['name'],
+                'description' => $request['description'],
+                'owner' => Str::uuid()->toString(),
+                'icon' => $request['icon'],
+                'active_from' => $request['active_from'],
+                'active_after' => $request['active_after'],
+                'api_url' => $request->input('api_url'),
+                'body' => $request['body'],
+                'created_author' => Auth::guard('api')->user()->id,
+                'updated_author' => Auth::guard('api')->user()->id
+            ]);
+            $type_content = TypeContent::find($new_type_content->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
+            return response()->json($type_content);
         } else {
             return 'not auth';
         }
@@ -174,18 +180,9 @@ class TypeContentController extends Controller
      * @param \App\Models\TypeContent $typeContent
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TypeContentRequest $request, $id)
     {
-        $request->validate([
-            'name' => 'required|max:255',
-            'description' => 'nullable|max:500',
-            'icon' => 'nullable|max:150',
-            'active_from' => 'nullable|date',
-            'active_after' => 'nullable|date',
-            'api_url' => 'required|alpha_dash|max:150',
-            'body' => 'nullable|max:1000',
-        ]);
-        if (Auth::guard('web')->check()) {
+                if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
                 //$idGlobal = Str::uuid()->toString();
@@ -201,8 +198,7 @@ class TypeContentController extends Controller
                     $type->body = $request['body'];
                     $type->updated_author = Auth::guard('web')->user()->id;
                     $type->save();
-                    return redirect()->route('type-content.index')->with('success',
-                        'Тип ' . $type->name . ' успешно отредактирован');
+                    return redirect()->route('type-content.index')->with('success', 'Тип ' . $type->name . ' успешно отредактирован');
                 } else {
                     return redirect()->back()->with('error', 'Что-то пошло не так');
                 }
@@ -244,7 +240,13 @@ class TypeContentController extends Controller
     public function destroy($id)
     {
         if (Auth::guard('web')->check()) {
-            //...
+            $type_content = TypeContent::find($id);
+            if ($type_content) {
+                $type_content->delete();
+                return redirect()->route('type-content.index')->with('success', 'Тип ' . $type_content->name . ' успешно удален');
+            } else{
+
+            }
         } else {
             if (Auth::guard('api')->check()) {
                 $type_content = TypeContent::find($id);

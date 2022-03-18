@@ -5,6 +5,7 @@
         <h1>Редактирование справочника {{$edit_dictionary->name}}</h1>
         <form action="{{route('dictionary.update', [$edit_dictionary])}}" method="post">
             @csrf
+            @method('PUT')
             <div class="form-group">
                 <label for="name">Наименование</label>
                 <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" placeholder="Введите имя"

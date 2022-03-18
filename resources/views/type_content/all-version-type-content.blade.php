@@ -29,16 +29,21 @@
                     <td>{{$type_content['id']}}</td>
                     <td>{{$type_content->updated_at}}
                         (@if(!empty($type_content->updated_authors)) {{$type_content->updated_authors->name}}@endif )</td>
-                                <td nowrap>
-                                    <a href="{{route('type-content.show', ($type_content->id))}}"
-                                       class="btn btn-success ">
-                                        <i class="fa fa-eye fa-lg" aria-hidden="true"></i>
-                                    </a>
-                                    <a href="{{route('type-content.edit', $type_content->id)}}"
-                                       class="btn btn-primary">
-                                        <i class="fa fa-edit fa-lg" aria-hidden="true"></i>
-                                    </a>
-                                </td>
+                    <td nowrap>
+                        <a href="{{route('type-content.show', ($type_content->id))}}"
+                           class="btn btn-success ">
+                            <i class="fa fa-eye fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <a href="{{route('type-content.edit', $type_content->id)}}"
+                           class="btn btn-primary">
+                            <i class="fa fa-edit fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <form action="{{ route('type-content.destroy', $type_content->id) }}" method="POST">
+                            @method('DELETE')
+                            @csrf
+                            <button type="submit" class="btn btn-danger"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></button>
+                        </form>
+                    </td>
                 </tr>
             @endforeach
         </table>
