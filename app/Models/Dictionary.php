@@ -17,11 +17,12 @@ class Dictionary extends Model
         'code',
         'description',
         'archive',
-    ];
-    protected $guarded = [
         'created_author',
         'updated_author',
     ];
+   /* protected $guarded = [
+
+    ];*/
     public function created_author() {
         return $this->belongsTo(User::class, 'created_author');
     }
