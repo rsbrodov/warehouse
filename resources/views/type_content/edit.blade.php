@@ -87,6 +87,7 @@
             </div>
         </form>
     </div>
+
     <script>
         //todo: убрать перед загрузкой:)
         //let focus = 0;
