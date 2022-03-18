@@ -20,10 +20,6 @@ class Dictionary extends Model
         'created_author',
         'updated_author',
     ];
-//    protected $guarded = [
-//        'created_author',
-//        'updated_author',
-//    ];
     public function created_author() {
         return $this->belongsTo(User::class, 'created_author');
     }

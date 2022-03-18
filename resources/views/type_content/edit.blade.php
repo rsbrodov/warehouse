@@ -5,59 +5,62 @@
         <h1>Редактирование типа контента {{$type_content->name}}</h1>
         <form action="{{route('type-content.update', [$type_content])}}" method="post">
             @csrf
+            @method('PUT')
             <div class="form-group">
                 <div class="form-group row">
                     <label for="name" class="col-md-4 col-form-label text-md-right">Наименование</label>
                     <div class="col-md-6">
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Введите имя"
-                               value="{{$type_content->name}}">
+                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" placeholder="Введите имя" value="{{$type_content->name}}">
+                        @error('name') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="api_url" class="col-md-4 col-form-label text-md-right">API URL</label>
                     <div class="col-md-6">
-                        <input type="text" name="api_url" placeholder="Automatic..." id="api_url" class="form-control"
-                               value="{{$type_content->api_url}}">
+                        <input type="text" name="api_url" placeholder="Automatic..." id="api_url" class="form-control @error('api_url') is-invalid @enderror" value="{{$type_content->api_url}}">
+                        @error('api_url') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="description" class="col-md-4 col-form-label text-md-right">Описание</label>
                     <div class="col-md-6">
-                        <textarea name="description" placeholder="Введите описание" id="description"
-                                  class="form-control">{{$type_content->description}}</textarea>
+                        <textarea name="description" placeholder="Введите описание" id="description" class="form-control @error('api_url') is-invalid @enderror">{{$type_content->description}}</textarea>
+                        @error('name') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="active_from" class="col-md-4 col-form-label text-md-right">Активен с...</label>
                     <div class="col-md-6">
-                        <input type="datetime-local" name="active_from" id="active_from" class="form-control"
-                               value="{{date('Y-m-d\TH:i', strtotime($type_content->active_from))}}">
+                        <input type="datetime-local" name="active_from" id="active_from" class="form-control @error('api_url') is-invalid @enderror" value="{{date('Y-m-d\TH:i', strtotime($type_content->active_from))}}">
+                        @error('name') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="active_after" class="col-md-4 col-form-label text-md-right">Активен по...</label>
                     <div class="col-md-6">
-                        <input type="datetime-local" name="active_after" id="active_after" class="form-control"
-                               value="{{date('Y-m-d\TH:i', strtotime($type_content->active_after))}}">
+                        <input type="datetime-local" name="active_after" id="active_after" class="form-control @error('api_url') is-invalid @enderror" value="{{date('Y-m-d\TH:i', strtotime($type_content->active_after))}}">
+                        @error('name') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                     </div>
                 </div>
                 <?php $status_array = ['Draft', 'Published', 'Archive']; ?>
                 <div class="form-group row">
                     <label for="status" class="col-md-4 col-form-label text-md-right">Статус</label>
                     <div class="col-md-6">
-                        <select id="status" type="text" class="form-control" name="status">
+                        <select id="status" type="text" class="form-control @error('api_url') is-invalid @enderror" name="status">
                             @foreach($status_array as $status)
                                 <option @if($type_content->status === $status) selected
                                         @endif value="{{$status}}">{{$status}}</option>
                             @endforeach
                         </select>
+                        @error('name') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                     </div>
                 </div>
                 <input type="hidden" id="icon_selected" value="{{$type_content->icon}}">
                 <div class="form-group row">
                     <label for="icon" class="col-md-4 col-form-label text-md-right">Иконка</label>
                     <div class="col-md-6">
-                        <select id="icon" type="text" class="form-control select2icon" name="icon"></select>
+                        <select id="icon" type="text" class="form-control select2icon @error('api_url') is-invalid @enderror" name="icon"></select>
+                        @error('name') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                     </div>
                 </div>
                 {{--                <?php $icons_array = ['one', 'two', 'three']; ?>--}}
@@ -89,15 +92,6 @@
     </div>
 
     <script>
-        //todo: убрать перед загрузкой:)
-        //let focus = 0;
-        // $('#name').focusout(function () {
-        //     focus++;
-        //     if (focus >= 5) {
-        //         $('#btn1').text('Ты серьезно? Уже ' + focus + ' исправлений...');
-        //     }
-        // });
-
         function urlLit(w, v) {
             var tr = 'a b v g d e ["zh","j"] z i y k l m n o p r s t u f h c ch sh ["shh","shch"] ~ y ~ e yu ya ~ ["jo","e"]'.split(' ');
             var ww = '';
