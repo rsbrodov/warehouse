@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Requests;
-
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UserRequest extends FormRequest
 {
@@ -23,11 +23,17 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'name' => 'required',
-            'email' => 'required|string|email|max:255',
+            'email' => ['required', 'string', 'email', 'max:255',
+                Rule::unique('users')->ignore($this->id),
+            ],
             'password' => 'required|confirmed|min:6',
         ];
+        if (in_array($this->method(), ['PUT', 'PATCH'])) {
+            $rules['password'] = [];
+        }
+        return $rules;
     }
 
     public function attributes()
@@ -39,11 +45,12 @@ class UserRequest extends FormRequest
     public function messages() // меняет вообще весь текст ошибки
     {
         return [
-            'name.required' => 'Поле "Имя" является обязательным',
-            'email.required' => 'Поле "Email" является обязательным',
-            'email.email' => 'То, что введено в поле "email" не похоже на email',
+            'name.required' => 'Пожалуйста, укажите имя',
+            'email.required' => 'Пожалуйста, укажите адрес электронной почты',
+            'email.email' => 'Пожалуйста, введите корректный адрес электронной почты',
             'email.max' => 'В поле "email" не может быть более 255 символов',
-            'password.required' => 'Поле "Пароль" является обязательным',
+            'email.unique' => 'Такой email уже существует',
+            'password.required' => 'Пожалуйста, введите пароль',
             'password.min' => 'Пароль не может быть короче 6 символов',
             'password.confirmed' => 'Пароли не совпадают'
         ];
