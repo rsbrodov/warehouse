@@ -10,6 +10,9 @@
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome Icons -->
     <link type="text/css" rel="stylesheet" href="{{ mix('css/app.css') }}">
+
+    <link rel="stylesheet" href="{{ asset("css/datepicker.min.css") }}">
+
     <!-- Theme style -->
     <link rel="stylesheet" href="{{asset('dist/css/adminlte.min.css')}}">
 {{--    <link href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" rel="stylesheet">--}}
@@ -25,6 +28,8 @@
 <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
 <!-- SELECT2 -->
 <script src="{{ asset('plugins/select2/js/select2.js') }}"></script>
+
+<script src="{{ asset("js/datepicker.min.js") }}"></script>
 <div class="wrapper">
 
 @include('admin.navbar')
@@ -75,7 +80,18 @@
 <!-- REQUIRED SCRIPTS -->
 <!-- jQuery -->
 
+<script type="text/javascript">
 
+    /*new AirDatepicker('.air-datepicker', {
+        dateFormat(date) {
+            return date.toLocaleString('ja', {
+                year: 'numeric',
+                day: '2-digit',
+                month: 'long'
+            });
+        }
+    })*/
+</script>
 </body>
 
 </html>

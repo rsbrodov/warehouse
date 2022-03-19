@@ -31,14 +31,14 @@
                 <div class="form-group row">
                     <label for="active_from" class="col-md-4 col-form-label text-md-right">Активен с...</label>
                     <div class="col-md-6">
-                        <input type="datetime-local" name="active_from" id="active_from" class="form-control @error('api_url') is-invalid @enderror" value="{{date('Y-m-d\TH:i', strtotime($type_content->active_from))}}">
+                        <input type="text" name="active_from" id="active_from" class="form-control datepicker-here @error('api_url') is-invalid @enderror" value="{{date('Y-m-d\TH:i', strtotime($type_content->active_from))}}">
                         @error('name') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="active_after" class="col-md-4 col-form-label text-md-right">Активен по...</label>
                     <div class="col-md-6">
-                        <input type="datetime-local" name="active_after" id="active_after" class="form-control @error('api_url') is-invalid @enderror" value="{{date('Y-m-d\TH:i', strtotime($type_content->active_after))}}">
+                        <input type="text" name="active_after" id="active_after" class="form-control datepicker-here @error('api_url') is-invalid @enderror" value="{{date('Y-m-d\TH:i', strtotime($type_content->active_after))}}">
                         @error('name') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                     </div>
                 </div>

@@ -30,14 +30,14 @@
             <div class="form-group row">
                 <label for="active_from" class="col-md-4 col-form-label text-md-right">Активен с...</label>
                 <div class="col-md-6">
-                    <input type="datetime-local" name="active_from" placeholder="Введите активен с" id="active_from" class="form-control @error('active_from') is-invalid @enderror" value="{{ old('active_from') }}">
+                    <input type="text" name="active_from" placeholder="Введите активен с" id="active_from" class="form-control datepicker-here @error('active_from') is-invalid @enderror" value="{{ old('active_from') }}">
                     @error('active_from') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                 </div>
             </div>
             <div class="form-group row">
                 <label for="active_after" class="col-md-4 col-form-label text-md-right">Активен по...</label>
                 <div class="col-md-6">
-                    <input type="datetime-local" name="active_after" placeholder="Введите активен по" id="active_after" class="form-control @error('active_after') is-invalid @enderror" value="{{ old('active_after') }}">
+                    <input type="test" name="active_after" placeholder="Введите активен по" id="active_after" class="form-control datepicker-here @error('active_after') is-invalid @enderror" value="{{ old('active_after') }}">
                     @error('active_after') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                 </div>
             </div>
