@@ -61,7 +61,7 @@ Route::get('/users/{id}/activate', [UsersController::class, 'activate'])->name('
 Route::get('/users/{id}/block', [UsersController::class, 'block'])->name('users.block');
 Route::get('/users/{id}/delete', [UsersController::class, 'delete'])->name('users.delete');
 // СПРАВОЧНИКИ
-Route::get('/dictionary/', [DictionaryController::class, 'index'])->name('dictionary.index');
+Route::get('/dictionary/', [DictionaryController::class, 'index'])->name('dictionary.index')->middleware('auth:web');
 Route::post('/dictionary/', [DictionaryController::class, 'store'])->name('dictionary.store');
 Route::get('/dictionary/create', [DictionaryController::class, 'create'])->name('dictionary.create');
 Route::post('/dictionary/', [DictionaryController::class, 'store'])->name('dictionary.store');
