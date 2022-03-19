@@ -82,7 +82,7 @@ class DictionaryController extends Controller
             return redirect()->route('dictionary.index')->with('success', 'Справочник ' . $new_dictionary->name . ' успешно добавлен');
         } else if (Auth::guard('api')->check()) {
             $dic = Dictionary::create(['code' => $request['code'], 'name' => $request['name'], 'description' => $request['description'], 'archive' => $request['archive'], 'created_author' => Auth::guard('api')->user()->id, 'updated_author' => Auth::guard('api')->user()->id]);
-            $dictionary = Dictionary::find($dic->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
+            $dictionary = Dictionary::where('id', $dic->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
             return response()->json($dictionary);
         } else {
             return 'not auth';
@@ -156,7 +156,7 @@ class DictionaryController extends Controller
             $dictionary->archive = $request['archive'];
             $dictionary->updated_author = Auth::guard('api')->user()->id;
             $dictionary->save();
-            $dictionary = Dictionary::find($id)->with('created_author:id,name')->with('updated_author:id,name')->get();
+            $dictionary = Dictionary::where('id', $id)->with('created_author:id,name')->with('updated_author:id,name')->get();
             return response()->json($dictionary);
         } else {
             return 'not auth';
