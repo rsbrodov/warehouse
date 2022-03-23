@@ -65,10 +65,10 @@ class TypeContentController extends Controller
      */
     public function store(TypeContentRequest $request)
     {
+
         $model = new TypeContent();
         if (Auth::guard('web')->check()) {
             if (!$model->checkingApiUrl(str_slug($request->input('name')))) {
-
                 $new_type_content = TypeContent::create([
                     'id_global' => Str::uuid()->toString(),
                     'name' => $request->input('name'),
@@ -91,6 +91,7 @@ class TypeContentController extends Controller
                 return redirect()->back()->with('error', 'Что-то пошло не так');
             }
         } elseif (Auth::guard('api')->check()) {
+
             if (!$model->checkingApiUrl(str_slug($request->input('name')))) {
                 $new_type_content = TypeContent::create([
                     'id_global' => Str::uuid()->toString(),
@@ -197,26 +198,21 @@ class TypeContentController extends Controller
             }
         } else {
             if (Auth::guard('api')->check()) {
-                    $type = TypeContent::find($id);
-                    //print_r($id);exit;
-                if (!$type->checkingApiUrl($request['api_url'], $type['id_global'])) {
-                    $type->name = $request['name'];
-                    $type->description = $request['description'];
-                    $type->owner = $request['owner'];
-                    $type->icon = $request['icon'];
-                    $type->active_from = $request['active_from'];
-                    $type->active_after = $request['active_after'];
-                    $type->api_url = $request['api_url'];
-                    $type->body = $request['body'];
-                    $type->updated_author = Auth::guard('api')->user()->id;
-                    $type->save();
-                    $type_content = TypeContent::find($type->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
-                    return response()->json($type_content);
-                } else {
-                    return response()->json([
-                        'message' => 'Unprocessable Entity (validation failed "API URL")'
-                    ], 422);
-                }
+
+                $type = TypeContent::find($id);
+                //print_r($id);exit;
+                $type->name = $request['name'];
+                $type->description = $request['description'];
+                $type->owner = $request['owner'];
+                $type->icon = $request['icon'];
+                $type->active_from = $request['active_from'];
+                $type->active_after = $request['active_after'];
+                $type->api_url = $request['api_url'];
+                $type->body = $request['body'];
+                $type->updated_author = Auth::guard('api')->user()->id;
+                $type->save();
+                $type_content = TypeContent::find($type->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
+                return response()->json($type_content);
             } else {
                 return 'not auth';
             }
