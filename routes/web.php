@@ -10,7 +10,6 @@ use App\Http\Controllers\TechController;
 
 use App\Http\Controllers\YurkController;
 use App\Http\Controllers\TestController;
-use App\Http\Livewire\Select2Dropdown;
 
 /*
 |--------------------------------------------------------------------------
