@@ -44,80 +44,23 @@
             <div class="form-group row">
                 <label for="icon" class="col-md-4 col-form-label text-md-right">Иконка</label>
                 <div class="col-md-6">
-                    <select id="icon" type="text" class="form-control @error('icon') is-invalid @enderror" name="icon"></select>
+                    <select id="icon" class="form-control @error('icon') is-invalid @enderror" name="icon">
+                        @foreach($icons as $icon)
+                            <option value='{{$icon->code}}'>&#x{{$icon->unicode}}; {{$icon->name}}</option>
+                        @endforeach
+                    </select>
                     @error('icon') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                 </div>
             </div>
+            <style>
+                select{
+                    font-family: fontAwesome
+                }
+            </style>
 
             <button id="btn1" type="submit" class="btn btn-success">Создать</button>
         </form>
     </div>
-    <script>
-        function urlLit(w, v) {
-            var tr = 'a b v g d e ["zh","j"] z i y k l m n o p r s t u f h c ch sh ["shh","shch"] ~ y ~ e yu ya ~ ["jo","e"]'.split(' ');
-            var ww = '';
-            w = w.toLowerCase();
-            for (i = 0; i < w.length; ++i) {
-                cc = w.charCodeAt(i);
-                ch = (cc >= 1072 ? tr[cc - 1072] : w[i]);
-                if (ch.length < 3) ww += ch; else ww += eval(ch)[v];
-            }
-            return (ww.replace(/[^a-zA-Z0-9\-]/g, '-').replace(/[-]{2,}/gim, '-').replace(/^\-+/g, '').replace(/\-+$/g, ''));
-        }
-
-        $(document).ready(function () {
-            $('#name').bind('change keyup input click', function () {
-                $('#api_url').val(urlLit($('#name').val(), 0))
-            });
-            {{--$.ajaxSetup({--}}
-            {{--    headers: {--}}
-            {{--        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')--}}
-            {{--    }--}}
-            {{--});--}}
-            {{--$.ajax({--}}
-            {{--    url: '{{route('type-content.get-icons')}}',--}}
-            {{--    type: 'POST',--}}
-            {{--    data: {--}}
-            {{--        "_token": "{{ csrf_token() }}"--}}
-            {{--    },--}}
-            {{--    success: function (response) {--}}
-            {{--        console.log(response);--}}
-            {{--    },error:function(){--}}
-            {{--        console.log("err");--}}
-            {{--    }--}}
-            {{--});--}}
-            //  let icons_array = ['fa-edit', 'fa-eye', 'fa-plus-circle'];
-
-            {{--let icons_array = '<?php echo json_encode($icons_code_array);?>';--}}
-                
-            var icons_array ='<?php echo '["' . implode('", "', $icons_code_array) . '"]' ?>';
-            console.log(icons_array);
-
-
-            function formatState(state) {
-                if (!state.id) {
-                    return state.text;
-                }
-                let $state = $('<span class="fa ' + state.id.toLowerCase() + ' fa-lg" aria-hidden="true"></span><span>' + state.id + '</span>');
-                return $state;
-            };
-            $("#icon").select2({
-                templateSelection: formatState,
-                templateResult: formatState,
-                allowHtml: true,
-                theme: 'classic',
-                data: icons_array,
-            });
-            $('#icon').on('change', function () {
-                $('.fa').hover(function () {
-                    $(this).addClass('fa-spin');
-                }, function () {
-                    $(this).removeClass('fa-spin');
-                });
-            });
-            $('#icon').trigger('change');
-        });
-    </script>
 @endsection
 
 

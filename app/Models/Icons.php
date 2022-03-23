@@ -13,6 +13,7 @@ class Icons extends Model
     protected $table = 'icons';
     protected $fillable = [
         'code',
+        'unicode',
         'name',
     ];
 

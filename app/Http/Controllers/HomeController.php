@@ -7,6 +7,7 @@ use App\Models\DictionaryElement;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Itstructure\GridView\DataProviders\EloquentDataProvider;
 
 class HomeController extends Controller
 {
@@ -62,5 +63,17 @@ class HomeController extends Controller
         //$user = User::create(['name'=>'admin', 'email'=> 'admin@mail.ru', 'pass'=> 'sdfsdrfsd', 'archive'=>0, 'created_author'=>1, 'updated_author'=>1]);
         print_r($dic);
         print_r($dictionary_element);
+    }
+
+    public function gridViewTest()
+    {
+        if(Auth::guard('web')->check()) {
+            $dataProvider = new EloquentDataProvider(User::query());
+            return view('home-gvt', [
+                'dataProvider' => $dataProvider
+            ]);
+        } else {
+            return 'not auth';
+        }
     }
 }

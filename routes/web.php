@@ -38,6 +38,7 @@ Route::get('/tech/index', [TechController::class, 'index'])->name('tech.index');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/home2', [App\Http\Controllers\HomeController::class, 'index2'])->name('home2');
 Route::get('/home3', [App\Http\Controllers\HomeController::class, 'index3'])->name('home3');
+Route::get('/gvt', [App\Http\Controllers\HomeController::class, 'gridViewTest'])->name('home-gvt');
 
 
 //Route::get('/users/link/{data}', [UsersController::class, 'linkHandler'])->name('link.handler');
@@ -61,7 +62,7 @@ Route::get('/users/{id}/activate', [UsersController::class, 'activate'])->name('
 Route::get('/users/{id}/block', [UsersController::class, 'block'])->name('users.block');
 Route::get('/users/{id}/delete', [UsersController::class, 'delete'])->name('users.delete');
 // СПРАВОЧНИКИ
-Route::get('/dictionary/', [DictionaryController::class, 'index'])->name('dictionary.index');
+Route::get('/dictionary/', [DictionaryController::class, 'index'])->name('dictionary.index')->middleware('auth:web');
 Route::post('/dictionary/', [DictionaryController::class, 'store'])->name('dictionary.store');
 Route::get('/dictionary/create', [DictionaryController::class, 'create'])->name('dictionary.create');
 Route::post('/dictionary/', [DictionaryController::class, 'store'])->name('dictionary.store');

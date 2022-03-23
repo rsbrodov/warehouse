@@ -17,8 +17,6 @@ class Dictionary extends Model
         'code',
         'description',
         'archive',
-    ];
-    protected $guarded = [
         'created_author',
         'updated_author',
     ];

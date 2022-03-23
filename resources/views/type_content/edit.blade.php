@@ -59,21 +59,14 @@
                 <div class="form-group row">
                     <label for="icon" class="col-md-4 col-form-label text-md-right">Иконка</label>
                     <div class="col-md-6">
-                        <select id="icon" type="text" class="form-control select2icon @error('api_url') is-invalid @enderror" name="icon"></select>
-                        @error('name') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
+                        <select id="icon" class="form-control @error('icon') is-invalid @enderror" name="icon">
+                            @foreach($icons as $icon)
+                                <option value='{{$icon->code}}'>&#x{{$icon->unicode}}; {{$icon->name}}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
-                {{--                <?php $icons_array = ['one', 'two', 'three']; ?>--}}
-                {{--                <div class="form-group row">--}}
-                {{--                    <label for="icon" class="col-md-4 col-form-label text-md-right">Иконка</label>--}}
-                {{--                    <div class="col-md-6">--}}
-                {{--                        <select id="icon" type="text" class="form-control" name="icon">--}}
-                {{--                            @foreach($icons_array as $icon)--}}
-                {{--                                <option @if($type_content->icon === $icon) selected @endif value="{{$icon}}">{{$icon}}</option>--}}
-                {{--                            @endforeach--}}
-                {{--                        </select>--}}
-                {{--                    </div>--}}
-                {{--                </div>--}}
+
                 <div class="form-group row">
                     <label for="body" class="col-md-4 col-form-label text-md-right">Тело</label>
                     <div class="col-md-6">
@@ -88,64 +81,13 @@
                 </div>
 
             </div>
+            <style>
+                select{
+                    font-family: fontAwesome
+                }
+            </style>
         </form>
     </div>
-    <script>
-        function urlLit(w, v) {
-            var tr = 'a b v g d e ["zh","j"] z i y k l m n o p r s t u f h c ch sh ["shh","shch"] ~ y ~ e yu ya ~ ["jo","e"]'.split(' ');
-            var ww = '';
-            w = w.toLowerCase();
-            for (i = 0; i < w.length; ++i) {
-                cc = w.charCodeAt(i);
-                ch = (cc >= 1072 ? tr[cc - 1072] : w[i]);
-                if (ch.length < 3) ww += ch; else ww += eval(ch)[v];
-            }
-            return (ww.replace(/[^a-zA-Z0-9\-]/g, '-').replace(/[-]{2,}/gim, '-').replace(/^\-+/g, '').replace(/\-+$/g, ''));
-        }
 
-        $(document).ready(function () {
-            $('#name').bind('change keyup input click', function () {
-                $('#api_url').val(urlLit($('#name').val(), 0))
-            });
-            let icons_array = ['edit', 'eye', 'plus-circle'];
 
-            function formatState(state) {
-                if (!state.id) {
-                    return state.text;
-                }
-                let $state = $('<span class="fa fa-' + state.id.toLowerCase() + ' fa-lg" aria-hidden="true"></span><span>' + state.id + '</span>');
-                return $state;
-            };
-            let $icon = $("#icon");
-            $icon.select2({
-                templateSelection: formatState,
-                templateResult: formatState,
-                allowHtml: true,
-                theme: 'classic',
-                data: icons_array,
-            });
-            let data_selected = {
-                full_name: $('#icon_selected').val(),
-                id: $('#icon_selected').val()
-            };
-            let option = new Option(data_selected.name, data_selected.id, true, true);
-            $icon.append(option);
-            $icon.trigger({
-                type: 'select2:select',
-                params: {
-                    data: data_selected
-                }
-            });
-            $icon.on('change', function () {
-                $('.fa').hover(function () {
-                    $(this).addClass('fa-spin');
-                }, function () {
-                    $(this).removeClass('fa-spin');
-                });
-            });
-            setTimeout(function () {
-                $icon.trigger('change');
-            }, 10);
-        });
-    </script>
 @endsection
