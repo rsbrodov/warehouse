@@ -10,7 +10,6 @@ use App\Http\Controllers\TechController;
 
 use App\Http\Controllers\YurkController;
 use App\Http\Controllers\TestController;
-use App\Http\Livewire\Select2Dropdown;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +37,7 @@ Route::get('/tech/index', [TechController::class, 'index'])->name('tech.index');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/home2', [App\Http\Controllers\HomeController::class, 'index2'])->name('home2');
 Route::get('/home3', [App\Http\Controllers\HomeController::class, 'index3'])->name('home3');
+Route::get('/gvt', [App\Http\Controllers\HomeController::class, 'gridViewTest'])->name('home-gvt');
 
 
 //Route::get('/users/link/{data}', [UsersController::class, 'linkHandler'])->name('link.handler');
