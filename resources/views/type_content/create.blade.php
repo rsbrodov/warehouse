@@ -53,15 +53,6 @@
         </form>
     </div>
     <script>
-        //todo: убрать перед загрузкой:)
-        // let focus = 0;
-        // $('#name').focusout(function () {
-        //     focus++;
-        //     if (focus >= 5) {
-        //         $('#btn1').text('Ты серьезно? Уже ' + focus + ' исправлений...');
-        //     }
-        // });
-
         function urlLit(w, v) {
             var tr = 'a b v g d e ["zh","j"] z i y k l m n o p r s t u f h c ch sh ["shh","shch"] ~ y ~ e yu ya ~ ["jo","e"]'.split(' ');
             var ww = '';
@@ -95,9 +86,14 @@
             {{--        console.log("err");--}}
             {{--    }--}}
             {{--});--}}
-             let icons_array = ['fa-edit', 'fa-eye', 'fa-plus-circle'];
+            //  let icons_array = ['fa-edit', 'fa-eye', 'fa-plus-circle'];
 
-            {{--let icons_array = '<?php echo json_encode($icons_array);?>';--}}
+            {{--let icons_array = '<?php echo json_encode($icons_code_array);?>';--}}
+                
+            var icons_array ='<?php echo '["' . implode('", "', $icons_code_array) . '"]' ?>';
+            console.log(icons_array);
+
+
             function formatState(state) {
                 if (!state.id) {
                     return state.text;

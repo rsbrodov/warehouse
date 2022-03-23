@@ -53,12 +53,16 @@ class TypeContentController extends Controller
     {
         if (Auth::guard('web')->check()) {
             $icons = Icons::all();
+
+            $icons_code_array = array();
+            $icons_name_array = array();
             foreach ($icons as $key => $icon)
             {
-                $icons_array[$icon->code] = $icon->code;
+                $icons_code_array[$key]= $icon->code;
+                $icons_name_array[$key]= $icon->name;
             }
-            //print_r($icons_array);
-            return view('type_content.create')->with('icons_array', $icons_array);
+            //dd($icons_array);
+            return view('type_content.create')->with(['icons_code_array'=> $icons_code_array, 'icons_name_array' => $icons_name_array]);
         }
     }
 
@@ -159,7 +163,7 @@ class TypeContentController extends Controller
      */
     public function update(TypeContentRequest $request, $id)
     {
-                if (Auth::guard('web')->check()) {
+        if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
                 //$idGlobal = Str::uuid()->toString();
