@@ -130,8 +130,6 @@ class TypeContentController extends Controller
             ]);
             $type_content = TypeContent::find($new_type_content->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
             return response()->json($type_content);
-        } else {
-            return 'not auth';
         }
     }
 
@@ -162,8 +160,6 @@ class TypeContentController extends Controller
                 $icons = Icons::all();
                 return view('type_content.edit', ['type_content' => $type_content, 'icons' => $icons]);
             }
-        } else {
-            print_r('Авторизируйтесь');
         }
     }
 
@@ -213,8 +209,6 @@ class TypeContentController extends Controller
                 $type->save();
                 $type_content = TypeContent::find($type->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
                 return response()->json($type_content);
-            } else {
-                return 'not auth';
             }
         }
     }

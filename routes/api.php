@@ -29,18 +29,15 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('me', [AuthController::class, 'me']);
 
 });
-Route::get('/tech/create/', [TechController::class, 'create'])->name('tech.create');
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index']);
 
-Route::group(['middleware' => 'api'], function ($router) {
+Route::group(['middleware' => 'auth:api'], function ($router) {
     Route::get('/dictionary/findDictionary/', [App\Http\Controllers\DictionaryController::class, 'index']);
     Route::post('/dictionary/createdDictionary/', [App\Http\Controllers\DictionaryController::class, 'store'])->middleware('auth:api');
     Route::put('/dictionary/updatedDictionary/{id}', [App\Http\Controllers\DictionaryController::class, 'update'])->middleware('auth:api');
     Route::delete('/dictionary/deletedDictionary/{id}', [App\Http\Controllers\DictionaryController::class, 'destroy'])->middleware('auth:api');
 });
 
-
-Route::group(['middleware' => 'api'], function ($router) {
+Route::group(['middleware' => 'auth:api'], function ($router) {
     Route::get('/dictionary/findElementDictionaryID/{id}', [App\Http\Controllers\DictionaryElementController::class, 'index']);//получение элементов по dictionary_id
     Route::get('/dictionary/findElementDictionaryCode/{code}', [App\Http\Controllers\DictionaryElementController::class, 'indexCode']);//получение элементов по dictionary_id
     Route::post('/dictionary/createdElementDictionary/', [App\Http\Controllers\DictionaryElementController::class, 'store'])->middleware('auth:api');
@@ -48,7 +45,7 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::delete('/dictionary/deletedElementDictionary/{id}', [App\Http\Controllers\DictionaryElementController::class, 'destroy'])->middleware('auth:api');
 });
 
-Route::group(['middleware' => 'api'], function ($router) {
+Route::group(['middleware' => 'auth:api'], function ($router) {
     Route::get('/template/getListTypeContent/', [App\Http\Controllers\TypeContentController::class, 'index']);
     Route::post('/template/createTypeContent/', [App\Http\Controllers\TypeContentController::class, 'store'])->middleware('auth:api');
     Route::put('/template/updateTypeContent/{id}', [App\Http\Controllers\TypeContentController::class, 'update'])->middleware('auth:api');
