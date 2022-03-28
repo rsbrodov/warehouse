@@ -27,12 +27,13 @@ class TypeContentController extends Controller
     public function index()
     {
         if (Auth::guard('web')->check()) {
-            $user = Auth::guard('web')->user();
-            if ($user->hasRole('SuperAdmin')) {
-                $type_contents = TypeContent::where(['created_author' => Auth::guard('web')->user()->id])->with('created_authors:id,name')->with('updated_authors:id,name')->get();
-            } elseif ($user->hasRole('Admin')) {
-                $type_contents = TypeContent::where(['created_author' => Auth::guard('web')->user()->id])->with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('name', 'desc')->get();
+            $type_contents = TypeContent::where(['created_author' => Auth::guard('web')->user()->id])->with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('name', 'desc')->get()->unique('id_global');//все уникальные
+            $ids = [];
+            foreach ($type_contents as $type_content){
+                $ids[] = TypeContent::where('id_global', $type_content->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first()->id;
             }
+            //dd($ids);
+            $type_contents = TypeContent::whereIn('id', $ids)->get();
             return view('type_content.index')->with('type_contents', $type_contents);
         } else {
             if (Auth::guard('api')->check()) {
@@ -244,11 +245,11 @@ class TypeContentController extends Controller
     public function getAllVersionTypeContent($id)
     {
         if (Auth::guard('web')->check()) {
-            $type_contents = TypeContent::where('id_global', $id)->get();
+            $type_contents = TypeContent::where('id_global', $id)->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
             return view('type_content.all-version-type-content')->with('type_contents', $type_contents);
         } else {
             if (Auth::guard('api')->check()) {
-                $type_content = TypeContent::where('id_global', $id)->get();
+                $type_content = TypeContent::where('id_global', $id)->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
                 return response()->json($type_content);
             } else {
                 return response()->json('item not found');

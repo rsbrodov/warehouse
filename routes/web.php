@@ -89,7 +89,7 @@ Route::get('/type-content/create-icons', [TypeContentController::class, 'createI
 Route::post('/type-content/get-icons', [TypeContentController::class, 'getIcons'])->name('type-content.get-icons');
 
 Route::middleware(['auth:web'])->group(function () {
-    Route::get('/type-content/', [TypeContentController::class, 'index'])->name('type-content.index')->middleware('auth:web');;
+    Route::get('/type-content/', [TypeContentController::class, 'index'])->name('type-content.index');
     Route::get('/type-content/create', [TypeContentController::class, 'create'])->name('type-content.create');
     Route::post('/type-content/', [TypeContentController::class, 'store'])->name('type-content.store');
     Route::get('/all-version-type-content/{id}', [TypeContentController::class, 'getAllVersionTypeContent'])->name('type-content.get-all-version'); // норм что здесь нет type_content?
