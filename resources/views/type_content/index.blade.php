@@ -4,12 +4,12 @@
     <div class="container" xmlns:white-space="http://www.w3.org/1999/xhtml">
         <div class="row">
             <div class="col-md-4"><h3>Контентная модель</h3></div>
-            <div class="col-md-1 ml-auto"><a href="{{route('type-content.create')}}" class="btn btn-primary "><span
+            <div class="col-md-1 ml-auto"><a href="{{route('type-content.create')}}" class="btn-create btn btn-primary"><span
                         class="fa fa-plus-circle fa-lg" aria-hidden="true"></span></a></div>
         </div>
         <table class="table table-bordered table-hover">
             <tr>
-                <th>Тип контента</th>
+                <th style="white-space: nowrap">Тип контента</th>
                 <th>Описание</th>
                 <th>Версия</th>
                 <th>Статус</th>
@@ -19,7 +19,7 @@
             </tr>
             @foreach($type_contents as $type_content)
                 <tr>
-                    <td><i class="fa {{$type_content->icon}} fa-lg" aria-hidden="true"></i>{{$type_content->name}}</td>
+                    <td style="white-space: nowrap"><i class="fa {{$type_content->icon}} fa-lg" aria-hidden="true"></i> {{$type_content->name}}</td>
                     <td>{{$type_content->description}}</td>
                     <td>{{$type_content->version_major}}.{{$type_content->version_minor}}</td>
 
@@ -44,4 +44,10 @@
         </table>
         {{--        <a href="{{route('type-content.create-icons')}}" class="btn btn-warning form-control">Сделать крутые иконки!</a>--}}
     </div>
+    <style>
+        .btn-create span{
+            background: #1890FF;
+            border-radius: 50%!important;
+        }
+    </style>
 @endsection
