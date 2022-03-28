@@ -9,40 +9,43 @@
                 <th>Версия</th>
                 <th>Статус</th>
                 <th>Идентификатор версии</th>
-                <th>Дата последнего обновления</th>
+                <th>Автор изменений</th>
+                <th>Дата и время изменений</th>
                 <th>Действия</th>
             </tr>
             @foreach($type_contents as $type_content)
                 <tr>
                     <td>{{$type_content->version_major}}.{{$type_content->version_minor}}</td>
-                    <td class="
                     @if($type_content->status == 'Draft')
-                        bg-secondary
-                    @elseif($type_content->status == 'ACTIVATED')
-                        bg-success
-                    @elseif($type_content->status == 'BLOCKED')
-                        bg-warning
+                        <td class="text-dark">Черновик</td>
+                    @elseif($type_content->status == 'Published')
+                        <td class="text-success">Опубликовано</td>
+                    @elseif($type_content->status == 'Archive')
+                        <td class="text-warning">В архиве</td>
                     @else
-                        bg-danger
+                        <td class="text-danger">Черновик</td>
                     @endif
-                        ">{{$type_content->status}}</td>
                     <td>{{$type_content['id']}}</td>
-                    <td>{{$type_content->updated_at}}
-                        (@if(!empty($type_content->updated_authors)) {{$type_content->updated_authors->name}}@endif )</td>
+                    <td>@if(!empty($type_content->updated_authors)) {{$type_content->updated_authors->name}}@endif </td>
+                    <td>{{$type_content->updated_at}}</td>
                     <td nowrap>
                         <a href="{{route('type-content.show', ($type_content->id))}}"
                            class="btn btn-success ">
                             <i class="fa fa-eye fa-lg" aria-hidden="true"></i>
                         </a>
+                        @if($type_content->status !== 'Archive')
                         <a href="{{route('type-content.edit', $type_content->id)}}"
                            class="btn btn-primary">
                             <i class="fa fa-edit fa-lg" aria-hidden="true"></i>
                         </a>
+                        @endif
+                        @if($type_content->status !== 'Published' and $type_content->status !== 'Archive')
                         <form action="{{ route('type-content.destroy', $type_content->id) }}" method="POST">
                             @method('DELETE')
                             @csrf
                             <button type="submit" class="btn btn-danger"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></button>
                         </form>
+                        @endif
                     </td>
                 </tr>
             @endforeach

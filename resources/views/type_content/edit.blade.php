@@ -46,7 +46,9 @@
                         @error('name') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                     </div>
                 </div>
-                <?php $status_array = ['Draft', 'Published', 'Archive']; ?>
+                <?php
+                    $status_array = ['Draft', 'Published', 'Archive'];
+                ?>
                 <div class="form-group row">
                     <label for="status" class="col-md-4 col-form-label text-md-right">Статус</label>
                     <div class="col-md-6">
