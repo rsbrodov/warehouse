@@ -65,7 +65,6 @@ class TypeContentController extends Controller
      */
     public function store(TypeContentRequest $request)
     {
-
         $model = new TypeContent();
         if (Auth::guard('web')->check()) {
             if (!$model->checkingApiUrl(str_slug($request->input('name')))) {
@@ -80,7 +79,7 @@ class TypeContentController extends Controller
                     'version_major' => '1',
                     'version_minor' => '0',
                     'icon' => $request->input('icon'),
-                    'api_url' => str_slug($request->input('name')),
+                    'api_url' => str_slug($request->input('api_url')),
                     'based_type' => null,
                     'created_author' => Auth::guard('web')->user()->id,
                     'updated_author' => Auth::guard('web')->user()->id
@@ -172,7 +171,7 @@ class TypeContentController extends Controller
      */
     public function update(TypeContentRequest $request, $id)
     {
-                if (Auth::guard('web')->check()) {
+        if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
                 $type = TypeContent::find($id);
