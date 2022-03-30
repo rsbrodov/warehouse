@@ -28,23 +28,29 @@
                     <td>{{$type_content['id']}}</td>
                     <td>@if(!empty($type_content->updated_authors)) {{$type_content->updated_authors->name}}@endif </td>
                     <td>{{$type_content->updated_at}}</td>
-                    <td nowrap>
-                        <a href="{{route('type-content.show', ($type_content->id))}}"
-                           class="btn btn-success ">
-                            <i class="fa fa-eye fa-lg" aria-hidden="true"></i>
-                        </a>
+                    <td style="display: flex">
+                        <div class="col-4">
+                            <a href="{{route('type-content.show', ($type_content->id))}}"
+                               class="btn btn-success ">
+                                <i class="fa fa-eye fa-lg" aria-hidden="true"></i>
+                            </a>
+                        </div>
                         @if($type_content->status !== 'Archive')
-                        <a href="{{route('type-content.edit', $type_content->id)}}"
-                           class="btn btn-primary">
-                            <i class="fa fa-edit fa-lg" aria-hidden="true"></i>
-                        </a>
+                            <div class="col-4">
+                                <a href="{{route('type-content.edit', $type_content->id)}}"
+                                   class="btn btn-primary">
+                                    <i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
+                                </a>
+                            </div>
                         @endif
                         @if($type_content->status !== 'Published' and $type_content->status !== 'Archive')
-                        <form action="{{ route('type-content.destroy', $type_content->id) }}" method="POST">
-                            @method('DELETE')
-                            @csrf
-                            <button type="submit" class="btn btn-danger"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></button>
-                        </form>
+                            <div class="col-4">
+                                <form action="{{ route('type-content.destroy', $type_content->id) }}" method="POST">
+                                    @method('DELETE')
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></button>
+                                </form>
+                            </div>
                         @endif
                     </td>
                 </tr>
