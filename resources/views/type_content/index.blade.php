@@ -63,7 +63,8 @@
             </tr>
             @foreach($type_contents as $type_content)
                 <tr>
-                    <td style="white-space: nowrap"><i class="fa {{$type_content->icon}} fa-lg" aria-hidden="true"></i> {{$type_content->name}}</td>
+                    <td style="white-space: nowrap"><i class="fa {{$type_content->icon}} fa-lg"
+                                                       aria-hidden="true"></i> {{$type_content->name}}</td>
                     <td>{{$type_content->description}}</td>
                     <td>{{$type_content->version_major}}.{{$type_content->version_minor}}</td>
 
@@ -76,12 +77,29 @@
                     @else
                         <td class="text-danger">Черновик</td>
                     @endif
+                    <?php
+                    $ac_fr = date_create($type_content->active_from);
+                    $ac_af = date_create($type_content->active_after);
+                    ?>
+                    @if(empty($type_content->active_from) and empty($type_content->active_after))
+                        <td>Не задан</td>
+                    @elseif(empty($type_content->active_from) and !empty($type_content->active_after))
+                        <td>До {{date_format($ac_af, 'd.m.Y')}}</td>
+                    @elseif(!empty($type_content->active_from) and empty($type_content->active_after))
+                        <td>{{date_format($ac_fr, 'd.m.Y')}}-бессрочно</td>
+                    @else
+                        <td>{{date_format($ac_fr, 'd.m.Y')}}-{{date_format($ac_af, 'd.m.Y')}}</td>
+                    @endif
+                    @if(!empty($type_content->updated_at))
+                        <?php
+                        $up_at = date_create($type_content->updated_at);
+                        ?>
+                        <td>{{date_format($up_at, 'd.m.Y H:m')}}</td>
+                    @endif
 
-                    <td>{{$type_content->active_from}}-{{$type_content->active_after}}</td>
-                    <td>{{$type_content->updated_at}}
-                        (@if(!empty($type_content->updated_authors)) {{$type_content->updated_authors->name}}@endif )</td>
                     <td nowrap>
-                        <a href="{{route('type-content.get-all-version', $type_content->id_global)}}" class="btn btn-primary"><i class="fa fa-edit fa-lg" aria-hidden="true"></i></a>
+                        <a href="{{route('type-content.get-all-version', $type_content->id_global)}}"
+                           class="btn btn-primary"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
                     </td>
                 </tr>
             @endforeach
