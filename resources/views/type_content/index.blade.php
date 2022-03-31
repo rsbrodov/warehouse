@@ -1,13 +1,57 @@
 <? use \App\Models\User; ?>
 @extends('admin.main')
 @section('content')
-    <div class="container" xmlns:white-space="http://www.w3.org/1999/xhtml">
-        <div class="row">
-            <div class="col-md-4"><h3>Контентная модель</h3></div>
-            <div class="col-md-1 ml-auto"><a href="{{route('type-content.create')}}" class="btn-create btn btn-primary"><span
-                        class="fa fa-plus-circle fa-lg" aria-hidden="true"></span></a></div>
+    <div class="" xmlns:white-space="http://www.w3.org/1999/xhtml">
+        <div class="text-center"><h3>Контентная модель</h3></div>
+
+        <div class="row mt-4">
+            <div class="header-block row">
+                <div class="search-button col-2">
+                    <button id="hideshow" class="btn btn-primary"><span class="fa fa-search fa-lg" aria-hidden="true"></span></button>
+                </div>
+                <div class="search-form col-8">
+                    <div class="form">
+                        <form action="{{route('type-content.store')}}" method="post">
+                            @csrf
+                            <div class="form-group row">
+                                <div class="col-4">
+                                    <input autocomplete="off" type="text" name="name" placeholder="Наименование типа" id="name" class="form-control">
+                                </div>
+                                <div class="col-4">
+                                    <select id="status" class="form-control" name="status">
+                                        <option value='0'>Все</option>
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <select id="owner" class="form-control" name="owner">
+                                        <option value='0'>Владелец</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-4">
+                                    <input autocomplete="off" type="text" name="active_from" placeholder="Период действия с" id="active_from" class="form-control datepicker-here">
+                                </div>
+                                <div class="col-4">
+                                    <input  autocomplete="off" type="text" name="active_after" placeholder="Период действия по" id="active_after" class="form-control datepicker-here">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="create col-2">
+                     <button id="clean" class="btn btn-primary"><span class="fa fa-paint-brush fa-lg" aria-hidden="true"></span> Очистить</button>
+                     <a href="{{route('type-content.create')}}" class="btn-create btn btn-primary"><span class="fa fa-plus-circle fa-lg" aria-hidden="true"></span></a>
+                </div>
+            </div>
+
+
+
+
+
         </div>
-        <table class="table table-bordered table-hover">
+        <table class="table table-bordered table-hover mt-4">
             <tr>
                 <th style="white-space: nowrap">Тип контента</th>
                 <th>Описание</th>
@@ -63,9 +107,22 @@
         {{--        <a href="{{route('type-content.create-icons')}}" class="btn btn-warning form-control">Сделать крутые иконки!</a>--}}
     </div>
     <style>
-        .btn-create span {
-            background: #1890FF;
-            border-radius: 50% !important;
+        .header-block{
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
         }
     </style>
+
+    <script>
+        $('.form').hide();
+        $('#hideshow').on('click', function(event) {
+            $('.form').toggle('show');
+        });
+        $("#clean").click(function() {
+            $( 'form' ).each(function(){
+                this.reset();
+            });
+        });
+    </script>
 @endsection
