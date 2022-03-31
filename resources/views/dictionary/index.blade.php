@@ -35,7 +35,7 @@
                             <i class="fa fa-eye fa-lg" aria-hidden="true"></i>
                         </a>
                         <a href="{{route('dictionary.edit', ($dictionary->id))}}" class="btn btn-primary">
-                            <i class="fa fa-edit fa-lg" aria-hidden="true"></i>
+                            <i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
                         </a>
                         <a href="{{route('dictionary-element.index', $dictionary->id)}}" class="btn btn-success">
                             <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
