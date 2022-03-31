@@ -4,7 +4,7 @@
     <div class="container" xmlns:white-space="http://www.w3.org/1999/xhtml">
         <div class="d-flex justify-content-center"><h1>Все версии одного global</h1></div>
         <a href="{{route('type-content.index')}}" class="btn btn-outline-info form-control">Вернуться</a>
-        <table class="table table-bordered table-hover">
+        <table class="table table-bordered mt-2 table-hover">
             <tr>
                 <th>Версия</th>
                 <th>Статус</th>
@@ -43,6 +43,11 @@
                             @csrf
                             <button type="submit" class="btn btn-danger"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></button>
                         </form>
+                        <a href="{{route('type-content.descript-version', $type_content->id)}}"
+                           class="btn btn-primary">
+                            <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
+                        </a>
+
                     </td>
                 </tr>
             @endforeach

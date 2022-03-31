@@ -86,7 +86,9 @@ Route::post('/type-content/get-icons', [TypeContentController::class, 'getIcons'
 Route::get('/type-content/', [TypeContentController::class, 'index'])->name('type-content.index');
 Route::get('/type-content/create', [TypeContentController::class, 'create'])->name('type-content.create');
 Route::post('/type-content/', [TypeContentController::class, 'store'])->name('type-content.store');
-Route::get('/all-version-type-content/{id}', [TypeContentController::class, 'getAllVersionTypeContent'])->name('type-content.get-all-version'); // норм что здесь нет type_content?
+Route::get('/all-version-type-content/{id}', [TypeContentController::class, 'getAllVersionTypeContent'])->name('type-content.get-all-version');
+Route::get('/descript-version-type-content/{id}', [TypeContentController::class, 'getShowDescription'])->name('type-content.descript-version');
+Route::get('/type-content/{id}/{type}', [TypeContentController::class, 'createElemen'])->name('type-content.create-elemen');
 Route::get('/type-content/{id}', [TypeContentController::class, 'show'])->name('type-content.show');
 Route::get('/type-content/{id}/edit', [TypeContentController::class, 'edit'])->name('type-content.edit');
 Route::get('/type-content/{id}/{parametr}', [TypeContentController::class, 'createNewVersion'])->name('type-content.create-new-version');
