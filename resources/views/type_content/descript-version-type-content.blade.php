@@ -87,6 +87,17 @@
             </div>
         </div>
         <hr>
+        <br>
+        <br>
+        <br>
+        <div class="container">
+            <label for="wdwd" class="text-center"><b>Напишите Ваш текст который хотите прочесть:</b></label>
+            <textarea name="wd" id="wdwd" cols="30" rows="2" class="form-control"></textarea>
+            <button id="speakBtn" class="btn form-control btn-secondary mt-2">Озвучить текст</button>
+        </div>
+        <br>
+        <br>
+        <br>
         <div class="p-2">
             <a href="{{route('type-content.get-all-version', $typeContent->id_global)}}"
                class="btn btn-danger mt-2 mb-3">Венуться к списку</a>
@@ -199,6 +210,18 @@
     </div>
     <script>
 
+        const textEl = document.getElementById('wdwd');
+        const speakEl = document.getElementById('speakBtn');
+        // перехватим клик по кнопке
+        speakEl.addEventListener('click', speakText);
+        function speakText() {
+            // остановим все, что уже синтезируется в речь
+            window.speechSynthesis.cancel();
+            // прочитать текст
+            const text = textEl.value;
+            const utterance = new SpeechSynthesisUtterance(text);
+            window.speechSynthesis.speak(utterance);
+        }
 
         var sortable = $('sortable');
         console.log('wdwd')
@@ -218,7 +241,7 @@
                     dragItem.id = idItemsEl;
                     dragItem.innerText = item.innerText;
                     idItemsEl++
-                    $('#modalefefef').modal('show');
+                    //$('#modalefefef').modal('show');
                     //console.log(dragItem)
                     //console.log(item.parentElement)
                     //удаление элемента
@@ -266,7 +289,19 @@
             `
             boards.append(board)
             dragAndDrop()
+            changeTitle()
         }
         button.addEventListener('click', addBoard)
+        function changeTitle(){
+            const titles = document.querySelectorAll('.title')
+            titles.forEach(title =>{
+                title.addEventListener('click', e => {
+                    console.log(title)
+                    old = e.target.textContent
+                    e.target.textContent = ''
+                })
+            })
+        }
+        changeTitle()
     </script>
 @endsection
