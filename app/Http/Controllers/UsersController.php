@@ -28,8 +28,6 @@ class UsersController extends Controller
                 $users = User::where('parent_id', Auth::id())->orWhere('id', Auth::id())->get();
             }
             return view('users.index')->with('users', $users);
-        } else {
-            print_r('Авторизируйтесь');
         }
     }
 
@@ -58,8 +56,6 @@ class UsersController extends Controller
                 $new_user->assignRole($request->input('role')); //назначить роль юзеру
             }
             return redirect()->route('users.index')->with('success', 'Пользователь ' . $new_user->name . ' успешно добавлен');
-        } else {
-            print_r('Авторизируйтесь');
         }
     }
 
@@ -71,8 +67,6 @@ class UsersController extends Controller
                 $edit_user = User::where('id', $id)->first();
                 return view('users.edit', ['edit_user' => $edit_user]); // вью - это физический файл, рут - это виртуальный путь, который ведет к методу
             }
-        } else {
-            print_r('Авторизируйтесь');
         }
     }
 
@@ -93,8 +87,6 @@ class UsersController extends Controller
                 $edit_user->save();
                 return redirect()->route('users.index')->with('success', 'Пользователь ' . $edit_user->name . ' успешно отредактирован');
             }
-        } else {
-            print_r('Авторизируйтесь');
         }
     }
 
@@ -110,8 +102,6 @@ class UsersController extends Controller
                 $act_user->save();
                 return redirect()->route('users.index')->with('success', 'Пользователь ' . $act_user->name . ' активирован!');
             }
-        } else {
-            print_r('Авторизируйтесь');
         }
     }
 
@@ -156,8 +146,6 @@ class UsersController extends Controller
                 $del_user->save();
                 return redirect()->route('users.index')->with($type_message, $message);
             }
-        } else {
-            print_r('Авторизируйтесь');
         }
     }
 
@@ -186,8 +174,6 @@ class UsersController extends Controller
                 $permissions = Permission::all();
                 return view('users.roles-create-view', ['roles' => $roles, 'permissions' => $permissions]);
             }
-        } else {
-            print_r('Авторизируйтесь');
         }
     }
 
@@ -222,8 +208,6 @@ class UsersController extends Controller
                 }
                 return redirect()->route('users.roles-create-view')->with($type_message, $message);
             }
-        } else {
-            print_r('Авторизируйтесь');
         }
     }
 
@@ -243,8 +227,6 @@ class UsersController extends Controller
                 $message = substr($message, 0, -2);
                 return redirect()->route('users.roles-create-view')->with($type_message, $message);
             }
-        } else {
-            print_r('Авторизируйтесь');
         }
     }
 

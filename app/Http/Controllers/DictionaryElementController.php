@@ -26,8 +26,6 @@ class DictionaryElementController extends Controller
         } else if (Auth::guard('api')->check()) {
             $dictionary_element = DictionaryElement::where(['dictionary_id' => $id])->with('created_author:id,name')->with('updated_author:id,name')->get();
             return response()->json($dictionary_element);
-        } else {
-            return 'not auth';
         }
     }
 
@@ -89,8 +87,6 @@ class DictionaryElementController extends Controller
             $dic = DictionaryElement::create(['dictionary_id' => $request['dictionary_id'], 'value' => $request['value'], 'created_author' => Auth::guard('api')->user()->id, 'updated_author' => Auth::guard('api')->user()->id]);
             $dictionary_element = DictionaryElement::where('id', $dic->id)->with('created_author:id,name')->with('updated_author:id,name')->first();
             return response()->json($dictionary_element);
-        } else {
-            return 'not auth';
         }
     }
 
@@ -121,8 +117,6 @@ class DictionaryElementController extends Controller
                 //dd($edit_element_dictionary);
                 return view('dictionary_element.edit', ['edit_element_dictionary' => $edit_element_dictionary]);
             }
-        } else {
-            print_r('Авторизируйтесь');
         }
     }
 
@@ -156,8 +150,6 @@ class DictionaryElementController extends Controller
 
             $dictionary = DictionaryElement::find($id)->with('created_author:id,name')->with('updated_author:id,name')->get();
             return response()->json($dictionary);
-        } else {
-            print_r('Авторизируйтесь');
         }
     }
 
@@ -186,7 +178,6 @@ class DictionaryElementController extends Controller
             } else {
                 return response()->json('item not found');
             }
-
         }
     }
 }
