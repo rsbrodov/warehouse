@@ -4,7 +4,7 @@
     <div class="container" xmlns:white-space="http://www.w3.org/1999/xhtml">
         <div class="d-flex justify-content-center"><h1>Все версии одного global</h1></div>
         <a href="{{route('type-content.index')}}" class="btn btn-outline-info form-control">Вернуться</a>
-        <table class="table table-bordered table-hover">
+        <table class="table table-bordered mt-2 table-hover">
             <tr>
                 <th>Версия</th>
                 <th>Статус</th>
@@ -26,6 +26,7 @@
                         <td class="text-danger">Черновик</td>
                     @endif
                     <td>{{$type_content['id']}}</td>
+
                     <td>@if(!empty($type_content->updated_authors)) {{$type_content->updated_authors->name}}@endif </td>
                     <td>{{$type_content->updated_at}}</td>
                     <td style="display: flex">
@@ -52,6 +53,10 @@
                                 </form>
                             </div>
                         @endif
+                        <a href="{{route('type-content.descript-version', $type_content->id)}}"
+                           class="btn btn-primary">
+                            <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
+                        </a>
                     </td>
                 </tr>
             @endforeach

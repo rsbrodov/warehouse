@@ -11,6 +11,7 @@
     <link type="text/css" rel="stylesheet" href="{{ mix('css/app.css') }}">
 
     <link rel="stylesheet" href="{{ asset("css/datepicker.min.css") }}">
+    <link rel="stylesheet" href="{{ asset("css/dragula.min.css") }}">
 
     <!-- Theme style -->
     <link rel="stylesheet" href="{{asset('dist/css/adminlte.min.css')}}">
@@ -26,6 +27,7 @@
 <script src="{{ asset('plugins/select2/js/select2.js') }}"></script>
 
 <script src="{{ asset("js/datepicker.min.js") }}"></script>
+<script src="{{ asset("js/dragula.min.js") }}"></script>
 
 <div class="wrapper">
 
@@ -69,7 +71,8 @@
 
 
     </div>
-    <!-- /.content-wrapper -->
+    @include('admin.mymodal')
+        <!-- /.content-wrapper -->
     @include('admin.control-sidebar')
     @include('admin.footer')
 </div>
