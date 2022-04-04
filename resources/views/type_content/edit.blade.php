@@ -24,26 +24,26 @@
                 <div class="form-group row">
                     <label for="description" class="col-md-4 col-form-label text-md-right">Описание</label>
                     <div class="col-md-6">
-                        <textarea name="description" placeholder="Введите описание" id="description" class="form-control @error('api_url') is-invalid @enderror">{{$type_content->description}}</textarea>
-                        @error('name') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
+                        <textarea name="description" placeholder="Введите описание" id="description" class="form-control @error('description') is-invalid @enderror">{{$type_content->description}}</textarea>
+                        @error('description') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="active_from" class="col-md-4 col-form-label text-md-right">Активен с...</label>
                     <div class="col-md-6">
 
-                        <input type="text" name="active_from" id="active_from" class="form-control datepicker-here @error('api_url') is-invalid @enderror" value="{{date('Y-m-d\TH:i', strtotime($type_content->active_from))}}">
+                        <input type="text" name="active_from" id="active_from" class="form-control datepicker-here @error('active_from') is-invalid @enderror" value="{{date('d.m.Y', strtotime($type_content->active_from))}}">
 
-                        @error('name') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
+                        @error('active_from') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="active_after" class="col-md-4 col-form-label text-md-right">Активен по...</label>
                     <div class="col-md-6">
 
-                        <input type="text" name="active_after" id="active_after" class="form-control datepicker-here @error('api_url') is-invalid @enderror" value="{{date('Y-m-d\TH:i', strtotime($type_content->active_after))}}">
+                        <input type="text" name="active_after" id="active_after" class="form-control datepicker-here @error('active_after') is-invalid @enderror" value="{{date('d.m.Y', strtotime($type_content->active_after))}}">
 
-                        @error('name') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
+                        @error('active_after') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                     </div>
                 </div>
                 <?php
@@ -52,13 +52,13 @@
                 <div class="form-group row">
                     <label for="status" class="col-md-4 col-form-label text-md-right">Статус</label>
                     <div class="col-md-6">
-                        <select id="status" type="text" class="form-control @error('api_url') is-invalid @enderror" name="status">
+                        <select id="status" type="text" class="form-control @error('status') is-invalid @enderror" name="status">
                             @foreach($status_array as $status)
                                 <option @if($type_content->status === $status) selected
                                         @endif value="{{$status}}">{{$status}}</option>
                             @endforeach
                         </select>
-                        @error('name') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
+                        @error('status') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                     </div>
                 </div>
                 <input type="hidden" id="icon_selected" value="{{$type_content->icon}}">
@@ -96,6 +96,24 @@
             </style>
         </form>
     </div>
+    <script>
+        function urlLit(w, v) {
+            let tr = 'a b v g d e ["zh","j"] z i y k l m n o p r s t u f h c ch sh ["shh","shch"] ~ y ~ e yu ya ~ ["jo","e"]'.split(' ');
+            let ww = '';
+            w = w.toLowerCase();
+            for (i = 0; i < w.length; ++i) {
+                cc = w.charCodeAt(i);
+                ch = (cc >= 1072 ? tr[cc - 1072] : w[i]);
+                if (ch.length < 3) ww += ch; else ww += eval(ch)[v];
+            }
+            return (ww.replace(/[^a-zA-Z0-9\-]/g, '-').replace(/[-]{2,}/gim, '-').replace(/^\-+/g, '').replace(/\-+$/g, ''));
+        }
 
+        $(document).ready(function () {
+            $('#name').bind('change keyup input click', function () {
+                $('#api_url').val(urlLit($('#name').val(), 0))
+            });
+        });
+    </script>
 
 @endsection

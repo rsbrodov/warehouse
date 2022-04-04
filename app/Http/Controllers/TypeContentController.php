@@ -70,13 +70,17 @@ class TypeContentController extends Controller
         $model = new TypeContent();
         if (Auth::guard('web')->check()) {
             if (!$model->checkingApiUrl(str_slug($request->input('name')))) {
+                $ac_fr = date_create($request->input('active_from'));
+                date_format($ac_fr, 'Y-m-d H:m:s');
+                $ac_af = date_create($request->input('active_after'));
+                date_format($ac_af, 'Y-m-d H:m:s');
                 $new_type_content = TypeContent::create([
                     'id_global' => Str::uuid()->toString(),
                     'name' => $request->input('name'),
                     'description' => $request->input('description'),
                     'owner' => '7856',
-                    'active_from' => $request->input('active_from'),
-                    'active_after' => $request->input('active_after'),
+                    'active_from' => $ac_fr,
+                    'active_after' => $ac_af,
                     'status' => 'DRAFT',
                     'version_major' => '1',
                     'version_minor' => '0',
@@ -176,13 +180,17 @@ class TypeContentController extends Controller
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
+                $ac_fr = date_create($request['active_from']);
+                date_format($ac_fr, 'Y-m-d H:m:s');
+                $ac_af = date_create($request['active_after']);
+                date_format($ac_af, 'Y-m-d H:m:s');
                 $type = TypeContent::find($id);
                 if (!$type->checkingApiUrl($request['api_url'], $type['id_global'])) {
                     $type->name = $request['name'];
                     $type->api_url = $request['api_url'];
                     $type->description = $request['description'];
-                    $type->active_from = $request['active_from'];
-                    $type->active_after = $request['active_after'];
+                    $type->active_from = $ac_fr;
+                    $type->active_after = $ac_af;
                     $type->status = $request['status'];
                     $type->icon = $request['icon'];
                     $type->body = $request['body'];

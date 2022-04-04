@@ -24,7 +24,7 @@
 <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
 
 <!-- SELECT2 -->
-<script src="{{ asset('plugins/select2/js/select2.js') }}"></script>
+{{--<script src="{{ asset('plugins/select2/js/select2.js') }}"></script>--}}
 
 <script src="{{ asset("js/datepicker.min.js") }}"></script>
 <script src="{{ asset("js/dragula.min.js") }}"></script>
