@@ -28,7 +28,7 @@
                         </a>
                         <a href="{{route('dictionary-element.edit', $dictionary_element->id)}}"
                            class="btn btn-primary ">
-                            <i class="fa fa-edit fa-lg" aria-hidden="true"></i>
+                            <i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
                         </a>
                         <form action="{{ route('dictionary-element.destroy', $dictionary_element->id) }}" method="POST">
                             @method('DELETE')

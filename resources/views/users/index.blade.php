@@ -42,7 +42,7 @@
                         @if($user->status != 'MODERATED')
                             <a href="{{route('users.edit', ($user->id))}}"
                                class="btn btn-primary @if($user->status == 'DELETED' or $user->status == 'BLOCKED') disabled @endif ">
-                                <i class="fa fa-edit fa-lg" aria-hidden="true"></i>
+                                <i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
                             </a>
                         @else
                             <a href="{{route('users.activate', ($user->id))}}"
