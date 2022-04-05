@@ -463,7 +463,7 @@ class TypeContentController extends Controller
         $typeContent->body = json_encode($data);
         $typeContent->save();
 
-        return redirect()->route('users.index', $id);
+        //return redirect()->route('users.index', $id);
         return view('type_content.descript-version-type-content', [
             'id' => $id,
             'typeContent' => $typeContent,
