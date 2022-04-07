@@ -185,6 +185,11 @@ class TypeContentController extends Controller
                 $ac_af = date_create($request['active_after']);
                 date_format($ac_af, 'Y-m-d H:m:s');
                 $type = TypeContent::find($id);
+                if($type->status === 'Draft' or $type->status === 'Archive') {
+                    $other_published = TypeContent::where(['id_global'=>$type->id_global, 'status' => 'Published'])->first();
+                    $other_published->status = 'Archive';
+                    $other_published->save();
+                }
                 if (!$type->checkingApiUrl($request['api_url'], $type['id_global'])) {
                     $type->name = $request['name'];
                     $type->api_url = $request['api_url'];
