@@ -187,8 +187,10 @@ class TypeContentController extends Controller
                 $type = TypeContent::find($id);
                 if($type->status === 'Draft' or $type->status === 'Archive') {
                     $other_published = TypeContent::where(['id_global'=>$type->id_global, 'status' => 'Published'])->first();
-                    $other_published->status = 'Archive';
-                    $other_published->save();
+                    if(isset($other_published)){
+                        $other_published->status = 'Archive';
+                        $other_published->save();
+                    }
                 }
                 if (!$type->checkingApiUrl($request['api_url'], $type['id_global'])) {
                     $type->name = $request['name'];
@@ -201,8 +203,7 @@ class TypeContentController extends Controller
                     $type->body = $request['body'];
                     $type->updated_author = Auth::guard('web')->user()->id;
                     $type->save();
-                    return redirect()->route('type-content.index')->with('success',
-                        'Тип ' . $type->name . ' успешно отредактирован');
+                    return redirect()->route('type-content.get-all-version', $type->id_global)->with('success', 'Тип ' . $type->name . ' успешно отредактирован');
                 } else {
                     return redirect()->back()->with('error', 'Что-то пошло не так');
                 }
@@ -227,7 +228,14 @@ class TypeContentController extends Controller
             }
         }
     }
+    public function enter(){
+        if (Auth::guard('web')->check()) {
+            $user = Auth::guard('web')->user();
+            if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
 
+            }
+        }
+    }
     /**
      * Remove the specified resource from storage.
      *
@@ -275,6 +283,15 @@ class TypeContentController extends Controller
 
     public function createNewVersion($id, $parametr)
     {
+        //todo проверить эту портянку на то что при создании новой версии и существующем черновике выдается ошибка!
+        $type = TypeContent::find($id);
+        $exist_other_draft = TypeContent::where(['id_global'=>$type->id_global, 'status' => 'Draft'])->count();
+        if($exist_other_draft){
+            alert('ERROR!');
+            return redirect()->back()->with('error', 'Черновик уже существует. Удалите его или отредактируйте.');
+        }
+        // endtodo: вот до сюдова
+
         //проверка параметров
         if ($parametr == 'major' || $parametr == 'minor') {
             if ($parametr == 'major') {
@@ -469,7 +486,7 @@ class TypeContentController extends Controller
         $typeContent->body = json_encode($data);
         $typeContent->save();
 
-        return redirect()->route('users.index', $id);
+        //return redirect()->route('users.index', $id);
         return view('type_content.descript-version-type-content', [
             'id' => $id,
             'typeContent' => $typeContent,
