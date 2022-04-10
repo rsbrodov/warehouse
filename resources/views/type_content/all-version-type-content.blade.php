@@ -47,7 +47,7 @@
                         <div class="col-4">
                             <a href="{{route('type-content.enter', $type_content->id)}}"
                                class="btn btn-primary">
-                                <i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
+                                <i class="fa fa-cubes fa-lg" aria-hidden="true"></i>
                             </a>
                         </div>
                         @if($type_content->status !== 'Published' and $type_content->status !== 'Archive')

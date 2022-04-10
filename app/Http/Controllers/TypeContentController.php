@@ -228,11 +228,12 @@ class TypeContentController extends Controller
             }
         }
     }
-    public function enter(){
+    public function enter($id){
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
-
+                $type_content = TypeContent::find($id);
+                return view('type_content.enter', ['type_content' => $type_content]);
             }
         }
     }
