@@ -24,7 +24,14 @@ class TypeContentController extends Controller
         //$this->middleware('auth');
     }
 
+    //получение вьюшки для фронта
     public function index()
+    {
+        return view('type_content.index2');
+    }
+
+    //получение списка
+    public function getListTypeContent()
     {
         if (Auth::guard('web')->check()) {
             $type_contents = TypeContent::where(['created_author' => Auth::guard('web')->user()->id])->with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('name', 'desc')->get()->unique('id_global');//все уникальные
@@ -32,25 +39,19 @@ class TypeContentController extends Controller
             foreach ($type_contents as $type_content){
                 $ids[] = TypeContent::where('id_global', $type_content->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first()->id;
             }
-            //dd($ids);
             $type_contents = TypeContent::whereIn('id', $ids)->get();
-            return view('type_content.index')->with('type_contents', $type_contents);
+            return response()->json($type_contents);
         } else {
             if (Auth::guard('api')->check()) {
                 $type_contents = TypeContent::where(['created_author' => Auth::guard('api')->user()->id])->with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('name',
                     'desc')->get();
                 return response()->json($type_contents);
-            } else {
-                return 'not auth';
             }
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+
     public function create()
     {
         if (Auth::guard('web')->check()) {
@@ -59,12 +60,7 @@ class TypeContentController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(TypeContentRequest $request)
     {
         $model = new TypeContent();
@@ -138,12 +134,7 @@ class TypeContentController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\Models\TypeContent $typeContent
-     * @return \Illuminate\Http\Response
-     */
+
     public function show(TypeContent $typeContent, $id)
     {
         $type_content = TypeContent::find($id);
@@ -168,13 +159,7 @@ class TypeContentController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\TypeContent $typeContent
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(TypeContentRequest $request, $id)
     {
         if (Auth::guard('web')->check()) {
@@ -228,6 +213,7 @@ class TypeContentController extends Controller
             }
         }
     }
+
     public function enter($id){
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
@@ -243,6 +229,7 @@ class TypeContentController extends Controller
      * @param \App\Models\TypeContent $typeContent
      * @return \Illuminate\Http\Response
      */
+
     public function destroy($id)
     {
         if (Auth::guard('web')->check()) {

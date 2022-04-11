@@ -13,6 +13,12 @@
 
     <link rel="stylesheet" href="{{ asset("css/datepicker.min.css") }}">
     <link rel="stylesheet" href="{{ asset("css/dragula.min.css") }}">
+{{--    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"--}}
+{{--          integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">--}}
+
+{{--    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">--}}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
     <!-- Theme style -->
     <link rel="stylesheet" href="{{asset('dist/css/adminlte.min.css')}}">
@@ -31,7 +37,10 @@
 <script src="{{ asset('plugins/select2/js/select2.js') }}"></script>
 
 <script src="{{ asset("js/datepicker.min.js") }}"></script>
-<script src="{{ asset("js/dragula.min.js") }}"></script>
+
+{{--<script src="{{ asset("js/dragula.min.js") }}"></script>--}}
+
+
 <div class="wrapper">
 
 @include('admin.navbar')
@@ -85,15 +94,6 @@
 
 <script type="text/javascript">
 
-    /*new AirDatepicker('.air-datepicker', {
-        dateFormat(date) {
-            return date.toLocaleString('ja', {
-                year: 'numeric',
-                day: '2-digit',
-                month: 'long'
-            });
-        }
-    })*/
 </script>
 </body>
 

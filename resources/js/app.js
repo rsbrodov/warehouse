@@ -3,12 +3,14 @@ require('./bootstrap');
 window.Vue = require('vue').default;
 import Vue from 'vue';
 import Vuelidate from 'vuelidate'
+import Moment from 'vue-moment';
+import BootstrapVue from 'bootstrap-vue';
 
-//Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('Index', require('./components/type-content/Index.vue').default);
 Vue.use(Vuelidate)
-Vue.component("login", require('./vue/login.vue').default);
+Vue.use( Moment );
+Vue.use(BootstrapVue);
 
 const app = new Vue({
     el: '#app',
-    //login
 });

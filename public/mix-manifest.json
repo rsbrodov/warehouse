@@ -1,15 +1,4 @@
 {
     "/js/app.js": "/js/app.js",
-    "/css/app.css": "/css/app.css",
-    "/images/add.png": "/images/add.png",
-    "/images/archive.png": "/images/archive.png",
-    "/images/block.png": "/images/block.png",
-    "/images/delete.png": "/images/delete.png",
-    "/images/dictionary.png": "/images/dictionary.png",
-    "/images/edit.png": "/images/edit.png",
-    "/images/new_user.png": "/images/new_user.png",
-    "/images/ok.png": "/images/ok.png",
-    "/images/revive.png": "/images/revive.png",
-    "/images/roles.png": "/images/roles.png",
-    "/images/show.png": "/images/show.png"
+    "/css/app.css": "/css/app.css"
 }

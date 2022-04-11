@@ -110,6 +110,7 @@
     </style>
 
     <script>
+
         $('.form').hide();
         $('#hideshow').on('click', function(event) {
             $('.form').toggle('show');

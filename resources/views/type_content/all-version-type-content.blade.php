@@ -30,14 +30,16 @@
                     <td>@if(!empty($type_content->updated_authors)) {{$type_content->updated_authors->name}}@endif </td>
                     <td>{{$type_content->updated_at}}</td>
                     <td style="display: flex">
-                        <div class="col-4">
+                        <div class="col-3">
                             <a href="{{route('type-content.show', ($type_content->id))}}"
                                class="btn btn-success ">
                                 <i class="fa fa-eye fa-lg" aria-hidden="true"></i>
                             </a>
                         </div>
+
 {{--                        @if($type_content->status !== 'Archive')--}}
                             <div class="col-4">
+
                                 <a href="{{route('type-content.edit', $type_content->id)}}"
                                    class="btn btn-primary">
                                     <i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
@@ -51,7 +53,7 @@
                             </a>
                         </div>
                         @if($type_content->status !== 'Published' and $type_content->status !== 'Archive')
-                            <div class="col-4">
+                            <div class="col-3">
                                 <form action="{{ route('type-content.destroy', $type_content->id) }}" method="POST">
                                     @method('DELETE')
                                     @csrf
@@ -59,10 +61,12 @@
                                 </form>
                             </div>
                         @endif
-                        <a href="{{route('type-content.descript-version', $type_content->id)}}"
-                           class="btn btn-primary">
-                            <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
-                        </a>
+                        <div class="col-3">
+                            <a href="{{route('type-content.descript-version', $type_content->id)}}"
+                               class="btn btn-primary">
+                                <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
+                            </a>
+                        </div>
                     </td>
                 </tr>
             @endforeach
