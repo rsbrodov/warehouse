@@ -45,8 +45,8 @@ Route::group(['middleware' => 'auth:api'], function ($router) {
     Route::delete('/dictionary/deletedElementDictionary/{id}', [App\Http\Controllers\DictionaryElementController::class, 'destroy'])->middleware('auth:api');
 });
 
+Route::get('/template/getListTypeContent/', [App\Http\Controllers\TypeContentController::class, 'getListTypeContent']);
 Route::group(['middleware' => 'auth:api'], function ($router) {
-    Route::get('/template/getListTypeContent/', [App\Http\Controllers\TypeContentController::class, 'index']);
     Route::post('/template/createTypeContent/', [App\Http\Controllers\TypeContentController::class, 'store'])->middleware('auth:api');
     Route::put('/template/updateTypeContent/{id}', [App\Http\Controllers\TypeContentController::class, 'update'])->middleware('auth:api');
     Route::delete('/template/deleteTypeContent/{id}', [App\Http\Controllers\TypeContentController::class, 'destroy'])->middleware('auth:api');
