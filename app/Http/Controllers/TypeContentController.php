@@ -66,13 +66,17 @@ class TypeContentController extends Controller
         $model = new TypeContent();
         if (Auth::guard('web')->check()) {
             if (!$model->checkingApiUrl(str_slug($request->input('name')))) {
+                $ac_fr = date_create($request->input('active_from'));
+                date_format($ac_fr, 'Y-m-d H:m:s');
+                $ac_af = date_create($request->input('active_after'));
+                date_format($ac_af, 'Y-m-d H:m:s');
                 $new_type_content = TypeContent::create([
                     'id_global' => Str::uuid()->toString(),
                     'name' => $request->input('name'),
                     'description' => $request->input('description'),
                     'owner' => '7856',
-                    'active_from' => $request->input('active_from'),
-                    'active_after' => $request->input('active_after'),
+                    'active_from' => $ac_fr,
+                    'active_after' => $ac_af,
                     'status' => 'DRAFT',
                     'version_major' => '1',
                     'version_minor' => '0',
@@ -161,20 +165,30 @@ class TypeContentController extends Controller
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
+                $ac_fr = date_create($request['active_from']);
+                date_format($ac_fr, 'Y-m-d H:m:s');
+                $ac_af = date_create($request['active_after']);
+                date_format($ac_af, 'Y-m-d H:m:s');
                 $type = TypeContent::find($id);
+                if($type->status === 'Draft' or $type->status === 'Archive') {
+                    $other_published = TypeContent::where(['id_global'=>$type->id_global, 'status' => 'Published'])->first();
+                    if(isset($other_published)){
+                        $other_published->status = 'Archive';
+                        $other_published->save();
+                    }
+                }
                 if (!$type->checkingApiUrl($request['api_url'], $type['id_global'])) {
                     $type->name = $request['name'];
                     $type->api_url = $request['api_url'];
                     $type->description = $request['description'];
-                    $type->active_from = $request['active_from'];
-                    $type->active_after = $request['active_after'];
+                    $type->active_from = $ac_fr;
+                    $type->active_after = $ac_af;
                     $type->status = $request['status'];
                     $type->icon = $request['icon'];
                     $type->body = $request['body'];
                     $type->updated_author = Auth::guard('web')->user()->id;
                     $type->save();
-                    return redirect()->route('type-content.index')->with('success',
-                        'Тип ' . $type->name . ' успешно отредактирован');
+                    return redirect()->route('type-content.get-all-version', $type->id_global)->with('success', 'Тип ' . $type->name . ' успешно отредактирован');
                 } else {
                     return redirect()->back()->with('error', 'Что-то пошло не так');
                 }
@@ -200,6 +214,21 @@ class TypeContentController extends Controller
         }
     }
 
+    public function enter($id){
+        if (Auth::guard('web')->check()) {
+            $user = Auth::guard('web')->user();
+            if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
+                $type_content = TypeContent::find($id);
+                return view('type_content.enter', ['type_content' => $type_content]);
+            }
+        }
+    }
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param \App\Models\TypeContent $typeContent
+     * @return \Illuminate\Http\Response
+     */
 
     public function destroy($id)
     {
@@ -242,6 +271,15 @@ class TypeContentController extends Controller
 
     public function createNewVersion($id, $parametr)
     {
+        //todo проверить эту портянку на то что при создании новой версии и существующем черновике выдается ошибка!
+        $type = TypeContent::find($id);
+        $exist_other_draft = TypeContent::where(['id_global'=>$type->id_global, 'status' => 'Draft'])->count();
+        if($exist_other_draft){
+            alert('ERROR!');
+            return redirect()->back()->with('error', 'Черновик уже существует. Удалите его или отредактируйте.');
+        }
+        // endtodo: вот до сюдова
+
         //проверка параметров
         if ($parametr == 'major' || $parametr == 'minor') {
             if ($parametr == 'major') {
@@ -436,7 +474,7 @@ class TypeContentController extends Controller
         $typeContent->body = json_encode($data);
         $typeContent->save();
 
-        return redirect()->route('users.index', $id);
+        //return redirect()->route('users.index', $id);
         return view('type_content.descript-version-type-content', [
             'id' => $id,
             'typeContent' => $typeContent,

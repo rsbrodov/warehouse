@@ -45,11 +45,6 @@
                      <a href="{{route('type-content.create')}}" class="btn-create btn btn-primary"><span class="fa fa-plus-circle fa-lg" aria-hidden="true"></span></a>
                 </div>
             </div>
-
-
-
-
-
         </div>
         <table class="table table-bordered table-hover mt-4">
             <tr>

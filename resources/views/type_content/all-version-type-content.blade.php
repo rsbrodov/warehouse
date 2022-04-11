@@ -36,14 +36,22 @@
                                 <i class="fa fa-eye fa-lg" aria-hidden="true"></i>
                             </a>
                         </div>
-                        @if($type_content->status !== 'Archive')
-                            <div class="col-3">
+
+{{--                        @if($type_content->status !== 'Archive')--}}
+                            <div class="col-4">
+
                                 <a href="{{route('type-content.edit', $type_content->id)}}"
                                    class="btn btn-primary">
                                     <i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
                                 </a>
                             </div>
-                        @endif
+{{--                        @endif--}}
+                        <div class="col-4">
+                            <a href="{{route('type-content.enter', $type_content->id)}}"
+                               class="btn btn-primary">
+                                <i class="fa fa-cubes fa-lg" aria-hidden="true"></i>
+                            </a>
+                        </div>
                         @if($type_content->status !== 'Published' and $type_content->status !== 'Archive')
                             <div class="col-3">
                                 <form action="{{ route('type-content.destroy', $type_content->id) }}" method="POST">
