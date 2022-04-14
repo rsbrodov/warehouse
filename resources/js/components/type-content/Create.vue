@@ -6,9 +6,8 @@
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
+        <form @submit.prevent="saveTypeContent()">
         <div class="modal-body">
-
-            <form @submit.prevent="saveTypeContent()">
                 <div class="row mb-3">
                     <div class="block col-6">
                         <label for="owner"><b>Владелец типа контента:</b></label>
@@ -18,8 +17,8 @@
                     <div class="block col-6">
                         <label for="icon"><b>Иконка для отображения</b></label>
                         <select id="icon" class="form-control" v-model="form.icon">
-                            <option v-for="(icon, index) in icons" :key="index" :value="icon.id">
-                                {{icon.name}}
+                            <option v-for="(icon, index) in icons" :key="index" :value="icon.code">
+                                &#x{{icon.unicode}}; {{icon.name}}
                             </option>
                         </select>
                     </div>
@@ -56,24 +55,24 @@
                     </div>
                 </div>
 
-
-            </form>
-
-
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-            <button type="button" class="btn btn-primary">ОК</button>
+            <button type="submit" class="btn btn-primary">ОК</button>
         </div>
+        </form>
+        {{form}}
     </div>
 </template>
 
 <script>
+    import {mapGetters, mapActions} from 'vuex'
     export default {
         name: "Create",
 
         data:function(){
             return {
+                icons:null,
                 form:{
                     icon:'',
                     name:'',
@@ -87,21 +86,31 @@
         },
 
         methods: {
+            ...mapActions(['newTypeContents']),
             async saveTypeContent() {
-                // axios.get('http://127.0.0.1:8000/type-content')
-                //     .then(response => {
-                //         //console.log(response.data)
-                //         this.type_contents = response.data;
-                //     })
-                //     .catch(error => {
-                //         console.log(error);
-                //     });
-                console.log(123);
-            }
+                /*this.newTypeContents({
+                    form: this.form
+                });*/
+                //$('#modal').modal().hide();
+                document.getElementById('close').click();
+            },
+            async getIcons() {
+                axios.get('http://127.0.0.1:8000/type-content/icons')
+                    .then(response => {
+                        console.log(response.data)
+                        this.icons = response.data;
+                    });
+            },
+        },
+        async created(){
+            this.getIcons();
+            $('.form').hide();
         },
     }
 </script>
 
 <style scoped>
-
+    select{
+        font-family: fontAwesome
+    }
 </style>

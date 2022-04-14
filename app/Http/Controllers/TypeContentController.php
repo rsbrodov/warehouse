@@ -39,7 +39,7 @@ class TypeContentController extends Controller
             foreach ($type_contents as $type_content){
                 $ids[] = TypeContent::where('id_global', $type_content->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first()->id;
             }
-            $type_contents = TypeContent::whereIn('id', $ids)->get();
+            $type_contents = TypeContent::whereIn('id', $ids)->orderBy('created_at', 'asc')->get();
             return response()->json($type_contents);
         } else {
             if (Auth::guard('api')->check()) {
@@ -61,7 +61,7 @@ class TypeContentController extends Controller
     }
 
 
-    public function store(TypeContentRequest $request)
+    /*public function store(TypeContentRequest $request)
     {
         $model = new TypeContent();
         if (Auth::guard('web')->check()) {
@@ -132,7 +132,78 @@ class TypeContentController extends Controller
             $type_content = TypeContent::find($new_type_content->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
             return response()->json($type_content);
         }
+    }*/
+
+    public function store(Request $request)
+    {
+        $model = new TypeContent();
+        if (Auth::guard('web')->check()) {
+            if (!$model->checkingApiUrl(str_slug($request->form['name']))) {
+                /*$ac_fr = date_create($request->form('active_from'));
+                date_format($ac_fr, 'Y-m-d H:m:s');
+                $ac_af = date_create($request->form('active_after'));
+                date_format($ac_af, 'Y-m-d H:m:s');*/
+                $new_type_content = TypeContent::create([
+                    'id_global' => Str::uuid()->toString(),
+                    'name' => $request->form['name'],
+                    'description' => $request->form['description'],
+                    'owner' => '7856',
+                    'active_from' => date_create($request->form['active_from']),
+                    'active_after' => date_create($request->form['active_after']),
+                    'status' => 'DRAFT',
+                    'version_major' => '1',
+                    'version_minor' => '0',
+                    'icon' => $request->form['icon'],
+                    'api_url' => str_slug($request->form['api_url']),
+                    'based_type' => null,
+                    'created_author' => Auth::guard('web')->user()->id,
+                    'updated_author' => Auth::guard('web')->user()->id
+                ]);
+                return response()->json($new_type_content);
+            }
+        } elseif (Auth::guard('api')->check()) {
+
+            if (!$model->checkingApiUrl(str_slug($request->input('name')))) {
+                $new_type_content = TypeContent::create([
+                    'id_global' => Str::uuid()->toString(),
+                    'name' => $request['name'],
+                    'description' => $request['description'],
+                    'owner' => Str::uuid()->toString(),
+                    'icon' => $request['icon'],
+                    'active_from' => $request['active_from'],
+                    'active_after' => $request['active_after'],
+                    'api_url' => str_slug($request->input('name')),
+                    'body' => $request['body'],
+                    'created_author' => Auth::guard('api')->user()->id,
+                    'updated_author' => Auth::guard('api')->user()->id
+                ]);
+                $type_content = TypeContent::find($new_type_content->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
+                return response()->json($type_content);
+            } else {
+                return response()->json([
+                    'message' => 'Unprocessable Entity (validation failed "API URL")'
+                ], 422);
+            }
+
+
+            /*$new_type_content = TypeContent::create([
+                'id_global' => Str::uuid()->toString(),
+                'name' => $request['name'],
+                'description' => $request['description'],
+                'owner' => Str::uuid()->toString(),
+                'icon' => $request['icon'],
+                'active_from' => $request['active_from'],
+                'active_after' => $request['active_after'],
+                'api_url' => $request->input('api_url'),
+                'body' => $request['body'],
+                'created_author' => Auth::guard('api')->user()->id,
+                'updated_author' => Auth::guard('api')->user()->id
+            ]);
+            $type_content = TypeContent::find($new_type_content->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
+            return response()->json($type_content);*/
+        }
     }
+
 
 
     public function show(TypeContent $typeContent, $id)
@@ -219,6 +290,20 @@ class TypeContentController extends Controller
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
                 $type_content = TypeContent::find($id);
+                $body = json_decode($type_content['body']);
+                foreach ($body as $row){
+                    foreach ($row as $colomnList) {
+                        //foreach ($colomnList->colomnList as $colomn) {
+                            //foreach ($colomn as $fieldList) {
+                                //foreach ($fieldList->fieldList as $field) {
+                                dd($body);
+                                //}
+                            //}
+                        //}
+                    }
+                }
+
+               // exit;
                 return view('type_content.enter', ['type_content' => $type_content]);
             }
         }
@@ -332,13 +417,7 @@ class TypeContentController extends Controller
         return redirect()->route('type-content.index')->with('success', 'Создано' . $i . 'иконок');
     }
 
-    public function getIcons()
-    {
-        //dd('test');
-//        return response()->json(Icons::all());
-        return 'Success!';
-        //return redirect()->route('type-content.index')->with('success', 'Создано' . $i . 'иконок');
-    }
+
 
     public function getShowDescription($id)
     {
@@ -480,5 +559,12 @@ class TypeContentController extends Controller
             'typeContent' => $typeContent,
             'body' => json_decode($typeContent->body),
         ]);
+    }
+
+    public function getIcons()
+    {
+        $icons = Icons::all();
+        return response()->json($icons);
+
     }
 }

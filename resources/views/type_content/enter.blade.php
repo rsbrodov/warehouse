@@ -4,9 +4,10 @@
     <?php $body = json_decode($type_content['body']);
     //    dd($body);
     ?>
-    @foreach($body as $row)
-        @foreach($row as $columns)
-            <?php print_r($columns['0']['colomn']); ?>
+<!--    --><?php //dd($body);exit; ?>
+    @foreach($body as $rowList)
+        @foreach($rowList as $columns)
+            <?php print_r($columns); ?>
 {{--            @foreach($columns as $column)--}}
 
                 {{--                    @foreach($columns as $fields)--}}

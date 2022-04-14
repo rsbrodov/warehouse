@@ -70,7 +70,7 @@
                 <th>Дата последнего<br> редактирования</th>
                 <th>Действия</th>
             </tr>
-            <tr v-for="(type_content, index) in filteredTypeContents " :key="index" >
+            <tr v-for="(type_content, index) in typeContents " :key="index" >
                 <td style="white-space: nowrap"><i :class="'fa ' + type_content.icon+ ' fa-lg'" aria-hidden="true"></i> {{type_content.name}}</td>
                 <td>{{type_content.description}}</td>
                 <td>{{type_content.version_major +'.'+ type_content.version_minor}}</td>
@@ -109,13 +109,13 @@
 </style>
 
 <script>
+    import {mapGetters, mapActions} from 'vuex'
     import Create from "./Create";
     import moment from 'moment'
     export default{
         components:{Create},
         data:function(){
             return {
-                type_contents:[],
                 filter_form:{
                     status:'',
                     name:'',
@@ -127,8 +127,9 @@
 
 
         computed:{
+            ...mapGetters(['typeContents']),
             filteredTypeContents: function () {
-                return this.type_contents.filter((type_content) => {
+                return this.typeContents.filter((type_content) => {
                     return type_content.name.toLowerCase().match(this.filter_form.name);
                 }).filter((type_content) => {
                     return type_content.status.match(this.filter_form.status);
@@ -136,16 +137,7 @@
             }
         },
         methods: {
-            async getTypeContent() {
-                axios.get('http://127.0.0.1:8000/type-content/getListTypeContent')
-                    .then(response => {
-                        //console.log(response.data)
-                        this.type_contents = response.data;
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
-            }
+            ...mapActions(['getTypeContents']),
         },
 
         filters: {
@@ -183,14 +175,21 @@
         },
 
         async created(){
-            this.getTypeContent();
+            this.getTypeContents();
             $('.form').hide();
+            // if (window.jQuery) {
+            //     // jQuery is loaded
+            //     alert("Yeah!");
+            // } else {
+            //     // jQuery is not loaded
+            //     alert("Doesn't Work");
+            // }
         },
     }
 
 
     $('#hideshow').on('click', function(event) {
-        $('.form').toggle('show');
+        $('.form').toggle('show');alert("Doesn't Work");
     });
     $("#clean").click(function() {
         $( 'form' ).each(function(){
