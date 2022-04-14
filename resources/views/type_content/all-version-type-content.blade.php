@@ -52,15 +52,6 @@
                                 <i class="fa fa-cubes fa-lg" aria-hidden="true"></i>
                             </a>
                         </div>
-                        @if($type_content->status !== 'Published' and $type_content->status !== 'Archive')
-                            <div class="col-3">
-                                <form action="{{ route('type-content.destroy', $type_content->id) }}" method="POST">
-                                    @method('DELETE')
-                                    @csrf
-                                    <button type="submit" class="btn btn-danger"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></button>
-                                </form>
-                            </div>
-                        @endif
                         <div class="col-3">
                             <a href="{{route('type-content.descript-version', $type_content->id)}}"
                                class="btn btn-primary">

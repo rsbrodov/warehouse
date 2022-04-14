@@ -229,7 +229,19 @@ class TypeContentController extends Controller
      * @param \App\Models\TypeContent $typeContent
      * @return \Illuminate\Http\Response
      */
-
+    public function publish($id){
+        if (Auth::guard('web')->check()) {
+            $user = Auth::guard('web')->user();
+            if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
+                $type_content = TypeContent::where('id', $id)->first();
+                if ($type_content->status == 'Draft') {
+                    $type_content->status = 'Published';
+                }
+                $type_content->save();
+                return redirect()->route('type-content.get-all-version', $type_content->id_global)->with('success', 'Тип ' . $type_content->name . ' успешно опубликован');
+            }
+        }
+    }
     public function destroy($id)
     {
         if (Auth::guard('web')->check()) {

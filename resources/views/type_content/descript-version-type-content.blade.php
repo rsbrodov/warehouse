@@ -103,7 +103,15 @@
             <hr>
             <button id="ready_obj" class="btn btn-block btn-outline-primary">Собрать объект</button>
             <button id="preview" class="btn btn-block btn-outline-primary mt-5">Предпросмотр страницы</button>
-            <!--ЭТО ПРОСТО ДИВ ДЛЯ ТОГО ЧТО ПОКАЗАТЬ КАК СОБРАЛСЯ ОБЪЕКТ-->
+            <form action="{{ route('type-content.destroy', $typeContent->id) }}" method="POST">
+                @method('DELETE')
+                @csrf
+                <button @if($typeContent->status == 'Published' or $typeContent->status == 'Archive') disabled @endif type="submit" class="btn btn-block mt-5 btn-outline-danger"><i class="fa fa-trash fa-lg" aria-hidden="true"></i> Удалить</button>
+            </form>
+            @if($typeContent->status == 'Draft')
+                <a href="{{route('type-content.publish', $typeContent->id)}}" class="btn btn-block mt-5 btn-outline-success"><i class="fa fa-check-circle fa-lg" aria-hidden="true">Опубликовать</i></a>
+            @endif
+        <!--ЭТО ПРОСТО ДИВ ДЛЯ ТОГО ЧТО ПОКАЗАТЬ КАК СОБРАЛСЯ ОБЪЕКТ-->
             <div id="result" class="container-fluid mt-5 p-2"></div>
         </div>
     </div>
