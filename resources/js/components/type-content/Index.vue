@@ -1,19 +1,17 @@
 <template>
     <div>
-
         <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="exampleModal" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
-                <create/>
+                <create @close-modal="closeModal"></create>
             </div>
         </div>
 
-<!--        <b-modal id="modal-1" class="mb-4" size="lg" title="Создание типа контента" ></b-modal>-->
         <div class="text-center"><h3>Контентная модель</h3></div>
         <div class="row mt-4">
             <div class="header-block row">
                 <div class="search-button col-2">
-                    <button id="hideshow" class="btn btn-primary"><span class="fa fa-search fa-lg" aria-hidden="true"></span></button>
+                    <button class="btn btn-primary" @click="toggleSearch()"><span class="fa fa-search fa-lg"></span></button>
                 </div>
                 <div class="search-form col-8">
                     <div class="form">
@@ -49,11 +47,10 @@
                     </div>
                 </div>
                 <div class="create col-2">
-                    <button id="clean" class="btn btn-primary"><span class="fa fa-paint-brush fa-lg" aria-hidden="true"></span> Очистить</button>
-<!--                    <b-button v-b-modal.modal-1 variant="success" class="btn-create btn btn-primary"><span class="fa fa-plus-circle fa-lg" aria-hidden="true"></span></b-button>-->
+                    <button class="btn btn-primary" @click="cleanSearch()"><span class="fa fa-paint-brush fa-lg"></span> Очистить</button>
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn-create btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                        <span class="fa fa-plus-circle fa-lg" aria-hidden="true"></span>
+                    <button type="button" class="btn-create btn btn-primary" @click="openModal()">
+                        <span class="fa fa-plus-circle fa-lg"></span>
                     </button>
                 </div>
             </div>
@@ -86,27 +83,6 @@
     </div>
 </template>
 
-<style scoped>
-    table > :not(:first-child) {
-        border-top: 1px solid currentColor !important;
-    }
-    .header-block{
-        display: flex;
-        flex-wrap: nowrap;
-        align-items: center;
-    }
-    .pencil > a {
-        background-color: #007bff!important;
-    }
-
-    .modal-backdrop {
-        z-index: 1040 !important;
-    }
-    .modal-content {
-        margin: 2px auto;
-        z-index: 1100 !important;
-    }
-</style>
 
 <script>
     import {mapGetters, mapActions} from 'vuex'
@@ -125,7 +101,6 @@
             }
         },
 
-
         computed:{
             ...mapGetters(['typeContents']),
             filteredTypeContents: function () {
@@ -136,8 +111,23 @@
                 });
             }
         },
+
         methods: {
             ...mapActions(['getTypeContents']),
+            closeModal(){
+                $("#exampleModal").modal("hide");
+            },
+            openModal(){
+                $('#exampleModal').modal('show');
+            },
+            toggleSearch(){
+                $('.form').toggle('show')
+            },
+            cleanSearch(){
+                $( 'form' ).each(function(){
+                    this.reset();
+                });
+            }
         },
 
         filters: {
@@ -176,28 +166,32 @@
 
         async created(){
             this.getTypeContents();
-            $('.form').hide();
-            // if (window.jQuery) {
-            //     // jQuery is loaded
-            //     alert("Yeah!");
-            // } else {
-            //     // jQuery is not loaded
-            //     alert("Doesn't Work");
-            // }
         },
+
+        async mounted(){
+            $('.form').hide();
+        }
     }
-
-
-    $('#hideshow').on('click', function(event) {
-        $('.form').toggle('show');alert("Doesn't Work");
-    });
-    $("#clean").click(function() {
-        $( 'form' ).each(function(){
-            this.reset();
-        });
-    });
 </script>
 
 <style scoped>
+    table > :not(:first-child) {
+        border-top: 1px solid currentColor !important;
+    }
+    .header-block{
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+    }
+    .pencil > a {
+        background-color: #007bff!important;
+    }
 
+    .modal-backdrop {
+        z-index: 1040 !important;
+    }
+    .modal-content {
+        margin: 2px auto;
+        z-index: 1100 !important;
+    }
 </style>
