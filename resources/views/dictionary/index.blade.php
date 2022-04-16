@@ -31,7 +31,7 @@
                 </div>
                 <div class="create col-2">
                     <button id="clean" class="btn btn-primary"><span class="fa fa-paint-brush fa-lg" aria-hidden="true"></span> Очистить</button>
-                    <a href="{{route('type-content.create')}}" class="btn-create btn btn-primary"><span class="fa fa-plus-circle fa-lg" aria-hidden="true"></span></a>
+                    <a href="{{route('dictionary.create')}}" class="btn-create btn btn-primary"><span class="fa fa-plus-circle fa-lg" aria-hidden="true"></span></a>
                 </div>
             </div>
         </div>
@@ -51,9 +51,9 @@
                     <?php $up_at = date_create($dictionary->updated_at); ?>
                     <td>{{date_format($up_at, 'd.m.Y H:m')}}</td>
                     @if($dictionary->archive)
-                        <td class="text-danger">Архивный</td>
+                        <td class="text-danger"><b>Архивный</b></td>
                     @else
-                        <td class="text-success">Действующий</td>
+                        <td class="text-success"><b>Действующий</b></td>
                    @endif
                     <td nowrap>
                         <a href="{{route('dictionary.show', ($dictionary->id))}}"
@@ -77,6 +77,5 @@
                 </tr>
             @endforeach
         </table>
-        <a href="{{route('dictionary.create')}}" class="btn btn-primary form-control">Создать</a>
-    </div>
+        </div>
 @endsection
