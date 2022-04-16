@@ -1,19 +1,17 @@
 <template>
     <div>
-
         <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="exampleModal" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
-                <create/>
+                <create @close-modal="closeModal"></create>
             </div>
         </div>
 
-<!--        <b-modal id="modal-1" class="mb-4" size="lg" title="Создание типа контента" ></b-modal>-->
         <div class="text-center"><h3>Контентная модель</h3></div>
         <div class="row mt-4">
             <div class="header-block row">
                 <div class="search-button col-2">
-                    <button id="hideshow" class="btn btn-primary"><span class="fa fa-search fa-lg" aria-hidden="true"></span></button>
+                    <button class="btn btn-primary" @click="toggleSearch()"><span class="fa fa-search fa-lg"></span></button>
                 </div>
                 <div class="search-form col-8">
                     <div class="form">
@@ -49,11 +47,10 @@
                     </div>
                 </div>
                 <div class="create col-2">
-                    <button id="clean" class="btn btn-primary"><span class="fa fa-paint-brush fa-lg" aria-hidden="true"></span> Очистить</button>
-<!--                    <b-button v-b-modal.modal-1 variant="success" class="btn-create btn btn-primary"><span class="fa fa-plus-circle fa-lg" aria-hidden="true"></span></b-button>-->
+                    <button class="btn btn-primary" @click="cleanSearch()"><span class="fa fa-paint-brush fa-lg"></span> Очистить</button>
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn-create btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                        <span class="fa fa-plus-circle fa-lg" aria-hidden="true"></span>
+                    <button type="button" class="btn-create btn btn-primary" @click="openModal()">
+                        <span class="fa fa-plus-circle fa-lg"></span>
                     </button>
                 </div>
             </div>
@@ -70,7 +67,7 @@
                 <th>Дата последнего<br> редактирования</th>
                 <th>Действия</th>
             </tr>
-            <tr v-for="(type_content, index) in filteredTypeContents " :key="index" >
+            <tr v-for="(type_content, index) in typeContents " :key="index" >
                 <td style="white-space: nowrap"><i :class="'fa ' + type_content.icon+ ' fa-lg'" aria-hidden="true"></i> {{type_content.name}}</td>
                 <td>{{type_content.description}}</td>
                 <td>{{type_content.version_major +'.'+ type_content.version_minor}}</td>
@@ -86,36 +83,15 @@
     </div>
 </template>
 
-<style scoped>
-    table > :not(:first-child) {
-        border-top: 1px solid currentColor !important;
-    }
-    .header-block{
-        display: flex;
-        flex-wrap: nowrap;
-        align-items: center;
-    }
-    .pencil > a {
-        background-color: #007bff!important;
-    }
-
-    .modal-backdrop {
-        z-index: 1040 !important;
-    }
-    .modal-content {
-        margin: 2px auto;
-        z-index: 1100 !important;
-    }
-</style>
 
 <script>
+    import {mapGetters, mapActions} from 'vuex'
     import Create from "./Create";
     import moment from 'moment'
     export default{
         components:{Create},
         data:function(){
             return {
-                type_contents:[],
                 filter_form:{
                     status:'',
                     name:'',
@@ -125,26 +101,32 @@
             }
         },
 
-
         computed:{
+            ...mapGetters(['typeContents']),
             filteredTypeContents: function () {
-                return this.type_contents.filter((type_content) => {
+                return this.typeContents.filter((type_content) => {
                     return type_content.name.toLowerCase().match(this.filter_form.name);
                 }).filter((type_content) => {
                     return type_content.status.match(this.filter_form.status);
                 });
             }
         },
+
         methods: {
-            async getTypeContent() {
-                axios.get('http://127.0.0.1:8000/type-content/getListTypeContent')
-                    .then(response => {
-                        //console.log(response.data)
-                        this.type_contents = response.data;
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
+            ...mapActions(['getTypeContents']),
+            closeModal(){
+                $("#exampleModal").modal("hide");
+            },
+            openModal(){
+                $('#exampleModal').modal('show');
+            },
+            toggleSearch(){
+                $('.form').toggle('show')
+            },
+            cleanSearch(){
+                $( 'form' ).each(function(){
+                    this.reset();
+                });
             }
         },
 
@@ -183,22 +165,33 @@
         },
 
         async created(){
-            this.getTypeContent();
-            $('.form').hide();
+            this.getTypeContents();
         },
+
+        async mounted(){
+            $('.form').hide();
+        }
     }
-
-
-    $('#hideshow').on('click', function(event) {
-        $('.form').toggle('show');
-    });
-    $("#clean").click(function() {
-        $( 'form' ).each(function(){
-            this.reset();
-        });
-    });
 </script>
 
 <style scoped>
+    table > :not(:first-child) {
+        border-top: 1px solid currentColor !important;
+    }
+    .header-block{
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+    }
+    .pencil > a {
+        background-color: #007bff!important;
+    }
 
+    .modal-backdrop {
+        z-index: 1040 !important;
+    }
+    .modal-content {
+        margin: 2px auto;
+        z-index: 1100 !important;
+    }
 </style>
