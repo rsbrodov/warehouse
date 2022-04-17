@@ -67,7 +67,7 @@
                 <th>Дата последнего<br> редактирования</th>
                 <th>Действия</th>
             </tr>
-            <tr v-for="(type_content, index) in typeContents " :key="index" >
+            <tr v-for="(type_content, index) in filteredTypeContents" :key="index" >
                 <td style="white-space: nowrap"><i :class="'fa ' + type_content.icon+ ' fa-lg'" aria-hidden="true"></i> {{type_content.name}}</td>
                 <td>{{type_content.description}}</td>
                 <td>{{type_content.version_major +'.'+ type_content.version_minor}}</td>
@@ -105,6 +105,7 @@
             ...mapGetters(['typeContents']),
             filteredTypeContents: function () {
                 return this.typeContents.filter((type_content) => {
+                //return this.$store.getters.type_contents.filter((type_content) => {
                     return type_content.name.toLowerCase().match(this.filter_form.name);
                 }).filter((type_content) => {
                     return type_content.status.match(this.filter_form.status);
@@ -121,7 +122,7 @@
                 $('#exampleModal').modal('show');
             },
             toggleSearch(){
-                $('.form').toggle('show')
+                $('.form').toggle('show');
             },
             cleanSearch(){
                 $( 'form' ).each(function(){

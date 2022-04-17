@@ -1,6 +1,6 @@
 export default{
     state: {
-        type_contents: '',
+        type_contents: [],
         new_type_contents: '',
     },
     getters: {
