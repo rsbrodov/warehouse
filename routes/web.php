@@ -64,6 +64,7 @@ Route::middleware(['auth:web'])->group(function () {
 // СПРАВОЧНИКИ
 Route::middleware(['auth:web'])->group(function () {
     Route::get('/dictionary/', [DictionaryController::class, 'index'])->name('dictionary.index');
+    Route::get('/dictionary/index2', [DictionaryController::class, 'index2'])->name('dictionary.index2');
     Route::post('/dictionary/', [DictionaryController::class, 'store'])->name('dictionary.store');
     Route::get('/dictionary/create', [DictionaryController::class, 'create'])->name('dictionary.create');
     Route::post('/dictionary/', [DictionaryController::class, 'store'])->name('dictionary.store');

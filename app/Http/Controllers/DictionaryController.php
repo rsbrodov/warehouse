@@ -24,6 +24,12 @@ class DictionaryController extends Controller
     public function index()
     {
         if(Auth::guard('web')->check()) {
+            return view('dictionary.index');
+        }
+    }
+    public function index2()
+    {
+        if(Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin')) {
                 $dictionary = Dictionary::all();
@@ -31,13 +37,12 @@ class DictionaryController extends Controller
             if ($user->hasRole('Admin')) {
                 $dictionary = Dictionary::where('created_author', Auth::id())->get();
             }
-            return view('dictionary.index', ['dictionaries' => $dictionary]);
+            return view('dictionary.index2', ['dictionaries' => $dictionary]);
         }else if (Auth::guard('api')->check()) {
             $dictionary = Dictionary::where(['archive' => 0, 'created_author' => Auth::guard('api')->user()->id])->with('created_author:id,name')->with('updated_author:id,name')->get();
             return response()->json($dictionary);
         }
     }
-
     /**
      * Show the form for creating a new resource.
      *
