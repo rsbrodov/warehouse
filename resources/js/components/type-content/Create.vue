@@ -3,23 +3,27 @@
         <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Создание типа контента</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
+                <span aria-hidden="true" @click="$emit('close-modal')">&times;</span>
             </button>
         </div>
+        <form @submit.prevent="saveTypeContent()">
         <div class="modal-body">
-
-            <form @submit.prevent="saveTypeContent()">
                 <div class="row mb-3">
                     <div class="block col-6">
                         <label for="owner"><b>Владелец типа контента:</b></label>
-                        <input autocomplete="off" id="owner" class="form-control" type="text" v-model="form.owner">
+                        <input autocomplete="off" id="owner" class="form-control" type="text" v-model="form.owner"
+                               :class="{invalid: ($v.form.owner.$dirty && !$v.form.owner.required)}">
+                        <small class="helper-text invalid" v-if="$v.form.owner.$dirty && !$v.form.owner.required">
+                            Укажите владельца
+                        </small>
                     </div>
 
                     <div class="block col-6">
                         <label for="icon"><b>Иконка для отображения</b></label>
                         <select id="icon" class="form-control" v-model="form.icon">
-                            <option v-for="(icon, index) in icons" :key="index" :value="icon.id">
-                                {{icon.name}}
+                            <option v-for="(icon, index) in icons" :key="index" :value="icon.code">
+                                <i :class="'fa ' + icon.code+ ' fa-lg'" aria-hidden="true">{{icon.name}}</i>
+<!--                                Github &#xf09b;-->
                             </option>
                         </select>
                     </div>
@@ -28,12 +32,20 @@
                 <div class="row mb-3">
                     <div class="block col-6">
                         <label for="name"><b>Наименование типа контента</b></label>
-                        <input autocomplete="off" id="name" class="form-control" type="text" v-model="form.name">
+                        <input autocomplete="off" id="name" class="form-control" type="text" v-model="form.name"
+                               :class="{invalid: ($v.form.name.$dirty && !$v.form.name.required)}">
+                            <small class="helper-text invalid" v-if="$v.form.name.$dirty && !$v.form.name.required">
+                                Введите Наименование
+                            </small>
                     </div>
 
                     <div class="block col-6">
                         <label for="api_url"><b>API URL:</b></label>
-                        <input autocomplete="off" id="api_url" class="form-control" type="text" v-model="form.api_url">
+                        <input autocomplete="off" id="api_url" class="form-control" type="text" v-model="form.api_url"
+                               :class="{invalid: ($v.form.api_url.$dirty && !$v.form.api_url.required)}">
+                        <small class="helper-text invalid" v-if="$v.form.api_url.$dirty && !$v.form.api_url.required">
+                            Введите api_url
+                        </small>
                     </div>
                 </div>
 
@@ -56,24 +68,24 @@
                     </div>
                 </div>
 
-
-            </form>
-
-
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-            <button type="button" class="btn btn-primary">ОК</button>
+            <button type="button" class="btn btn-secondary" @click="$emit('close-modal')">Отмена</button>
+            <button id="add" type="submit" class="btn btn-primary">ОК</button>
         </div>
+        </form>
     </div>
 </template>
 
 <script>
+    import {mapGetters, mapActions} from 'vuex'
+    import {required} from "vuelidate/lib/validators";
     export default {
         name: "Create",
 
         data:function(){
             return {
+                icons:null,
                 form:{
                     icon:'',
                     name:'',
@@ -87,21 +99,53 @@
         },
 
         methods: {
+            ...mapActions(['newTypeContents']),
             async saveTypeContent() {
-                // axios.get('http://127.0.0.1:8000/type-content')
-                //     .then(response => {
-                //         //console.log(response.data)
-                //         this.type_contents = response.data;
-                //     })
-                //     .catch(error => {
-                //         console.log(error);
-                //     });
-                console.log(123);
+                this.$v.form.$touch();
+                if(this.$v.form.$invalid){
+                    console.log('Form not subm')
+                }else {
+                    this.newTypeContents({
+                        form: this.form
+                    }).then(response => {
+                        this.$emit('close-modal');
+                        this.form.icon = ''; this.form.name = ''; this.form.owner = ''; this.form.api_url = ''; this.form.active_from = ''; this.form.active_after = ''; this.form.description = '';
+                    }).catch(errors => {
+                        console.log(errors);
+                    });
+                }
+
+            },
+            async getIcons() {
+                axios.get('http://127.0.0.1:8000/type-content/icons')
+                    .then(response => {
+                        this.icons = response.data;
+                    });
+            },
+        },
+        async created(){
+            this.getIcons();
+        },
+        validations: {
+            form:{
+                name: {required},
+                icon: {required},
+                owner: {required},
+                api_url: {required},
             }
         },
     }
 </script>
 
-<style scoped>
-
+<style>
+    select{
+        font-family: fontAwesome
+    }
+    .invalid {
+        border-color: red;
+        color: red;
+    }
+    small .invalid {
+        color: red;
+    }
 </style>

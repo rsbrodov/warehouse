@@ -86,11 +86,12 @@ Route::middleware(['auth:web'])->group(function () {
     Route::delete('dictionary-element/{id}', [DictionaryElementController::class, 'destroy'])->name('dictionary-element.destroy');
 });
 // ТИПЫ КОНТЕНТА
+Route::get('/type-content/icons', [TypeContentController::class, 'getIcons']);
 Route::get('/type-content/create-icons', [TypeContentController::class, 'createIcons'])->name('type-content.create-icons');
-Route::post('/type-content/get-icons', [TypeContentController::class, 'getIcons'])->name('type-content.get-icons');
 
 
 Route::middleware(['auth:web'])->group(function () {
+    Route::post('/type-content/store/', [App\Http\Controllers\TypeContentController::class, 'store']);
     Route::get('/type-content/', [TypeContentController::class, 'index'])->name('type-content.index');
     Route::get('/type-content/getListTypeContent', [TypeContentController::class, 'getListTypeContent'])->name('type-content.getListTypeContent');
     Route::get('/type-content/create', [TypeContentController::class, 'create'])->name('type-content.create');
