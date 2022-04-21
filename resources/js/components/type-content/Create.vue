@@ -11,11 +11,7 @@
                 <div class="row mb-3">
                     <div class="block col-6">
                         <label for="owner"><b>Владелец типа контента:</b></label>
-                        <input autocomplete="off" id="owner" class="form-control" type="text" v-model="form.owner"
-                               :class="{invalid: ($v.form.owner.$dirty && !$v.form.owner.required)}">
-                        <small class="helper-text invalid" v-if="$v.form.owner.$dirty && !$v.form.owner.required">
-                            Укажите владельца
-                        </small>
+                        <input autocomplete="off" id="owner" class="form-control" type="text" v-model="form.owner">
                     </div>
 
                     <div class="block col-6">
@@ -35,7 +31,7 @@
                         <input autocomplete="off" id="name" class="form-control" type="text" v-model="form.name"
                                :class="{invalid: ($v.form.name.$dirty && !$v.form.name.required)}">
                             <small class="helper-text invalid" v-if="$v.form.name.$dirty && !$v.form.name.required">
-                                Введите Наименование
+                                Необходимо заполнить «Наименование».
                             </small>
                     </div>
 
@@ -44,7 +40,7 @@
                         <input autocomplete="off" id="api_url" class="form-control" type="text" v-model="form.api_url"
                                :class="{invalid: ($v.form.api_url.$dirty && !$v.form.api_url.required)}">
                         <small class="helper-text invalid" v-if="$v.form.api_url.$dirty && !$v.form.api_url.required">
-                            Введите api_url
+                            Необходимо заполнить «API URL».
                         </small>
                     </div>
                 </div>
@@ -129,8 +125,6 @@
         validations: {
             form:{
                 name: {required},
-                icon: {required},
-                owner: {required},
                 api_url: {required},
             }
         },
