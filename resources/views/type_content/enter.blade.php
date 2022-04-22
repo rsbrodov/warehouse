@@ -5,17 +5,18 @@
     //    dd($body);
     ?>
 <!--    --><?php //dd($body);exit; ?>
-    @foreach($body as $rowList)
-        @foreach($rowList as $columns)
-            <?php print_r($columns); ?>
+    @foreach($rows as $row)
+        <?print_r($row);?>
+{{--        @foreach($rowList as $columns)--}}
+<!--            --><?php //print_r($columns); ?>
 {{--            @foreach($columns as $column)--}}
 
                 {{--                    @foreach($columns as $fields)--}}
                 {{--                        --}}
                 {{--                    @endforeach--}}
 {{--            @endforeach--}}
-        @endforeach
-    @endforeach
+{{--        @endforeach--}}
+{{--    @endforeach--}}
 {{--    <label for="{{$name}}" class="col-md-4 col-form-label text-md-right">{{$label}}</label>--}}
 {{--    <div class="col-md-6">--}}
 {{--        <input type="{{$input_type}}" class="form-control @error($name) is-invalid @enderror" id="{{$name}}"--}}
