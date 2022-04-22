@@ -286,34 +286,86 @@ class TypeContentController extends Controller
     }
 
     public function enter($id){
-        if (Auth::guard('web')->check()) {
-            $user = Auth::guard('web')->user();
-            if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
-                $type_content = TypeContent::find($id);
-                $body = json_decode($type_content['body']);
-                foreach ($body as $row){
-                    foreach ($row as $colomnList) {
-                        //foreach ($colomnList->colomnList as $colomn) {
-                            //foreach ($colomn as $fieldList) {
-                                //foreach ($fieldList->fieldList as $field) {
-                                dd($body);
-                                //}
-                            //}
-                        //}
-                    }
-                }
 
-               // exit;
-                return view('type_content.enter', ['type_content' => $type_content]);
+        $type_content = TypeContent::find($id);
+        $object = (object)[
+            [
+                "idRow" => "1",
+                "col" => [
+                    [
+                        "idCol" => "row1/col1",
+                        "element" => [
+                            [
+                                "id" => 1,
+                                "type" => "text",
+                                "order" => 1,
+                                "title" => "Название",
+                                "required" => true,
+                            ],
+                            [
+                                "id" => 2,
+                                "type" => "text",
+                                "order" => 3,
+                                "title" => "Цена",
+                                "required" => true
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+
+            [
+                "idRow" => "2",
+                "col" => [
+                    [
+                        "idCol" => "row2/col2",
+                        "element" => [
+                            [
+                                "id" => 1,
+                                "type" => "checkbox",
+                                "order" => 4,
+                                "title" => "М/Ж",
+                                "required" => true
+                            ],
+                            [
+                                "id" => 3,
+                                "type" => "text",
+                                "order" => 2,
+                                "title" => "Размер",
+                                "required" => true
+                            ],
+                            [
+                                "id" => 2,
+                                "type" => "text",
+                                "order" => 2,
+                                "title" => "Описание",
+                                "required" => true
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+        ];
+
+
+        $type_content->body = serialize($object);
+        $type_content->save();
+
+
+        $type_content = TypeContent::find($id);
+        $rows = unserialize($type_content->body);
+        foreach ($rows as $row){
+            foreach ($row['col'] as $column){
+                foreach ($column['element'] as $field){
+                    print_r($field);
+                    print_r('<pre>');
+                }
             }
         }
     }
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\Models\TypeContent $typeContent
-     * @return \Illuminate\Http\Response
-     */
+
+
+
     public function publish($id){
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
@@ -508,6 +560,7 @@ class TypeContentController extends Controller
             'name' => 'Ваш ответ',
             'null' => 'null',
             'row' => '1',
+            'sort' => '3',
             'sort' => '3',
         ]);
         //$typeContent = TypeContent::find($id);
