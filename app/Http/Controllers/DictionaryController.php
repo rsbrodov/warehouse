@@ -27,6 +27,17 @@ class DictionaryController extends Controller
             return view('dictionary.index');
         }
     }
+    public function findDictionary()
+    {
+        if(Auth::guard('web')->check()) {
+            $dictionary = Dictionary::where(['created_author' => Auth::guard('web')->user()->id])->with('created_author:id,name')->with('updated_author:id,name')->get();
+            return response()->json($dictionary);
+
+        }else if (Auth::guard('api')->check()) {
+            $dictionary = Dictionary::where(['created_author' => Auth::guard('api')->user()->id])->with('created_author:id,name')->with('updated_author:id,name')->get();
+            return response()->json($dictionary);
+        }
+    }
     public function index2()
     {
         if(Auth::guard('web')->check()) {
