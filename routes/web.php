@@ -63,17 +63,16 @@ Route::middleware(['auth:web'])->group(function () {
 });
 // СПРАВОЧНИКИ
 Route::middleware(['auth:web'])->group(function () {
+    Route::get('/dictionary/findDictionary', [DictionaryController::class, 'findDictionary']);
     Route::get('/dictionary/', [DictionaryController::class, 'index'])->name('dictionary.index');
     Route::get('/dictionary/index2', [DictionaryController::class, 'index2'])->name('dictionary.index2');
-    Route::post('/dictionary/', [DictionaryController::class, 'store'])->name('dictionary.store');
-    Route::get('/dictionary/create', [DictionaryController::class, 'create'])->name('dictionary.create');
-    Route::post('/dictionary/', [DictionaryController::class, 'store'])->name('dictionary.store');
     Route::get('/dictionary/{id}', [DictionaryController::class, 'show'])->name('dictionary.show');
     Route::get('/dictionary/{id}/edit', [DictionaryController::class, 'edit'])->name('dictionary.edit');
     Route::put('/dictionary/{id}', [DictionaryController::class, 'update'])->name('dictionary.update');
     Route::delete('/dictionary/{id}', [DictionaryController::class, 'destroy'])->name('dictionary.destroy');
     Route::get('/dictionary/{id}/archive', [DictionaryController::class, 'archive'])->name('dictionary.archive');
-    Route::get('/dictionary/{id}/delete', [DictionaryController::class, 'delete'])->name('dictionary.delete');
+    Route::post('/dictionary/store/', [DictionaryController::class, 'store']);
+
 });
 // ЭЛЕМЕНТЫ СПРАВОЧНИКОВ
 Route::middleware(['auth:web'])->group(function () {

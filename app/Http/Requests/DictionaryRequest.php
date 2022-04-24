@@ -23,8 +23,6 @@ class DictionaryRequest extends FormRequest
      */
     public function rules()
     {
-        /*print_r($this->method());
-        exit();*/
         return [
             'name' => 'required|max:150',
             'code' => 'required',
@@ -44,7 +42,7 @@ class DictionaryRequest extends FormRequest
         return [
             'name.required' => 'Поле "Название" является обязательным',
             'name.max' => 'В поле "Название" не может быть более 150 символов',
-            'code.required' => 'Поле "Описание" является обязательным',
+            'code.required' => 'Поле "Код" является обязательным',
             'archive.boolean' => 'Поле "Код" может содержать только числовые значения',
         ];
     }
