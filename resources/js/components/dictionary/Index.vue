@@ -1,5 +1,12 @@
 <template>
 <div>
+
+        <!-- Modal Dictionary create -->
+        <div class="modal fade" id="dictionaryCreate" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <Create @close-modal="closeModal('create')"></Create>
+            </div>
+        </div>
         <div class="d-flex justify-content-center"><h1>Справочники</h1></div>
         <div class="row mt-4">
             <div class="header-block row">
@@ -17,7 +24,7 @@
                                     <input autocomplete="off" type="text" name="name" placeholder="Наименование справочника" id="name" class="form-control" v-model="filter_form.name">
                                 </div>
                                 <div class="col-4">
-                                    <select id="status" class="form-control" name="archive" v-model="filter_form.status">
+                                    <select id="archive" class="form-control" name="archive" v-model="filter_form.archive">
                                         <option value=''>Все</option>
                                         <option value='0'>Действующий</option>
                                         <option value='1'>Архивный</option>
@@ -29,7 +36,9 @@
                 </div>
                 <div class="create col-2">
                     <button id="clean" class="btn btn-primary" @click="cleanSearch()"><span class="fa fa-paint-brush fa-lg" aria-hidden="true"></span> Очистить</button>
-                    <a href="" class="btn-create btn btn-primary"><span class="fa fa-plus-circle fa-lg" aria-hidden="true"></span></a>
+                    <button type="button" class="btn-create btn btn-primary" @click="openModal()">
+                        <span class="fa fa-plus-circle fa-lg"></span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -49,7 +58,8 @@
                 <td>{{ dictionary | dateUpdated }}</td>
                 <td :class="dictionary.archive | statusColor"><b>{{ dictionary.archive | status }}</b></td>
 
-<!--                <td nowrap>-->
+                <td nowrap>
+                <button class="btn btn-danger del" @click="removeDictionary(dictionary.id)"><i class="fa fa-trash fa-lg"></i></button>
 <!--                    <a href="{{route('dictionary.show', ($dictionary->id))}}" class="btn btn-success ">-->
 <!--                        <i class="fa fa-eye fa-lg" aria-hidden="true"></i>-->
 <!--                    </a>-->
@@ -66,12 +76,10 @@
 <!--                        <i class="fa fa-file-archive-o fa-lg" aria-hidden="true"></i>-->
 <!--                        @endif-->
 <!--                    </a>-->
-<!--                </td>-->
+                </td>
             </tr>
         </table>
-<!--        <a href="{{route('dictionary.create')}}" class="btn btn-primary form-control">Создать</a>-->
 <!--    </div>-->
-<!--    @endsection-->
 
 </div>
 </template>
@@ -79,14 +87,14 @@
 
 <script>
     import {mapGetters, mapActions} from 'vuex'
-    //import Create from "./Create";
+    import Create from './create'
     import moment from 'moment'
     export default{
-        //components:{Create},
+        components:{Create},
         data:function(){
             return {
                 filter_form:{
-                    status:'',
+                    archive:'',
                     name:'',
                     code:'',
                 },
@@ -101,18 +109,24 @@
                 }).filter((dictionary) => {
                     return dictionary.code.toLowerCase().match(this.filter_form.code);
                 })/*.filter((dictionary) => {
-                    return dictionary.archive.match(this.filter_form.status);
+                    return dictionary.archive.match(this.filter_form.archive);
                 })*/;
             }
         },
 
         methods: {
-            ...mapActions(['getDictionary']),
-            closeModal(){
-                $("#exampleModal").modal("hide");
+            ...mapActions(['getDictionary', 'deleteDictionary']),
+            closeModal(id){
+                if(id == 'create'){
+                    $("#dictionaryCreate").modal("hide");
+                }
+
+            },
+            removeDictionary(id){
+                this.deleteDictionary(id);
             },
             openModal(){
-                $('#exampleModal').modal('show');
+                $('#dictionaryCreate').modal('show');
             },
             toggleSearch(){
                 $('.form').toggle('show');
@@ -163,15 +177,7 @@
         flex-wrap: nowrap;
         align-items: center;
     }
-    .pencil > a {
-        background-color: #007bff!important;
-    }
-
-    .modal-backdrop {
-        z-index: 1040 !important;
-    }
-    .modal-content {
-        margin: 2px auto;
-        z-index: 1100 !important;
+    .del {
+        background-color: #dc3545!important;
     }
 </style>

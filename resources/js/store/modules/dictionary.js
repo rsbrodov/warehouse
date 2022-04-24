@@ -7,34 +7,32 @@ export default{
         Dictionary(state){
             return state.dictionary
         },
-        new_Dictionary(state){
+        newDictionary(state){
             return state.new_dictionary
         },
     },
     mutations: {
-        updateDictionary(state, dictionary){
+        UPDATE(state, dictionary){
             state.dictionary = dictionary
         },
-        addingDictionary(state, new_Dictionary){
-            state.dictionary.unshift(new_Dictionary)
-        },
-
+        ADDING(state, new_dictionary){
+            state.dictionary.unshift(new_dictionary)
+        }
     },
     actions: {
         async getDictionary(ctx){
             const dictionary = await axios.get('http://127.0.0.1:8000/dictionary/findDictionary');
-            ctx.commit('updateDictionary', dictionary.data)
+            ctx.commit('UPDATE', dictionary.data)
         },
         async newDictionary(ctx, form){
-            const new_dictionary = await axios.post('http://127.0.0.1:8000/type-dictionary/store', form);
-            ctx.commit('addingDictionary', new_dictionary.data);
+            const new_dictionary = await axios.post('http://127.0.0.1:8000/dictionary/store', form);
             const dictionary = await axios.get('http://127.0.0.1:8000/dictionary/findDictionary');
-            ctx.commit('updateDictionary', dictionary.data)
+            ctx.commit('UPDATE', dictionary.data)
         },
         async deleteDictionary(ctx, id){
-            await axios.delete('api/dishes/'+id);
-            const my_dishes = await axios.get('api/dishes/');
-            ctx.commit('updateMyDishes', my_dishes.data)
+            await axios.delete('http://127.0.0.1:8000/dictionary/'+id);
+            const dictionary = await axios.get('http://127.0.0.1:8000/dictionary/findDictionary');
+            ctx.commit('UPDATE', dictionary.data)
         },
     },
 }

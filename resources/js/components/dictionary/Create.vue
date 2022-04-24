@@ -1,61 +1,86 @@
 <template>
     <div>
-<!--        <?use \App\Models\User;?>-->
-<!--        @extends('admin.main')-->
-<!--        @section('content')-->
-            <h1>Создание справочника</h1>
-            <form action="" method="post"> <!-- <form action="{{route('dictionary.store')}}" method="post">-->
-<!--                @csrf-->
-                <div class="form-group row">
-                    <label for="name" class="col-md-4 col-form-label text-md-right">Название</label>
-                    <div class="col-md-6">
-                        <input autofocus type="text" name="name" value="" placeholder="Введите название" id="name" class="form-control"> <!-- <input autofocus type="text" name="name" value="{{ old('name') }}" placeholder="Введите название" id="name" class="form-control @error('name') is-invalid @enderror">-->
-<!--                        @error('name')-->
-                        <span class="invalid-feedback" role="alert"><strong>
-<!--                            {{ $message }}-->
-                        </strong></span>
-<!--                        @enderror-->
-                    </div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Создание справочника</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" @click="$emit('close-modal')">&times;</span>
+                </button>
+            </div>
+            <form @submit.prevent="saveDictionary()">
+                <div class="modal-body">
+                     <div class="block">
+                         <label for="name"><b>Наименование справочника</b></label>
+                         <input autocomplete="off" id="name" class="form-control" type="text" v-model="form.name"
+                                :class="{invalid: ($v.form.name.$dirty && !$v.form.name.required)}">
+                         <small class="helper-text invalid" v-if="$v.form.name.$dirty && !$v.form.name.required">
+                             Необходимо заполнить «Наименование».
+                         </small>
+                     </div>
+
+                     <div class="block">
+                         <label for="api_url"><b>Код справочника:</b></label>
+                         <input autocomplete="off" id="api_url" class="form-control" type="text" v-model="form.code"
+                                :class="{invalid: ($v.form.code.$dirty && !$v.form.code.required)}">
+                         <small class="helper-text invalid" v-if="$v.form.code.$dirty && !$v.form.code.required">
+                             Необходимо заполнить «Код».
+                         </small>
+                     </div>
+                     <div class="block">
+                         <label for="description"><b>Описание справочника:</b></label>
+                         <textarea autocomplete="off" name="description" v-model="form.description" id="description" class="form-control"/>
+                     </div>
                 </div>
-                <div class="form-group row">
-                    <label for="description" class="col-md-4 col-form-label text-md-right" >Описание</label>
-                    <div class="col-md-6">
-                        <textarea name="description" placeholder="Введите описание" id="description" class="form-control"></textarea> <!-- <textarea name="description" placeholder="Введите описание" id="description" class="form-control @error('description') is-invalid @enderror">{{ old('description') }}</textarea>-->
-<!--                        @error('description')-->
-                        <span class="invalid-feedback" role="alert"><strong> </strong></span> <!-- <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>-->
-<!--                        @enderror-->
-                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @click="$emit('close-modal')">Отмена</button>
+                    <button id="add" type="submit" class="btn btn-primary">ОК</button>
                 </div>
-                <div class="form-group row">
-                    <label for="code" class="col-md-4 col-form-label text-md-right">Код</label>
-                    <div class="col-md-6">
-                        <input type="text" name="code" value="" placeholder="Введите код" id="code" class="form-control"><!-- <input type="text" name="code" value="{{ old('code') }}" placeholder="Введите код" id="code" class="form-control @error('code') is-invalid @enderror">-->
-<!--                        @error('code')-->
-                        <span class="invalid-feedback" role="alert"><strong></strong></span> <!-- <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>-->
-<!--                        @enderror-->
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="archive" class="col-md-4 col-form-label text-md-right">Архив</label>
-                    <div class="col-md-6">
-                        <select id="archive" type="text" class="form-control" name="archive"> <!-- <select id="archive" type="text" class="form-control @error('archive') is-invalid @enderror" name="archive">-->
-                            <option value="0">Нет</option> <!-- <option {{ old('archive')== '0' ? 'selected' : '' }} value="0">Нет</option>-->
-                            <option value="1">Да</option> <!-- <option {{ old('archive')== '1' ? 'selected' : '' }} value="1">Да</option>-->
-                        </select>
-<!--                        @error('archive')-->
-                        <span class="invalid-feedback" role="alert"><strong> </strong></span> <!-- <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>-->
-<!--                        @enderror-->
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-success ">Создать</button>
             </form>
-<!--        @endsection-->
+        </div>
     </div>
 </template>
 
 <script>
+    import {required} from "vuelidate/lib/validators";
+    import {mapActions} from "vuex";
     export default {
-        name: "Create"
+        name: "Create_dictionary",
+        data:function(){
+            return {
+                form:{
+                    name:'',
+                    code:'',
+                    description:'',
+                }
+            }
+        },
+        methods: {
+            ...mapActions(['newDictionary']),
+            async saveDictionary() {
+                this.$v.form.$touch();
+                if (this.$v.form.$invalid) {
+                    console.log('Form not subm')
+                } else {
+                    this.newDictionary({
+                        form: this.form
+                    }).then(response => {
+                        this.$emit('close-modal');
+                        this.form.code = '';
+                        this.form.name = '';
+                        this.form.description = '';
+                        console.log(response);
+                    }).catch(errors => {
+                        console.log(errors);
+                    });
+                }
+            }
+        },
+        validations: {
+            form:{
+                name: {required},
+                code: {required},
+            }
+        },
     }
 </script>
 
