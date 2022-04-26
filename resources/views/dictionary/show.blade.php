@@ -2,31 +2,46 @@
 @extends('admin.main')
 @section('content')
     <div class="container">
-        <h1> {{ $dictionary->name }}</h1>
-        <div class="jumbotron text-center">
-            <h2>{{ $dictionary->name }}</h2>
+{{--        <a href="{{route('dictionary.index')}}" class="btn btn-outline-info form-control">Вернуться</a>--}}
 
-            <strong>ID:</strong> {{ $dictionary->id }}<br>
-            <strong>Имя:</strong> {{ $dictionary->name }}<br>
-            <strong>Описание:</strong> {{ $dictionary->description }}<br>
-            <strong>Код:</strong> {{ $dictionary->code }}<br>
-            <strong>Архив:</strong>
-            <div class="p-3 mb-2
-            @if($dictionary->archive == 1)
-                bg-warning text-white
-            @elseif($dictionary->status == 0)
-                bg-primary text-white
-            @else
-                bg-danger text-white
-            @endif
-                ">{{ $dictionary->archive?'Да':'Нет' }}</div>
-            <strong>Содержит элементов:</strong> {{ \App\Models\DictionaryElement::where('dictionary_id', $dictionary->id)->count() }}<br>
-            <strong>Кем создан:</strong> {{ \App\Models\User::where('id', $dictionary->created_author)->first()->name }}<br>
-            <strong>Время создания:</strong> {{ $dictionary->created_at }}<br>
-            <strong>Кем обновлен:</strong> {{ \App\Models\User::where('id', $dictionary->updated_author)->first()->name }}<br>
-            <strong>Время обновления:</strong> {{ $dictionary->updated_at }}<br>
-
-            <a href="{{route('dictionary.index')}}" class="btn btn-primary form-control">Вернуться</a>
+        <div class="create col-2">
+            <a href="{{route('dictionary-element.create', $dictionary_id)}}" class="btn-create btn btn-primary"><span class="fa fa-plus-circle fa-lg" aria-hidden="true"></span></a>
         </div>
+        <div class="d-flex justify-content-center"><h1>Элементы справочника {{\App\Models\Dictionary::where('id', $dictionary_id)->first()->name}}</h1></div>
+        <table class="table table-bordered table-hover">
+            <tr>
+                <th>ID</th>
+                <th>Значение</th>
+                <th>Создатель</th>
+                <th>Дата создания</th>
+                <th>Последний редактор</th>
+                <th>Дата редактирования</th>
+            </tr>
+            @foreach($dictionary_elements as $dictionary_element)
+                <tr>
+                    <td>{{$dictionary_element->id}}</td>
+                    <td>{{$dictionary_element->value}}</td>
+                    <td>{{User::where('id', $dictionary_element->created_author)->first()->name}}</td>
+                    <td>{{$dictionary_element->created_at}}</td>
+                    <td>{{User::where('id', $dictionary_element->updated_author)->first()->name}}</td>
+                    <td>{{$dictionary_element->updated_at}}</td>
+                    <td>
+                        <a href="{{route('dictionary-element.show', [$dictionary_element->id])}}"
+                           class="btn btn-success ">
+                            <i class="fa fa-eye fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <a href="{{route('dictionary-element.edit', $dictionary_element->id)}}"
+                           class="btn btn-primary ">
+                            <i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <form action="{{ route('dictionary-element.destroy', $dictionary_element->id) }}" method="POST">
+                            @method('DELETE')
+                            @csrf
+                            <button type="submit" class="btn btn-danger"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            @endforeach
+        </table>
     </div>
 @endsection
