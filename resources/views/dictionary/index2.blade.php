@@ -10,7 +10,7 @@
                 </div>
                 <div class="search-form col-8">
                     <div class="form">
-                        <form action="{{route('dictionary.store')}}" method="post">
+                     <form action="" method="post"> {{--   {{route('dictionary.store')}}--}}
                             @csrf
                             <div class="form-group row">
                                 <div class="col-4">
@@ -55,14 +55,13 @@
                         <td class="text-success">Действующий</td>
                    @endif
                     <td nowrap>
-                        <a href="{{route('dictionary.show', ($dictionary->id))}}"
-                           class="btn btn-success ">
+                        <a href="{{route('dictionary.show', ($dictionary->id))}}" class="btn btn-success ">
                             <i class="fa fa-eye fa-lg" aria-hidden="true"></i>
                         </a>
                         <a href="{{route('dictionary.edit', ($dictionary->id))}}" class="btn btn-primary">
                             <i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
                         </a>
-                        <a href="{{route('dictionary-element.index', $dictionary->id)}}" class="btn btn-success">
+                        <a href="{{route('dictionary-element.create', $dictionary->id)}}" class="btn btn-success">
                             <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
                         </a>
                         <a href="{{route('dictionary.archive', $dictionary->id)}}" class="btn btn-secondary">
@@ -76,6 +75,6 @@
                 </tr>
             @endforeach
         </table>
-        <a href="{{route('dictionary.create')}}" class="btn btn-primary form-control">Создать</a>
+        <a href="" class="btn btn-primary form-control">Создать</a> {{--   {{route('dictionary.create')}}--}}
     </div>
 @endsection

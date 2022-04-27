@@ -9,7 +9,8 @@
                                     <a class="btn btn-primary" href="{{ route('home-gvt') }}"> Тест GridView</a>
 
 
-            @can('read-component')
+            
+        @can('read-component')
                 <a class="btn btn-success" href="{{ route('tech.create') }}"> Create New Role</a>
             @endcan
             @auth
