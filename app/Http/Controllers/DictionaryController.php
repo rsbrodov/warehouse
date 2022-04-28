@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DictionaryRequest;
 use App\Models\Dictionary;
+use App\Models\DictionaryElement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
@@ -84,8 +85,16 @@ class DictionaryController extends Controller
      */
     public function show($id)
     {
-        $dictionary = Dictionary::find($id);
-        return view('dictionary.show')->with('dictionary', $dictionary);
+        if (Auth::guard('web')->check()) {
+            $user = Auth::guard('web')->user();
+            if ($user->hasRole('Admin') or $user->hasRole('SuperAdmin')) {
+                $dictionary_elements = DictionaryElement::where('dictionary_id', $id)->get();
+                return view('dictionary.show', ['dictionary_elements' => $dictionary_elements, 'dictionary_id' => $id]);
+            }
+        } else if (Auth::guard('api')->check()) {
+            $dictionary_element = DictionaryElement::where(['dictionary_id' => $id])->with('created_author:id,name')->with('updated_author:id,name')->get();
+            return response()->json($dictionary_element);
+        }
     }
 
 

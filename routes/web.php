@@ -72,7 +72,6 @@ Route::middleware(['auth:web'])->group(function () {
     Route::delete('/dictionary/{id}', [DictionaryController::class, 'destroy'])->name('dictionary.destroy');
     Route::get('/dictionary/{id}/archive', [DictionaryController::class, 'archive'])->name('dictionary.archive');
     Route::post('/dictionary/store/', [DictionaryController::class, 'store']);
-
 });
 // ЭЛЕМЕНТЫ СПРАВОЧНИКОВ
 Route::middleware(['auth:web'])->group(function () {
