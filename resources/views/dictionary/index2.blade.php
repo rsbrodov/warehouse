@@ -10,7 +10,9 @@
                 </div>
                 <div class="search-form col-8">
                     <div class="form">
+
                      <form action="" method="post"> {{--   {{route('dictionary.store')}}--}}
+
                             @csrf
                             <div class="form-group row">
                                 <div class="col-4">
@@ -30,7 +32,7 @@
                 </div>
                 <div class="create col-2">
                     <button id="clean" class="btn btn-primary"><span class="fa fa-paint-brush fa-lg" aria-hidden="true"></span> Очистить</button>
-                    <a href="{{route('type-content.create')}}" class="btn-create btn btn-primary"><span class="fa fa-plus-circle fa-lg" aria-hidden="true"></span></a>
+
                 </div>
             </div>
         </div>

@@ -288,7 +288,7 @@ class TypeContentController extends Controller
     public function enter($id){
 
         $type_content = TypeContent::find($id);
-/*
+
        $object = (object)[
             [
                 "idRow" => "1",
@@ -422,7 +422,7 @@ class TypeContentController extends Controller
         ];
         $type_content->body = serialize($object);
         $type_content->save();
-*/
+
 
         $type_content = TypeContent::find($id);
         $rows = unserialize($type_content->body);

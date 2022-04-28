@@ -55,25 +55,7 @@ class DictionaryController extends Controller
             return response()->json($dictionary);
         }
     }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
 
-    public function create()
-    {
-        if (Auth::guard('web')->check()) {
-            return view('dictionary.create');
-        }
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         if (Auth::guard('web')->check()) {
@@ -103,6 +85,7 @@ class DictionaryController extends Controller
      */
     public function show($id)
     {
+
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('Admin') or $user->hasRole('SuperAdmin')) {
@@ -123,22 +106,20 @@ class DictionaryController extends Controller
      */
     public function edit($id)
     {
+
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
-            if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
-                $edit_dictionary = Dictionary::where('id', $id)->first();
-                return view('dictionary.edit', ['edit_dictionary' => $edit_dictionary]);
+            if ($user->hasRole('Admin') or $user->hasRole('SuperAdmin')) {
+                $dictionary_elements = DictionaryElement::where('dictionary_id', $id)->get();
+                return view('dictionary.show', ['dictionary_elements' => $dictionary_elements, 'dictionary_id' => $id]);
             }
+        } else if (Auth::guard('api')->check()) {
+            $dictionary_element = DictionaryElement::where(['dictionary_id' => $id])->with('created_author:id,name')->with('updated_author:id,name')->get();
+            return response()->json($dictionary_element);
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(DictionaryRequest $request, $id)
     {
         if (Auth::guard('web')->check()) {

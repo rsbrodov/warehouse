@@ -4,7 +4,14 @@
         <!-- Modal Dictionary create -->
         <div class="modal fade" id="dictionaryCreate" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
-                <Create @close-modal="closeModal('create')"></Create>
+                <Create @close-modal="closeModal('dictionaryCreate')"></Create>
+            </div>
+        </div>
+
+        <!-- Modal Dictionary create -->
+        <div class="modal fade" id="dictionaryElementCreate" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <CreateElement @close-modal="closeModal('dictionaryElementCreate')"></CreateElement>
             </div>
         </div>
         <div class="d-flex justify-content-center"><h1>Справочники</h1></div>
@@ -36,7 +43,7 @@
                 </div>
                 <div class="create col-2">
                     <button id="clean" class="btn btn-primary" @click="cleanSearch()"><span class="fa fa-paint-brush fa-lg" aria-hidden="true"></span> Очистить</button>
-                    <button type="button" class="btn-create btn btn-primary" @click="openModal()">
+                    <button type="button" class="btn-create btn btn-primary" @click="openModal('dictionaryCreate')">
                         <span class="fa fa-plus-circle fa-lg"></span>
                     </button>
                 </div>
@@ -60,6 +67,7 @@
 
                 <td nowrap>
                 <button class="btn btn-danger del" @click="removeDictionary(dictionary.id)"><i class="fa fa-trash fa-lg"></i></button>
+                <button class="btn btn-warning plus" @click="openModal('dictionaryElementCreate')"><i class="fa fa-plus fa-lg" style="color:white"></i></button>
 <!--                    <a href="{{route('dictionary.show', ($dictionary->id))}}" class="btn btn-success ">-->
 <!--                        <i class="fa fa-eye fa-lg" aria-hidden="true"></i>-->
 <!--                    </a>-->
@@ -88,9 +96,10 @@
 <script>
     import {mapGetters, mapActions} from 'vuex'
     import Create from './create'
+    import CreateElement from "./CreateElement";
     import moment from 'moment'
     export default{
-        components:{Create},
+        components:{Create, CreateElement},
         data:function(){
             return {
                 filter_form:{
@@ -117,16 +126,24 @@
         methods: {
             ...mapActions(['getDictionary', 'deleteDictionary']),
             closeModal(id){
-                if(id == 'create'){
+                if(id == 'dictionaryCreate'){
                     $("#dictionaryCreate").modal("hide");
+                }
+                if(id == 'dictionaryElementCreate'){
+                    $("#dictionaryElementCreate").modal("hide");
                 }
 
             },
             removeDictionary(id){
                 this.deleteDictionary(id);
             },
-            openModal(){
-                $('#dictionaryCreate').modal('show');
+            openModal(id){
+                if(id == 'dictionaryCreate') {
+                    $('#dictionaryCreate').modal('show');
+                }
+                if(id == 'dictionaryElementCreate') {
+                    $('#dictionaryElementCreate').modal('show');
+                }
             },
             toggleSearch(){
                 $('.form').toggle('show');
@@ -179,5 +196,8 @@
     }
     .del {
         background-color: #dc3545!important;
+    }
+    .plus {
+        background-color: #ffc107!important;
     }
 </style>
