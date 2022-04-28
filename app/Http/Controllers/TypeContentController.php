@@ -288,7 +288,8 @@ class TypeContentController extends Controller
     public function enter($id){
 
         $type_content = TypeContent::find($id);
-        $object = (object)[
+/*
+       $object = (object)[
             [
                 "idRow" => "1",
                 "col" => [
@@ -299,21 +300,22 @@ class TypeContentController extends Controller
                                 "id" => 1,
                                 "type" => "text",
                                 "order" => 1,
-                                "title" => "Название",
+                                "title" => "Название единорога",
+                                "name" => "name",
                                 "required" => true,
                             ],
                             [
                                 "id" => 2,
                                 "type" => "text",
                                 "order" => 3,
-                                "title" => "Цена",
-                                "required" => true
+                                "title" => "Цена единорога",
+                                "required" => true,
+                                "name" => "cost",
                             ]
                         ]
                     ]
                 ]
             ],
-
             [
                 "idRow" => "2",
                 "col" => [
@@ -324,44 +326,115 @@ class TypeContentController extends Controller
                                 "id" => 1,
                                 "type" => "checkbox",
                                 "order" => 4,
-                                "title" => "М/Ж",
-                                "required" => true
+                                "title" => "Пол единорога",
+                                "name" => "sex",
+                                "required" => true,
+                                "parameters" => [
+                                    [
+                                        "label"=> "Мужской",
+                                        "name"=>"male",
+                                    ],
+                                    [
+                                        "label"=> "Женский",
+                                        "name"=>"female",
+                                    ]
+                                ]
                             ],
                             [
                                 "id" => 3,
                                 "type" => "text",
                                 "order" => 2,
-                                "title" => "Размер",
+                                "title" => "Размер единорога",
+                                "name" => "size",
                                 "required" => true
                             ],
                             [
                                 "id" => 2,
-                                "type" => "text",
+                                "type" => "textarea",
                                 "order" => 2,
-                                "title" => "Описание",
+                                "title" => "Описание единорога",
+                                "name" => "description",
                                 "required" => true
+
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            [
+                "idRow" => "2",
+                "col" => [
+                    [
+                        "idCol" => "row2/col2",
+                        "element" => [
+                            [
+                                "id" => 1,
+                                "type" => "text",
+                                "order" => 4,
+                                "title" => "Местоположение единорога",
+                                "name" => "location",
+                                "required" => true
+                            ],
+                            [
+                                "id" => 3,
+                                "type" => "select",
+                                "order" => 2,
+                                "title" => "Наличие разрешения на управление",
+                                "name" => "permission",
+                                "required" => true,
+                                "parameters" => [
+                                        [
+                                            "label"=> "Да",
+                                            "name"=>"Yes",
+                                        ],
+                                        [
+                                            "label"=> "Нет",
+                                            "name"=>"No",
+                                        ]
+                                    ]
+                            ],
+                            [
+                                "id" => 2,
+                                "type" => "select",
+                                "order" => 2,
+                                "title" => "Тип допуска",
+                                "name" => "description",
+                                "required" => true,
+                                "parameters" =>  [
+                                    [
+                                        "label"=> "Полный",
+                                        "name"=>"Full",
+                                    ],
+                                    [
+                                        "label"=> "Ограниченный",
+                                        "name"=>"Partly",
+                                    ],
+                                    [
+                                        "label"=> "Отсутствует",
+                                        "name"=>"Denied",
+                                    ]
+                                ]
                             ]
                         ]
                     ]
                 ]
             ],
         ];
-
-
         $type_content->body = serialize($object);
         $type_content->save();
-
+*/
 
         $type_content = TypeContent::find($id);
         $rows = unserialize($type_content->body);
-        foreach ($rows as $row){
+        return view('type_content.enter', ['rows' => $rows]);
+      /*  foreach ($rows as $row){
             foreach ($row['col'] as $column){
                 foreach ($column['element'] as $field){
                     print_r($field);
                     print_r('<pre>');
                 }
             }
-        }
+        }*/
     }
 
 
