@@ -11,7 +11,7 @@
                 <div class="search-form col-8">
                     <div class="form">
 
-                        <form action="" method="post">
+                     <form action="" method="post"> {{--   {{route('dictionary.store')}}--}}
 
                             @csrf
                             <div class="form-group row">
@@ -77,7 +77,6 @@
                 </tr>
             @endforeach
         </table>
-
         <a href="" class="btn btn-primary form-control">Создать</a> {{--   {{route('dictionary.create')}}--}}
     </div>
 @endsection
