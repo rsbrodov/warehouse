@@ -40,6 +40,7 @@ class TypeContentController extends Controller
                 $ids[] = TypeContent::where('id_global', $type_content->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first()->id;
             }
             $type_contents = TypeContent::whereIn('id', $ids)->orderBy('created_at', 'asc')->get();
+            //print_r($type_contents);exit;
             return response()->json($type_contents);
         } else {
             if (Auth::guard('api')->check()) {
