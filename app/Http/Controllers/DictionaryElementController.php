@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class DictionaryElementController extends Controller
 {
-  
+
     public function index($id)
     {
         if (Auth::guard('web')->check()) {
