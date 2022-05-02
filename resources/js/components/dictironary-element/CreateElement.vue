@@ -16,6 +16,8 @@
                         <small class="helper-text invalid" v-if="$v.form.name.$dirty && !$v.form.name.required">
                             Необходимо заполнить «Наименование».
                         </small>
+
+                        <input autocomplete="off" id="dictionary_id" class="form-control" type="hidden" v-model="dictionary_id">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -24,6 +26,7 @@
                 </div>
             </form>
         </div>
+
     </div>
 </template>
 
@@ -32,6 +35,7 @@
     import {mapActions} from "vuex";
     export default {
         name: "CreateElement",
+        props:['dictionary_id'],
         data:function(){
             return {
                 form:{
@@ -40,25 +44,25 @@
             }
         },
         methods: {
-            //...mapActions(['newDictionary']),
+            ...mapActions(['newDictionaryElement']),
             async saveDictionaryElement() {
                 this.$v.form.$touch();
                 if (this.$v.form.$invalid) {
                     console.log('Form not subm')
                 } else {
-                    this.$emit('close-modal');
-                    this.form.name = '';
-                    /*this.newDictionary({
-                        form: this.form
+                    this.newDictionaryElement({
+                        form: {
+                            value: this.form.name,
+                            dictionary_id: this.dictionary_id
+                        }
+
                     }).then(response => {
                         this.$emit('close-modal');
-                        this.form.code = '';
                         this.form.name = '';
-                        this.form.description = '';
                         console.log(response);
                     }).catch(errors => {
                         console.log(errors);
-                    });*/
+                    });
                 }
             }
         },
@@ -67,6 +71,9 @@
                 name: {required},
             }
         },
+        async mounted(){
+            console.log(this.dictionary_id)
+        }
     }
 </script>
 

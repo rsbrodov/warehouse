@@ -19,10 +19,20 @@ class DictionaryElementController extends Controller
     public function findElementDictionaryID($id)
     {
         if (Auth::guard('web')->check()) {
-            $dictionary_element = DictionaryElement::where(['dictionary_id' => $id])->with('created_author:id,name')->with('updated_author:id,name')->get();
+            $dictionary_element = DictionaryElement::where(['dictionary_id' => $id])->with('created_author:id,name')->with('updated_author:id,name')->orderBy('created_at', 'asc')->get();
             return response()->json($dictionary_element);
         } else if (Auth::guard('api')->check()) {
-            $dictionary_element = DictionaryElement::where(['dictionary_id' => $id])->with('created_author:id,name')->with('updated_author:id,name')->get();
+            $dictionary_element = DictionaryElement::where(['dictionary_id' => $id])->with('created_author:id,name')->with('updated_author:id,name')->orderBy('created_at', 'asc')->get();
+            return response()->json($dictionary_element);
+        }
+    }
+    public function findID($id)
+    {
+        if (Auth::guard('web')->check()) {
+            $dictionary_element = DictionaryElement::where(['id' => $id])->with('created_author:id,name')->with('updated_author:id,name')->get();
+            return response()->json($dictionary_element);
+        } else if (Auth::guard('api')->check()) {
+            $dictionary_element = DictionaryElement::where(['id' => $id])->with('created_author:id,name')->with('updated_author:id,name')->get();
             return response()->json($dictionary_element);
         }
     }
@@ -45,21 +55,17 @@ class DictionaryElementController extends Controller
     }
 
 
-    public function store(Request $request, $dictionary_id)
+    public function store(Request $request)
     {
-        $request->validate([
-            'value' => 'required|max:255',
-
-        ]);
         if (Auth::guard('web')->check()) {
-            $new_dictionary_element = DictionaryElement::create([
-                'value' => $request->input('value'),
-                'dictionary_id' => $dictionary_id,
+            $dictionary_element = DictionaryElement::create([
+                'value' => $request->form['value'],
+                'dictionary_id' => $request->form['dictionary_id'],
                 'created_author' => Auth::guard('web')->user()->id,
                 'updated_author' => Auth::guard('web')->user()->id
             ]);
 
-            return redirect()->route('dictionary-element.index', $dictionary_id)->with('success', 'Элемент ' . $new_dictionary_element->value . ' успешно добавлен');
+            return response()->json($dictionary_element);
         } else if (Auth::guard('api')->check()) {
             $dictionary = Dictionary::where(['id' => $request['dictionary_id']])->first();
             if (empty($dictionary)) {
@@ -115,23 +121,12 @@ class DictionaryElementController extends Controller
 
     public function destroy($id)
     {
-        if(Auth::guard('web')->check()) {
-            $user = Auth::guard('web')->user();
-            if($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
-                $element_dictionary = DictionaryElement::find($id);
-                $element_dictionary->delete();
-                return redirect()->route('dictionary-element.index', $element_dictionary->dictionary_id)->with('info', 'Элемент ' . $element_dictionary->value . ' уничтожен');
-            }else {
-                print_r('Авторизируйтесь');
-            }
-        }else if (Auth::guard('web')->check()) {
-            $dictionary_element = DictionaryElement::find($id);
-            if ($dictionary_element) {
-                $dictionary_element->delete();
-                return response()->json('item was deleted');
-            } else {
-                return response()->json('item not found');
-            }
+        $dictionary_element = DictionaryElement::find($id);
+        if ($dictionary_element) {
+            $dictionary_element->delete();
+            return response()->json('item was deleted');
+        } else {
+            return response()->json('item not found');
         }
     }
 }

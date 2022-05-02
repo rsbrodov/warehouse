@@ -1,12 +1,22 @@
 <template>
 <div>
         <!-- Modal Dictionary create -->
-<!--        <div class="modal fade" id="dictionaryElementCreate" aria-hidden="true">-->
-<!--            <div class="modal-dialog modal-lg" role="document">-->
-<!--                <CreateElement @close-modal="closeModal('dictionaryElementCreate')"></CreateElement>-->
-<!--            </div>-->
-<!--        </div>-->
+        <div class="modal fade" id="dictionaryElementCreate" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <CreateElement :dictionary_id="id" @close-modal="closeModal('dictionaryElementCreate')"></CreateElement>
+            </div>
+        </div>
         <div class="d-flex justify-content-center"><h1>Элементы справочника</h1></div>
+        <div class="row mt-4">
+            <div class="header-block row">
+                <div class="search-form col-10"></div>
+                <div class="create col-2">
+                    <button type="button" class="btn-create btn btn-primary" @click="openModal('dictionaryElementCreate', id)">
+                        <span class="fa fa-plus-circle fa-lg"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
         <table class="table table-bordered table-hover mt-4">
             <tr>
                 <th>Список значений справочника</th>
@@ -15,9 +25,7 @@
             <tr v-for="(dictionary_element, index) in DictionaryElement" :key="index" >
                 <td>{{dictionary_element.value}}</td>
                 <td nowrap>
-<!--                <button class="btn btn-danger del" @click="removeDictionary(dictionary.id)"><i class="fa fa-trash fa-lg"></i></button>-->
-<!--                <button class="btn btn-warning plus" @click="openModal('dictionaryElementCreate')"><i class="fa fa-plus fa-lg" style="color:white"></i></button>-->
-<!--                <a :href="'/dictionary/'+dictionary.id+'/dictionary-element'" class="btn btn-success eye"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a>-->
+                <button class="btn btn-danger del" @click="removeDictionaryElement(dictionary_element.id)"><i class="fa fa-trash fa-lg"></i></button>
                 </td>
             </tr>
         </table>
@@ -27,10 +35,9 @@
 
 <script>
     import {mapGetters, mapActions} from 'vuex'
-    /*import Create from './create'
-    import CreateElement from "./CreateElement";*/
+    import CreateElement from "../dictironary-element/CreateElement";
     export default{
-        //components:{Create, CreateElement},
+        components:{CreateElement},
         data:function(){
             return {
                 id: window.location.href.split('/').slice(-3)[0],
@@ -49,8 +56,8 @@
                 }
 
             },
-            removeDictionary(id){
-                this.deleteDictionary(id);
+            removeDictionaryElement(id){
+                this.deleteDictionaryElement(id);
             },
             openModal(id){
                 if(id == 'dictionaryElementCreate') {
