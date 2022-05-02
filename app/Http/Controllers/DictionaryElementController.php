@@ -77,21 +77,6 @@ class DictionaryElementController extends Controller
         }
     }
 
-
-
-    public function edit($id)
-    {
-        if (Auth::guard('web')->check()) {
-            $user = Auth::guard('web')->user();
-            if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
-                $edit_element_dictionary = DictionaryElement::where('id', $id)->first();
-                //dd($edit_element_dictionary);
-                return view('dictionary_element.edit', ['edit_element_dictionary' => $edit_element_dictionary]);
-            }
-        }
-    }
-
-
     public function update(Request $request, $id)
     {
         $request->validate([
