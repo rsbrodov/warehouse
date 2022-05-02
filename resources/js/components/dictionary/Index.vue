@@ -4,14 +4,14 @@
         <!-- Modal Dictionary create -->
         <div class="modal fade" id="dictionaryCreate" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
-                <Create @close-modal="closeModal('dictionaryCreate')"></Create>
+                <Create @close-modal="closeModal('dictionaryCreate', 1)" ></Create>
             </div>
         </div>
 
         <!-- Modal Dictionary create -->
         <div class="modal fade" id="dictionaryElementCreate" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
-                <CreateElement @close-modal="closeModal('dictionaryElementCreate')"></CreateElement>
+                <CreateElement :dictionary_id="dictionary_id" @close-modal="closeModal('dictionaryElementCreate')"></CreateElement>
             </div>
         </div>
         <div class="d-flex justify-content-center"><h1>Справочники</h1></div>
@@ -67,7 +67,7 @@
 
                 <td nowrap>
                 <button class="btn btn-danger del" @click="removeDictionary(dictionary.id)"><i class="fa fa-trash fa-lg"></i></button>
-                <button class="btn btn-warning plus" @click="openModal('dictionaryElementCreate')"><i class="fa fa-plus fa-lg" style="color:white"></i></button>
+                <button class="btn btn-warning plus" @click="openModal('dictionaryElementCreate', dictionary.id)"><i class="fa fa-plus fa-lg" style="color:white"></i></button>
                 <a :href="'/dictionary/'+dictionary.id+'/dictionary-element/'" class="btn btn-success eye"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a>
                 </td>
             </tr>
@@ -79,12 +79,13 @@
 <script>
     import {mapGetters, mapActions} from 'vuex'
     import Create from './create'
-    import CreateElement from "./CreateElement";
+    import CreateElement from "../dictironary-element/CreateElement";
     import moment from 'moment'
     export default{
         components:{Create, CreateElement},
         data:function(){
             return {
+                dictionary_id:null,
                 filter_form:{
                     archive:'',
                     name:'',
@@ -120,12 +121,13 @@
             removeDictionary(id){
                 this.deleteDictionary(id);
             },
-            openModal(id){
+            openModal(id, dictionary_id){
                 if(id == 'dictionaryCreate') {
                     $('#dictionaryCreate').modal('show');
                 }
                 if(id == 'dictionaryElementCreate') {
                     $('#dictionaryElementCreate').modal('show');
+                    this.dictionary_id = dictionary_id;
                 }
             },
             toggleSearch(){
