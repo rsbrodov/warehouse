@@ -38,7 +38,7 @@ Route::group(['middleware' => 'auth:api'], function ($router) {
 });
 
 Route::group(['middleware' => 'auth:api'], function ($router) {
-    Route::get('/dictionary/findElementDictionaryID/{id}', [App\Http\Controllers\DictionaryElementController::class, 'index']);//получение элементов по dictionary_id
+    Route::get('/dictionary/findElementDictionaryID/{id}', [App\Http\Controllers\DictionaryElementController::class, 'findElementDictionaryID']);//получение элементов по dictionary_id
     Route::get('/dictionary/findElementDictionaryCode/{code}', [App\Http\Controllers\DictionaryElementController::class, 'indexCode']);//получение элементов по dictionary_id
     Route::post('/dictionary/createdElementDictionary/', [App\Http\Controllers\DictionaryElementController::class, 'store'])->middleware('auth:api');
     Route::put('/dictionary/updatedElementDictionary/{id}', [App\Http\Controllers\DictionaryElementController::class, 'update'])->middleware('auth:api');

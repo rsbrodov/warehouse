@@ -68,27 +68,10 @@
                 <td nowrap>
                 <button class="btn btn-danger del" @click="removeDictionary(dictionary.id)"><i class="fa fa-trash fa-lg"></i></button>
                 <button class="btn btn-warning plus" @click="openModal('dictionaryElementCreate')"><i class="fa fa-plus fa-lg" style="color:white"></i></button>
-<!--                    <a href="{{route('dictionary.show', ($dictionary->id))}}" class="btn btn-success ">-->
-<!--                        <i class="fa fa-eye fa-lg" aria-hidden="true"></i>-->
-<!--                    </a>-->
-<!--                    <a href="{{route('dictionary.edit', ($dictionary->id))}}" class="btn btn-primary">-->
-<!--                        <i class="fa fa-pencil fa-lg" aria-hidden="true"></i>-->
-<!--                    </a>-->
-<!--                    <a href="{{route('dictionary-element.index', $dictionary->id)}}" class="btn btn-success">-->
-<!--                        <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>-->
-<!--                    </a>-->
-<!--                    <a href="{{route('dictionary.archive', $dictionary->id)}}" class="btn btn-secondary">-->
-<!--                        @if(\App\Models\Dictionary::find($dictionary->id)->archive == '1')-->
-<!--                        <i class="fa fa-history fa-lg" aria-hidden="true"></i>-->
-<!--                        @else-->
-<!--                        <i class="fa fa-file-archive-o fa-lg" aria-hidden="true"></i>-->
-<!--                        @endif-->
-<!--                    </a>-->
+                <a :href="'/dictionary/'+dictionary.id+'/dictionary-element/'" class="btn btn-success eye"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a>
                 </td>
             </tr>
         </table>
-<!--    </div>-->
-
 </div>
 </template>
 
@@ -199,5 +182,8 @@
     }
     .plus {
         background-color: #ffc107!important;
+    }
+    .eye {
+        background-color: #28a745!important;
     }
 </style>

@@ -9,6 +9,7 @@ import store from './store/index'
 
 Vue.component('Index', require('./components/type-content/Index.vue').default);
 Vue.component('Indexdictionary', require('./components/dictionary/Index.vue').default);
+Vue.component('Indexdictionaryelement', require('./components/dictironary-element/Index.vue').default);
 Vue.use(Vuelidate)
 Vue.use( Moment );
 Vue.use(BootstrapVue);
