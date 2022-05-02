@@ -76,7 +76,7 @@ Route::middleware(['auth:web'])->group(function () {
 // ЭЛЕМЕНТЫ СПРАВОЧНИКОВ
 Route::middleware(['auth:web'])->group(function () {
     Route::get('dictionary/{id}/dictionary-element/', [DictionaryElementController::class, 'index'])->name('dictionary-element.index');
-    Route::get('dictionary/{id}/dictionary-element/create', [DictionaryElementController::class, 'create'])->name('dictionary-element.create');
+    Route::get('dictionary/findElementDictionaryID/{id}', [DictionaryElementController::class, 'findElementDictionaryID']);
     Route::post('dictionary/{id}/dictionary-element/', [DictionaryElementController::class, 'store'])->name('dictionary-element.store');
     Route::get('dictionary-element/{id}', [DictionaryElementController::class, 'show'])->name('dictionary-element.show');
     Route::get('dictionary-element/{id}/edit', [DictionaryElementController::class, 'edit'])->name('dictionary-element.edit');
