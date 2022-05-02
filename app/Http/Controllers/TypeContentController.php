@@ -327,19 +327,10 @@ class TypeContentController extends Controller
                                 "id" => 1,
                                 "type" => "checkbox",
                                 "order" => 4,
-                                "title" => "Пол единорога",
+                                "title" => "Пол единорога (БД)",
                                 "name" => "sex",
                                 "required" => true,
-                                "parameters" => [
-                                    [
-                                        "label"=> "Мужской",
-                                        "name"=>"male",
-                                    ],
-                                    [
-                                        "label"=> "Женский",
-                                        "name"=>"female",
-                                    ]
-                                ]
+                                "parameters" => "9ca1da69-7104-4b15-ad89-a645d143abef"
                             ],
                             [
                                 "id" => 3,
@@ -380,41 +371,76 @@ class TypeContentController extends Controller
                                 "id" => 3,
                                 "type" => "select",
                                 "order" => 2,
-                                "title" => "Наличие разрешения на управление",
+                                "title" => "Наличие разрешения на управление (БД)",
                                 "name" => "permission",
                                 "required" => true,
-                                "parameters" => [
-                                        [
-                                            "label"=> "Да",
-                                            "name"=>"Yes",
-                                        ],
-                                        [
-                                            "label"=> "Нет",
-                                            "name"=>"No",
-                                        ]
-                                    ]
+                                "parameters" => "dd882515-16ea-4d3a-ba87-6cb05126702e"
                             ],
                             [
                                 "id" => 2,
                                 "type" => "select",
                                 "order" => 2,
-                                "title" => "Тип допуска",
-                                "name" => "description",
+                                "title" => "Тип допуска (БД)",
+                                "name" => "admission",
                                 "required" => true,
-                                "parameters" =>  [
-                                    [
-                                        "label"=> "Полный",
-                                        "name"=>"Full",
-                                    ],
-                                    [
-                                        "label"=> "Ограниченный",
-                                        "name"=>"Partly",
-                                    ],
-                                    [
-                                        "label"=> "Отсутствует",
-                                        "name"=>"Denied",
-                                    ]
-                                ]
+                                "parameters" =>  "a0114e96-d434-4d91-845b-0b76eb531cef"
+                            ],
+//                            [
+//                                "id" => 2,
+//                                "type" => "select",
+//                                "order" => 2,
+//                                "title" => "Тип допуска",
+//                                "name" => "description",
+//                                "required" => true,
+//                                "parameters" =>  [
+//                                    [
+//                                        "label"=> "Полный",
+//                                        "value"=>"Full",
+//                                    ],
+//                                    [
+//                                        "label"=> "Ограниченный",
+//                                        "value"=>"Partly",
+//                                    ],
+//                                    [
+//                                        "label"=> "Отсутствует",
+//                                        "value"=>"Denied",
+//                                    ]
+//                                ]
+//                            ],
+//                            [
+//                                "id" => 2,
+//                                "type" => "radio",
+//                                "order" => 2,
+//                                "title" => "Предпочитаемый способ езды",
+//                                "name" => "rideType",
+//                                "required" => true,
+//                                "parameters" =>  [
+//                                    [
+//                                        "label"=> "Шаг",
+//                                        "value"=>"Step",
+//                                    ],
+//                                    [
+//                                        "label"=> "Рысь",
+//                                        "value"=>"Trott",
+//                                    ],
+//                                    [
+//                                        "label"=> "Галоп",
+//                                        "value"=>"Gallop",
+//                                    ],
+//                                    [
+//                                        "label"=> "Карьер",
+//                                        "value"=>"Quarry",
+//                                    ]
+//                                ]
+//                            ],
+                            [
+                                "id" => 2,
+                                "type" => "radio",
+                                "order" => 2,
+                                "title" => "Предпочитаемый способ езды (БД)",
+                                "name" => "rideType",
+                                "required" => true,
+                                "parameters" =>  "81f52fa0-e5e1-41d4-a530-0102e4d0bbdb"
                             ]
                         ]
                     ]
