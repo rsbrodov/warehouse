@@ -76,4 +76,231 @@ class HomeController extends Controller
             return 'not auth';
         }
     }
+    public function test()
+    {
+        if(Auth::guard('web')->check()) {
+            $object = (object)[
+                [
+                    "idRow" => "1",
+                    "col" => [
+                        [
+                            "idCol" => "row1/col1",
+                            "element" => [
+                                [
+                                    "id" => 1,
+                                    "type" => "text",
+                                    "order" => 1,
+                                    "title" => "Название единорога",
+                                    "name" => "name",
+                                    "required" => true,
+                                ],
+                                [
+                                    "id" => 2,
+                                    "type" => "text",
+                                    "order" => 3,
+                                    "title" => "Цена единорога",
+                                    "required" => true,
+                                    "name" => "cost",
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    "idRow" => "2",
+                    "col" => [
+                        [
+                            "idCol" => "row2/col2",
+                            "element" => [
+                                [
+                                    "id" => 1,
+                                    "type" => "checkbox",
+                                    "order" => 4,
+                                    "title" => "Пол единорога (БД)",
+                                    "name" => "sex",
+                                    "required" => true,
+                                    "parameters" => "9ca1da69-7104-4b15-ad89-a645d143abef"
+                                ],
+                                [
+                                    "id" => 3,
+                                    "type" => "text",
+                                    "order" => 2,
+                                    "title" => "Размер единорога",
+                                    "name" => "size",
+                                    "required" => true
+                                ],
+                                [
+                                    "id" => 2,
+                                    "type" => "textarea",
+                                    "order" => 2,
+                                    "title" => "Описание единорога",
+                                    "name" => "description",
+                                    "required" => true
+
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    "idRow" => "2",
+                    "col" => [
+                        [
+                            "idCol" => "row2/col2",
+                            "element" => [
+                                [
+                                    "id" => 1,
+                                    "type" => "text",
+                                    "order" => 4,
+                                    "title" => "Местоположение единорога",
+                                    "name" => "location",
+                                    "required" => true
+                                ],
+                                [
+                                    "id" => 3,
+                                    "type" => "select",
+                                    "order" => 2,
+                                    "title" => "Наличие разрешения на управление (БД)",
+                                    "name" => "permission",
+                                    "required" => true,
+                                    "parameters" => "dd882515-16ea-4d3a-ba87-6cb05126702e"
+                                ],
+                                [
+                                    "id" => 2,
+                                    "type" => "select",
+                                    "order" => 2,
+                                    "title" => "Тип допуска (БД)",
+                                    "name" => "admission",
+                                    "required" => true,
+                                    "parameters" =>  "a0114e96-d434-4d91-845b-0b76eb531cef"
+                                ],
+                                [
+                                    "id" => 2,
+                                    "type" => "radio",
+                                    "order" => 2,
+                                    "title" => "Предпочитаемый способ езды (БД)",
+                                    "name" => "rideType",
+                                    "required" => true,
+                                    "parameters" =>  "81f52fa0-e5e1-41d4-a530-0102e4d0bbdb"
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+            ];
+            $rand_words_1 = [
+                'Безотказная',
+                'Развратная',
+                'Раскрытая',
+                'Офигевшая',
+                'Шальная',
+                'Бухая',
+                'Вычурная',
+                'Честная',
+                'Приятная',
+                'Горячая',
+                'Бесконечная',
+                'Космическая',
+                'Протёкшая',
+            ];
+            $rand_words_2 = [
+                'императрица',
+                'богиня',
+                'машина',
+                'дочь олигарха',
+                'развратница',
+                'микроволновка',
+                'кочерга',
+                'кувалда',
+                'книга',
+                'бутылка',
+                'простокваша',
+                'пальма',
+                'швабра',
+            ];
+            $rand_words_3 = [
+                'на выезде',
+                'на задании',
+                'вышла на охоту',
+                'кусает шашлык',
+                'выглядит развратно',
+                'хочет тебя',
+                'волнуется и переживает',
+                'уже хочет тебя',
+                'отключилась',
+                'в жопе',
+            ];
+
+            $random_status = [
+                'Published',
+                'Draft',
+                'Archive'
+            ];
+            for ($i = 0; $i < 10000; $i++){
+                $str = $rand_words_1[rand(0, count($rand_words_1)-1)] . ' ' . $rand_words_2[rand(0, count($rand_words_2)-1)] . ' ' . $rand_words_3[rand(0, count($rand_words_3)-1)];
+                \App\Models\TypeContent::create(
+                    [
+                        'id_global'      => \Illuminate\Support\Str::uuid()->toString(),
+                        'name'           => $str,
+                        'description'    => $str,
+                        'owner'          => 'TEST10000',
+                        'active_from'    => date_create('2022-01-01'),
+                        'active_after'   => date_create('2023-02-02'),
+                        'status'         => $random_status[rand(0, count($random_status)-1)],
+                        'version_major'  => '1',
+                        'version_minor'  => '0',
+                        'icon'           => 'fa-battery',
+                        'api_url'        => str_slug($str),
+                        'body' =>serialize($object),
+                        'based_type'     => null,
+                        'created_author' => 27,
+                        'updated_author' => 27,
+                    ]
+                );
+            }
+
+           return redirect()->route('home')->with('success', '10000 типов контента успешно созданы!');
+
+            //return view('home-test', ['str'=>$str]);
+        } else {
+            return 'not auth';
+        }
+    }
+    public function test2()
+    {
+        $rand_words_1 = [
+            'честных',
+            'безумных',
+            'квадратных',
+            'великих',
+            'странных',
+            'культурных',
+            'неизвестных',
+            'великолепных'
+        ];
+        $rand_words_2 = [
+            'дел',
+            'стрел',
+            'людей',
+            'коров',
+            'бобров',
+            'домов',
+            'лольных кеков',
+            'пиндосов'
+        ];
+
+        for ($i = 0; $i < 10000; $i++){
+            $str = $rand_words_1[rand(0, count($rand_words_1)-1)] . ' ' . $rand_words_2[rand(0, count($rand_words_2)-1)] . ' ';
+            \App\Models\Dictionary::create([
+                   'code' => rand(0,10) . 'x' . rand(0,55),
+                   'name' => 'Справочник '.$str,
+                   'description' => 'Описание справочника '.$str,
+                   'archive' => rand(0, 1),
+                   'created_author' => 27,
+                   'updated_author' => 27
+               ]);
+        }
+
+        return redirect()->route('home')->with('warning', '10000 справочников успешно созданы!');
+    }
 }

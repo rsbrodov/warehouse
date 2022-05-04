@@ -38,6 +38,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/home2', [App\Http\Controllers\HomeController::class, 'index2'])->name('home2');
 Route::get('/home3', [App\Http\Controllers\HomeController::class, 'index3'])->name('home3');
 Route::get('/gvt', [App\Http\Controllers\HomeController::class, 'gridViewTest'])->name('home-gvt');
+Route::get('/home-test', [App\Http\Controllers\HomeController::class, 'test'])->name('home-test');
+Route::get('/home-test2', [App\Http\Controllers\HomeController::class, 'test2'])->name('home-test2');
 
 
 //Route::get('/users/link/{data}', [UsersController::class, 'linkHandler'])->name('link.handler');
