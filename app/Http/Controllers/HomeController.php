@@ -230,7 +230,6 @@ class HomeController extends Controller
                 'отключилась',
                 'в жопе',
             ];
-
             $random_status = [
                 'Published',
                 'Draft',
@@ -258,9 +257,7 @@ class HomeController extends Controller
                     ]
                 );
             }
-
            return redirect()->route('home')->with('success', '10000 типов контента успешно созданы!');
-
             //return view('home-test', ['str'=>$str]);
         } else {
             return 'not auth';
@@ -292,7 +289,7 @@ class HomeController extends Controller
         for ($i = 0; $i < 10000; $i++){
             $str = $rand_words_1[rand(0, count($rand_words_1)-1)] . ' ' . $rand_words_2[rand(0, count($rand_words_2)-1)] . ' ';
             \App\Models\Dictionary::create([
-                   'code' => rand(0,10) . 'x' . rand(0,55),
+                   'code' => 'TEST10000',
                    'name' => 'Справочник '.$str,
                    'description' => 'Описание справочника '.$str,
                    'archive' => rand(0, 1),
@@ -302,5 +299,27 @@ class HomeController extends Controller
         }
 
         return redirect()->route('home')->with('warning', '10000 справочников успешно созданы!');
+    }
+    public function deleteTEST10000TC(){
+        if(Auth::guard('web')->check()) {
+            $tc10000 = \App\Models\TypeContent::where('owner', 'TEST10000');
+            if ($tc10000) {
+                $tc10000->delete();
+            }
+            return redirect()->route('home')->with('success', '10000 типов контента успешно удалены!');
+        } else {
+            return 'not auth';
+        }
+    }
+    public function deleteTEST10000D(){
+        if(Auth::guard('web')->check()) {
+            $d10000 = \App\Models\Dictionary::where('code', 'TEST10000');
+            if ($d10000) {
+                $d10000->delete();
+            }
+            return redirect()->route('home')->with('success', '10000 справочников успешно удалены!');
+        } else {
+            return 'not auth';
+        }
     }
 }
