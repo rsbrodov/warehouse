@@ -32,7 +32,6 @@
             <div class="col-3"><a href="{{route('type-content.edit', $type_content->id)}}" class="btn btn-outline-secondary"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a></div>
         </div>
 
-        <!-- Columns are always 50% wide, on mobile and desktop -->
         <div class="row">
             <div class="col-1">
                 <b>Статус:</b>
@@ -53,6 +52,28 @@
             <div class="col-2"><a href="" class="btn btn-outline-secondary form-control">Доступ</a></div>
             <div class="col-2"><a href="{{route('type-content.get-all-version', $type_content->id_global)}}" class="btn btn-outline-secondary form-control">История изменений</a></div>
         </div>
-        {{--    <a href="{{route('type-content.create')}}" class="btn btn-primary form-control">Создать</a>--}}
+        <br>
+        <br>
+        <div class="row ">
+            <div class="col-9 bg-secondary text-center">Перетащите сюда</div>
+            <div class="col-3">
+                <div class="d-flex flex-column">
+                    <div class="p-2"><a href="" class="btn btn-primary form-control text-left"><i class="fa fa-save fa-lg" aria-hidden="true"></i> Сохранить черновик</a></div>
+                    <div class="p-2"><a href="" class="btn btn-primary form-control text-left"><i class="fa fa-check-circle fa-lg" aria-hidden="true"></i> Публикация типа</a></div>
+                    <div class="p-2"><a href="" class="btn btn-primary form-control text-left"><i class="fa fa-trash fa-lg" aria-hidden="true"></i> Удалить тип</a></div>
+                    <div class="p-2"><a href="" class="btn btn-outline-secondary form-control text-left"><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Добавить строку</a></div>
+                    <div class="p-2"><a href="" class="btn btn-outline-secondary form-control text-left"><i class="fa fa-columns fa-lg" aria-hidden="true"></i> Добавить колонку</a></div>
+                    <div class="p-2"><a href="" class="btn btn-outline-secondary form-control text-left"><i class="fa fa-code fa-lg" aria-hidden="true"></i> HTML редактор</a></div>
+                    <div class="p-2"><a href="" class="btn btn-outline-secondary form-control text-left"><i class="fa fa-caret-down fa-lg" aria-hidden="true"></i> Выпадающий список</a></div>
+                    <div class="p-2"><a href="" class="btn btn-outline-secondary form-control text-left"><i class="fa fa-calendar fa-lg" aria-hidden="true"></i> Дата/Время</a></div>
+                    <div class="p-2"><a href="" class="btn btn-outline-secondary form-control text-left"><i class="fa fa-image fa-lg" aria-hidden="true"></i> Изображение</a></div>
+                    <div class="p-2"><a href="" class="btn btn-outline-secondary form-control text-left"><i class="fa fa-list fa-lg" aria-hidden="true"></i> Радио-группа</a></div>
+                    <div class="p-2"><a href="" class="btn btn-outline-secondary form-control text-left"><i class="fa fa-text-height fa-lg" aria-hidden="true"></i> Текстовое поле</a></div>
+                </div>
+
+            </div>
+        </div>
     </div>
+    <br>
+    <br>
 @endsection
