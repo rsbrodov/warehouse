@@ -516,7 +516,20 @@ class TypeContentController extends Controller
             }
         }
     }
-
+    public function View($id)
+    {
+        if (Auth::guard('web')->check()) {
+            $type_content = TypeContent::where('id_global', $id)->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->first();
+            return view('type_content.view')->with('type_content', $type_content);
+        } else {
+            if (Auth::guard('api')->check()) {
+                $type_content = TypeContent::where('id_global', $id)->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
+                return response()->json($type_content);
+            } else {
+                return response()->json('item not found');
+            }
+        }
+    }
     public function createNewVersion($id, $parametr)
     {
         //todo проверить эту портянку на то что при создании новой версии и существующем черновике выдается ошибка!

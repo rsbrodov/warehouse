@@ -40,6 +40,8 @@ Route::get('/home3', [App\Http\Controllers\HomeController::class, 'index3'])->na
 Route::get('/gvt', [App\Http\Controllers\HomeController::class, 'gridViewTest'])->name('home-gvt');
 Route::get('/home-test', [App\Http\Controllers\HomeController::class, 'test'])->name('home-test');
 Route::get('/home-test2', [App\Http\Controllers\HomeController::class, 'test2'])->name('home-test2');
+Route::get('/home-delete-test10000TC', [App\Http\Controllers\HomeController::class, 'deleteTEST10000TC'])->name('home-delete-test10000TC');
+Route::get('/home-delete-test10000D', [App\Http\Controllers\HomeController::class, 'deleteTEST10000D'])->name('home-delete-test10000D');
 
 
 //Route::get('/users/link/{data}', [UsersController::class, 'linkHandler'])->name('link.handler');
@@ -101,6 +103,7 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('/type-content/{id}/publish', [TypeContentController::class, 'publish'])->name('type-content.publish');
     Route::get('/type-content/enter/{id}', [TypeContentController::class, 'enter'])->name('type-content.enter');
     Route::get('/all-version-type-content/{id}', [TypeContentController::class, 'getAllVersionTypeContent'])->name('type-content.get-all-version'); // норм что здесь нет type_content?
+    Route::get('/type-content/view/{id}', [TypeContentController::class, 'View'])->name('type-content.view');
     Route::get('/descript-version-type-content/{id}', [TypeContentController::class, 'getShowDescription'])->name('type-content.descript-version');
     Route::get('/type-content/{id}/{type}', [TypeContentController::class, 'createElemen'])->name('type-content.create-elemen');
     Route::get('/type-content/{id}', [TypeContentController::class, 'show'])->name('type-content.show');

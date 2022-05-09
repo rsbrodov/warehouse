@@ -8,7 +8,9 @@
             {{--                        <a class="btn btn-warning" href="{{ route('link.handler', 'fuckinglinkingnotless50synBOLsehehelol') }}"> Тест ссылки 1</a>--}}
             <a class="btn btn-primary" href="{{ route('home-gvt') }}"> Тест GridView</a>
             <a class="btn btn-danger" href="{{ route('home-test') }}">Создать 10000 типов контента</a>
+            <a class="btn btn-outline-primary" href="{{ route('home-delete-test10000TC') }}">Удалить 10000 типов контента</a>
             <a class="btn btn-warning" href="{{ route('home-test2') }}">Создать 10000 справочников</a>
+            <a class="btn btn-outline-primary" href="{{ route('home-delete-test10000D') }}">Удалить 10000 справочников</a>
             @can('read-component')
                 <a class="btn btn-success" href="{{ route('tech.create') }}"> Create New Role</a>
             @endcan
