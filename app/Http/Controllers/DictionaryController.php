@@ -39,6 +39,18 @@ class DictionaryController extends Controller
             return response()->json($dictionary);
         }
     }
+
+    public function findDictionaryID($id)
+    {
+        $dictionary = Dictionary::where(['id' => $id])->with('created_author:id,name')->with('updated_author:id,name')->orderBy('created_at', 'asc')->get();
+        if($dictionary){
+            return response()->json($dictionary);
+        }else{
+            return response()->json('not found');
+        }
+
+
+    }
     public function index2()
     {
         if(Auth::guard('web')->check()) {
@@ -77,34 +89,8 @@ class DictionaryController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
-    {
-
-        if (Auth::guard('web')->check()) {
-            $user = Auth::guard('web')->user();
-            if ($user->hasRole('Admin') or $user->hasRole('SuperAdmin')) {
-                $dictionary_elements = DictionaryElement::where('dictionary_id', $id)->get();
-                return view('dictionary.show', ['dictionary_elements' => $dictionary_elements, 'dictionary_id' => $id]);
-            }
-        } else if (Auth::guard('api')->check()) {
-            $dictionary_element = DictionaryElement::where(['dictionary_id' => $id])->with('created_author:id,name')->with('updated_author:id,name')->get();
-            return response()->json($dictionary_element);
-        }
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
     {
 
         if (Auth::guard('web')->check()) {
@@ -146,12 +132,7 @@ class DictionaryController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function archive($id)
     {
         if (Auth::guard('web')->check()) {
