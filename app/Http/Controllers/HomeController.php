@@ -252,8 +252,8 @@ class HomeController extends Controller
                         'api_url'        => str_slug($str),
                         'body' =>serialize($object),
                         'based_type'     => null,
-                        'created_author' => 27,
-                        'updated_author' => 27,
+                        'created_author' => 1,
+                        'updated_author' => 1,
                     ]
                 );
             }
@@ -293,8 +293,8 @@ class HomeController extends Controller
                    'name' => 'Справочник '.$str,
                    'description' => 'Описание справочника '.$str,
                    'archive' => rand(0, 1),
-                   'created_author' => 27,
-                   'updated_author' => 27
+                   'created_author' => 1,
+                   'updated_author' => 1
                ]);
         }
 
