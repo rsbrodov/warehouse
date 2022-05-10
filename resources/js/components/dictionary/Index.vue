@@ -14,6 +14,13 @@
                 <CreateElement :dictionary_id="dictionary_id" @close-modal="closeModal('dictionaryElementCreate')"></CreateElement>
             </div>
         </div>
+
+        <!-- Modal Dictionary edit -->
+        <div class="modal fade" id="dictionaryEdit" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <Edit :dictionary_id="dictionary_id" @close-modal="closeModal('dictionaryEdit')"></Edit>
+            </div>
+        </div>
         <div class="d-flex justify-content-center"><h1>Справочники</h1></div>
         <div class="row mt-4">
             <div class="header-block row">
@@ -66,6 +73,7 @@
                 <td :class="dictionary.archive | statusColor"><b>{{ dictionary.archive | status }}</b></td>
 
                 <td nowrap>
+                <button class="btn btn-warning pencil" @click="openModal('dictionaryEdit', dictionary)"><i class="fa fa-pencil fa-lg" style="color:white"></i></button>
                 <button class="btn btn-danger del" @click="removeDictionary(dictionary.id)"><i class="fa fa-trash fa-lg"></i></button>
                 <button class="btn btn-warning plus" @click="openModal('dictionaryElementCreate', dictionary.id)"><i class="fa fa-plus fa-lg" style="color:white"></i></button>
                 <a :href="'/dictionary/'+dictionary.id+'/dictionary-element/'" class="btn btn-success eye"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a>
@@ -80,9 +88,10 @@
     import {mapGetters, mapActions} from 'vuex'
     import Create from './create'
     import CreateElement from "../dictironary-element/CreateElement";
+    import Edit from "./Edit";
     import moment from 'moment'
     export default{
-        components:{Create, CreateElement},
+        components:{Create, CreateElement, Edit},
         data:function(){
             return {
                 dictionary_id:null,
@@ -116,10 +125,10 @@
                 if(id == 'dictionaryElementCreate'){
                     $("#dictionaryElementCreate").modal("hide");
                 }
+                if(id == 'dictionaryEdit'){
+                    $("#dictionaryEdit").modal("hide");
+                }
 
-            },
-            removeDictionary(id){
-                this.deleteDictionary(id);
             },
             openModal(id, dictionary_id){
                 if(id == 'dictionaryCreate') {
@@ -129,6 +138,13 @@
                     $('#dictionaryElementCreate').modal('show');
                     this.dictionary_id = dictionary_id;
                 }
+                if(id == 'dictionaryEdit') {
+                    $('#dictionaryEdit').modal('show');
+                    this.dictionary_id = dictionary_id;
+                }
+            },
+            removeDictionary(id){
+                this.deleteDictionary(id);
             },
             toggleSearch(){
                 $('.form').toggle('show');
@@ -187,5 +203,8 @@
     }
     .eye {
         background-color: #28a745!important;
+    }
+    .pencil{
+        background-color: #007bff!important;
     }
 </style>
