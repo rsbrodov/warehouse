@@ -5,6 +5,8 @@ import Vue from 'vue';
 import Vuelidate from 'vuelidate'
 import Moment from 'vue-moment';
 import BootstrapVue from 'bootstrap-vue';
+import FlashMessage from '@smartweb/vue-flash-message';
+
 import store from './store/index'
 
 Vue.component('Index', require('./components/type-content/Index.vue').default);
@@ -13,6 +15,7 @@ Vue.component('Indexdictionaryelement', require('./components/dictironary-elemen
 Vue.use(Vuelidate)
 Vue.use( Moment );
 Vue.use(BootstrapVue);
+Vue.use(FlashMessage);
 
 const app = new Vue({
     el: '#app',

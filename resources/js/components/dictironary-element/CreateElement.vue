@@ -59,7 +59,10 @@
                     }).then(response => {
                         this.$emit('close-modal');
                         this.form.name = '';
-                        console.log(response);
+                        this.flashMessage.success({
+                            message: 'Элемент справочника успешно добавлен',
+                            time: 3000,
+                        });
                     }).catch(errors => {
                         console.log(errors);
                     });
