@@ -106,19 +106,17 @@ class DictionaryController extends Controller
     }
 
 
-    public function update(DictionaryRequest $request, $id)
+    public function update(Request $request, $id)
     {
         if (Auth::guard('web')->check()) {
-            $user = Auth::guard('web')->user();
-            if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
-                $edit_dictionary = Dictionary::find($id);
-                $edit_dictionary->name = $request->input('name');
-                $edit_dictionary->description = $request->input('description');
-                $edit_dictionary->code = $request->input('code');
-                $edit_dictionary->archive = $request->input('archive');
-                $edit_dictionary->save();
-                return redirect()->route('dictionary.index')->with('success', 'Справочник ' . $edit_dictionary->name . ' успешно отредактирован');
-            }
+            $edit_dictionary = Dictionary::find($request->form['id']);
+            $edit_dictionary->name = $request->form['name'];
+            $edit_dictionary->description = $request->form['description'];
+            $edit_dictionary->code = $request->form['code'];
+            $edit_dictionary->save();
+            $dictionary = Dictionary::where('id', $edit_dictionary->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
+            return response()->json($dictionary);
+
         } else if (Auth::guard('api')->check()) {
             $dictionary = Dictionary::find($id);
             $dictionary->name = $request['name'];

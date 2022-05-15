@@ -17,11 +17,17 @@
         </div>
 
         <!-- Modal Dictionary edit -->
-<!--        <div class="modal fade" id="dictionaryEdit" aria-hidden="true">-->
-<!--            <div class="modal-dialog modal-lg" role="document">-->
-<!--                <Edit :dictionary_id="dictionary_id" @close-modal="closeModal('dictionaryEdit')"></Edit>-->
-<!--            </div>-->
-<!--        </div>-->
+        <div class="modal fade" id="dictionaryEdit" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <Edit
+                    :dictionary_id="dictionary_id"
+                    :dictionary_name="dictionary_name"
+                    :dictionary_code="dictionary_code"
+                    :dictionary_description="dictionary_description"
+                    @close-modal="closeModal('dictionaryEdit')"
+                />
+            </div>
+        </div>
         <div class="d-flex justify-content-center"><h1>Справочники</h1></div>
         <div class="row mt-4">
             <div class="header-block row">
@@ -85,7 +91,7 @@
                         class="fa fa-pencil fa-lg" style="color:white"></i></button>
                     <button class="btn btn-danger del" @click="removeDictionary(dictionary.id)"><i
                         class="fa fa-trash fa-lg"></i></button>
-                    <button class="btn btn-warning plus" @click="openModal('dictionaryElementCreate', dictionary.id)"><i
+                    <button class="btn btn-warning plus" @click="openModal('dictionaryElementCreate', dictionary)"><i
                         class="fa fa-plus fa-lg" style="color:white"></i></button>
                     <a :href="'/dictionary/'+dictionary.id+'/dictionary-element/'" class="btn btn-success eye"><i
                         class="fa fa-eye fa-lg" aria-hidden="true"></i></a>
@@ -107,6 +113,9 @@
         data:function(){
             return {
                 dictionary_id:null,
+                dictionary_name:null,
+                dictionary_code:null,
+                dictionary_description:null,
                 filter_form:{
                     archive:'',
                     name:'',
@@ -142,17 +151,20 @@
                 }
 
             },
-            openModal(id, dictionary_id){
+            openModal(id, dictionary){
                 if(id == 'dictionaryCreate') {
                     $('#dictionaryCreate').modal('show');
                 }
                 if(id == 'dictionaryElementCreate') {
                     $('#dictionaryElementCreate').modal('show');
-                    this.dictionary_id = dictionary_id;
+                    this.dictionary_id = dictionary.id;
                 }
                 if(id == 'dictionaryEdit') {
                     $('#dictionaryEdit').modal('show');
-                    this.dictionary_id = dictionary_id;
+                    this.dictionary_id = dictionary.id;
+                    this.dictionary_name = dictionary.name;
+                    this.dictionary_code = dictionary.code;
+                    this.dictionary_description = dictionary.description;
                 }
             },
             removeDictionary(id){
