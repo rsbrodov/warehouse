@@ -92,9 +92,6 @@
                 name: {required},
             }
         },
-        async beforeUpdated(){
-            this.Calc();
-        },
 
 
     }

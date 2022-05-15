@@ -68,7 +68,10 @@
                 <th>Дата последнего<br> редактирования</th>
                 <th>Действия</th>
             </tr>
-            <tr v-for="(type_content, index) in filteredTypeContents" :key="index" >
+            <tr v-if="filteredTypeContents.length === 0">
+                <td class="text-center text-danger" colspan="7"><b>Данные не найдены!</b></td>
+            </tr>
+            <tr v-else v-for="(type_content, index) in filteredTypeContents" :key="index" >
                 <td style="white-space: nowrap"><i :class="'fa ' + type_content.icon+ ' fa-lg'" aria-hidden="true"></i> {{type_content.name}}</td>
                 <td>{{type_content.description}}</td>
                 <td>{{type_content.version_major +'.'+ type_content.version_minor}}</td>

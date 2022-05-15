@@ -79,7 +79,10 @@
                 <th>Статус</th>
                 <th>Действия</th>
             </tr>
-            <tr v-for="(dictionary, index) in filteredDictionary" :key="index">
+            <tr v-if="filteredDictionary.length === 0">
+                <td class="text-center text-danger" colspan="6"><b>Данные не найдены!</b></td>
+            </tr>
+            <tr v-else v-for="(dictionary, index) in filteredDictionary" :key="index">
                 <td>{{dictionary.code}}</td>
                 <td>{{dictionary.name}}</td>
                 <td>{{dictionary.description}}</td>

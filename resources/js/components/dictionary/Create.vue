@@ -85,17 +85,9 @@
                 code: {required},
             }
         },
-        async created(){
-            this.flashMessage.success({
-                message: 'Справочник успешно создан',
-                time: 3000,
-            });
-        },
     }
 </script>
 
 <style scoped>
-    ._vue-flash-msg-body.my-custom-class .my-content-class {
-        border: 30px solid green;
-    }
+
 </style>
