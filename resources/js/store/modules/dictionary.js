@@ -50,5 +50,10 @@ export default{
             const dictionary = await axios.get('http://127.0.0.1:8000/dictionary/findDictionary');
             ctx.commit('UPDATE', dictionary.data)
         },
+        async archiveDictionary(ctx, id){
+            await axios.get('http://127.0.0.1:8000/dictionary/'+id+ '/archive');
+            const dictionary = await axios.get('http://127.0.0.1:8000/dictionary/findDictionary');
+            ctx.commit('UPDATE', dictionary.data)
+        },
     },
 }

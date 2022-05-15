@@ -92,8 +92,10 @@
                 <td nowrap>
                     <button class="btn btn-warning pencil" @click="openModal('dictionaryEdit', dictionary)"><i
                         class="fa fa-pencil fa-lg" style="color:white"></i></button>
-                    <button class="btn btn-danger del" @click="removeDictionary(dictionary.id)"><i
-                        class="fa fa-trash fa-lg"></i></button>
+<!--                    <button class="btn btn-danger del" @click="removeDictionary(dictionary.id)"><i-->
+<!--                        class="fa fa-trash fa-lg"></i></button>-->
+                    <button class="btn btn-secondary del" @click="archDictionary(dictionary.id)"><i
+                        class="fa fa-exchange fa-lg"></i></button>
                     <button class="btn btn-warning plus" @click="openModal('dictionaryElementCreate', dictionary)"><i
                         class="fa fa-plus fa-lg" style="color:white"></i></button>
                     <a :href="'/dictionary/'+dictionary.id+'/dictionary-element/'" class="btn btn-success eye"><i
@@ -141,7 +143,7 @@
         },
 
         methods: {
-            ...mapActions(['getDictionary', 'deleteDictionary']),
+            ...mapActions(['getDictionary', 'deleteDictionary', 'archiveDictionary']),
             closeModal(id){
                 if(id == 'dictionaryCreate'){
                     $("#dictionaryCreate").modal("hide");
@@ -175,6 +177,15 @@
                     .then(response => {
                         this.flashMessage.success({
                             message: 'Справочник успешно удален',
+                            time: 3000,
+                        });
+                    });
+            },
+            archDictionary(id){
+                this.archiveDictionary(id)
+                    .then(response => {
+                        this.flashMessage.success({
+                            message: 'Статус справочника изменен',
                             time: 3000,
                         });
                     });

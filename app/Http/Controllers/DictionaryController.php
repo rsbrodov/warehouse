@@ -134,21 +134,14 @@ class DictionaryController extends Controller
     public function archive($id)
     {
         if (Auth::guard('web')->check()) {
-            $user = Auth::guard('web')->user();
-            if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
-                $message = ''; $type_message = 'success';
-                $archive_dictionary = Dictionary::where('id', $id)->first();
-                if ($archive_dictionary->archive == '1') {
-                    $archive_dictionary->archive = '0';
-                    $message = 'Справочник ' . $archive_dictionary->name . ' извлечен из архива';
-                } else {
-                    $archive_dictionary->archive = '1';
-                    $message = 'Справочник ' . $archive_dictionary->name . ' перенесён в архив';
-                    $type_message = 'warning';
-                }
-                $archive_dictionary->save();
-                return redirect()->route('dictionary.index')->with($type_message, $message);
+            $dictionary = Dictionary::where('id', $id)->first();
+            if ($dictionary->archive == 1) {
+                $dictionary->archive = 0;
+            } else {
+                $dictionary->archive = 1;
             }
+            $dictionary->save();
+            return response()->json($dictionary);
         }
     }
 
