@@ -1,44 +1,50 @@
 <template>
-<div>
-
+    <div>
+        <FlashMessage :position="'right bottom'"></FlashMessage>
         <!-- Modal Dictionary create -->
         <div class="modal fade" id="dictionaryCreate" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
-                <Create @close-modal="closeModal('dictionaryCreate', 1)" ></Create>
+                <Create @close-modal="closeModal('dictionaryCreate', 1)"></Create>
             </div>
         </div>
 
         <!-- Modal Dictionary create -->
         <div class="modal fade" id="dictionaryElementCreate" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
-                <CreateElement :dictionary_id="dictionary_id" @close-modal="closeModal('dictionaryElementCreate')"></CreateElement>
+                <CreateElement :dictionary_id="dictionary_id"
+                               @close-modal="closeModal('dictionaryElementCreate')"></CreateElement>
             </div>
         </div>
 
         <!-- Modal Dictionary edit -->
-        <div class="modal fade" id="dictionaryEdit" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <Edit :dictionary_id="dictionary_id" @close-modal="closeModal('dictionaryEdit')"></Edit>
-            </div>
-        </div>
+<!--        <div class="modal fade" id="dictionaryEdit" aria-hidden="true">-->
+<!--            <div class="modal-dialog modal-lg" role="document">-->
+<!--                <Edit :dictionary_id="dictionary_id" @close-modal="closeModal('dictionaryEdit')"></Edit>-->
+<!--            </div>-->
+<!--        </div>-->
         <div class="d-flex justify-content-center"><h1>Справочники</h1></div>
         <div class="row mt-4">
             <div class="header-block row">
                 <div class="search-button col-2">
-                    <button id="hideshow" class="btn btn-primary" @click="toggleSearch()"><span class="fa fa-search fa-lg" aria-hidden="true"></span></button>
+                    <button id="hideshow" class="btn btn-primary" @click="toggleSearch()"><span
+                        class="fa fa-search fa-lg" aria-hidden="true"></span></button>
                 </div>
                 <div class="search-form col-8">
                     <div class="form">
                         <form action="" method="post">
                             <div class="form-group row">
                                 <div class="col-4">
-                                    <input autocomplete="off" type="text" name="name" placeholder="Код справочника" id="code" class="form-control" v-model="filter_form.code">
+                                    <input autocomplete="off" type="text" name="name" placeholder="Код справочника"
+                                           id="code" class="form-control" v-model="filter_form.code">
                                 </div>
                                 <div class="col-4">
-                                    <input autocomplete="off" type="text" name="name" placeholder="Наименование справочника" id="name" class="form-control" v-model="filter_form.name">
+                                    <input autocomplete="off" type="text" name="name"
+                                           placeholder="Наименование справочника" id="name" class="form-control"
+                                           v-model="filter_form.name">
                                 </div>
                                 <div class="col-4">
-                                    <select id="archive" class="form-control" name="archive" v-model="filter_form.archive">
+                                    <select id="archive" class="form-control" name="archive"
+                                            v-model="filter_form.archive">
                                         <option value=''>Все</option>
                                         <option value='0'>Действующий</option>
                                         <option value='1'>Архивный</option>
@@ -49,7 +55,9 @@
                     </div>
                 </div>
                 <div class="create col-2">
-                    <button id="clean" class="btn btn-primary" @click="cleanSearch()"><span class="fa fa-paint-brush fa-lg" aria-hidden="true"></span> Очистить</button>
+                    <button id="clean" class="btn btn-primary" @click="cleanSearch()"><span
+                        class="fa fa-paint-brush fa-lg" aria-hidden="true"></span> Очистить
+                    </button>
                     <button type="button" class="btn-create btn btn-primary" @click="openModal('dictionaryCreate')">
                         <span class="fa fa-plus-circle fa-lg"></span>
                     </button>
@@ -65,7 +73,7 @@
                 <th>Статус</th>
                 <th>Действия</th>
             </tr>
-            <tr v-for="(dictionary, index) in filteredDictionary" :key="index" >
+            <tr v-for="(dictionary, index) in filteredDictionary" :key="index">
                 <td>{{dictionary.code}}</td>
                 <td>{{dictionary.name}}</td>
                 <td>{{dictionary.description}}</td>
@@ -73,14 +81,18 @@
                 <td :class="dictionary.archive | statusColor"><b>{{ dictionary.archive | status }}</b></td>
 
                 <td nowrap>
-                <button class="btn btn-warning pencil" @click="openModal('dictionaryEdit', dictionary)"><i class="fa fa-pencil fa-lg" style="color:white"></i></button>
-                <button class="btn btn-danger del" @click="removeDictionary(dictionary.id)"><i class="fa fa-trash fa-lg"></i></button>
-                <button class="btn btn-warning plus" @click="openModal('dictionaryElementCreate', dictionary.id)"><i class="fa fa-plus fa-lg" style="color:white"></i></button>
-                <a :href="'/dictionary/'+dictionary.id+'/dictionary-element/'" class="btn btn-success eye"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a>
+                    <button class="btn btn-warning pencil" @click="openModal('dictionaryEdit', dictionary)"><i
+                        class="fa fa-pencil fa-lg" style="color:white"></i></button>
+                    <button class="btn btn-danger del" @click="removeDictionary(dictionary.id)"><i
+                        class="fa fa-trash fa-lg"></i></button>
+                    <button class="btn btn-warning plus" @click="openModal('dictionaryElementCreate', dictionary.id)"><i
+                        class="fa fa-plus fa-lg" style="color:white"></i></button>
+                    <a :href="'/dictionary/'+dictionary.id+'/dictionary-element/'" class="btn btn-success eye"><i
+                        class="fa fa-eye fa-lg" aria-hidden="true"></i></a>
                 </td>
             </tr>
         </table>
-</div>
+    </div>
 </template>
 
 
@@ -144,7 +156,13 @@
                 }
             },
             removeDictionary(id){
-                this.deleteDictionary(id);
+                this.deleteDictionary(id)
+                    .then(response => {
+                        this.flashMessage.success({
+                            message: 'Справочник успешно удален',
+                            time: 3000,
+                        });
+                    });
             },
             toggleSearch(){
                 $('.form').toggle('show');

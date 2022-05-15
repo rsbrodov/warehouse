@@ -51,7 +51,7 @@
                     name:'',
                     code:'',
                     description:'',
-                }
+                },
             }
         },
         methods: {
@@ -59,7 +59,7 @@
             async saveDictionary() {
                 this.$v.form.$touch();
                 if (this.$v.form.$invalid) {
-                    console.log('Form not subm')
+
                 } else {
                     this.newDictionary({
                         form: this.form
@@ -68,7 +68,11 @@
                         this.form.code = '';
                         this.form.name = '';
                         this.form.description = '';
-                        console.log(response);
+                        this.flashMessage.success({
+                            message: 'Справочник успешно создан',
+                            time: 3000,
+                        });
+                        console.log(23232);
                     }).catch(errors => {
                         console.log(errors);
                     });
@@ -81,9 +85,17 @@
                 code: {required},
             }
         },
+        async created(){
+            this.flashMessage.success({
+                message: 'Справочник успешно создан',
+                time: 3000,
+            });
+        },
     }
 </script>
 
 <style scoped>
-
+    ._vue-flash-msg-body.my-custom-class .my-content-class {
+        border: 30px solid green;
+    }
 </style>

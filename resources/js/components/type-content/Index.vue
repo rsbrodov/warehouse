@@ -1,5 +1,6 @@
 <template>
     <div>
+        <FlashMessage :position="'right bottom'"></FlashMessage>
         <!-- Modal -->
         <div class="modal fade" id="exampleModal" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
