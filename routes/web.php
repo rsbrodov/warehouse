@@ -68,13 +68,13 @@ Route::middleware(['auth:web'])->group(function () {
 // СПРАВОЧНИКИ
 Route::middleware(['auth:web'])->group(function () {
     Route::get('/dictionary/findDictionary', [DictionaryController::class, 'findDictionary']);
+    Route::post('/dictionary/store/', [DictionaryController::class, 'store']);
     Route::get('/dictionary/', [DictionaryController::class, 'index'])->name('dictionary.index');
     Route::get('/dictionary/index2', [DictionaryController::class, 'index2'])->name('dictionary.index2');
     Route::get('/dictionary/{id}', [DictionaryController::class, 'show'])->name('dictionary.show');
     Route::post('/dictionary/{id}', [DictionaryController::class, 'update'])->name('dictionary.update');
     Route::delete('/dictionary/{id}', [DictionaryController::class, 'destroy'])->name('dictionary.destroy');
     Route::get('/dictionary/{id}/archive', [DictionaryController::class, 'archive'])->name('dictionary.archive');
-    Route::post('/dictionary/store/', [DictionaryController::class, 'store']);
 });
 // ЭЛЕМЕНТЫ СПРАВОЧНИКОВ
 Route::middleware(['auth:web'])->group(function () {
