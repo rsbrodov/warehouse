@@ -40,8 +40,8 @@ export default{
             const dictionary = await axios.get('http://127.0.0.1:8000/dictionary/findDictionary');
             ctx.commit('UPDATE', dictionary.data)
         },
-        async updateDictionary(ctx, id, form){
-            const new_dictionary = await axios.put('http://127.0.0.1:8000/dictionary/'+id, form);
+        async updateDictionary(ctx, form){
+            const new_dictionary = await axios.post('http://127.0.0.1:8000/dictionary/'+form.form.id, form);
             const dictionary = await axios.get('http://127.0.0.1:8000/dictionary/findDictionary');
             ctx.commit('UPDATE', dictionary.data)
         },

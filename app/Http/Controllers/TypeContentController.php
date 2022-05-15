@@ -232,39 +232,41 @@ class TypeContentController extends Controller
     }
 
 
-    public function update(TypeContentRequest $request, $id)
+    public function update($request, $id)
     {
+        return $request;
         if (Auth::guard('web')->check()) {
-            $user = Auth::guard('web')->user();
-            if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
-                $ac_fr = date_create($request['active_from']);
-                date_format($ac_fr, 'Y-m-d H:m:s');
-                $ac_af = date_create($request['active_after']);
-                date_format($ac_af, 'Y-m-d H:m:s');
-                $type = TypeContent::find($id);
-                if($type->status === 'Draft' or $type->status === 'Archive') {
-                    $other_published = TypeContent::where(['id_global'=>$type->id_global, 'status' => 'Published'])->first();
-                    if(isset($other_published)){
-                        $other_published->status = 'Archive';
-                        $other_published->save();
-                    }
-                }
-                if (!$type->checkingApiUrl($request['api_url'], $type['id_global'])) {
-                    $type->name = $request['name'];
-                    $type->api_url = $request['api_url'];
-                    $type->description = $request['description'];
-                    $type->active_from = $ac_fr;
-                    $type->active_after = $ac_af;
-                    $type->status = $request['status'];
-                    $type->icon = $request['icon'];
-                    $type->body = $request['body'];
-                    $type->updated_author = Auth::guard('web')->user()->id;
-                    $type->save();
-                    return redirect()->route('type-content.get-all-version', $type->id_global)->with('success', 'Тип ' . $type->name . ' успешно отредактирован');
-                } else {
-                    return redirect()->back()->with('error', 'Что-то пошло не так');
+            $type_content = TypeContent::find($id)->with('created_authors:id,name')->with('updated_authors:id,name');
+            return response()->json($type_content);
+            $ac_fr = date_create($request['active_from']);
+            date_format($ac_fr, 'Y-m-d H:m:s');
+            $ac_af = date_create($request['active_after']);
+            date_format($ac_af, 'Y-m-d H:m:s');
+            $type = TypeContent::find($id);
+            if ($type->status === 'Draft' or $type->status === 'Archive') {
+                $other_published = TypeContent::where(['id_global' => $type->id_global, 'status' => 'Published'])->first();
+                if (isset($other_published)) {
+                    $other_published->status = 'Archive';
+                    $other_published->save();
                 }
             }
+            if (!$type->checkingApiUrl($request['api_url'], $type['id_global'])) {
+                $type->name = $request['name'];
+                $type->api_url = $request['api_url'];
+                $type->description = $request['description'];
+                $type->active_from = $ac_fr;
+                $type->active_after = $ac_af;
+                $type->status = $request['status'];
+                $type->icon = $request['icon'];
+                $type->body = $request['body'];
+                $type->updated_author = Auth::guard('web')->user()->id;
+                $type->save();
+                $type_content = TypeContent::find($id)->with('created_authors:id,name')->with('updated_authors:id,name');
+                return response()->json($type_content);
+            } else {
+                return response()->json(123);
+            }
+
         } else {
             if (Auth::guard('api')->check()) {
 
