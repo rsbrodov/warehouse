@@ -24,12 +24,22 @@ export default{
         },
         ONE(state, one_dictionary){
             state.one_dictionary = one_dictionary
-        }
+        },
     },
     actions: {
-        async getDictionary(ctx){
-            const dictionary = await axios.get('http://127.0.0.1:8000/dictionary/findDictionary');
-            ctx.commit('UPDATE', dictionary.data)
+        async getDictionary({commit}){
+            commit('setLoading', true);
+            await axios.get('http://127.0.0.1:8000/dictionary/findDictionary')
+                .then(response => {
+                    commit('UPDATE', response.data)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+                .finally(() => {
+                    commit('setLoading', false);
+                });
+
         },
         async getDictionaryID(ctx, id){
             const dictionary = await axios.get('http://127.0.0.1:8000/dictionary/findDictionaryID/'+id);
