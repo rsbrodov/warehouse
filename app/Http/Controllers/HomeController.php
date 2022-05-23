@@ -286,7 +286,7 @@ class HomeController extends Controller
             'пиндосов'
         ];
 
-        for ($i = 0; $i < 10000; $i++){
+        for ($i = 0; $i < 5000; $i++){
             $str = $rand_words_1[rand(0, count($rand_words_1)-1)] . ' ' . $rand_words_2[rand(0, count($rand_words_2)-1)] . ' ';
             \App\Models\Dictionary::create([
                    'code' => 'TEST10000',
