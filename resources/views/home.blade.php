@@ -11,6 +11,16 @@
             <a class="btn btn-outline-primary" href="{{ route('home-delete-test10000TC') }}">Удалить 10000 типов контента</a>
             <a class="btn btn-warning" href="{{ route('home-test2') }}">Создать 10000 справочников</a>
             <a class="btn btn-outline-primary" href="{{ route('home-delete-test10000D') }}">Удалить 10000 справочников</a>
+            <form action="{{route('image.upload')}}" method="post" enctype="multipart/form-data">
+                {{csrf_field()}}
+                <div class="form-group">
+                    <input type="file" name="image">
+                </div>
+                <button class="btn-default" type="submit">Загрузка</button>
+            </form>
+            @isset($path)
+                <img class="img-fluid" src="{{asset('/storage/' . $path)}}">
+            @endisset
             @can('read-component')
                 <a class="btn btn-success" href="{{ route('tech.create') }}"> Create New Role</a>
             @endcan

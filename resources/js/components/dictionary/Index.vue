@@ -1,5 +1,6 @@
 <template>
     <div>
+        <div class="d-flex justify-content-center"><h1>Справочники</h1></div>
         <FlashMessage :position="'right bottom'"></FlashMessage>
         <!-- Modal Dictionary create -->
         <div class="modal fade" id="dictionaryCreate" aria-hidden="true">
@@ -28,7 +29,6 @@
                 />
             </div>
         </div>
-        <div class="d-flex justify-content-center"><h1>Справочники</h1></div>
         <div class="row mt-4">
             <div class="header-block row">
                 <div class="search-button col-2">
@@ -79,8 +79,11 @@
                 <th>Статус</th>
                 <th>Действия</th>
             </tr>
-            <tr v-if="filteredDictionary.length === 0">
+            <tr v-if="filteredDictionary.length === 0 && getLoading === false">
                 <td class="text-center text-danger" colspan="6"><b>Данные не найдены!</b></td>
+            </tr>
+            <tr v-else-if="getLoading === true" style="border:none">
+                <td class="text-center text-danger" colspan="6"><Loader/></td>
             </tr>
             <tr v-else v-for="(dictionary, index) in filteredDictionary" :key="index">
                 <td>{{dictionary.code}}</td>
@@ -112,9 +115,10 @@
     import Create from './create'
     import CreateElement from "../dictironary-element/CreateElement";
     import Edit from "./Edit";
+    import Loader from "../helpers/Loader";
     import moment from 'moment'
     export default{
-        components:{Create, CreateElement, Edit},
+        components:{Loader, Create, CreateElement, Edit},
         data:function(){
             return {
                 dictionary_id:null,
@@ -130,7 +134,7 @@
         },
 
         computed:{
-            ...mapGetters(['Dictionary']),
+            ...mapGetters(['Dictionary', 'getLoading']),
             filteredDictionary: function () {
                 return this.Dictionary.filter((dictionary) => {
                     return dictionary.name.toLowerCase().match(this.filter_form.name)
@@ -221,11 +225,12 @@
         },
 
         async created(){
-            this.getDictionary();
+
         },
 
         async mounted(){
             $('.form').hide();
+            this.getDictionary();
         }
     }
 </script>

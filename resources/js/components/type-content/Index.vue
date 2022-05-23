@@ -69,8 +69,11 @@
                 <th>Дата последнего<br> редактирования</th>
                 <th>Действия</th>
             </tr>
-            <tr v-if="filteredTypeContents.length === 0">
+            <tr v-if="filteredTypeContents.length === 0 && getLoading === false">
                 <td class="text-center text-danger" colspan="7"><b>Данные не найдены!</b></td>
+            </tr>
+            <tr v-else-if="getLoading === true" style="border:none">
+                <td class="text-center text-danger" colspan="6"><Loader/></td>
             </tr>
             <tr v-else v-for="(type_content, index) in filteredTypeContents" :key="index" >
                 <td style="white-space: nowrap"><i :class="'fa ' + type_content.icon+ ' fa-lg'" aria-hidden="true"></i> {{type_content.name}}</td>
@@ -92,9 +95,10 @@
 <script>
     import {mapGetters, mapActions} from 'vuex'
     import Create from "./Create";
+    import Loader from "../helpers/Loader";
     import moment from 'moment'
     export default{
-        components:{Create},
+        components:{Create, Loader},
         data:function(){
             return {
                 filter_form:{
@@ -107,7 +111,7 @@
         },
 
         computed:{
-            ...mapGetters(['typeContents']),
+            ...mapGetters(['typeContents', 'getLoading']),
             filteredTypeContents: function () {
                 return this.typeContents.filter((type_content) => {
                 //return this.$store.getters.type_contents.filter((type_content) => {
@@ -178,12 +182,9 @@
             }
         },
 
-        async created(){
-            this.getTypeContents();
-        },
-
         async mounted(){
             $('.form').hide();
+            this.getTypeContents();
         }
     }
 </script>
