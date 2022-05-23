@@ -12,7 +12,7 @@
         <div class="row mt-4">
             <div class="header-block row">
                 <div class="search-button col-2">
-                    <button class="btn btn-primary" @click="toggleSearch()"><span class="fa fa-search fa-lg"></span></button>
+<!--                    <button id="search-btn" class="btn btn-primary" @click="toggleSearch()"><span class="fa fa-search fa-lg"></span></button>-->
                 </div>
                 <div class="search-form col-8">
                     <div class="form">
@@ -48,7 +48,8 @@
                     </div>
                 </div>
                 <div class="create col-2">
-                    <button class="btn btn-primary" @click="cleanSearch()"><span class="fa fa-paint-brush fa-lg"></span> Очистить</button>
+                    <button id="search-btn" class="btn btn-primary" @click="toggleSearch()"><span class="fa fa-search fa-lg"></span></button>
+                    <button class="btn btn-primary" id="clear-btn" style="display: none;" @click="cleanSearch()"><span class="fa fa-paint-brush fa-lg"></span> Очистить</button>
                     <!-- Button trigger modal -->
                     <button type="button" class="btn-create btn btn-primary" @click="openModal()">
                         <span class="fa fa-plus-circle fa-lg"></span>
@@ -125,12 +126,20 @@
             ...mapActions(['getTypeContents']),
             closeModal(){
                 $("#exampleModal").modal("hide");
+
             },
             openModal(){
                 $('#exampleModal').modal('show');
             },
             toggleSearch(){
                 $('.form').toggle('show');
+                $('#clear-btn').toggle('show');
+                $('#search-btn').toggleClass('btn-primary btn-secondary');
+                if( $('#search-btn').hasClass('btn-primary')){
+                    $('#search-btn').html('<span class="fa fa-search fa-lg"></span>');
+                } else if( $('#search-btn').hasClass('btn-secondary')){
+                    $('#search-btn').html('Свернуть');
+                }
             },
             cleanSearch(){
                 $( 'form' ).each(function(){

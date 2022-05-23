@@ -322,4 +322,8 @@ class HomeController extends Controller
             return 'not auth';
         }
     }
+    public function imageUpload(Request $request){
+        $path = $request->file('image')->store('uploads', 'public');
+        return view('home', ['path' => $path]);
+    }
 }
