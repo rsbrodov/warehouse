@@ -6,6 +6,8 @@ import Vuelidate from 'vuelidate'
 import Moment from 'vue-moment';
 import BootstrapVue from 'bootstrap-vue';
 import FlashMessage from '@smartweb/vue-flash-message';
+import Sortable from 'vue-sortable'
+import draggable from 'vuedraggable'
 
 import store from './store/index'
 
@@ -16,8 +18,10 @@ Vue.use(Vuelidate)
 Vue.use( Moment );
 Vue.use(BootstrapVue);
 Vue.use(FlashMessage);
+Vue.use(Sortable)
 
 const app = new Vue({
     el: '#app',
-    store
+    store,
+    draggable
 });
