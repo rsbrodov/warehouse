@@ -65,17 +65,7 @@ class HomeController extends Controller
         print_r($dictionary_element);
     }
 
-    public function gridViewTest()
-    {
-        if(Auth::guard('web')->check()) {
-            $dataProvider = new EloquentDataProvider(User::query());
-            return view('home-gvt', [
-                'dataProvider' => $dataProvider
-            ]);
-        } else {
-            return 'not auth';
-        }
-    }
+
     public function test()
     {
         if(Auth::guard('web')->check()) {
