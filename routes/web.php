@@ -96,7 +96,7 @@ Route::get('/type-content/create-icons', [TypeContentController::class, 'createI
 Route::middleware(['auth:web'])->group(function () {
     Route::post('/type-content/store/', [App\Http\Controllers\TypeContentController::class, 'store']);
     Route::get('/type-content/', [TypeContentController::class, 'index'])->name('type-content.index');
-    Route::get('/type-content/view-new/', [TypeContentController::class, 'viewNew'])->name('type-content.view-new');
+    Route::get('/type-content/view-new/{id}', [TypeContentController::class, 'viewNew'])->name('type-content.view-new');
     Route::get('/type-content/getListTypeContent', [TypeContentController::class, 'getListTypeContent'])->name('type-content.getListTypeContent');
     Route::get('/type-content/create', [TypeContentController::class, 'create'])->name('type-content.create');
     Route::post('/type-content/', [TypeContentController::class, 'store'])->name('type-content.store');

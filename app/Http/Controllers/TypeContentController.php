@@ -30,7 +30,7 @@ class TypeContentController extends Controller
         return view('type_content.index2');
     }
 
-    public function viewNew()
+    public function viewNew($id)
     {
         return view('type_content.view-new');
     }

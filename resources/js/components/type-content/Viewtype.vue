@@ -1,22 +1,71 @@
 <template>
     <div id="app">
-        <h4>Try dragging several "Drag me 1" items down to the below "Drag Here" text. Each time you drag an item, it will clone it. You will see the same key gets generated for each item.
-        </h4>
-        <h4>Click a cloned item to try to delete it.</h4>
-
-        <draggable v-model="availableItems" :options="availableItemOptions" :clone="handleClone">
-            <div v-for="item in availableItems" :key="uuid(item)">
-                {{item.name}} - key is: {{item.uid}}
+        <div class="container-fluid">
+            <!-- Stack the columns on mobile by making one full-width and the other half-width -->
+            <div class="row">
+                <div class="col"><b><h1>Тип контента 45</h1></b></div>
+                <div class="col"></div>
             </div>
-        </draggable>
+            <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
+            <div class="row">
+                <div class="col-3"><b>Идентификатор:</b> 45-fdf-45-dhg-6</div>
+                <div class="col-1"><b>API URL:</b> /products</div>
+                <div class="col-1"><b>Владелец:</b> Admin</div>
+                <div class="col">
+                    <b>Период действия:</b>Не задан
+                </div>
+                <div class="col-3"><a href="#" class="btn btn-outline-secondary"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a></div>
+            </div>
 
-        <div style="height:50px;"></div>
+            <div class="row">
+                <div class="col-1">
+                    <b>Статус:</b>Черновик
+                </div>
+                <div class="col-1"><b>Версия:</b> 2.0</div>
+            </div>
+            <div class="row">
+                <div class="col-2"><a href="" class="btn btn-outline-secondary form-control">Состав полей</a></div>
+                <div class="col-2"><a href="" class="btn btn-outline-secondary form-control">Доступ</a></div>
+                <div class="col-2"><a href=""
+                                      class="btn btn-outline-secondary form-control">История изменений</a></div>
+            </div>
+            <br>
+            <br>
+            <div class="row ">
+                <div class="col-9 bg-secondary text-center">
+                    Перетащите сюда
+                    <draggable v-model="clonedItems" :options="clonedItemOptions" style="border: 1px solid blue;">
+                        <h4 v-for="(item, index) in clonedItems" :key="uuid(item)" @click="deleteItem(index)"
+                            class="clickable">
+                            {{item.name}}
+                            <!--                - click to delete - key is: {{item.uid}}-->
+                        </h4>
+                    </draggable>
+                </div>
+                <div class="col-3">
+                    <div class="d-flex flex-column">
+                        <div class="p-2"><a href="" class="btn btn-primary form-control text-left"><i
+                            class="fa fa-save fa-lg" aria-hidden="true"></i> Сохранить черновик</a></div>
+                        <div class="p-2"><a href="" class="btn btn-primary form-control text-left"><i
+                            class="fa fa-check-circle fa-lg" aria-hidden="true"></i> Публикация типа</a></div>
+                        <div class="p-2"><a href="" class="btn btn-primary form-control text-left"><i
+                            class="fa fa-trash fa-lg" aria-hidden="true"></i> Удалить тип</a></div>
+                        <div class="p-2"><a href="" class="btn btn-outline-secondary form-control text-left"><i
+                            class="fa fa-bars fa-lg" aria-hidden="true"></i> Добавить строку</a></div>
+                        <div class="p-2"><a href="" class="btn btn-outline-secondary form-control text-left"><i
+                            class="fa fa-columns fa-lg" aria-hidden="true"></i> Добавить колонку</a></div>
+                        <draggable v-model="availableItems" :options="availableItemOptions" :clone="handleClone">
+                            <!--                {{item.name}} - key is: {{item.uid}}-->
+                            <div class="p-2" v-for="item in availableItems" :key="uuid(item)">
+                                <a href="" class="btn btn-outline-secondary form-control text-left"><i
+                                    :class="item.class" aria-hidden="true"></i> {{item.name}}</a>
+                            </div>
+                        </draggable>
+                    </div>
 
-        <draggable v-model="clonedItems" :options="clonedItemOptions" style="border: 1px solid blue;">
-            <h4 v-for="(item, index) in clonedItems" :key="uuid(item)" @click="deleteItem(index)" class="clickable">
-                {{item.name}} - click to delete - key is: {{item.uid}}
-            </h4>
-        </draggable>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -29,17 +78,35 @@
             return {
                 clonedItems: [
                     {
-                        name: "Drag here"
+                        //name: "Drag here"
                     }
                 ],
 
                 availableItems: [
                     {
-                        name: "Drag me 1"
+                        class: "fa fa-code fa-lg",
+                        name: "HTML редактор"
                     },
                     {
-                        name: "Drag me 2"
-                    }
+                        class: "fa fa-caret-down fa-lg",
+                        name: "Выпадающий список"
+                    },
+                    {
+                        class: "fa fa-calendar fa-lg",
+                        name: "Дата/Время"
+                    },
+                    {
+                        class: "fa fa-image fa-lg",
+                        name: "Изображение"
+                    },
+                    {
+                        class: "fa fa-list fa-lg",
+                        name: "Радио-группа"
+                    },
+                    {
+                        class: "fa fa-text-height fa-lg",
+                        name: "Текстовое поле"
+                    },
                 ],
 
                 clonedItemOptions: {
