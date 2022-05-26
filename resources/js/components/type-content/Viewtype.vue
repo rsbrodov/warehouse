@@ -32,15 +32,21 @@
             <br>
             <br>
             <div class="row ">
-                <div class="col-9 bg-secondary text-center">
-                    Перетащите сюда
-                    <draggable v-model="clonedItems" :options="clonedItemOptions" style="border: 1px solid blue;">
-                        <h4 v-for="(item, index) in clonedItems" :key="uuid(item)" @click="deleteItem(index)"
-                            class="clickable">
-                            {{item.name}}
-                            <!--                - click to delete - key is: {{item.uid}}-->
-                        </h4>
+                <div class="col-9 bg-secondary">
+                    <draggable v-model="clonedItems" :options="clonedItemOptions" class="draggable_parent mt-3">
+                        <div v-if="clonedItems.length > 0" v-for="(item, index) in clonedItems" :key="uuid(item)" class="clickable element_style mt-2 mb-2">
+                            <p class="pl-2 pt-3 text-secondary"><i :class="item.class"></i> {{item.name}}</p>
+                            <div class="button-group">
+                                <button class="btn btn-outline-secondary mr-2" ><i class="fa fa-pencil fa-sm"></i></button>
+                                <button class="btn btn-outline-secondary mr-2" @click="deleteItem(index)"><i class="fa fa-trash fa-sm"></i></button>
+                            </div>
+                        </div>
+                        <div v-else class="clickable element_style mt-2 mb-2">
+                            <p>Перетащите сюда</p>
+                        </div>
                     </draggable>
+
+
                 </div>
                 <div class="col-3">
                     <div class="d-flex flex-column">
@@ -54,6 +60,8 @@
                             class="fa fa-bars fa-lg" aria-hidden="true"></i> Добавить строку</a></div>
                         <div class="p-2"><a href="" class="btn btn-outline-secondary form-control text-left"><i
                             class="fa fa-columns fa-lg" aria-hidden="true"></i> Добавить колонку</a></div>
+
+
                         <draggable v-model="availableItems" :options="availableItemOptions" :clone="handleClone">
                             <!--                {{item.name}} - key is: {{item.uid}}-->
                             <div class="p-2" v-for="item in availableItems" :key="uuid(item)">
@@ -76,12 +84,7 @@
         components: {draggable},
         data() {
             return {
-                clonedItems: [
-                    {
-                        //name: "Drag here"
-                    }
-                ],
-
+                clonedItems: [],
                 availableItems: [
                     {
                         class: "fa fa-code fa-lg",
@@ -128,9 +131,7 @@
             handleClone (item) {
                 // Create a fresh copy of item
                 let cloneMe = JSON.parse(JSON.stringify(item));
-
                 this.$delete(cloneMe, 'uid');
-
                 return cloneMe;
             },
 
@@ -154,5 +155,31 @@
 </script>
 
 <style scoped>
-
+ .element_style{
+     background-color: white;
+     width: 95%;
+     border-radius: 5px;
+     min-height:40px;
+     margin:0 auto;
+     cursor:grab;
+     display: flex;
+     justify-content: space-between;
+     align-items:center;
+ }
+ .element_style:active{
+     cursor:grabbing;
+ }
+ .element_style > p{
+     color: black;
+     font-size: 18px;
+ }
+ .element_style > .button-group{
+     display: flex;
+     justify-content: space-between;
+ }
+    .draggable_parent{
+        border: 1px dashed black;
+        border-radius: 5px;
+        min-height: 60px;
+    }
 </style>
