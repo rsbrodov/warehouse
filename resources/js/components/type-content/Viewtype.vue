@@ -32,21 +32,22 @@
             <br>
             <br>
             <div class="row ">
-                <div class="col-9 bg-secondary">
-                    <draggable v-model="clonedItems" :options="clonedItemOptions" class="draggable_parent mt-3">
-                        <div v-if="clonedItems.length > 0" v-for="(item, index) in clonedItems" :key="uuid(item)" class="clickable element_style mt-2 mb-2">
-                            <p class="pl-2 pt-3 text-secondary"><i :class="item.class"></i> {{item.name}}</p>
-                            <div class="button-group">
-                                <button class="btn btn-outline-secondary mr-2" ><i class="fa fa-pencil fa-sm"></i></button>
-                                <button class="btn btn-outline-secondary mr-2" @click="deleteItem(index)"><i class="fa fa-trash fa-sm"></i></button>
+                <div class="col-9 left-block">
+                    <div class="left-block__draggable-layout mt-2">
+                        <draggable class="left-block__draggable-layout__draggable-parent mt-3 mb-3" v-model="clonedItems" :options="clonedItemOptions">
+                            <div class="clickable left-block__draggable-layout__draggable-parent__item mt-2 mb-2" v-if="clonedItems.length != 0" v-for="(item, index) in clonedItems" :key="uuid(item)" >
+                                <p class="pl-2 pt-3 text-secondary"><i :class="item.class"></i> {{item.name}}</p>
+                                <div class="button-group">
+                                    <button class="btn btn-outline-secondary mr-2" ><i class="fa fa-pencil fa-sm"></i></button>
+                                    <button class="btn btn-outline-secondary mr-2" @click="deleteItem(index)"><i class="fa fa-trash fa-sm"></i></button>
+                                </div>
                             </div>
-                        </div>
-                        <div v-else class="clickable element_style mt-2 mb-2">
-                            <p>Перетащите сюда</p>
-                        </div>
-                    </draggable>
+                        </draggable>
+                    </div>
 
+                    <div class="left-block__draggable-layout mt-2">
 
+                    </div>
                 </div>
                 <div class="col-3">
                     <div class="d-flex flex-column">
@@ -155,31 +156,43 @@
 </script>
 
 <style scoped>
- .element_style{
-     background-color: white;
-     width: 95%;
-     border-radius: 5px;
-     min-height:40px;
-     margin:0 auto;
-     cursor:grab;
-     display: flex;
-     justify-content: space-between;
-     align-items:center;
- }
- .element_style:active{
-     cursor:grabbing;
- }
- .element_style > p{
-     color: black;
-     font-size: 18px;
- }
- .element_style > .button-group{
-     display: flex;
-     justify-content: space-between;
- }
-    .draggable_parent{
-        border: 1px dashed black;
+    .left-block {
+        background-color: #d6d6d6;
+    }
+
+    .left-block__draggable-layout {
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80px;
+    }
+    .left-block__draggable-layout__draggable-parent {
+        background-color: #c4c4c4;
         border-radius: 5px;
         min-height: 60px;
+        width: 98%;
+    }
+    .left-block__draggable-layout__draggable-parent__item {
+        background-color: white;
+        width: 98%;
+        border-radius: 5px;
+        min-height: 40px;
+        margin: 0 auto;
+        cursor: grab;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .left-block__draggable-layout__draggable-parent__item:active {
+        cursor: grabbing;
+    }
+    .left-block__draggable-layout__draggable-parent__item > .button-group {
+        display: flex;
+        justify-content: space-between;
+    }
+    .left-block__draggable-layout__draggable-parent__item > p {
+        color: black;
+        font-size: 18px;
     }
 </style>
