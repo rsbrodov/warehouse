@@ -7,6 +7,7 @@ use App\Models\DictionaryElement;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Itstructure\GridView\DataProviders\EloquentDataProvider;
 
 class HomeController extends Controller
@@ -235,7 +236,7 @@ class HomeController extends Controller
                 'Draft',
                 'Archive'
             ];
-            for ($i = 0; $i < 10000; $i++){
+            for ($i = 0; $i < 5000; $i++){
                 $str = $rand_words_1[rand(0, count($rand_words_1)-1)] . ' ' . $rand_words_2[rand(0, count($rand_words_2)-1)] . ' ' . $rand_words_3[rand(0, count($rand_words_3)-1)];
                 \App\Models\TypeContent::create(
                     [
@@ -286,9 +287,9 @@ class HomeController extends Controller
             'пиндосов'
         ];
 
-        for ($i = 0; $i < 10000; $i++){
+        for ($i = 0; $i < 5000; $i++){
             $str = $rand_words_1[rand(0, count($rand_words_1)-1)] . ' ' . $rand_words_2[rand(0, count($rand_words_2)-1)] . ' ';
-            \App\Models\Dictionary::create([
+            $dictionary = \App\Models\Dictionary::create([
                    'code' => 'TEST10000',
                    'name' => 'Справочник '.$str,
                    'description' => 'Описание справочника '.$str,
@@ -296,6 +297,16 @@ class HomeController extends Controller
                    'created_author' => 1,
                    'updated_author' => 1
                ]);
+        for ($e = 0; $e < rand(1, 10); $e++) {
+            \App\Models\DictionaryElement::create(
+                [
+                    'dictionary_id' => $dictionary->id,
+                    'value' => 'TEST10000',
+                    'created_author' => 1,
+                    'updated_author' => 1
+                ]
+            );
+        }
         }
 
         return redirect()->route('home')->with('warning', '10000 справочников успешно созданы!');
@@ -314,16 +325,28 @@ class HomeController extends Controller
     public function deleteTEST10000D(){
         if(Auth::guard('web')->check()) {
             $d10000 = \App\Models\Dictionary::where('code', 'TEST10000');
+            //todo: не удаляется связь по внешнему ключу
             if ($d10000) {
-                $d10000->delete();
+                dd($d10000->onDelete());
+//                \App\Models\DictionaryElement::where('dictionary_id', $d10000->id)->delete();
+//                $d10000->delete();
             }
-            return redirect()->route('home')->with('success', '10000 справочников успешно удалены!');
+            //$de10000 = \App\Models\DictionaryElement::where('dictionary_id', $d10000->id);
+
+            return redirect()->route('home')->with('success', '10000 справочников и элементов успешно удалены!');
         } else {
             return 'not auth';
         }
     }
     public function imageUpload(Request $request){
-        $path = $request->file('image')->store('uploads', 'public');
-        return view('home', ['path' => $path]);
+        //$path = $request->file('image')->store('uploads', 'public');
+        $path = Image::make($request->file('image')->getRealPath())->resize(200, 200)->store('uploads', 'public');
+        return view('image-show', ['path' => $path]);
+    }
+    public function imageShow(){
+        $directory = 'public/uploads';
+        $images = Storage::disk('local')->allFiles($directory);
+        //dd($images);
+        return view('image-show', ['images' => $images]);
     }
 }

@@ -51,9 +51,7 @@
                     <button id="search-btn" class="btn btn-primary" @click="toggleSearch()"><span class="fa fa-search fa-lg"></span></button>
                     <button class="btn btn-primary" id="clear-btn" style="display: none;" @click="cleanSearch()"><span class="fa fa-paint-brush fa-lg"></span> Очистить</button>
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn-create btn btn-primary" @click="openModal()">
-                        <span class="fa fa-plus-circle fa-lg"></span>
-                    </button>
+                    <button type="button" class="btn-create btn btn-primary" @click="openModal()"><span class="fa fa-plus-circle fa-lg"></span></button>
                 </div>
             </div>
 
