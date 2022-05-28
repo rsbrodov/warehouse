@@ -1,5 +1,17 @@
 <template>
     <div id="app">
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <Viewmodal
+                    @close-modal="closeModal(drop)"
+                    :copy="copy"
+                    :clonedItems="clonedItems"
+                ></Viewmodal>
+            </div>
+        </div>
+        <!--End Modal -->
+
         <div class="container-fluid">
             <!-- Stack the columns on mobile by making one full-width and the other half-width -->
             <div class="row">
@@ -36,7 +48,7 @@
                     <div class="left-block__draggable-layout mt-2">
                         <draggable class="left-block__draggable-layout__draggable-parent mt-3 mb-3" v-model="clonedItems" :options="clonedItemOptions">
                             <div class="clickable left-block__draggable-layout__draggable-parent__item mt-2 mb-2" v-if="clonedItems.length != 0" v-for="(item, index) in clonedItems" :key="uuid(item)" >
-                                <p class="pl-2 pt-3 text-secondary"><i :class="item.class"></i> {{item.name}}</p>
+                                <p class="pl-2 pt-3 text-secondary"><i :class="item.class"></i> {{item.uid}}</p>
                                 <div class="button-group">
                                     <button class="btn btn-outline-secondary mr-2" ><i class="fa fa-pencil fa-sm"></i></button>
                                     <button class="btn btn-outline-secondary mr-2" @click="deleteItem(index)"><i class="fa fa-trash fa-sm"></i></button>
@@ -45,7 +57,7 @@
                         </draggable>
                     </div>
 
-                    <div class="left-block__draggable-layout mt-2">
+                    <div class="left-block__draggable-layout mt-4">
 
                     </div>
                 </div>
@@ -63,11 +75,15 @@
                             class="fa fa-columns fa-lg" aria-hidden="true"></i> Добавить колонку</a></div>
 
 
-                        <draggable v-model="availableItems" :options="availableItemOptions" :clone="handleClone">
-                            <!--                {{item.name}} - key is: {{item.uid}}-->
-                            <div class="p-2" v-for="item in availableItems" :key="uuid(item)">
-                                <a href="" class="btn btn-outline-secondary form-control text-left"><i
-                                    :class="item.class" aria-hidden="true"></i> {{item.name}}</a>
+                        <draggable
+                            v-model="availableItems"
+                            :options="availableItemOptions"
+                            :clone="handleClone"
+                            @end="moveAction"
+                        >
+                            <div class="p-2" v-for="item in availableItems" >
+                                <a class="btn btn-outline-secondary form-control text-left">
+                                    <i :class="item.class" aria-hidden="true"></i> {{item.name}}</a>
                             </div>
                         </draggable>
                     </div>
@@ -80,36 +96,46 @@
 
 <script>
     import draggable from 'vuedraggable'
+    import Viewmodal from "./Viewmodal";
+
     export default {
         name: "Viewtype",
-        components: {draggable},
+        components: {draggable, Viewmodal},
         data() {
             return {
+                copy: null,
+                drop: null,
                 clonedItems: [],
                 availableItems: [
                     {
                         class: "fa fa-code fa-lg",
-                        name: "HTML редактор"
+                        name: "HTML редактор",
+                        type: "textarea",
                     },
                     {
                         class: "fa fa-caret-down fa-lg",
-                        name: "Выпадающий список"
+                        name: "Выпадающий список",
+                        type: "select",
                     },
                     {
                         class: "fa fa-calendar fa-lg",
-                        name: "Дата/Время"
+                        name: "Дата/Время",
+                        type: "datetime",
                     },
                     {
                         class: "fa fa-image fa-lg",
-                        name: "Изображение"
+                        name: "Изображение",
+                        type: "file",
                     },
                     {
                         class: "fa fa-list fa-lg",
-                        name: "Радио-группа"
+                        name: "Радио-группа",
+                        type: "radio",
                     },
                     {
                         class: "fa fa-text-height fa-lg",
-                        name: "Текстовое поле"
+                        name: "Текстовое поле",
+                        type: "text",
                     },
                 ],
 
@@ -129,11 +155,20 @@
         },
 
         methods: {
-            handleClone (item) {
-                // Create a fresh copy of item
+            handleClone(item) {
                 let cloneMe = JSON.parse(JSON.stringify(item));
-                this.$delete(cloneMe, 'uid');
+                this.$set(cloneMe, 'title', '');
+                this.$set(cloneMe, 'required', '');
+
+                //делаем ключик в момент клонирования
+                const key = Math.random().toString(16).slice(2);
+                this.$set(cloneMe, "uid", key);
+
+                this.copy = key;
                 return cloneMe;
+            },
+            moveAction(item) {
+                this.openModal();
             },
 
             deleteItem(index) {
@@ -142,16 +177,23 @@
 
             uuid(e) {
                 if (e.uid) return e.uid;
-
                 const key = Math.random()
                     .toString(16)
                     .slice(2);
-
                 this.$set(e, "uid", key);
-
                 return e.uid;
-            }
-        }
+            },
+
+            closeModal(val) {
+                $("#exampleModal").modal("hide");
+                console.log(123);
+
+            },
+            openModal() {
+                $('#exampleModal').modal('show');
+            },
+        },
+
     }
 </script>
 
