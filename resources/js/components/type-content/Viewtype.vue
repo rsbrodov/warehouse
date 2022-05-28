@@ -1,13 +1,26 @@
 <template>
     <div id="app">
         <!-- Modal -->
-        <div class="modal fade" id="exampleModal" aria-hidden="true">
+        <div class="modal fade" id="createElement" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <Viewmodal
-                    @close-modal="closeModal(drop)"
+                    @close-modal="closeModal('createElement', $event)"
                     :copy="copy"
                     :clonedItems="clonedItems"
                 ></Viewmodal>
+            </div>
+        </div>
+        <!--End Modal -->
+
+
+        <!-- Edit modal -->
+        <div class="modal fade" id="editElement" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <Editmodal
+                    @close-modal="closeModal('editElement', $event)"
+                    :copy="copy"
+                    :clonedItems="clonedItems"
+                ></Editmodal>
             </div>
         </div>
         <!--End Modal -->
@@ -48,9 +61,9 @@
                     <div class="left-block__draggable-layout mt-2">
                         <draggable class="left-block__draggable-layout__draggable-parent mt-3 mb-3" v-model="clonedItems" :options="clonedItemOptions">
                             <div class="clickable left-block__draggable-layout__draggable-parent__item mt-2 mb-2" v-if="clonedItems.length != 0" v-for="(item, index) in clonedItems" :key="uuid(item)" >
-                                <p class="pl-2 pt-3 text-secondary"><i :class="item.class"></i> {{item.uid}}</p>
+                                <p class="pl-2 pt-3 text-secondary"><i :class="item.class"></i> {{item.title}}</p>
                                 <div class="button-group">
-                                    <button class="btn btn-outline-secondary mr-2" ><i class="fa fa-pencil fa-sm"></i></button>
+                                    <button class="btn btn-outline-secondary mr-2" @click="EditItem(item.uid)"><i class="fa fa-pencil fa-sm"></i></button>
                                     <button class="btn btn-outline-secondary mr-2" @click="deleteItem(index)"><i class="fa fa-trash fa-sm"></i></button>
                                 </div>
                             </div>
@@ -97,14 +110,14 @@
 <script>
     import draggable from 'vuedraggable'
     import Viewmodal from "./Viewmodal";
+    import Editmodal from "./Editmodal";
 
     export default {
         name: "Viewtype",
-        components: {draggable, Viewmodal},
+        components: {draggable, Viewmodal, Editmodal},
         data() {
             return {
                 copy: null,
-                drop: null,
                 clonedItems: [],
                 availableItems: [
                     {
@@ -168,7 +181,7 @@
                 return cloneMe;
             },
             moveAction(item) {
-                this.openModal();
+                this.openModal('createElement');
             },
 
             deleteItem(index) {
@@ -184,13 +197,17 @@
                 return e.uid;
             },
 
-            closeModal(val) {
-                $("#exampleModal").modal("hide");
-                console.log(123);
+            closeModal(id) {
+                $("#"+id).modal("hide");
 
             },
-            openModal() {
-                $('#exampleModal').modal('show');
+            openModal(id) {
+                $('#'+id).modal('show');
+            },
+
+            EditItem(uid) {
+                this.copy = uid;
+                this.openModal('editElement');
             },
         },
 

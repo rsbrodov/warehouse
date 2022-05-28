@@ -3,7 +3,7 @@
         <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Информация о поле</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true" @click="$emit('close-modal', 'createElement')">&times;</span>
+                <span aria-hidden="true" @click="$emit('close-modal', 'editElement')">&times;</span>
             </button>
         </div>
         <form @submit.prevent="saveDropElement()">
@@ -21,9 +21,19 @@
                         </select>
                     </div>
                 </div>
+
+                <div class="row mb-3">
+                    <div class="block col-6">
+                        <label for="name"><b>Тип поля:</b></label>
+                        <input autocomplete="off" id="name" class="form-control" type="text" v-model="vv.name" disabled="true">
+                    </div>
+                    <div class="block col-6">
+
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" @click="$emit('close-modal', 'createElement')">Отмена</button>
+                <button type="button" class="btn btn-secondary" @click="$emit('close-modal', 'editElement')">Отмена</button>
                 <button id="add" type="submit" class="btn btn-primary">ОК</button>
             </div>
         </form>
@@ -32,7 +42,7 @@
 
 <script>
     export default {
-        name: "Viewmodal",
+        name: "Editmodal",
         props: ['copy', 'clonedItems'],
         data() {
             return {
@@ -46,7 +56,7 @@
         },
         methods:{
             saveDropElement() {
-                this.$emit('close-modal', 'createElement', this.vv)
+                this.$emit('close-modal', 'editElement', this.vv)
             }
         }
     }
