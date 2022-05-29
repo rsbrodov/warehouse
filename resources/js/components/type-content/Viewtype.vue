@@ -69,11 +69,8 @@
                             </div>
                         </draggable>
                     </div>
-
-                    <div class="left-block__draggable-layout mt-4">
-
-                    </div>
                 </div>
+
                 <div class="col-3">
                     <div class="d-flex flex-column">
                         <div class="p-2"><a href="" class="btn btn-primary form-control text-left"><i
@@ -96,11 +93,11 @@
                         >
                             <div class="p-2" v-for="item in availableItems" >
                                 <a class="btn btn-outline-secondary form-control text-left">
-                                    <i :class="item.class" aria-hidden="true"></i> {{item.name}}</a>
+                                    <i :class="item.class" aria-hidden="true"></i> {{item.name}}
+                                </a>
                             </div>
                         </draggable>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -111,6 +108,7 @@
     import draggable from 'vuedraggable'
     import Viewmodal from "./Viewmodal";
     import Editmodal from "./Editmodal";
+    import {mapActions, mapGetters} from "vuex";
 
     export default {
         name: "Viewtype",
@@ -172,6 +170,10 @@
                 let cloneMe = JSON.parse(JSON.stringify(item));
                 this.$set(cloneMe, 'title', '');
                 this.$set(cloneMe, 'required', '');
+
+                if(cloneMe.type == 'select' || cloneMe.type == 'radio'){
+                    this.$set(cloneMe, 'dictionary_id', null);
+                }
 
                 //делаем ключик в момент клонирования
                 const key = Math.random().toString(16).slice(2);

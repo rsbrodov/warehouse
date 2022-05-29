@@ -14,7 +14,7 @@
                         <input autocomplete="off" id="title" class="form-control" type="text" v-model="vv.title">
                     </div>
                     <div class="block col-6">
-                        <label for="required"><b>Обязательно к заполнению</b></label>
+                        <label for="required"><b>Обязательно к заполнению:</b></label>
                         <select id="required" class="form-control" v-model="vv.required">
                             <option value="1">Да</option>
                             <option value="0">Нет</option>
@@ -28,7 +28,16 @@
                         <input autocomplete="off" id="name" class="form-control" type="text" v-model="vv.name" disabled="true">
                     </div>
                     <div class="block col-6">
-
+                        <label for="dictionary_id"><b>Справочник:</b></label>
+                        <select id="dictionary_id" class="form-control"
+                                v-model="vv.dictionary_id">
+                            <option v-for="(dic, index) in Dictionary"
+                                    :key="index"
+                                    :value="dic.id"
+                            >
+                                {{dic.name}}
+                            </option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -41,6 +50,8 @@
 </template>
 
 <script>
+    import {mapActions, mapGetters} from "vuex";
+
     export default {
         name: "Editmodal",
         props: ['copy', 'clonedItems'],
@@ -49,15 +60,20 @@
             }
         },
         computed:{
+            ...mapGetters(['Dictionary']),
             vv(){
                 let find = this.clonedItems.find(clonedItems => clonedItems.uid === this.copy)
                 return find;
             }
         },
         methods:{
+            ...mapActions(['getDictionary']),
             saveDropElement() {
                 this.$emit('close-modal', 'editElement', this.vv)
             }
+        },
+        async mounted(){
+            this.getDictionary();
         }
     }
 </script>
