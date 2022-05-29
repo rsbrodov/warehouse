@@ -31,11 +31,10 @@
         </div>
         <div class="row mt-4">
             <div class="header-block row">
-                <div class="search-button col-2">
-                    <button id="hideshow" class="btn btn-primary" @click="toggleSearch()"><span
-                        class="fa fa-search fa-lg" aria-hidden="true"></span></button>
-                </div>
-                <div class="search-form col-8">
+<!--                <div class="search-button col-2">-->
+<!--                    <button id="hideshow" class="btn btn-primary" @click="toggleSearch()"><span class="fa fa-search fa-lg" aria-hidden="true"></span></button>-->
+<!--                </div>-->
+                <div class="search-form col-6">
                     <div class="form">
                         <form action="" method="post">
                             <div class="form-group row">
@@ -60,13 +59,10 @@
                         </form>
                     </div>
                 </div>
-                <div class="create col-2">
-                    <button id="clean" class="btn btn-primary" @click="cleanSearch()"><span
-                        class="fa fa-paint-brush fa-lg" aria-hidden="true"></span> Очистить
-                    </button>
-                    <button type="button" class="btn-create btn btn-primary" @click="openModal('dictionaryCreate')">
-                        <span class="fa fa-plus-circle fa-lg"></span>
-                    </button>
+                <div class="create col-6 text-right">
+                    <button id="hideshow" class="btn btn-primary" @click="toggleSearch()"><span class="fa fa-search fa-lg" aria-hidden="true"></span></button>
+                    <button id="clean" class="btn btn-primary" style="display: none;"  @click="cleanSearch()"><span class="fa fa-paint-brush fa-lg" aria-hidden="true"></span> Очистить</button>
+                    <button type="button" class="btn-create btn btn-primary" @click="openModal('dictionaryCreate')"><span class="fa fa-plus-circle fa-lg"></span></button>
                 </div>
             </div>
         </div>
@@ -196,6 +192,13 @@
             },
             toggleSearch(){
                 $('.form').toggle('show');
+                $('#clean').toggle('show');
+                $('#hideshow').toggleClass('btn-primary btn-secondary');
+                if( $('#hideshow').hasClass('btn-primary')){
+                    $('#hideshow').html('<span class="fa fa-search fa-lg"></span>');
+                } else if( $('#hideshow').hasClass('btn-secondary')){
+                    $('#hideshow').html('Свернуть');
+                }
             },
             cleanSearch(){
                 $( 'form' ).each(function(){

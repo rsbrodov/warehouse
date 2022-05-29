@@ -11,10 +11,10 @@
         <div class="text-center"><h3>Контентная модель</h3></div>
         <div class="row mt-4">
             <div class="header-block row">
-                <div class="search-button col-2">
+<!--                <div class="search-button col-2">-->
 <!--                    <button id="search-btn" class="btn btn-primary" @click="toggleSearch()"><span class="fa fa-search fa-lg"></span></button>-->
-                </div>
-                <div class="search-form col-8">
+<!--                </div>-->
+                <div class="search-form col-6">
                     <div class="form">
                         <form>
                             <div class="form-group row">
@@ -47,16 +47,13 @@
                         </form>
                     </div>
                 </div>
-                <div class="create col-2">
+                <div class="create col-6 text-right">
                     <button id="search-btn" class="btn btn-primary" @click="toggleSearch()"><span class="fa fa-search fa-lg"></span></button>
                     <button class="btn btn-primary" id="clear-btn" style="display: none;" @click="cleanSearch()"><span class="fa fa-paint-brush fa-lg"></span> Очистить</button>
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn-create btn btn-primary" @click="openModal()">
-                        <span class="fa fa-plus-circle fa-lg"></span>
-                    </button>
+                    <button type="button" class="btn-create btn btn-primary" @click="openModal()"><span class="fa fa-plus-circle fa-lg"></span></button>
                 </div>
             </div>
-
         </div>
 
         <table class="table table-bordered table-hover mt-4">

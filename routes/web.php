@@ -42,7 +42,8 @@ Route::get('/home-test', [App\Http\Controllers\HomeController::class, 'test'])->
 Route::get('/home-test2', [App\Http\Controllers\HomeController::class, 'test2'])->name('home-test2');
 Route::get('/home-delete-test10000TC', [App\Http\Controllers\HomeController::class, 'deleteTEST10000TC'])->name('home-delete-test10000TC');
 Route::get('/home-delete-test10000D', [App\Http\Controllers\HomeController::class, 'deleteTEST10000D'])->name('home-delete-test10000D');
-    Route::post('/home-image-upload', [App\Http\Controllers\HomeController::class, 'imageUpload'])->name('image.upload');
+Route::get('/image-show', [App\Http\Controllers\HomeController::class, 'imageShow'])->name('image.show');
+Route::post('/home-image-upload', [App\Http\Controllers\HomeController::class, 'imageUpload'])->name('image.upload');
 
 
 //Route::get('/users/link/{data}', [UsersController::class, 'linkHandler'])->name('link.handler');
