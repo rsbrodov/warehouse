@@ -66,17 +66,7 @@ class HomeController extends Controller
         print_r($dictionary_element);
     }
 
-    public function gridViewTest()
-    {
-        if(Auth::guard('web')->check()) {
-            $dataProvider = new EloquentDataProvider(User::query());
-            return view('home-gvt', [
-                'dataProvider' => $dataProvider
-            ]);
-        } else {
-            return 'not auth';
-        }
-    }
+
     public function test()
     {
         if(Auth::guard('web')->check()) {
@@ -287,7 +277,7 @@ class HomeController extends Controller
             'пиндосов'
         ];
 
-        for ($i = 0; $i < 5000; $i++){
+        //for ($i = 0; $i < 5000; $i++){
             $str = $rand_words_1[rand(0, count($rand_words_1)-1)] . ' ' . $rand_words_2[rand(0, count($rand_words_2)-1)] . ' ';
             $dictionary = \App\Models\Dictionary::create([
                    'code' => 'TEST10000',
@@ -297,17 +287,17 @@ class HomeController extends Controller
                    'created_author' => 1,
                    'updated_author' => 1
                ]);
-        for ($e = 0; $e < rand(1, 10); $e++) {
-            \App\Models\DictionaryElement::create(
-                [
-                    'dictionary_id' => $dictionary->id,
-                    'value' => 'TEST10000',
-                    'created_author' => 1,
-                    'updated_author' => 1
-                ]
-            );
-        }
-        }
+            for ($e = 0; $e < rand(1, 10); $e++) {
+                \App\Models\DictionaryElement::create(
+                    [
+                        'dictionary_id'  => $dictionary->id,
+                        'value'          => 'TEST10000',
+                        'created_author' => 1,
+                        'updated_author' => 1,
+                    ]
+                );
+            }
+       // }
 
         return redirect()->route('home')->with('warning', '10000 справочников успешно созданы!');
     }
@@ -327,12 +317,8 @@ class HomeController extends Controller
             $d10000 = \App\Models\Dictionary::where('code', 'TEST10000');
             //todo: не удаляется связь по внешнему ключу
             if ($d10000) {
-                dd($d10000->onDelete());
-//                \App\Models\DictionaryElement::where('dictionary_id', $d10000->id)->delete();
-//                $d10000->delete();
+                $d10000->delete();
             }
-            //$de10000 = \App\Models\DictionaryElement::where('dictionary_id', $d10000->id);
-
             return redirect()->route('home')->with('success', '10000 справочников и элементов успешно удалены!');
         } else {
             return 'not auth';

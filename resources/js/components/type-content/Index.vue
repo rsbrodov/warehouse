@@ -82,7 +82,7 @@
                 <td>{{ type_content | dateUpdated }}</td>
                 <td class="pencil" nowrap>
                     <a :href="'/all-version-type-content/'+type_content.id_global" class="btn btn-primary"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
-                    <a :href="'/type-content/view/'+type_content.id_global" class="btn btn-primary ml-3"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a>
+                    <a :href="'/type-content/view-new/'+type_content.id_global" class="btn btn-primary ml-3"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a>
                 </td>
             </tr>
         </table>
