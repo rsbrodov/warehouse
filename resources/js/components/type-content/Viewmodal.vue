@@ -11,14 +11,36 @@
                 <div class="row mb-3">
                     <div class="block col-6">
                         <label for="title"><b>Наименование:</b></label>
-                        <input autocomplete="off" id="title" class="form-control" type="text" v-model="vv.title">
+                        <input autofocus autocomplete="off" id="title" class="form-control" type="text" v-model="vv.title">
                     </div>
                     <div class="block col-6">
-                        <label for="required"><b>Обязательно к заполнению</b></label>
+                        <label for="required"><b>Обязательно к заполнению:</b></label>
                         <select id="required" class="form-control" v-model="vv.required">
                             <option value="1">Да</option>
                             <option value="0">Нет</option>
                         </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="block col-6">
+                        <label for="name"><b>Тип поля:</b></label>
+                        <input autocomplete="off" id="name" class="form-control" type="text" v-model="vv.name" disabled="true">
+                    </div>
+                    <div class="block col-6" v-if="vv.type == 'select' || vv.type == 'radio'">
+                        <label for="dictionary_id"><b>Справочник:</b></label>
+                        <select id="dictionary_id" class="form-control"
+                                v-model="vv.dictionary_id">
+                            <option v-for="(dic, index) in Dictionary"
+                                    :key="index"
+                                    :value="dic.id"
+                            >
+                                {{dic.name}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="block col-6">
+
                     </div>
                 </div>
             </div>
@@ -31,6 +53,8 @@
 </template>
 
 <script>
+    import {mapActions, mapGetters} from "vuex";
+
     export default {
         name: "Viewmodal",
         props: ['copy', 'clonedItems'],
@@ -39,15 +63,20 @@
             }
         },
         computed:{
+            ...mapGetters(['Dictionary']),
             vv(){
                 let find = this.clonedItems.find(clonedItems => clonedItems.uid === this.copy)
                 return find;
             }
         },
         methods:{
+            ...mapActions(['getDictionary']),
             saveDropElement() {
                 this.$emit('close-modal', 'createElement', this.vv)
             }
+        },
+        async mounted(){
+            this.getDictionary();
         }
     }
 </script>
