@@ -65,7 +65,16 @@
         computed:{
             ...mapGetters(['Dictionary']),
             vv(){
-                let find = this.clonedItems.find(clonedItems => clonedItems.uid === this.copy)
+                let find;
+                let copy = this.copy;//он не хочет читать переменную, нужно ее таким образом пробрасывать чтоб он видил ее в фориче ЖЕСТЬ
+                //return find;
+                $.each(this.clonedItems,function(index,clonedItem) {
+                    $.each(clonedItem,function(index_item,item) {
+                        if(item.uid === copy){
+                            find = item;
+                        }
+                    });
+                });
                 return find;
             }
         },
