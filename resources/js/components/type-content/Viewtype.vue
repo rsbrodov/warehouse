@@ -58,13 +58,13 @@
             <br>
             <div class="row ">
                 <div class="col-9 left-block">
-                    <div class="left-block__draggable-layout mt-2">
-                        <draggable class="left-block__draggable-layout__draggable-parent mt-3 mb-3" v-model="clonedItems" :options="clonedItemOptions">
-                            <div class="clickable left-block__draggable-layout__draggable-parent__item mt-2 mb-2" v-if="clonedItems.length != 0" v-for="(item, index) in clonedItems" :key="uuid(item)" >
+                    <div class="left-block__draggable-layout mt-2" v-for="(mas, index) in clonedItems" :key="index">
+                        <draggable class="left-block__draggable-layout__draggable-parent mt-3 mb-3" v-model="clonedItems[index]" :options="clonedItemOptions">
+                            <div class="clickable left-block__draggable-layout__draggable-parent__item mt-2 mb-2" v-for="(item, indexing) in mas" :key="uuid(item)" >
                                 <p class="pl-2 pt-3 text-secondary"><i :class="item.class"></i> {{item.title}}</p>
                                 <div class="button-group">
                                     <button class="btn btn-outline-secondary mr-2" @click="EditItem(item.uid)"><i class="fa fa-pencil fa-sm"></i></button>
-                                    <button class="btn btn-outline-secondary mr-2" @click="deleteItem(index)"><i class="fa fa-trash fa-sm"></i></button>
+                                    <button class="btn btn-outline-secondary mr-2" @click="deleteItem(index, indexing)"><i class="fa fa-trash fa-sm"></i></button>
                                 </div>
                             </div>
                         </draggable>
@@ -116,7 +116,18 @@
         data() {
             return {
                 copy: null,
-                clonedItems: [],
+                clonedItems: [
+                    /*[
+                        {
+                            class: "fa fa-code fa-lg",
+                            name: "HTML редактор",
+                            type: "textarea",
+                        },
+                    ],*/
+                    [
+
+                    ]
+                ],
                 availableItems: [
                     {
                         class: "fa fa-code fa-lg",
@@ -186,8 +197,8 @@
                 this.openModal('createElement');
             },
 
-            deleteItem(index) {
-                this.clonedItems.splice(index, 1);
+            deleteItem(index, indexing) {
+                this.clonedItems[index].splice(indexing, 1);
             },
 
             uuid(e) {
