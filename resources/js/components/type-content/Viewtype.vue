@@ -59,6 +59,7 @@
             <div class="row ">
                 <div class="col-9 left-block">
                     <div class="left-block__draggable-layout mt-2" v-for="(mas, index) in clonedItems" :key="index">
+                        <button class="btn btn-outline-secondary mr-2" @click="deleteRow(index)"><i class="fa fa-trash fa-sm"></i></button>
                         <draggable class="left-block__draggable-layout__draggable-parent mt-3 mb-3" v-model="clonedItems[index]" :options="clonedItemOptions">
                             <div class="clickable left-block__draggable-layout__draggable-parent__item mt-2 mb-2" v-for="(item, indexing) in mas" :key="uuid(item)" >
                                 <p class="pl-2 pt-3 text-secondary"><i :class="item.class"></i> {{item.title}}</p>
@@ -77,10 +78,11 @@
                             class="fa fa-save fa-lg" aria-hidden="true"></i> Сохранить черновик</a></div>
                         <div class="p-2"><a href="" class="btn btn-primary form-control text-left"><i
                             class="fa fa-check-circle fa-lg" aria-hidden="true"></i> Публикация типа</a></div>
-                        <div class="p-2"><a href="" class="btn btn-primary form-control text-left"><i
-                            class="fa fa-trash fa-lg" aria-hidden="true"></i> Удалить тип</a></div>
-                        <div class="p-2"><a href="" class="btn btn-outline-secondary form-control text-left"><i
-                            class="fa fa-bars fa-lg" aria-hidden="true"></i> Добавить строку</a></div>
+                        <div class="p-2"><a href="" class="btn btn-primary form-control text-left">
+                            <i class="fa fa-trash fa-lg" aria-hidden="true"></i> Удалить тип</a></div>
+                        <div class="p-2">
+                            <button @click="pushRow()" class="btn btn-outline-secondary form-control text-left"><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Добавить строку</button>
+                        </div>
                         <div class="p-2"><a href="" class="btn btn-outline-secondary form-control text-left"><i
                             class="fa fa-columns fa-lg" aria-hidden="true"></i> Добавить колонку</a></div>
 
@@ -117,13 +119,6 @@
             return {
                 copy: null,
                 clonedItems: [
-                    /*[
-                        {
-                            class: "fa fa-code fa-lg",
-                            name: "HTML редактор",
-                            type: "textarea",
-                        },
-                    ],*/
                     [
 
                     ]
@@ -200,6 +195,9 @@
             deleteItem(index, indexing) {
                 this.clonedItems[index].splice(indexing, 1);
             },
+            deleteRow(index) {
+                this.clonedItems.splice(index, 1);
+            },
 
             uuid(e) {
                 if (e.uid) return e.uid;
@@ -221,6 +219,10 @@
             EditItem(uid) {
                 this.copy = uid;
                 this.openModal('editElement');
+            },
+            pushRow() {
+                let dop_array = [];
+                this.clonedItems.push(dop_array);
             },
         },
 
