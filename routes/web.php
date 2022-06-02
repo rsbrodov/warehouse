@@ -7,7 +7,7 @@ use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TechController;
-
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\YurkController;
 use App\Http\Controllers\TestController;
 
@@ -44,7 +44,7 @@ Route::get('/home-delete-test10000TC', [App\Http\Controllers\HomeController::cla
 Route::get('/home-delete-test10000D', [App\Http\Controllers\HomeController::class, 'deleteTEST10000D'])->name('home-delete-test10000D');
 Route::get('/image-show', [App\Http\Controllers\HomeController::class, 'imageShow'])->name('image.show');
 Route::post('/home-image-upload', [App\Http\Controllers\HomeController::class, 'imageUpload'])->name('image.upload');
-
+Route::get('/send', [App\Http\Controllers\MailController::class, 'send'])->name('mail.send');
 
 //Route::get('/users/link/{data}', [UsersController::class, 'linkHandler'])->name('link.handler');
 
