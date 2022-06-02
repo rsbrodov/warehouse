@@ -58,22 +58,19 @@
             <br>
             <div class="row ">
                 <div class="col-9 left-block">
-                    <div class="left-block__draggable-layout mt-2">
-                        <draggable class="left-block__draggable-layout__draggable-parent mt-3 mb-3" v-model="clonedItems" :options="clonedItemOptions">
-                            <div class="clickable left-block__draggable-layout__draggable-parent__item mt-2 mb-2" v-if="clonedItems.length != 0" v-for="(item, index) in clonedItems" :key="uuid(item)" >
+                    <div class="left-block__draggable-layout mt-2" v-for="(mas, index) in clonedItems" :key="index">
+                        <draggable class="left-block__draggable-layout__draggable-parent mt-3 mb-3" v-model="clonedItems[index]" :options="clonedItemOptions">
+                            <div class="clickable left-block__draggable-layout__draggable-parent__item mt-2 mb-2" v-for="(item, indexing) in mas" :key="uuid(item)" >
                                 <p class="pl-2 pt-3 text-secondary"><i :class="item.class"></i> {{item.title}}</p>
                                 <div class="button-group">
                                     <button class="btn btn-outline-secondary mr-2" @click="EditItem(item.uid)"><i class="fa fa-pencil fa-sm"></i></button>
-                                    <button class="btn btn-outline-secondary mr-2" @click="deleteItem(index)"><i class="fa fa-trash fa-sm"></i></button>
+                                    <button class="btn btn-outline-secondary mr-2" @click="deleteItem(index, indexing)"><i class="fa fa-trash fa-sm"></i></button>
                                 </div>
                             </div>
                         </draggable>
                     </div>
-
-                    <div class="left-block__draggable-layout mt-4">
-
-                    </div>
                 </div>
+
                 <div class="col-3">
                     <div class="d-flex flex-column">
                         <div class="p-2"><a href="" class="btn btn-primary form-control text-left"><i
@@ -96,11 +93,11 @@
                         >
                             <div class="p-2" v-for="item in availableItems" >
                                 <a class="btn btn-outline-secondary form-control text-left">
-                                    <i :class="item.class" aria-hidden="true"></i> {{item.name}}</a>
+                                    <i :class="item.class" aria-hidden="true"></i> {{item.name}}
+                                </a>
                             </div>
                         </draggable>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -111,6 +108,7 @@
     import draggable from 'vuedraggable'
     import Viewmodal from "./Viewmodal";
     import Editmodal from "./Editmodal";
+    import {mapActions, mapGetters} from "vuex";
 
     export default {
         name: "Viewtype",
@@ -118,7 +116,18 @@
         data() {
             return {
                 copy: null,
-                clonedItems: [],
+                clonedItems: [
+                    /*[
+                        {
+                            class: "fa fa-code fa-lg",
+                            name: "HTML редактор",
+                            type: "textarea",
+                        },
+                    ],*/
+                    [
+
+                    ]
+                ],
                 availableItems: [
                     {
                         class: "fa fa-code fa-lg",
@@ -173,6 +182,10 @@
                 this.$set(cloneMe, 'title', '');
                 this.$set(cloneMe, 'required', '');
 
+                if(cloneMe.type == 'select' || cloneMe.type == 'radio'){
+                    this.$set(cloneMe, 'dictionary_id', null);
+                }
+
                 //делаем ключик в момент клонирования
                 const key = Math.random().toString(16).slice(2);
                 this.$set(cloneMe, "uid", key);
@@ -184,8 +197,8 @@
                 this.openModal('createElement');
             },
 
-            deleteItem(index) {
-                this.clonedItems.splice(index, 1);
+            deleteItem(index, indexing) {
+                this.clonedItems[index].splice(indexing, 1);
             },
 
             uuid(e) {
