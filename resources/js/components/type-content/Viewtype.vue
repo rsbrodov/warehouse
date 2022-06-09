@@ -1,6 +1,7 @@
 <template>
     <div id="app">
         <!-- Modal -->
+        <FlashMessage :position="'right bottom'" style='z-index:20001;'></FlashMessage>
         <div class="modal fade" id="createElement" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <Viewmodal
@@ -58,14 +59,14 @@
             <br>
             <div class="row ">
                 <div class="col-9 left-block">
-                    <div class="left-block__draggable-layout mt-2" v-for="(mas, index) in clonedItems" :key="index">
-                        <button class="btn btn-outline-secondary mr-2" @click="deleteRow(index)"><i class="fa fa-trash fa-sm"></i></button>
-                        <draggable class="left-block__draggable-layout__draggable-parent mt-3 mb-3" v-model="clonedItems[index]" :options="clonedItemOptions">
-                            <div class="clickable left-block__draggable-layout__draggable-parent__item mt-2 mb-2" v-for="(item, indexing) in mas" :key="uuid(item)" >
+                    <div class="left-block__draggable-layout" v-for="(mas, index) in clonedItems" :key="index">
+                        <i class="fa fa-trash mr-2 mt-2 text-primary lg" @click="deleteRow(index)"></i>
+                        <draggable class="left-block__draggable-layout__draggable-parent" v-model="clonedItems[index]" :options="clonedItemOptions">
+                            <div class="clickable left-block__draggable-layout__draggable-parent__item" v-for="(item, indexing) in mas" :key="uuid(item)" >
                                 <p class="pl-2 pt-3 text-secondary"><i :class="item.class"></i> {{item.title}}</p>
                                 <div class="button-group">
-                                    <button class="btn btn-outline-secondary mr-2" @click="EditItem(item.uid)"><i class="fa fa-pencil fa-sm"></i></button>
-                                    <button class="btn btn-outline-secondary mr-2" @click="deleteItem(index, indexing)"><i class="fa fa-trash fa-sm"></i></button>
+                                    <button class="btn btn-outline-primary mr-2" @click="EditItem(item.uid)"><i class="fa fa-pencil fa-sm"></i></button>
+                                    <button class="btn btn-outline-primary mr-2" @click="deleteItem(index, indexing)"><i class="fa fa-trash fa-sm"></i></button>
                                 </div>
                             </div>
                         </draggable>
@@ -196,7 +197,15 @@
                 this.clonedItems[index].splice(indexing, 1);
             },
             deleteRow(index) {
-                this.clonedItems.splice(index, 1);
+                if (this.clonedItems.length > 1){
+                    this.clonedItems.splice(index, 1);
+                }else{
+                    this.flashMessage.error({
+                        message: 'Нельзя удалить все блоки',
+                        time: 3000,
+                    });
+                }
+
             },
 
             uuid(e) {
@@ -231,28 +240,35 @@
 
 <style scoped>
     .left-block {
-        background-color: #d6d6d6;
+        z-index:1;
+        background-color: #ededed;
     }
 
     .left-block__draggable-layout {
         background-color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 80px;
+        min-height: 110px;
+        max-height: 11000px;
+        text-align: right;
+        padding-bottom: 10px;
+        margin-top:20px;
+
     }
+
     .left-block__draggable-layout__draggable-parent {
         background-color: #c4c4c4;
         border-radius: 5px;
         min-height: 60px;
-        width: 98%;
+        width: 96%;
+        margin:0 auto;
+        padding-bottom: 10px;
+        padding-top: 10px;
     }
     .left-block__draggable-layout__draggable-parent__item {
         background-color: white;
         width: 98%;
         border-radius: 5px;
-        min-height: 40px;
-        margin: 0 auto;
+        height: 45px;
+        margin: 5px auto;
         cursor: grab;
         display: flex;
         justify-content: space-between;
@@ -268,5 +284,11 @@
     .left-block__draggable-layout__draggable-parent__item > p {
         color: black;
         font-size: 18px;
+    }
+    i:hover {
+        cursor: pointer;
+    }
+    ._vue-flash-msg-container_right-bottom {
+        z-index: 10000000 !important;
     }
 </style>
