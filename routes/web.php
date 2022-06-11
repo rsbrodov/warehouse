@@ -7,7 +7,7 @@ use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TechController;
-use App\Http\Controllers\MailController;
+
 use App\Http\Controllers\YurkController;
 use App\Http\Controllers\TestController;
 
@@ -42,9 +42,8 @@ Route::get('/home-test', [App\Http\Controllers\HomeController::class, 'test'])->
 Route::get('/home-test2', [App\Http\Controllers\HomeController::class, 'test2'])->name('home-test2');
 Route::get('/home-delete-test10000TC', [App\Http\Controllers\HomeController::class, 'deleteTEST10000TC'])->name('home-delete-test10000TC');
 Route::get('/home-delete-test10000D', [App\Http\Controllers\HomeController::class, 'deleteTEST10000D'])->name('home-delete-test10000D');
-Route::get('/image-show', [App\Http\Controllers\HomeController::class, 'imageShow'])->name('image.show');
-Route::post('/home-image-upload', [App\Http\Controllers\HomeController::class, 'imageUpload'])->name('image.upload');
-Route::get('/send', [App\Http\Controllers\MailController::class, 'send'])->name('mail.send');
+    Route::post('/home-image-upload', [App\Http\Controllers\HomeController::class, 'imageUpload'])->name('image.upload');
+
 
 //Route::get('/users/link/{data}', [UsersController::class, 'linkHandler'])->name('link.handler');
 
@@ -95,6 +94,7 @@ Route::get('/type-content/create-icons', [TypeContentController::class, 'createI
 
 
 Route::middleware(['auth:web'])->group(function () {
+    Route::get('/type-content/get-body/{id}', [TypeContentController::class, 'bodyType']);
     Route::post('/type-content/store/', [App\Http\Controllers\TypeContentController::class, 'store']);
     Route::get('/type-content/view-new/{id}', [TypeContentController::class, 'viewNew'])->name('type-content.view-new');
     Route::get('/type-content/index', [TypeContentController::class, 'index'])->name('type-content.index');
@@ -106,10 +106,11 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('/type-content/enter/{id}', [TypeContentController::class, 'enter'])->name('type-content.enter');
     Route::get('/all-version-type-content/{id}', [TypeContentController::class, 'getAllVersionTypeContent'])->name('type-content.get-all-version'); // норм что здесь нет type_content?
     Route::get('/descript-version-type-content/{id}', [TypeContentController::class, 'getShowDescription'])->name('type-content.descript-version');
-    Route::get('/type-content/{id}/{type}', [TypeContentController::class, 'createElemen'])->name('type-content.create-elemen');
+    //Route::get('/type-content/{id}/{type}', [TypeContentController::class, 'createElemen'])->name('type-content.create-elemen');
     Route::get('/type-content/{id}/{parametr}', [TypeContentController::class, 'createNewVersion'])->name('type-content.create-new-version');
     Route::put('/type-content/{id}', [TypeContentController::class, 'update'])->name('type-content.update');
     Route::delete('/type-content/{id}', [TypeContentController::class, 'destroy'])->name('type-content.destroy');
+    Route::post('/type-content/save-body/', [App\Http\Controllers\TypeContentController::class, 'saveBody']);
 });
 
 
