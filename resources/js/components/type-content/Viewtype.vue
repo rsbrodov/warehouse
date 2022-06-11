@@ -75,8 +75,8 @@
 
                 <div class="col-3">
                     <div class="d-flex flex-column">
-                        <div class="p-2"><a href="" class="btn btn-primary form-control text-left"><i
-                            class="fa fa-save fa-lg" aria-hidden="true"></i> Сохранить черновик</a></div>
+                        <div class="p-2"><button class="btn btn-primary form-control text-left" @click="saveBody()"><i
+                            class="fa fa-save fa-lg" aria-hidden="true"></i> Сохранить черновик</button></div>
                         <div class="p-2"><a href="" class="btn btn-primary form-control text-left"><i
                             class="fa fa-check-circle fa-lg" aria-hidden="true"></i> Публикация типа</a></div>
                         <div class="p-2"><a href="" class="btn btn-primary form-control text-left">
@@ -118,7 +118,9 @@
         components: {draggable, Viewmodal, Editmodal},
         data() {
             return {
+                type_content_id: window.location.href.split('/')[5],
                 copy: null,
+                data: null,
                 clonedItems: [
                     [
 
@@ -233,6 +235,38 @@
                 let dop_array = [];
                 this.clonedItems.push(dop_array);
             },
+            saveBody(){
+                axios.post('http://127.0.0.1:8000/type-content/save-body', {id: this.type_content_id, body: this.clonedItems})
+                .then(response => {
+                    if (response.status === 200){
+                        this.flashMessage.success({
+                            message: 'Данные сохранены',
+                            time: 3000,
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+            },
+
+            async getBody(){
+               await axios.get('http://127.0.0.1:8000/type-content/get-body/'+ this.type_content_id)
+                    .then(response => {
+                        if (Object.keys(response.data).length === 0){
+                            this.clonedItems = [[]];
+                        }else{
+                            this.clonedItems = response.data
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
+            }
+        },
+
+        async created(){
+            await this.getBody();
         },
 
     }

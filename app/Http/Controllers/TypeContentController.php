@@ -587,43 +587,6 @@ class TypeContentController extends Controller
             ['unicode' => 'f080', 'code' => 'fa-baк-chart', 'name' => 'График'],
             ['unicode' => 'f240', 'code' => 'fa-battery', 'name' => 'Заряд батареи'],
             ['unicode' => 'f02d', 'code' => 'fa-book', 'name' => 'Книга'],
-            ['unicode' => 'f2bd', 'code' => 'fa-user-circle', 'name' => 'Пользователь'],
-            ['unicode' => 'f0f3', 'code' => 'fa-bell', 'name' => 'Колокольчик'],
-            ['unicode' => 'f073', 'code' => 'fa-calendar', 'name' => 'Календарь'],
-            ['unicode' => 'f030', 'code' => 'fa-camera', 'name' => 'Фотоаппарат'],
-            ['unicode' => 'f03e', 'code' => 'fa-picture-o', 'name' => 'Фото'],
-            ['unicode' => 'f0f4', 'code' => 'fa-coffee', 'name' => 'Кофе'],
-            ['unicode' => 'f09d', 'code' => 'fa-credit-card', 'name' => 'Кредитная карта'],
-            ['unicode' => 'f15a', 'code' => 'fa-btc', 'name' => 'Биткоин'],
-            ['unicode' => 'f0e0', 'code' => 'fa-envelope', 'name' => 'Почта'],
-            ['unicode' => 'f06e', 'code' => 'fa-eye', 'name' => 'Глаз'],
-            ['unicode' => 'f09e', 'code' => 'fa-rss', 'name' => 'Новости'],
-            ['unicode' => 'f040', 'code' => 'fa-pencil', 'name' => 'Карандаш'],
-            ['unicode' => 'f055', 'code' => 'fa-plus-circle', 'name' => 'Плюс'],
-            ['unicode' => 'f1f8', 'code' => 'fa-trash', 'name' => 'Корзина'],
-            ['unicode' => 'f03d', 'code' => 'fa-video-camera', 'name' => 'Камера'],
-            ['unicode' => 'f008', 'code' => 'fa-video-film', 'name' => 'Видео'],
-            ['unicode' => 'f013', 'code' => 'fa-cog', 'name' => 'Настройка'],
-            ['unicode' => 'f085', 'code' => 'fa-cogs', 'name' => 'Настройки'],
-            ['unicode' => 'f1de', 'code' => 'fa-sliders', 'name' => 'Слайдер'],
-            ['unicode' => 'f21e', 'code' => 'fa-heartbeat', 'name' => 'Сердце'],
-            ['unicode' => 'f05a', 'code' => 'fa-info-circle', 'name' => 'Информация'],
-            ['unicode' => 'f1b9', 'code' => 'fa-car', 'name' => 'Автомобиль'],
-            ['unicode' => 'f238', 'code' => 'fa-train', 'name' => 'Поезд'],
-            ['unicode' => 'f072', 'code' => 'fa-plane', 'name' => 'Самолет'],
-            ['unicode' => 'f135', 'code' => 'fa-rocket', 'name' => 'Ракета'],
-            ['unicode' => 'f02e', 'code' => 'fa-bookmark', 'name' => 'Закладка'],
-            ['unicode' => 'f0f5', 'code' => 'fa-cutlery', 'name' => 'Столовые приборы'],
-            ['unicode' => 'f1fb', 'code' => 'fa-eyedropper', 'name' => 'Пипетка'],
-            ['unicode' => 'f0b0', 'code' => 'fa-filter', 'name' => 'Фильтр'],
-            ['unicode' => 'f07b', 'code' => 'fa-folder', 'name' => 'Папка'],
-            ['unicode' => 'f0ac', 'code' => 'fa-globe', 'name' => 'Глобус'],
-            ['unicode' => 'f16a', 'code' => 'fa-youtube-play', 'name' => 'Youtube'],
-            ['unicode' => 'f1da', 'code' => 'fa-history', 'name' => 'История'],
-            ['unicode' => 'f12e', 'code' => 'fa-puzzle-piece', 'name' => 'Пазл'],
-            ['unicode' => 'f132', 'code' => 'fa-shield', 'name' => 'Щит'],
-            ['unicode' => 'f005', 'code' => 'fa-star', 'name' => 'Звезда'],
-            ['unicode' => 'f05e', 'code' => 'fa-ban', 'name' => 'Бан'],
         ];
         $i = 0;
         foreach ($icons as $icon) {
@@ -734,7 +697,7 @@ class TypeContentController extends Controller
         ]);
     }
 
-    public function createElemen(TypeContent $typeContent, $id, $type)
+    /*public function createElemen(TypeContent $typeContent, $id, $type)
     {
         //проверить каждый ШАГ!!!
         $typeContent = TypeContent::find($id);
@@ -780,12 +743,33 @@ class TypeContentController extends Controller
             'typeContent' => $typeContent,
             'body' => json_decode($typeContent->body),
         ]);
-    }
+    }*/
 
     public function getIcons()
     {
         $icons = Icons::all();
         return response()->json($icons);
 
+    }
+
+    public function saveBody(Request $request)
+    {
+        $type_content = TypeContent::find($request->id);
+        if(!empty($type_content)){
+            $type_content->body = json_encode($request->body);
+            $type_content->save();
+            return response()->json($type_content);
+        }else{
+            return response()->json('object not found');
+        }
+    }
+    public function bodyType($id)
+    {
+        $type_content = TypeContent::find($id);
+        if(!empty($type_content)){
+            return response()->json(json_decode($type_content->body));
+        }else{
+            return response()->json('object not found');
+        }
     }
 }
