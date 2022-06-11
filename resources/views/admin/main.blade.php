@@ -85,8 +85,6 @@
     </div>
     @include('admin.mymodal')
         <!-- /.content-wrapper -->
-    @include('admin.control-sidebar')
-    @include('admin.footer')
 </div>
 <!-- ./wrapper -->
 <!-- REQUIRED SCRIPTS -->
