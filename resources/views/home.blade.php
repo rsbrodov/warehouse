@@ -12,8 +12,8 @@
             <a class="btn btn-warning" href="{{ route('home-test2') }}">Создать 10000 справочников</a>
             <a class="btn btn-outline-primary" href="{{ route('home-delete-test10000D') }}">Удалить 10000 справочников</a>
 
-            <a class="btn btn-primary" href="{{ route('image.show') }}"> Показать все картинки</a>
-            <a class="btn btn-outline-warning" href="{{ route('mail.send') }}"> Отправить письмо себе на hsxcms@gmail.com</a>
+{{--            <a class="btn btn-primary" href="{{ route('image.show') }}"> Показать все картинки</a>--}}
+{{--            <a class="btn btn-outline-warning" href="{{ route('mail.send') }}"> Отправить письмо себе на hsxcms@gmail.com</a>--}}
 
             @can('read-component')
                 <a class="btn btn-success" href="{{ route('tech.create') }}"> Create New Role</a>
