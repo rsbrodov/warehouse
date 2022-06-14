@@ -88,10 +88,7 @@
                     <ul class="nav nav-treeview">
                         @foreach($type_contents as $type_content)
                             <li class="nav-item">
-                                <a href="#" class="nav-link ml-2">
-                                    <i class="fa {{$type_content->icon}} fa-lg"></i>
-                                    <p>{{$type_content->name}}</p>
-                                </a>
+                                <a href="/element-content/{{$type_content->id}}" class="nav-link ml-2"><i class="fa {{$type_content->icon}} fa-lg"></i><p>{{$type_content->name}}</p></a>
                             </li>
                         @endforeach
                     </ul>
