@@ -1,7 +1,6 @@
 <? use \App\Models\User; ?>
 @extends('admin.main')
 @section('content')
-
     <div class="container">
         <table class="table table-bordered mt-2 table-hover">
             <tr>
