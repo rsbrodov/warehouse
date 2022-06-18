@@ -15,8 +15,14 @@ class ElementContentController extends Controller
     public function index($type_content_id)
     {
         if (Auth::guard('web')->check()) {
-            $element_contents = ElementContent::where('owner', Auth::guard('web')->id())->where('type_content_id', $type_content_id)->get();
-            return view('element_content.index')->with('element_contents', $element_contents);
+            $exist_element_contents = ElementContent::where('owner', Auth::guard('web')->id())->where('type_content_id', $type_content_id)->count();
+            //dd($exist_element_contents);
+            if($exist_element_contents){
+                $element_contents = ElementContent::where('owner', Auth::guard('web')->id())->where('type_content_id', $type_content_id)->get();
+                return view('element_content.index')->with('element_contents', $element_contents);
+            } else {
+                return view('element_content.create')->with('type_content_id', $type_content_id);
+            }
         }
     }
     public function create($type_content_id)
