@@ -98,6 +98,7 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('/type-content/getTypeContentID/{id}', [TypeContentController::class, 'getTypeContentID']);
     Route::get('/type-content/get-body/{id}', [TypeContentController::class, 'bodyType']);
     Route::post('/type-content/store/', [App\Http\Controllers\TypeContentController::class, 'store']);
+    Route::post('/type-content/{id}', [TypeContentController::class, 'update']);
     Route::get('/type-content/view-new/{id}', [TypeContentController::class, 'viewNew'])->name('type-content.view-new');
     Route::get('/type-content/index', [TypeContentController::class, 'index'])->name('type-content.index');
     Route::get('/type-content/getListTypeContent', [TypeContentController::class, 'getListTypeContent'])->name('type-content.getListTypeContent');

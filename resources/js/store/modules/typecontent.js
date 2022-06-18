@@ -59,7 +59,13 @@ export default{
                 /*.finally(() => {
                     commit('setLoading', false);
                 });*/
+            
 
+        },
+        async update(ctx, form, id){
+            const type_content = await axios.post('http://127.0.0.1:8000/type-content/'+id, form);
+            /*const type_contents = await axios.get('http://127.0.0.1:8000/type-content/getListTypeContent');
+            ctx.commit('updateTypeContents', type_contents.data)*/
         },
     },
 }
