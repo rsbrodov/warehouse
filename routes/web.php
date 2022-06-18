@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\DictionaryController;
 use App\Http\Controllers\DictionaryElementController;
-use App\Http\Controllers\ElementContentController;
 use App\Http\Controllers\TypeContentController;
+use App\Http\Controllers\ElementContentController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -89,15 +89,16 @@ Route::middleware(['auth:web'])->group(function () {
     Route::put('dictionary-element/{id}', [DictionaryElementController::class, 'update'])->name('dictionary-element.update');
     Route::delete('dictionary-element/{id}', [DictionaryElementController::class, 'destroy'])->name('dictionary-element.destroy');
 });
-
 // ТИПЫ КОНТЕНТА
 Route::get('/type-content/icons', [TypeContentController::class, 'getIcons']);
 Route::get('/type-content/create-icons', [TypeContentController::class, 'createIcons'])->name('type-content.create-icons');
 
 
 Route::middleware(['auth:web'])->group(function () {
+    Route::get('/type-content/getTypeContentID/{id}', [TypeContentController::class, 'getTypeContentID']);
     Route::get('/type-content/get-body/{id}', [TypeContentController::class, 'bodyType']);
     Route::post('/type-content/store/', [App\Http\Controllers\TypeContentController::class, 'store']);
+    Route::post('/type-content/{id}', [TypeContentController::class, 'update']);
     Route::get('/type-content/view-new/{id}', [TypeContentController::class, 'viewNew'])->name('type-content.view-new');
     Route::get('/type-content/index', [TypeContentController::class, 'index'])->name('type-content.index');
     Route::get('/type-content/getListTypeContent', [TypeContentController::class, 'getListTypeContent'])->name('type-content.getListTypeContent');
@@ -115,7 +116,6 @@ Route::middleware(['auth:web'])->group(function () {
     Route::post('/type-content/save-body/', [App\Http\Controllers\TypeContentController::class, 'saveBody']);
 });
 
-
 // ЭЛЕМЕНТЫ КОНТЕНТА
 Route::middleware(['auth:web'])->group(function () {
     Route::get('/element-content/{type_content_id}', [ElementContentController::class, 'index'])->name('element-content.index');
@@ -125,3 +125,5 @@ Route::middleware(['auth:web'])->group(function () {
     Route::put('/element-content/{id}', [ElementContentController::class, 'update'])->name('element-content.update');
     Route::delete('/element-content/{id}', [ElementContentController::class, 'destroy'])->name('element-content.destroy');
 });
+
+
