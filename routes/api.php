@@ -51,4 +51,5 @@ Route::group(['middleware' => 'auth:api'], function ($router) {
     Route::put('/template/updateTypeContent/{id}', [App\Http\Controllers\TypeContentController::class, 'update'])->middleware('auth:api');
     Route::delete('/template/deleteTypeContent/{id}', [App\Http\Controllers\TypeContentController::class, 'destroy'])->middleware('auth:api');
     Route::get('/template/getAllVersionTypeContent/{$id}', [App\Http\Controllers\TypeContentController::class, 'getAllVersionTypeContent'])->middleware('auth:api');
+    
 });

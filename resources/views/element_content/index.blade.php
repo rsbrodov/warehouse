@@ -38,6 +38,7 @@
                 </tr>
             @endforeach
         </table>
-            <a href="{{route('element-content.create', $element_content->type_content_id)}}" class="btn btn-primary form-control">Создать</a>
+        <a href="{{route('element-content.create', $element_content->type_content_id)}}" class="btn btn-primary form-control">Создать</a>
     </div>
 @endsection
+

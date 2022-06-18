@@ -56,6 +56,12 @@ class TypeContentController extends Controller
         }
     }
 
+    public function getTypeContentID($id)
+    {
+        $type_content = TypeContent::find($id);
+        return response()->json($type_content);
+    }
+
 
 
     public function create()

@@ -29,30 +29,30 @@
         <div class="container-fluid">
             <!-- Stack the columns on mobile by making one full-width and the other half-width -->
             <div class="row">
-                <div class="col"><b><h1>Тип контента 45</h1></b></div>
+                <div class="col"><b><h1>{{typeContentOne.name}}</h1></b></div>
                 <div class="col"></div>
             </div>
             <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
             <div class="row">
-                <div class="col-3"><b>Идентификатор:</b> 45-fdf-45-dhg-6</div>
-                <div class="col-1"><b>API URL:</b> /products</div>
+                <div class="col-3"><b>Идентификатор:</b>{{typeContentOne.id}}</div>
+                <div class="col-1"><b>API URL:</b>{{typeContentOne.api_url}}</div>
                 <div class="col-1"><b>Владелец:</b> Admin</div>
                 <div class="col">
-                    <b>Период действия:</b>Не задан
+                    <b>Период действия:</b>{{typeContentOne.status | date}}
                 </div>
                 <div class="col-3"><a href="#" class="btn btn-outline-secondary"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a></div>
             </div>
 
             <div class="row">
                 <div class="col-1">
-                    <b>Статус:</b>Черновик
+                    <b>Статус:</b>{{typeContentOne.status | status}}
                 </div>
-                <div class="col-1"><b>Версия:</b> 2.0</div>
+                <div class="col-1"><b>Версия:</b>{{typeContentOne.version_major}}.{{typeContentOne.version_minor}}</div>
             </div>
             <div class="row">
                 <div class="col-2"><a href="" class="btn btn-outline-secondary form-control">Состав полей</a></div>
                 <div class="col-2"><a href="" class="btn btn-outline-secondary form-control">Доступ</a></div>
-                <div class="col-2"><a href=""
+                <div class="col-2"><a :href="'/all-version-type-content/'+typeContentOne.id_global"
                                       class="btn btn-outline-secondary form-control">История изменений</a></div>
             </div>
             <br>
@@ -103,7 +103,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>34
     </div>
 </template>
 
@@ -173,8 +173,13 @@
                 }
             };
         },
+        computed:{
+            ...mapGetters(['typeContentOne']),
+        
+        },
 
         methods: {
+             ...mapActions(['getTypeContentOne']),
             handleClone(item) {
                 let cloneMe = JSON.parse(JSON.stringify(item));
                 this.$set(cloneMe, 'title', '');
@@ -262,12 +267,38 @@
                     .catch(error => {
                         console.log(error);
                     })
-            }
+            },
         },
 
         async created(){
             await this.getBody();
+            await this.getTypeContentOne(this.type_content_id);
         },
+        filters: {
+            date: function (type_content) {
+                if(!type_content.active_from && !type_content.active_after){
+                    return "Не задан";
+                }else if(!type_content.active_from && type_content.active_after){
+                    return "До "+ moment(type_content.active_after).format('DD.MM.YYYY');
+                } else if(type_content.active_from && !type_content.active_after){
+                    return moment(type_content.active_from).format('DD.MM.YYYY') + " - бессрочно";
+                }else{
+                    return moment(type_content.active_from).format('DD.MM.YYYY') + " - " + moment(type_content.active_after).format('DD.MM.YYYY');
+                }
+
+            },
+            dateUpdated: function (type_content) {
+                return moment(type_content.updated_at).format('DD.MM.YYYY HH:II');
+            },
+            status: function (status) {
+                let status_array = {Draft: 'Черновик', Published: 'Опубликовано', Archive:'В архиве'};
+                if(status){
+                    return status_array[status];
+                }else{
+                    return status_array['Draft'];
+                }
+            },
+        }
 
     }
 </script>
