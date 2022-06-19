@@ -11,7 +11,7 @@
                 <div class="row mb-3">
                     <div class="block col-6">
                         <label for="owner"><b>Владелец типа контента:</b></label>
-                        <input autocomplete="off" id="owner" class="form-control" type="text" v-model="vv.owner">
+                        <input autocomplete="off" id="owner" class="form-control" type="text" v-model="form_edit.owner">
                     </div>
 
                     <div class="block col-6">
@@ -27,7 +27,7 @@
                 <div class="row mb-3">
                     <div class="block col-6">
                         <label for="name"><b>Наименование типа контента</b></label>
-                        <input autocomplete="off" id="name" class="form-control" type="text" v-model="vv.name"
+                        <input autocomplete="off" id="name" class="form-control" type="text" v-model="form_edit.name"
                                :class="{invalid: ($v.vv.name.$dirty && !$v.vv.name.required)}">
                             <small class="helper-text invalid" v-if="$v.vv.name.$dirty && !$v.vv.name.required">
                                 Необходимо заполнить «Наименование».
@@ -36,7 +36,7 @@
 
                     <div class="block col-6">
                         <label for="api_url"><b>API URL:</b></label>
-                        <input autocomplete="off" id="api_url" class="form-control" type="text" v-model="vv.api_url"
+                        <input autocomplete="off" id="api_url" class="form-control" type="text" v-model="form_edit.api_url"
                                :class="{invalid: ($v.vv.api_url.$dirty && !$v.vv.api_url.required)}">
                         <small class="helper-text invalid" v-if="$v.vv.api_url.$dirty && !$v.vv.api_url.required">
                             Необходимо заполнить «API URL».
@@ -47,19 +47,29 @@
                 <div class="row mb-3">
                     <div class="block col-6">
                         <label for="active_from"><b>Период действия с:</b></label>
-                        <input autocomplete="off" type="text" name="active_from" v-model="vv.active_from" id="active_from" class="form-control datepicker-here">
+                        <datepicker
+                            :id="form_edit.active_from"
+                            v-model="form_edit.active_from"
+                            :language="ru"
+                            class="form-control">
+                        </datepicker>
                     </div>
 
                     <div class="block col-6">
                         <label for="api_url"><b>Период действия по:</b></label>
-                        <input  autocomplete="off" type="text" name="active_after" v-model="vv.active_after" id="active_after" class="form-control datepicker-here">
+                         <datepicker
+                            :id="form_edit.active_after"
+                            v-model="form_edit.active_after"
+                            :language="ru"
+                            class="form-control">
+                        </datepicker>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="block col-12">
                         <label for="description"><b>Описание:</b></label>
-                        <input autocomplete="off" type="textarea" name="description" v-model="vv.description" id="description" class="form-control">
+                        <input autocomplete="off" type="textarea" name="description" v-model="form_edit.description" id="description" class="form-control">
                     </div>
                 </div>
 
@@ -69,24 +79,47 @@
             <button id="add" type="submit" class="btn btn-primary">ОК</button>
         </div>
         </form>
-        {{vv}}
     </div>
 </template>
 
 <script>
     import {mapGetters, mapActions} from 'vuex'
     import {required} from "vuelidate/lib/validators";
+    import Datepicker from 'vuejs-datepicker';
+    import {ru} from 'vuejs-datepicker/dist/locale'
     export default {
         name: "Edit",
-        props: ['type_content'],
+        components: {Datepicker},
+        props: ['id', 'owner', 'icon', 'api_url', 'status', 'description', 'status', 'active_from', 'active_after', 'name'],
         data:function(){
             return {
+                ru:ru,
                 icons:null,
+                form_edit:{
+                    id:null,
+                    owner:null,
+                    icon:null,
+                    name:null,
+                    status:null,
+                    api_url:null,
+                    active_from:null,
+                    active_after:null,
+                    description:null,
+                }
             }
         },
         computed:{
             vv(){
-                return this.type_content;
+                this.form_edit.id = this.id
+                this.form_edit.owner = this.owner
+                this.form_edit.icon = this.icon
+                this.form_edit.name = this.name
+                this.form_edit.status = this.status
+                this.form_edit.api_url = this.api_url
+                this.form_edit.active_from = this.active_from
+                this.form_edit.active_after = this.active_after
+                this.form_edit.description = this.description
+                return this.form_edit;
             }
         },
 
@@ -104,11 +137,11 @@
                     console.log('Form not subm')
                 } else {
                     console.log(123);
-                    this.update({form: this.vv, id: this.vv}
+                    this.update({form: this.form_edit, id: this.form_edit.id}
                     ).then(response => {
                         this.$emit('close-modal');
                         this.flashMessage.success({
-                            message: 'Справочник отредактирован',
+                            message: 'Тип контента отредактирован',
                             time: 3000,
                         });
                     }).catch(errors => {
@@ -119,6 +152,7 @@
         },
         async created(){
             this.getIcons();
+            
         },
         validations: {
             vv:{
