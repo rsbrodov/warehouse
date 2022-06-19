@@ -41,6 +41,7 @@
                         <small class="helper-text invalid" v-if="$v.vv.api_url.$dirty && !$v.vv.api_url.required">
                             Необходимо заполнить «API URL».
                         </small>
+                        <a class="btn btn-warning btn-sm mt-1" @click="generateUrl()"><i class="fa fa-undo" aria-hidden="true"></i> Сгенерировать</a>
                     </div>
                 </div>
 
@@ -87,6 +88,7 @@
     import {required} from "vuelidate/lib/validators";
     import Datepicker from 'vuejs-datepicker';
     import {ru} from 'vuejs-datepicker/dist/locale'
+    import { url_slug } from 'cyrillic-slug'
     export default {
         name: "Edit",
         components: {Datepicker},
@@ -149,6 +151,9 @@
                     });
                 }
             },
+            generateUrl(){
+                this.form_edit.api_url =  url_slug(this.form_edit.name)   
+            }
         },
         async created(){
             this.getIcons();
