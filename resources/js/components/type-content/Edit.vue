@@ -47,12 +47,22 @@
                 <div class="row mb-3">
                     <div class="block col-6">
                         <label for="active_from"><b>Период действия с:</b></label>
-                        <input autocomplete="off" type="text" name="active_from" v-model="form_edit.active_from" id="active_from" class="form-control datepicker-here">
+                        <datepicker
+                            :id="form_edit.active_from"
+                            v-model="form_edit.active_from"
+                            :language="ru"
+                            class="form-control">
+                        </datepicker>
                     </div>
 
                     <div class="block col-6">
                         <label for="api_url"><b>Период действия по:</b></label>
-                        <input  autocomplete="off" type="text" name="active_after" v-model="form_edit.active_after" id="active_after" class="form-control datepicker-here">
+                         <datepicker
+                            :id="form_edit.active_after"
+                            v-model="form_edit.active_after"
+                            :language="ru"
+                            class="form-control">
+                        </datepicker>
                     </div>
                 </div>
 
@@ -75,11 +85,15 @@
 <script>
     import {mapGetters, mapActions} from 'vuex'
     import {required} from "vuelidate/lib/validators";
+    import Datepicker from 'vuejs-datepicker';
+    import {ru} from 'vuejs-datepicker/dist/locale'
     export default {
         name: "Edit",
+        components: {Datepicker},
         props: ['id', 'owner', 'icon', 'api_url', 'status', 'description', 'status', 'active_from', 'active_after', 'name'],
         data:function(){
             return {
+                ru:ru,
                 icons:null,
                 form_edit:{
                     id:null,
