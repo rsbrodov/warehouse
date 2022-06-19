@@ -12,7 +12,15 @@
         <div class="modal fade" id="typeContentEdit" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <Edit
-                    :type_content="type_content"
+                    :id="type_content.id"
+                    :owner="type_content.owner"
+                    :api_url="type_content.api_url"
+                    :name="type_content.name"
+                    :status="type_content.status"
+                    :icon="type_content.icon"
+                    :active_from="type_content.active_from"
+                    :active_after="type_content.active_after"
+                    :description="type_content.description"
                     @close-modal="closeModal('typeContentEdit')"
                 />
             </div>
@@ -86,7 +94,7 @@
                 <td>{{ type_content | date }}</td>
                 <td>{{ type_content | dateUpdated }}</td>
                 <td class="pencil" nowrap>
-                    <button class="btn btn-warning" @click="openModal('typeContentEdit', type_content)"><i
+                    <button class="btn btn-primary" @click="openModal('typeContentEdit', type_content)"><i
                         class="fa fa-pencil fa-lg" style="color:white"></i></button>
                     <a :href="'/type-content/view-new/'+type_content.id" class="btn btn-primary ml-3"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a>
                 </td>
@@ -112,7 +120,17 @@
                     active_from:'',
                     active_after:'',
                 },
-                type_content: null
+                type_content:{
+                    id:null,
+                    owner:null,
+                    api_url:null,
+                    icon:null,
+                    name:null,
+                    status:null,
+                    active_after:null,
+                    active_from:null,
+                    description:null
+                }
             }
         },
 
@@ -138,7 +156,15 @@
                 $('#'+id).modal('show');
 
                 if(id == 'typeContentEdit') {
-                    this.type_content = type_content;
+                    this.type_content.id = type_content.id;
+                    this.type_content.owner = type_content.owner;
+                    this.type_content.api_url = type_content.api_url;
+                    this.type_content.name = type_content.name;
+                    this.type_content.status = type_content.status;
+                    this.type_content.icon = type_content.icon;
+                    this.type_content.active_after = type_content.active_after;
+                    this.type_content.active_from = type_content.active_from;
+                    this.type_content.description = type_content.description;
                 }
             },
             toggleSearch(){
@@ -208,7 +234,7 @@
         flex-wrap: nowrap;
         align-items: center;
     }
-    .pencil > a {
+    .pencil > a, button {
         background-color: #007bff!important;
     }
 
