@@ -14,6 +14,7 @@ class ElementContent extends Model
 
     protected $fillable = [
         'id_global',
+        'type_content_id',
         'label',
         'url',
         'owner',
@@ -33,5 +34,16 @@ class ElementContent extends Model
 
     public function updated_authors() {
         return $this->belongsTo(User::class, 'updated_author');
+    }
+    public function checkingApiUrl($apiUrl, $idGlobal = null) {
+        if($idGlobal){
+            if(($elementContentExistence = ElementContent::where('url', $apiUrl)->whereNotIn('id_global', [$idGlobal])->first()) !== null){
+                return 'error';
+            }
+        } else {
+            if(($elementContentExistence = ElementContent::where('url', $apiUrl)->first()) !== null){
+                return 'error';
+            }
+        }
     }
 }

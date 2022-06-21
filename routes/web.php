@@ -123,5 +123,6 @@ Route::middleware(['auth:web'])->group(function () {
     Route::post('/element-content/{type_content_id}', [ElementContentController::class, 'store'])->name('element-content.store');
     Route::get('/element-content/{id}/edit', [ElementContentController::class, 'edit'])->name('element-content.edit');
     Route::put('/element-content/{id}', [ElementContentController::class, 'update'])->name('element-content.update');
-    Route::delete('/element-content/{id}', [ElementContentController::class, 'destroy'])->name('element-content.destroy');
+    Route::get('/element-content/{id}/del', [ElementContentController::class, 'destroy'])->name('element-content.destroy');
+    Route::get('/element-content/{id}/{parameter}', [ElementContentController::class, 'createNewVersion'])->name('element-content.create-new-version');
 });

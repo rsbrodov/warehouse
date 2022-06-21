@@ -3,7 +3,7 @@
 
     <div class="container">
         <h1>Создание элемента контента</h1>
-        <form action="{{route('element-content.store', $type_content_id)}}" method="post">
+        <form action="{{route('element-content.store', request()->route('type_content_id'))}}" method="post">
             @csrf
             <div class="form-group row">
                 <label for="name" class="col-md-4 col-form-label text-md-right">Название</label>
