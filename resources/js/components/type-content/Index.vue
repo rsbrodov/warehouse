@@ -63,9 +63,9 @@
                     </div>
                 </div>
                 <div class="create col-6 text-right">
-                    <button id="search-btn" class="btn btn-primary" @click="toggleSearch()"><span class="fa fa-search fa-lg"></span></button>
-                    <button class="btn btn-primary" id="clear-btn" style="display: none;" @click="cleanSearch()"><span class="fa fa-paint-brush fa-lg"></span> Очистить</button>
-                    <button type="button" class="btn-create btn btn-primary" @click="openModal('typeContentCreate')"><span class="fa fa-plus-circle fa-lg"></span></button>
+                    <button id="search-btn" class="btn btn-outline-primary btn-unbordered" @click="toggleSearch()"><span class="fa fa-search fa-lg"></span></button>
+                    <button class="btn btn-outline-primary btn-unbordered" id="clear-btn" style="display: none;" @click="cleanSearch()"><span class="fa fa-paint-brush fa-lg"></span> Очистить</button>
+                    <button type="button" class="btn-create btn btn-outline-primary btn-unbordered" @click="openModal('typeContentCreate')"><span class="fa fa-plus-circle fa-lg"></span></button>
                 </div>
             </div>
         </div>
@@ -93,10 +93,9 @@
                 <td :class="type_content.status | statusColor"><b>{{ type_content.status | status }}</b></td>
                 <td>{{ type_content | date }}</td>
                 <td>{{ type_content | dateUpdated }}</td>
-                <td class="pencil" nowrap>
-                    <button class="btn btn-primary" @click="openModal('typeContentEdit', type_content)"><i
-                        class="fa fa-pencil fa-lg" style="color:white"></i></button>
-                    <a :href="'/type-content/view-new/'+type_content.id" class="btn btn-primary ml-3"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a>
+                <td nowrap>
+                    <a class="btn btn-outline-primary btn-unbordered" @click="openModal('typeContentEdit', type_content)"><i class="fa fa-pencil fa-lg"></i></a>
+                    <a :href="'/type-content/view-new/'+type_content.id" class="btn btn-outline-primary btn-unbordered"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a>
                 </td>
             </tr>
         </table>
@@ -234,10 +233,6 @@
         flex-wrap: nowrap;
         align-items: center;
     }
-    .pencil > a, button {
-        background-color: #007bff!important;
-    }
-
     .modal-backdrop {
         z-index: 1040 !important;
     }

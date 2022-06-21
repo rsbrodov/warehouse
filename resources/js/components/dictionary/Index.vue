@@ -31,9 +31,6 @@
         </div>
         <div class="row mt-4">
             <div class="header-block row">
-<!--                <div class="search-button col-2">-->
-<!--                    <button id="hideshow" class="btn btn-primary" @click="toggleSearch()"><span class="fa fa-search fa-lg" aria-hidden="true"></span></button>-->
-<!--                </div>-->
                 <div class="search-form col-6">
                     <div class="form">
                         <form action="" method="post">
@@ -60,9 +57,9 @@
                     </div>
                 </div>
                 <div class="create col-6 text-right">
-                    <button id="hideshow" class="btn btn-primary" @click="toggleSearch()"><span class="fa fa-search fa-lg" aria-hidden="true"></span></button>
-                    <button id="clean" class="btn btn-primary" style="display: none;"  @click="cleanSearch()"><span class="fa fa-paint-brush fa-lg" aria-hidden="true"></span> Очистить</button>
-                    <button type="button" class="btn-create btn btn-primary" @click="openModal('dictionaryCreate')"><span class="fa fa-plus-circle fa-lg"></span></button>
+                    <button id="hideshow" class="btn btn-outline-primary btn-unbordered" @click="toggleSearch()"><span class="fa fa-search fa-lg" aria-hidden="true"></span></button>
+                    <button id="clean" class="btn btn-outline-primary btn-unbordered" style="display: none;"  @click="cleanSearch()"><span class="fa fa-paint-brush fa-lg" aria-hidden="true"></span> Очистить</button>
+                    <button type="button" class="btn-create btn btn-outline-primary btn-unbordered" @click="openModal('dictionaryCreate')"><span class="fa fa-plus-circle fa-lg"></span></button>
                 </div>
             </div>
         </div>
@@ -89,15 +86,15 @@
                 <td :class="dictionary.archive | statusColor"><b>{{ dictionary.archive | status }}</b></td>
 
                 <td nowrap>
-                    <button class="btn btn-warning pencil" @click="openModal('dictionaryEdit', dictionary)"><i
-                        class="fa fa-pencil fa-lg" style="color:white"></i></button>
+                    <a class="btn btn-outline-primary btn-unbordered" @click="openModal('dictionaryEdit', dictionary)"><i
+                        class="fa fa-pencil fa-lg"></i></a>
 <!--                    <button class="btn btn-danger del" @click="removeDictionary(dictionary.id)"><i-->
 <!--                        class="fa fa-trash fa-lg"></i></button>-->
-                    <button class="btn btn-secondary del" @click="archDictionary(dictionary.id)"><i
-                        class="fa fa-exchange fa-lg"></i></button>
-                    <button class="btn btn-warning plus" @click="openModal('dictionaryElementCreate', dictionary)"><i
-                        class="fa fa-plus fa-lg" style="color:white"></i></button>
-                    <a :href="'/dictionary/'+dictionary.id+'/dictionary-element/'" class="btn btn-success eye"><i
+                    <a class="btn btn-outline-primary btn-unbordered" @click="archDictionary(dictionary.id)"><i
+                        class="fa fa-exchange fa-lg"></i></a>
+                    <a class="btn btn-outline-primary btn-unbordered" @click="openModal('dictionaryElementCreate', dictionary)"><i
+                        class="fa fa-plus fa-lg"></i></a>
+                    <a :href="'/dictionary/'+dictionary.id+'/dictionary-element/'" class="btn btn-outline-primary btn-unbordered"><i
                         class="fa fa-eye fa-lg" aria-hidden="true"></i></a>
                 </td>
             </tr>
@@ -248,17 +245,5 @@
         display: flex;
         flex-wrap: nowrap;
         align-items: center;
-    }
-    .del {
-        background-color: #dc3545!important;
-    }
-    .plus {
-        background-color: #ffc107!important;
-    }
-    .eye {
-        background-color: #28a745!important;
-    }
-    .pencil{
-        background-color: #007bff!important;
     }
 </style>

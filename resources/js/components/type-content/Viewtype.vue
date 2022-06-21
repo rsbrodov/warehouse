@@ -40,7 +40,7 @@
                 <div class="col">
                     <b>Период действия:</b>{{typeContentOne.status | date}}
                 </div>
-                <div class="col-3"><a href="#" class="btn btn-outline-secondary"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a></div>
+                <div class="col-3"><a href="#" class="btn btn-outline-primary btn-unbordered"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a></div>
             </div>
 
             <div class="row">
