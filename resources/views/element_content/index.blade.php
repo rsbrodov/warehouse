@@ -95,6 +95,6 @@
                 <tr><td colspan="7">Нет данных</td></tr>
             @endforelse
         </table>
-
     </div>
 @endsection
+

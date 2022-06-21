@@ -12,7 +12,7 @@
         <!-- Modal Dictionary create -->
         <div class="modal fade" id="dictionaryElementCreate" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
-                <CreateElement :dictionary_id="dictionary_id"
+                <CreateElement :dictionary_id="dictionary.id"
                                @close-modal="closeModal('dictionaryElementCreate')"></CreateElement>
             </div>
         </div>
@@ -21,10 +21,10 @@
         <div class="modal fade" id="dictionaryEdit" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <Edit
-                    :dictionary_id="dictionary_id"
-                    :dictionary_name="dictionary_name"
-                    :dictionary_code="dictionary_code"
-                    :dictionary_description="dictionary_description"
+                    :dictionary_id="dictionary.id"
+                    :dictionary_name="dictionary.name"
+                    :dictionary_code="dictionary.code"
+                    :dictionary_description="dictionary.description"
                     @close-modal="closeModal('dictionaryEdit')"
                 />
             </div>
@@ -117,10 +117,12 @@
         components:{Loader, Create, CreateElement, Edit},
         data:function(){
             return {
-                dictionary_id:null,
-                dictionary_name:null,
-                dictionary_code:null,
-                dictionary_description:null,
+                dictionary:{
+                    id:null,
+                    name:null,
+                    code:null,
+                    description:null,
+                },
                 filter_form:{
                     archive:'',
                     name:'',
@@ -166,10 +168,10 @@
                 }
                 if(id == 'dictionaryEdit') {
                     $('#dictionaryEdit').modal('show');
-                    this.dictionary_id = dictionary.id;
-                    this.dictionary_name = dictionary.name;
-                    this.dictionary_code = dictionary.code;
-                    this.dictionary_description = dictionary.description;
+                    this.dictionary.id = dictionary.id;
+                    this.dictionary.name = dictionary.name;
+                    this.dictionary.code = dictionary.code;
+                    this.dictionary.description = dictionary.description;
                 }
             },
             removeDictionary(id){
