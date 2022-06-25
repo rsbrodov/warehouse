@@ -15,6 +15,23 @@
 {{--            <a class="btn btn-primary" href="{{ route('image.show') }}"> Показать все картинки</a>--}}
 {{--            <a class="btn btn-outline-warning" href="{{ route('mail.send') }}"> Отправить письмо себе на hsxcms@gmail.com</a>--}}
 
+{{--            <table>--}}
+{{--                @for($i = 0; $i < 100; $i++)--}}
+{{--                    <tr>--}}
+{{--                        <td>--}}
+{{--                            <?php--}}
+{{--                            $random_number = '33';--}}
+{{--                            for($j = 0; $j < 5; $j++){--}}
+{{--                                $random_number .= rand(0,9);--}}
+{{--                            }--}}
+{{--                            echo $random_number;--}}
+{{--                            $random_number = '';--}}
+{{--                            ?>--}}
+{{--                        </td>--}}
+{{--                    </tr>--}}
+{{--                @endfor--}}
+{{--            </table>--}}
+
             @can('read-component')
                 <a class="btn btn-success" href="{{ route('tech.create') }}"> Create New Role</a>
             @endcan

@@ -1,3 +1,14 @@
+<style>
+    .flex-cont{
+        display:inline-flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        width:66.66%;
+    }
+    .flex-elem{
+        margin: 5px
+    }
+</style>
 <template>
     <div id="app">
         <!-- Modal -->
@@ -29,32 +40,39 @@
         <div class="container-fluid">
             <!-- Stack the columns on mobile by making one full-width and the other half-width -->
             <div class="row">
-                <div class="col"><b><h1>Тип контента 45</h1></b></div>
+                <div class="col"><b><h1>{{typeContentOne.name}}</h1></b></div>
                 <div class="col"></div>
             </div>
             <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
             <div class="row">
-                <div class="col-3"><b>Идентификатор:</b> 45-fdf-45-dhg-6</div>
-                <div class="col-1"><b>API URL:</b> /products</div>
-                <div class="col-1"><b>Владелец:</b> Admin</div>
-                <div class="col">
-                    <b>Период действия:</b>Не задан
+                <div class="col-9">
+                    <div class="flex-cont">
+                        <div class="flex-elem"><b>Идентификатор: </b>{{typeContentOne.id}}</div>
+                        <div class="flex-elem"><b>API URL: </b>{{typeContentOne.api_url}}</div>
+                        <div class="flex-elem"><b>Владелец: </b> Admin</div>
+                        <div class="flex-elem">
+                            <b>Период действия: </b>{{typeContentOne.status | date}}
+                        </div>
+                        <div class="flex-elem"><b>Статус: </b>{{typeContentOne.status | status}}</div>
+                        <div class="flex-elem"><b>Версия: </b>{{typeContentOne.version_major}}.{{typeContentOne.version_minor}}</div>
+                    </div>
                 </div>
-                <div class="col-3"><a href="#" class="btn btn-outline-secondary"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a></div>
+                <div class="col-3 text-right"><a href="#" class="btn btn-outline-secondary"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a></div>
             </div>
 
-            <div class="row">
-                <div class="col-1">
-                    <b>Статус:</b>Черновик
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <button class="nav-link active" id="nav-structure-tab" data-bs-toggle="tab" data-bs-target="#nav-structure" type="button" role="tab" aria-controls="nav-structure" aria-selected="true">Состав полей</button>
+                    <button class="nav-link" id="nav-access-tab" data-bs-toggle="tab" data-bs-target="#nav-access" type="button" role="tab" aria-controls="nav-access" aria-selected="false">Доступ</button>
+                    <button class="nav-link" id="nav-story-tab" data-bs-toggle="tab" data-bs-target="#nav-story" type="button" role="tab" aria-controls="nav-story" aria-selected="false">История изменений</button>
                 </div>
-                <div class="col-1"><b>Версия:</b> 2.0</div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-structure" role="tabpanel" aria-labelledby="nav-structure-tab">Какой-то состав полей</div>
+                <div class="tab-pane fade" id="nav-access" role="tabpanel" aria-labelledby="nav-access-tab">Доступ к чему-то</div>
+                <div class="tab-pane fade" id="nav-story" role="tabpanel" aria-labelledby="nav-story-tab">Пока это просто кнопка:<a class="nav-link" :href="'/all-version-type-content/'+typeContentOne.id_global">История изменений</a></div>
             </div>
-            <div class="row">
-                <div class="col-2"><a href="" class="btn btn-outline-secondary form-control">Состав полей</a></div>
-                <div class="col-2"><a href="" class="btn btn-outline-secondary form-control">Доступ</a></div>
-                <div class="col-2"><a href=""
-                                      class="btn btn-outline-secondary form-control">История изменений</a></div>
-            </div>
+
             <br>
             <br>
             <div class="row ">
@@ -103,7 +121,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>34
     </div>
 </template>
 
@@ -173,8 +191,13 @@
                 }
             };
         },
+        computed:{
+            ...mapGetters(['typeContentOne']),
+
+        },
 
         methods: {
+             ...mapActions(['getTypeContentOne']),
             handleClone(item) {
                 let cloneMe = JSON.parse(JSON.stringify(item));
                 this.$set(cloneMe, 'title', '');
@@ -262,12 +285,38 @@
                     .catch(error => {
                         console.log(error);
                     })
-            }
+            },
         },
 
         async created(){
             await this.getBody();
+            await this.getTypeContentOne(this.type_content_id);
         },
+        filters: {
+            date: function (type_content) {
+                if(!type_content.active_from && !type_content.active_after){
+                    return "Не задан";
+                }else if(!type_content.active_from && type_content.active_after){
+                    return "До "+ moment(type_content.active_after).format('DD.MM.YYYY');
+                } else if(type_content.active_from && !type_content.active_after){
+                    return moment(type_content.active_from).format('DD.MM.YYYY') + " - бессрочно";
+                }else{
+                    return moment(type_content.active_from).format('DD.MM.YYYY') + " - " + moment(type_content.active_after).format('DD.MM.YYYY');
+                }
+
+            },
+            dateUpdated: function (type_content) {
+                return moment(type_content.updated_at).format('DD.MM.YYYY HH:II');
+            },
+            status: function (status) {
+                let status_array = {Draft: 'Черновик', Published: 'Опубликовано', Archive:'В архиве'};
+                if(status){
+                    return status_array[status];
+                }else{
+                    return status_array['Draft'];
+                }
+            },
+        }
 
     }
 </script>

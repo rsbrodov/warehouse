@@ -83,7 +83,7 @@
                             <a href="{{route('element-content.edit', $element_content->id)}}" class="btn btn-primary"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
                         </div>
                         <div class="col-4">
-                            @if($element_content->status == 'Draft')
+                            @if($element_content->status == 'Draft' or $element_content->status == 'Archive')
                                 <a href="{{route('element-content.destroy', $element_content->id)}}" class="btn btn-danger"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
                             @elseif($element_content->status == 'Destroy')
                                 <a href="{{route('element-content.destroy', $element_content->id)}}" class="btn btn-success"><i class="fa fa-check-circle fa-lg" aria-hidden="true"></i></a>

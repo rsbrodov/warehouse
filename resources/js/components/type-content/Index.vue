@@ -1,19 +1,34 @@
 <template>
     <div>
         <FlashMessage :position="'right bottom'"></FlashMessage>
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" aria-hidden="true">
+        <!-- Modal Create -->
+        <div class="modal fade" id="typeContentCreate" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
-                <create @close-modal="closeModal"></create>
+                <create @close-modal="closeModal('typeContentCreate')"></create>
+            </div>
+        </div>
+
+        <!-- Modal edit -->
+        <div class="modal fade" id="typeContentEdit" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <Edit
+                    :id="type_content.id"
+                    :owner="type_content.owner"
+                    :api_url="type_content.api_url"
+                    :name="type_content.name"
+                    :status="type_content.status"
+                    :icon="type_content.icon"
+                    :active_from="type_content.active_from"
+                    :active_after="type_content.active_after"
+                    :description="type_content.description"
+                    @close-modal="closeModal('typeContentEdit')"
+                />
             </div>
         </div>
 
         <div class="text-center"><h3>Контентная модель</h3></div>
         <div class="row mt-4">
             <div class="header-block row">
-<!--                <div class="search-button col-2">-->
-<!--                    <button id="search-btn" class="btn btn-primary" @click="toggleSearch()"><span class="fa fa-search fa-lg"></span></button>-->
-<!--                </div>-->
                 <div class="search-form col-6">
                     <div class="form">
                         <form>
@@ -50,8 +65,7 @@
                 <div class="create col-6 text-right">
                     <button id="search-btn" class="btn btn-primary" @click="toggleSearch()"><span class="fa fa-search fa-lg"></span></button>
                     <button class="btn btn-primary" id="clear-btn" style="display: none;" @click="cleanSearch()"><span class="fa fa-paint-brush fa-lg"></span> Очистить</button>
-                    <!-- Button trigger modal -->
-                    <button type="button" class="btn-create btn btn-primary" @click="openModal()"><span class="fa fa-plus-circle fa-lg"></span></button>
+                    <button type="button" class="btn-create btn btn-primary" @click="openModal('typeContentCreate')"><span class="fa fa-plus-circle fa-lg"></span></button>
                 </div>
             </div>
         </div>
@@ -80,7 +94,8 @@
                 <td>{{ type_content | date }}</td>
                 <td>{{ type_content | dateUpdated }}</td>
                 <td class="pencil" nowrap>
-                    <a :href="'/all-version-type-content/'+type_content.id_global" class="btn btn-primary"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
+                    <button class="btn btn-primary" @click="openModal('typeContentEdit', type_content)"><i
+                        class="fa fa-pencil fa-lg" style="color:white"></i></button>
                     <a :href="'/type-content/view-new/'+type_content.id" class="btn btn-primary ml-3"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a>
                 </td>
             </tr>
@@ -92,10 +107,11 @@
 <script>
     import {mapGetters, mapActions} from 'vuex'
     import Create from "./Create";
+    import Edit from './Edit';
     import Loader from "../helpers/Loader";
     import moment from 'moment'
     export default{
-        components:{Create, Loader},
+        components:{Create, Edit, Loader},
         data:function(){
             return {
                 filter_form:{
@@ -104,6 +120,17 @@
                     active_from:'',
                     active_after:'',
                 },
+                type_content:{
+                    id:null,
+                    owner:null,
+                    api_url:null,
+                    icon:null,
+                    name:null,
+                    status:null,
+                    active_after:null,
+                    active_from:null,
+                    description:null
+                }
             }
         },
 
@@ -121,12 +148,24 @@
 
         methods: {
             ...mapActions(['getTypeContents']),
-            closeModal(){
-                $("#exampleModal").modal("hide");
+            closeModal(id){
+                $("#"+id).modal("hide");
 
             },
-            openModal(){
-                $('#exampleModal').modal('show');
+            openModal(id, type_content){
+                $('#'+id).modal('show');
+
+                if(id == 'typeContentEdit') {
+                    this.type_content.id = type_content.id;
+                    this.type_content.owner = type_content.owner;
+                    this.type_content.api_url = type_content.api_url;
+                    this.type_content.name = type_content.name;
+                    this.type_content.status = type_content.status;
+                    this.type_content.icon = type_content.icon;
+                    this.type_content.active_after = type_content.active_after;
+                    this.type_content.active_from = type_content.active_from;
+                    this.type_content.description = type_content.description;
+                }
             },
             toggleSearch(){
                 $('.form').toggle('show');
@@ -195,7 +234,7 @@
         flex-wrap: nowrap;
         align-items: center;
     }
-    .pencil > a {
+    .pencil > a, button {
         background-color: #007bff!important;
     }
 

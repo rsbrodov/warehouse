@@ -70,6 +70,20 @@
                         <p>Типы контента</p>
                     </a>
                 </li>
+                <?php
+                $type_contents = \App\Models\TypeContent::where(['created_author' => Auth::guard('web')->user()->id, 'status' => 'Published'])->with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('name', 'desc')->get()->unique('id_global');//все уникальные
+                $ids = [];
+                foreach ($type_contents as $type_content){
+                    $ids[] = \App\Models\TypeContent::where('id_global', $type_content->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first()->id;
+                }
+                $type_contents = \App\Models\TypeContent::whereIn('id', $ids)->orderBy('created_at', 'asc')->get();
+                $current_page = false;
+                foreach ($type_contents as $type_content){
+                    if(request()->route('type_content_id') == $type_content->id){
+                        $current_page = true;
+                    }
+                }
+                ?>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <span class="fa fa-coffee fa-lg"></span>
@@ -77,20 +91,11 @@
                             <i class="fa fa-angle-left right"></i>
                         </p>
                     </a>
-                    <?php
-                    $type_contents = \App\Models\TypeContent::where(['created_author' => Auth::guard('web')->user()->id, 'status' => 'Published'])->with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('name', 'desc')->get()->unique('id_global');//все уникальные
-                    $ids = [];
-                    foreach ($type_contents as $type_content){
-                        $ids[] = \App\Models\TypeContent::where('id_global', $type_content->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first()->id;
-                    }
-                    $type_contents = \App\Models\TypeContent::whereIn('id', $ids)->orderBy('created_at', 'asc')->get();
-                    ?>
+
                     <ul class="nav nav-treeview"
-                        @foreach($type_contents as $type_content)
-                            @if(request()->route('type_content_id') == $type_content->id)
+                            @if($current_page == true)
                                 style="display: block;"
                             @endif
-                        @endforeach
                         >
                         @foreach($type_contents as $type_content)
                             <li class="nav-item">

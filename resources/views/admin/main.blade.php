@@ -12,7 +12,7 @@
     <link type="text/css" rel="stylesheet" href="{{ mix('css/app.css') }}">
 
     <link rel="stylesheet" href="{{ asset("css/datepicker.min.css") }}">
-    <link rel="stylesheet" href="{{ asset("css/dragula.min.css") }}">
+
 {{--    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"--}}
 {{--          integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">--}}
 
@@ -25,7 +25,7 @@
 {{--    <link href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" rel="stylesheet">--}}
 
 <!-- SELECT2 -->
-    <link rel="stylesheet" href="{{asset('plugins/select2/css/select2.css')}}">
+    <!-- <link rel="stylesheet" href="{{asset('plugins/select2/css/select2.css')}}"> -->
 </head>
 <body class="hold-transition sidebar-mini">
 <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
@@ -35,11 +35,10 @@
 <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
 
 <!-- SELECT2 -->
-<script src="{{ asset('plugins/select2/js/select2.js') }}"></script>
+<!-- <script src="{{ asset('plugins/select2/js/select2.js') }}"></script> -->
 
 <script src="{{ asset("js/datepicker.min.js") }}"></script>
 
-{{--<script src="{{ asset("js/dragula.min.js") }}"></script>--}}
 
 
 <div class="wrapper">
