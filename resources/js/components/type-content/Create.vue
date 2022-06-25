@@ -118,7 +118,8 @@
                     console.log('Form not subm')
                 }else {
                     this.newTypeContents({
-                        form: this.form
+                        icon: this.form.icon, name: this.form.name, owner: this.form.owner, api_url: this.form.api_url, 
+                        active_from: this.form.active_from, active_after: this.form.active_after, description: this.form.description
                     }).then(response => {
                         this.$emit('close-modal');
                         this.form.icon = ''; this.form.name = ''; this.form.owner = ''; this.form.api_url = ''; this.form.active_from = ''; this.form.active_after = ''; this.form.description = '';

@@ -116,7 +116,6 @@
                 this.form_edit.owner = this.owner
                 this.form_edit.icon = this.icon
                 this.form_edit.name = this.name
-                this.form_edit.status = this.status
                 this.form_edit.api_url = this.api_url
                 this.form_edit.active_from = this.active_from
                 this.form_edit.active_after = this.active_after
@@ -139,7 +138,8 @@
                     console.log('Form not subm')
                 } else {
                     console.log(123);
-                    this.update({form: this.form_edit, id: this.form_edit.id}
+                    this.update({id: this.form_edit.id, owner: this.form_edit.owner, icon: this.form_edit.icon, name: this.form_edit.name, api_url: this.form_edit.api_url,
+                     active_from: this.form_edit.active_from, active_after: this.form_edit.active_after, description: this.form_edit.description,}
                     ).then(response => {
                         this.$emit('close-modal');
                         this.flashMessage.success({

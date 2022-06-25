@@ -50,6 +50,7 @@
         data:function(){
             return {
                 form_edit:{
+                    id:null,
                     name:null,
                     code:null,
                     description:null,
@@ -68,11 +69,12 @@
         methods: {
             ...mapActions(['updateDictionary']),
             async updDictionary() {
+                console.log(123)
                 this.$v.$touch();
                 if (this.$v.$invalid) {
                     console.log('Form not subm')
                 } else {
-                    this.updateDictionary({form: this.form_edit}
+                    this.updateDictionary({id: this.form_edit.id, name: this.form_edit.name, code: this.form_edit.code, description: this.form_edit.description}
                     ).then(response => {
                         this.$emit('close-modal');
                         this.flashMessage.success({
