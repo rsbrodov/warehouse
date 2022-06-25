@@ -1,3 +1,14 @@
+<style>
+    .flex-cont{
+        display:inline-flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        width:66.66%;
+    }
+    .flex-elem{
+        margin: 5px
+    }
+</style>
 <template>
     <div id="app">
         <!-- Modal -->
@@ -34,27 +45,34 @@
             </div>
             <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
             <div class="row">
-                <div class="col-3"><b>Идентификатор:</b>{{typeContentOne.id}}</div>
-                <div class="col-1"><b>API URL:</b>{{typeContentOne.api_url}}</div>
-                <div class="col-1"><b>Владелец:</b> Admin</div>
-                <div class="col">
-                    <b>Период действия:</b>{{typeContentOne.status | date}}
+                <div class="col-9">
+                    <div class="flex-cont">
+                        <div class="flex-elem"><b>Идентификатор: </b>{{typeContentOne.id}}</div>
+                        <div class="flex-elem"><b>API URL: </b>{{typeContentOne.api_url}}</div>
+                        <div class="flex-elem"><b>Владелец: </b> Admin</div>
+                        <div class="flex-elem">
+                            <b>Период действия: </b>{{typeContentOne.status | date}}
+                        </div>
+                        <div class="flex-elem"><b>Статус: </b>{{typeContentOne.status | status}}</div>
+                        <div class="flex-elem"><b>Версия: </b>{{typeContentOne.version_major}}.{{typeContentOne.version_minor}}</div>
+                    </div>
                 </div>
-                <div class="col-3"><a href="#" class="btn btn-outline-primary btn-unbordered"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a></div>
+                <div class="col-3 text-right"><a href="#" class="btn btn-outline-secondary"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a></div>
             </div>
 
-            <div class="row">
-                <div class="col-1">
-                    <b>Статус:</b>{{typeContentOne.status | status}}
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <button class="nav-link active" id="nav-structure-tab" data-bs-toggle="tab" data-bs-target="#nav-structure" type="button" role="tab" aria-controls="nav-structure" aria-selected="true">Состав полей</button>
+                    <button class="nav-link" id="nav-access-tab" data-bs-toggle="tab" data-bs-target="#nav-access" type="button" role="tab" aria-controls="nav-access" aria-selected="false">Доступ</button>
+                    <button class="nav-link" id="nav-story-tab" data-bs-toggle="tab" data-bs-target="#nav-story" type="button" role="tab" aria-controls="nav-story" aria-selected="false">История изменений</button>
                 </div>
-                <div class="col-1"><b>Версия:</b>{{typeContentOne.version_major}}.{{typeContentOne.version_minor}}</div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-structure" role="tabpanel" aria-labelledby="nav-structure-tab">Какой-то состав полей</div>
+                <div class="tab-pane fade" id="nav-access" role="tabpanel" aria-labelledby="nav-access-tab">Доступ к чему-то</div>
+                <div class="tab-pane fade" id="nav-story" role="tabpanel" aria-labelledby="nav-story-tab">Пока это просто кнопка:<a class="nav-link" :href="'/all-version-type-content/'+typeContentOne.id_global">История изменений</a></div>
             </div>
-            <div class="row">
-                <div class="col-2"><a href="" class="btn btn-outline-secondary form-control">Состав полей</a></div>
-                <div class="col-2"><a href="" class="btn btn-outline-secondary form-control">Доступ</a></div>
-                <div class="col-2"><a :href="'/all-version-type-content/'+typeContentOne.id_global"
-                                      class="btn btn-outline-secondary form-control">История изменений</a></div>
-            </div>
+
             <br>
             <br>
             <div class="row ">
@@ -175,7 +193,7 @@
         },
         computed:{
             ...mapGetters(['typeContentOne']),
-        
+
         },
 
         methods: {

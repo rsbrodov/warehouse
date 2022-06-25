@@ -66,7 +66,6 @@ class HomeController extends Controller
         print_r($dictionary_element);
     }
 
-
     public function test()
     {
         if(Auth::guard('web')->check()) {
