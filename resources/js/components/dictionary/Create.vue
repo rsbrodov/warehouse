@@ -62,7 +62,7 @@
 
                 } else {
                     this.newDictionary({
-                        form: this.form
+                        name: this.form.name, code: this.form.code, description: this.form.description,
                     }).then(response => {
                         this.$emit('close-modal');
                         this.form.code = '';

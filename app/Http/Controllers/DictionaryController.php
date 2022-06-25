@@ -28,6 +28,7 @@ class DictionaryController extends Controller
             return view('dictionary.index');
         }
     }
+
     public function findDictionary()
     {
         if(Auth::guard('web')->check()) {
@@ -51,39 +52,23 @@ class DictionaryController extends Controller
 
 
     }
-    public function index2()
-    {
-        if(Auth::guard('web')->check()) {
-            $user = Auth::guard('web')->user();
-            if ($user->hasRole('SuperAdmin')) {
-                $dictionary = Dictionary::all();
-            }
-            if ($user->hasRole('Admin')) {
-                $dictionary = Dictionary::where('created_author', Auth::id())->get();
-            }
-            return view('dictionary.index2', ['dictionaries' => $dictionary]);
-        }else if (Auth::guard('api')->check()) {
-            $dictionary = Dictionary::where(['archive' => 0, 'created_author' => Auth::guard('api')->user()->id])->with('created_author:id,name')->with('updated_author:id,name')->get();
-            return response()->json($dictionary);
-        }
-    }
 
-    public function store(Request $request)
+    public function store(DictionaryRequest $request)
     {
         if (Auth::guard('web')->check()) {
-            //return $request->form['name'].$request->form['code'];
             $new_dictionary = Dictionary::create([
-                'code' => $request->form['code'],
-                'name' => $request->form['name'],
-                'description' => $request->form['description'],
+                'code' => $request->code,
+                'name' => $request->name,
+                'description' => $request->description,
                 'archive' => 0,
                 'created_author' => Auth::guard('web')->user()->id,
                 'updated_author' => Auth::guard('web')->user()->id
             ]);
             $dictionary = Dictionary::where('id', $new_dictionary->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
             return response()->json($dictionary);
+
         } else if (Auth::guard('api')->check()) {
-            $dic = Dictionary::create(['code' => $request['code'], 'name' => $request['name'], 'description' => $request['description'], 'archive' => $request['archive'], 'created_author' => Auth::guard('api')->user()->id, 'updated_author' => Auth::guard('api')->user()->id]);
+            $dic = Dictionary::create(['code' => $request->code, 'name' => $request->name, 'description' => $request->description, 'archive' => 0, 'created_author' => Auth::guard('api')->user()->id, 'updated_author' => Auth::guard('api')->user()->id]);
             $dictionary = Dictionary::where('id', $dic->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
             return response()->json($dictionary);
         }
@@ -106,23 +91,23 @@ class DictionaryController extends Controller
     }
 
 
-    public function update(Request $request, $id)
+    public function update(DictionaryRequest $request, $id)
     {
         if (Auth::guard('web')->check()) {
-            $edit_dictionary = Dictionary::find($request->form['id']);
-            $edit_dictionary->name = $request->form['name'];
-            $edit_dictionary->description = $request->form['description'];
-            $edit_dictionary->code = $request->form['code'];
+            $edit_dictionary = Dictionary::find($request->id);
+            $edit_dictionary->name = $request->name;
+            $edit_dictionary->description = $request->description;
+            $edit_dictionary->code = $request->code;
+            $dictionary->updated_author = Auth::guard('web')->user()->id;
             $edit_dictionary->save();
             $dictionary = Dictionary::where('id', $edit_dictionary->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
             return response()->json($dictionary);
 
         } else if (Auth::guard('api')->check()) {
             $dictionary = Dictionary::find($id);
-            $dictionary->name = $request['name'];
-            $dictionary->code = $request['code'];
-            $dictionary->description = $request['description'];
-            $dictionary->archive = $request['archive'];
+            $dictionary->name = $request->name;
+            $dictionary->description = $request->description;
+            $dictionary->code = $request->code;
             $dictionary->updated_author = Auth::guard('api')->user()->id;
             $dictionary->save();
             $dictionary = Dictionary::where('id', $id)->with('created_author:id,name')->with('updated_author:id,name')->get();
