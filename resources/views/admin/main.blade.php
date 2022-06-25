@@ -52,11 +52,11 @@
     {{--подключаем файл с уведомлениями--}}
 {{--    @include('validate-message')--}}
 
-    
+
 
         <!-- Main content -->
         <div class="content">
-            <div class="container-fluid">
+            <div class="container-fluid bg-white shadow px-5" style="height: 800px;">
                 <div class="row">
                     @yield('content')
                 </div>
