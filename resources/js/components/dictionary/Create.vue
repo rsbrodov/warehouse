@@ -10,7 +10,7 @@
             <form @submit.prevent="saveDictionary()">
                 <div class="modal-body">
                      <div class="block">
-                         <label for="name"><b>Наименование справочника</b></label>
+                         <label for="name"><b class="text-danger">*</b><b>Наименование справочника</b></label>
                          <input autocomplete="off" id="name" class="form-control" type="text" v-model="form.name"
                                 :class="{invalid: ($v.form.name.$dirty && !$v.form.name.required)}">
                          <small class="helper-text invalid" v-if="$v.form.name.$dirty && !$v.form.name.required">
@@ -19,7 +19,7 @@
                      </div>
 
                      <div class="block">
-                         <label for="api_url"><b>Код справочника:</b></label>
+                         <label for="api_url"><b class="text-danger">*</b><b>Код справочника:</b></label>
                          <input autocomplete="off" id="api_url" class="form-control" type="text" v-model="form.code"
                                 :class="{invalid: ($v.form.code.$dirty && !$v.form.code.required)}">
                          <small class="helper-text invalid" v-if="$v.form.code.$dirty && !$v.form.code.required">

@@ -241,4 +241,10 @@ class UsersController extends Controller
         Permission::where('id', $id)->delete();
         return redirect()->route('users.roles-create-view');
     }
+
+    public function usersList()
+    {
+        $users = User::get();
+        return response()->json($users);
+    }
 }

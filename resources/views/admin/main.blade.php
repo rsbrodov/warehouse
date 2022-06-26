@@ -46,17 +46,15 @@
 @include('admin.navbar')
 @include('admin.sidebar')
 <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-    {{--                @include('admin.content')--}}
+    <div class="content-wrapper"  style="background-color:#F5F0F0">
+    {{--@include('admin.content')--}}
     @include('flash-message')
     {{--подключаем файл с уведомлениями--}}
-{{--    @include('validate-message')--}}
-
-
+    {{--@include('validate-message')--}}
 
         <!-- Main content -->
-        <div class="content">
-            <div class="container-fluid bg-white shadow px-5" style="height: 800px;">
+        <div class="content pt-3" style="background-color:#F5F0F0">
+            <div class="container-fluid bg-white px-5" style="min-height: 91vh; width:85vw; box-shadow: 0px 4px 4px 4px rgba(0, 0, 0, 0.25);">
                 <div class="row">
                     @yield('content')
                 </div>

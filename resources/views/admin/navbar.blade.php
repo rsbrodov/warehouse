@@ -1,5 +1,5 @@
 <!-- Navbar -->
-<nav class="main-header navbar navbar-expand navbar-black navbar-light">
+<nav class="main-header navbar navbar-expand navbar-black navbar-light d-flex justify-content-between">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
         <li class="nav-item">
@@ -22,13 +22,13 @@
     </ul>
 
     <!-- Right navbar links -->
-    <ul class="navbar-nav ml-auto">
+    <ul class="navbar-nav">
         <!-- User Profile -->
-        <li class="user-panel d-flex">
-            <div class="row">
-                <div class="col-4"><span class="fa fa-question-circle-o fa-lg" aria-hidden="true"></span></div>
-                <div class="col-4"><a href="#" class="d-block">{{Auth::guard('web')->user()->name}}</a></div>
-                <div class="col-4"> <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image"></div>
+        <li class="user-panel">
+            <div class="d-flex ">
+                <div class="mr-2" ><span class="fa fa-question-circle-o fa-lg" aria-hidden="true"></span></div>
+                <div class="mr-2"><a href="#" class="d-block">{{Auth::guard('web')->user()->name}}</a></div>
+                <div class="mr-2"><img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image"></div>
             </div>
 
         </li>
