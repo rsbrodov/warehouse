@@ -11,7 +11,12 @@
                 <div class="row mb-3">
                     <div class="block col-6">
                         <label for="owner"><b>Владелец типа контента:</b></label>
-                        <input autocomplete="off" id="owner" class="form-control" type="text" v-model="form_edit.owner">
+                        <select id="owner" class="form-control" v-model="form_edit.owner">
+                            <option disabled selected value> -- Выберите пользователя -- </option>
+                            <option v-for="(user, index) in users" :key="index" :value="user.id">
+                                <i aria-hidden="true">{{user.name}}</i>
+                            </option>
+                        </select>
                     </div>
 
                     <div class="block col-6">
@@ -26,7 +31,7 @@
 
                 <div class="row mb-3">
                     <div class="block col-6">
-                        <label for="name"><b>Наименование типа контента</b></label>
+                        <label for="name"><b class="text-danger">*</b><b>Наименование типа контента</b></label>
                         <input autocomplete="off" id="name" class="form-control" type="text" v-model="form_edit.name"
                                :class="{invalid: ($v.vv.name.$dirty && !$v.vv.name.required)}">
                             <small class="helper-text invalid" v-if="$v.vv.name.$dirty && !$v.vv.name.required">
@@ -35,7 +40,7 @@
                     </div>
 
                     <div class="block col-6">
-                        <label for="api_url"><b>API URL:</b></label>
+                        <label for="api_url"><b class="text-danger">*</b><b>API URL:</b></label>
                         <input autocomplete="off" id="api_url" class="form-control" type="text" v-model="form_edit.api_url"
                                :class="{invalid: ($v.vv.api_url.$dirty && !$v.vv.api_url.required)}">
                         <small class="helper-text invalid" v-if="$v.vv.api_url.$dirty && !$v.vv.api_url.required">
@@ -97,6 +102,7 @@
             return {
                 ru:ru,
                 icons:null,
+                users:null,
                 form_edit:{
                     id:null,
                     owner:null,
@@ -153,10 +159,17 @@
             },
             generateUrl(){
                 this.form_edit.api_url =  url_slug(this.form_edit.name)   
-            }
+            },
+            getUsers(){
+                axios.get('http://127.0.0.1:8000/users-list')
+                    .then(response => {
+                        this.users = response.data;
+                    });
+            },
         },
         async created(){
             this.getIcons();
+            this.getUsers();
             
         },
         validations: {

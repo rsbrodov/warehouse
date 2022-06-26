@@ -33,7 +33,7 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/tech/create', [TechController::class, 'create'])->name('tech.create');
 Route::get('/tech/index', [TechController::class, 'index'])->name('tech.index');
-
+Route::get('/users-list', [App\Http\Controllers\UsersController::class, 'usersList']);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/home2', [App\Http\Controllers\HomeController::class, 'index2'])->name('home2');

@@ -79,7 +79,7 @@ class TypeContentController extends Controller
                 'id_global' => Str::uuid()->toString(),
                 'name' => $request->name,
                 'description' => $request->description,
-                'owner' => '7856',
+                'owner' => $request->owner,
                 'active_from' => date_create($request->active_from),
                 'active_after' => date_create($request->active_after),
                 'status' => 'DRAFT',
@@ -137,6 +137,7 @@ class TypeContentController extends Controller
             $type->active_from = date_format(date_create($request->active_from), 'Y-m-d H:m:s');
             $type->active_after = date_format(date_create($request->active_after), 'Y-m-d H:m:s');
             $type->icon = $request->icon;
+            $type->owner = $request->owner;
             $type->updated_author = Auth::guard('web')->user()->id;
             $type->save();
             $type_content = TypeContent::where('id', $request->id)->with('created_authors:id,name')->with('updated_authors:id,name')->first();
@@ -150,6 +151,7 @@ class TypeContentController extends Controller
                 $type->active_from = date_format(date_create($request->active_from), 'Y-m-d H:m:s');
                 $type->active_after = date_format(date_create($request->active_after), 'Y-m-d H:m:s');
                 $type->icon = $request->icon;
+                $type->owner = $request->owner;
                 $type->updated_author = Auth::guard('api')->user()->id;
                 $type->updated_author = Auth::guard('api')->user()->id;
                 $type->save();
