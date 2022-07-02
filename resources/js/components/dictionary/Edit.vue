@@ -10,7 +10,7 @@
             <form @submit.prevent="updDictionary()">
                 <div class="modal-body">
                      <div class="block">
-                         <label for="name"><b>Наименование справочника</b></label>
+                         <label for="name"><b class="text-danger">*</b><b>Наименование справочника</b></label>
                          <input autocomplete="off" id="name" class="form-control" type="text" v-model="vv.name"
                                 :class="{invalid: (!$v.form_edit.name.required)}">
                          <small class="helper-text invalid" v-if="!$v.form_edit.name.required">
@@ -19,7 +19,7 @@
                      </div>
 
                      <div class="block">
-                         <label for="api_url"><b>Код справочника:</b></label>
+                         <label for="api_url"><b class="text-danger">*</b><b>Код справочника:</b></label>
                          <input autocomplete="off" id="api_url" class="form-control" type="text" v-model="vv.code"
                                 :class="{invalid: ($v.form_edit.code.$dirty && !$v.form_edit.code.required)}">
                          <small class="helper-text invalid" v-if="$v.form_edit.code.$dirty && !$v.form_edit.code.required">
@@ -50,6 +50,7 @@
         data:function(){
             return {
                 form_edit:{
+                    id:null,
                     name:null,
                     code:null,
                     description:null,
@@ -68,11 +69,12 @@
         methods: {
             ...mapActions(['updateDictionary']),
             async updDictionary() {
+                console.log(123)
                 this.$v.$touch();
                 if (this.$v.$invalid) {
                     console.log('Form not subm')
                 } else {
-                    this.updateDictionary({form: this.form_edit}
+                    this.updateDictionary({id: this.form_edit.id, name: this.form_edit.name, code: this.form_edit.code, description: this.form_edit.description}
                     ).then(response => {
                         this.$emit('close-modal');
                         this.flashMessage.success({

@@ -11,7 +11,12 @@
                 <div class="row mb-3">
                     <div class="block col-6">
                         <label for="owner"><b>Владелец типа контента:</b></label>
-                        <input autocomplete="off" id="owner" class="form-control" type="text" v-model="form_edit.owner">
+                        <select id="owner" class="form-control" v-model="form_edit.owner">
+                            <option disabled selected value> -- Выберите пользователя -- </option>
+                            <option v-for="(user, index) in users" :key="index" :value="user.id">
+                                <i aria-hidden="true">{{user.name}}</i>
+                            </option>
+                        </select>
                     </div>
 
                     <div class="block col-6">
@@ -26,7 +31,7 @@
 
                 <div class="row mb-3">
                     <div class="block col-6">
-                        <label for="name"><b>Наименование типа контента</b></label>
+                        <label for="name"><b class="text-danger">*</b><b>Наименование типа контента</b></label>
                         <input autocomplete="off" id="name" class="form-control" type="text" v-model="form_edit.name"
                                :class="{invalid: ($v.vv.name.$dirty && !$v.vv.name.required)}">
                             <small class="helper-text invalid" v-if="$v.vv.name.$dirty && !$v.vv.name.required">
@@ -35,7 +40,7 @@
                     </div>
 
                     <div class="block col-6">
-                        <label for="api_url"><b>API URL:</b></label>
+                        <label for="api_url"><b class="text-danger">*</b><b>API URL:</b></label>
                         <input autocomplete="off" id="api_url" class="form-control" type="text" v-model="form_edit.api_url"
                                :class="{invalid: ($v.vv.api_url.$dirty && !$v.vv.api_url.required)}">
                         <small class="helper-text invalid" v-if="$v.vv.api_url.$dirty && !$v.vv.api_url.required">
@@ -97,6 +102,7 @@
             return {
                 ru:ru,
                 icons:null,
+                users:null,
                 form_edit:{
                     id:null,
                     owner:null,
@@ -116,7 +122,6 @@
                 this.form_edit.owner = this.owner
                 this.form_edit.icon = this.icon
                 this.form_edit.name = this.name
-                this.form_edit.status = this.status
                 this.form_edit.api_url = this.api_url
                 this.form_edit.active_from = this.active_from
                 this.form_edit.active_after = this.active_after
@@ -139,7 +144,8 @@
                     console.log('Form not subm')
                 } else {
                     console.log(123);
-                    this.update({form: this.form_edit, id: this.form_edit.id}
+                    this.update({id: this.form_edit.id, owner: this.form_edit.owner, icon: this.form_edit.icon, name: this.form_edit.name, api_url: this.form_edit.api_url,
+                     active_from: this.form_edit.active_from, active_after: this.form_edit.active_after, description: this.form_edit.description,}
                     ).then(response => {
                         this.$emit('close-modal');
                         this.flashMessage.success({
@@ -153,10 +159,17 @@
             },
             generateUrl(){
                 this.form_edit.api_url =  url_slug(this.form_edit.name)   
-            }
+            },
+            getUsers(){
+                axios.get('http://127.0.0.1:8000/users-list')
+                    .then(response => {
+                        this.users = response.data;
+                    });
+            },
         },
         async created(){
             this.getIcons();
+            this.getUsers();
             
         },
         validations: {

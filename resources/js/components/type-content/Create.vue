@@ -11,15 +11,20 @@
                 <div class="row mb-3">
                     <div class="block col-6">
                         <label for="owner"><b>Владелец типа контента:</b></label>
-                        <input autocomplete="off" id="owner" class="form-control" type="text" v-model="form.owner">
+                        <select id="owner" class="form-control" v-model="form.owner">
+                            <option disabled selected value> -- Выберите пользователя -- </option>
+                            <option v-for="(user, index) in users" :key="index" :value="user.id">
+                                <i aria-hidden="true">{{user.name}}</i>
+                            </option>
+                        </select>
                     </div>
 
                     <div class="block col-6">
                         <label for="icon"><b>Иконка для отображения</b></label>
                         <select id="icon" class="form-control" v-model="form.icon">
+                            <option disabled selected value> -- Выберите иконку -- </option>
                             <option v-for="(icon, index) in icons" :key="index" :value="icon.code">
                                 <i :class="'fa ' + icon.code+ ' fa-lg'" aria-hidden="true">{{icon.name}}</i>
-<!--                                Github &#xf09b;-->
                             </option>
                         </select>
                     </div>
@@ -27,7 +32,7 @@
 
                 <div class="row mb-3">
                     <div class="block col-6">
-                        <label for="name"><b>Наименование типа контента</b></label>
+                        <label for="name"><b class="text-danger">*</b><b>Наименование типа контента</b></label>
                         <input autocomplete="off" id="name" class="form-control" type="text" v-model="form.name"
                                :class="{invalid: ($v.form.name.$dirty && !$v.form.name.required)}">
                             <small class="helper-text invalid" v-if="$v.form.name.$dirty && !$v.form.name.required">
@@ -36,7 +41,7 @@
                     </div>
 
                     <div class="block col-6">
-                        <label for="api_url"><b>API URL:</b></label>
+                        <label for="api_url"><b class="text-danger">*</b><b>API URL:</b></label>
                         <input autocomplete="off" id="api_url" class="form-control" type="text" v-model="form.api_url"
                                :class="{invalid: ($v.form.api_url.$dirty && !$v.form.api_url.required)}">
                         <small class="helper-text invalid" v-if="$v.form.api_url.$dirty && !$v.form.api_url.required">
@@ -97,6 +102,7 @@
         data:function(){
             return {
                 icons:null,
+                users:null,
                 ru:ru,
                 form:{
                     icon:'',
@@ -118,7 +124,8 @@
                     console.log('Form not subm')
                 }else {
                     this.newTypeContents({
-                        form: this.form
+                        icon: this.form.icon, name: this.form.name, owner: this.form.owner, api_url: this.form.api_url, 
+                        active_from: this.form.active_from, active_after: this.form.active_after, description: this.form.description
                     }).then(response => {
                         this.$emit('close-modal');
                         this.form.icon = ''; this.form.name = ''; this.form.owner = ''; this.form.api_url = ''; this.form.active_from = ''; this.form.active_after = ''; this.form.description = '';
@@ -139,10 +146,17 @@
             },
             generateUrl(){
                 this.form.api_url =  url_slug(this.form.name)   
+            },
+            getUsers(){
+                axios.get('http://127.0.0.1:8000/users-list')
+                    .then(response => {
+                        this.users = response.data;
+                    });
             }
         },
         async created(){
             this.getIcons();
+            this.getUsers();
         },
         validations: {
             form:{

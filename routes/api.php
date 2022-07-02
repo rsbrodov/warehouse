@@ -31,18 +31,18 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
 });
 
 Route::group(['middleware' => 'auth:api'], function ($router) {
-    Route::get('/dictionary/findDictionary/', [App\Http\Controllers\DictionaryController::class, 'index']);
-    Route::post('/dictionary/createdDictionary/', [App\Http\Controllers\DictionaryController::class, 'store'])->middleware('auth:api');
-    Route::put('/dictionary/updatedDictionary/{id}', [App\Http\Controllers\DictionaryController::class, 'update'])->middleware('auth:api');
-    Route::delete('/dictionary/deletedDictionary/{id}', [App\Http\Controllers\DictionaryController::class, 'destroy'])->middleware('auth:api');
+    Route::get('/dictionary/findDictionary/', [App\Http\Controllers\DictionaryController::class, 'findDictionary']);
+    Route::post('/dictionary/createdDictionary/', [App\Http\Controllers\DictionaryController::class, 'store']);
+    Route::put('/dictionary/updatedDictionary/{id}', [App\Http\Controllers\DictionaryController::class, 'update']);
+    Route::delete('/dictionary/deletedDictionary/{id}', [App\Http\Controllers\DictionaryController::class, 'destroy']);
 });
 
 Route::group(['middleware' => 'auth:api'], function ($router) {
     Route::get('/dictionary/findElementDictionaryID/{id}', [App\Http\Controllers\DictionaryElementController::class, 'findElementDictionaryID']);//получение элементов по dictionary_id
     Route::get('/dictionary/findElementDictionaryCode/{code}', [App\Http\Controllers\DictionaryElementController::class, 'indexCode']);//получение элементов по dictionary_id
-    Route::post('/dictionary/createdElementDictionary/', [App\Http\Controllers\DictionaryElementController::class, 'store'])->middleware('auth:api');
-    Route::put('/dictionary/updatedElementDictionary/{id}', [App\Http\Controllers\DictionaryElementController::class, 'update'])->middleware('auth:api');
-    Route::delete('/dictionary/deletedElementDictionary/{id}', [App\Http\Controllers\DictionaryElementController::class, 'destroy'])->middleware('auth:api');
+    Route::post('/dictionary/createdElementDictionary/', [App\Http\Controllers\DictionaryElementController::class, 'store']);
+    Route::put('/dictionary/updatedElementDictionary/{id}', [App\Http\Controllers\DictionaryElementController::class, 'update']);
+    Route::delete('/dictionary/deletedElementDictionary/{id}', [App\Http\Controllers\DictionaryElementController::class, 'destroy']);
 });
 
 Route::get('/template/getListTypeContent/', [App\Http\Controllers\TypeContentController::class, 'getListTypeContent']);

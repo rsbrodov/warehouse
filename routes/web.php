@@ -33,7 +33,7 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/tech/create', [TechController::class, 'create'])->name('tech.create');
 Route::get('/tech/index', [TechController::class, 'index'])->name('tech.index');
-
+Route::get('/users-list', [App\Http\Controllers\UsersController::class, 'usersList']);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/home2', [App\Http\Controllers\HomeController::class, 'index2'])->name('home2');
@@ -72,7 +72,6 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('/dictionary/findDictionary', [DictionaryController::class, 'findDictionary']);
     Route::post('/dictionary/store/', [DictionaryController::class, 'store']);
     Route::get('/dictionary/', [DictionaryController::class, 'index'])->name('dictionary.index');
-    Route::get('/dictionary/index2', [DictionaryController::class, 'index2'])->name('dictionary.index2');
     Route::get('/dictionary/{id}', [DictionaryController::class, 'show'])->name('dictionary.show');
     Route::post('/dictionary/{id}', [DictionaryController::class, 'update'])->name('dictionary.update');
     Route::delete('/dictionary/{id}', [DictionaryController::class, 'destroy'])->name('dictionary.destroy');
