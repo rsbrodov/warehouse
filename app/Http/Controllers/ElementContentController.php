@@ -15,8 +15,24 @@ class ElementContentController extends Controller
     public function index()
     {
         if (Auth::guard('web')->check()) {
-            $element_contents = ElementContent::where('owner', Auth::guard('web')->id())->where('type_content_id', request('type_content_id'))->get();
-            return view('element_content.index')->with('element_contents', $element_contents);
+            if (Auth::guard('web')->check()) {
+                $element_contents = ElementContent::where(['created_author' => Auth::guard('web')->user()->id])->with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('label', 'desc')->get()->unique('id_global');//все уникальные
+                $ids = [];
+                foreach ($element_contents as $element_content){
+                    $ids[] = ElementContent::where('id_global', $element_content->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first()->id;
+                }
+                $element_contents = ElementContent::whereIn('id', $ids)->orderBy('created_at', 'asc')->get();
+                return view('element_content.index')->with('element_contents', $element_contents);
+                //return response()->json($element_contents);
+            } else {
+                if (Auth::guard('api')->check()) {
+                    $type_contents = ElementContent::where(['created_author' => Auth::guard('api')->user()->id])->with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('label',
+                        'desc')->get();
+                    return response()->json($type_contents);
+                }
+            }
+            //$element_contents = ElementContent::where('owner', Auth::guard('web')->id())->where('type_content_id', request('type_content_id'))->get();
+            //return view('element_content.index')->with('element_contents', $element_contents);
         }
     }
     public function create()
@@ -163,6 +179,21 @@ class ElementContentController extends Controller
             }
         } else {
             return redirect()->back()->with('error', 'Что-то пошло не так');
+        }
+    }
+    
+    public function getAllVersionElementContent($id)
+    {
+        if (Auth::guard('web')->check()) {
+            $element_contents = ElementContent::where('id_global', $id)->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
+            return view('element_content.all-version-element-content')->with('element_contents', $element_contents);
+        } else {
+            if (Auth::guard('api')->check()) {
+                $element_content = ElementContent::where('id_global', $id)->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
+                return response()->json($element_content);
+            } else {
+                return response()->json('item not found');
+            }
         }
     }
 }

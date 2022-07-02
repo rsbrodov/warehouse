@@ -40,6 +40,7 @@
                                                      role="alert"><strong>{{ $message }}</strong></span>@enderror
                     </div>
                 </div>
+                <?php $status_array = []; ?>
                 @if($element_content->status === 'Draft')
                     <?php $status_array = ['Draft', 'Published'];?>
                 @elseif($element_content->status === 'Published' or $element_content->status === 'Archive')
