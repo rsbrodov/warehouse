@@ -78,7 +78,7 @@
             <tr v-else-if="getLoading === true" style="border:none">
                 <td class="text-center text-danger" colspan="6"><Loader/></td>
             </tr>
-            <tr v-else v-for="(dictionary, index) in filteredDictionary" :key="index">
+            <tr v-else v-for="(dictionary, index) in pageOfItems" :key="index">
                 <td>{{dictionary.code}}</td>
                 <td>{{dictionary.name}}</td>
                 <td>{{dictionary.description}}</td>
@@ -99,6 +99,11 @@
                 </td>
             </tr>
         </table>
+
+        <div class="card-footer pb-0 pt-3">
+            <jw-pagination :items="filteredDictionary" @changePage="onChangePage"></jw-pagination>
+        </div>
+
     </div>
 </template>
 
@@ -125,6 +130,7 @@
                     name:'',
                     code:'',
                 },
+                pageOfItems: []
             }
         },
 
@@ -203,7 +209,11 @@
                 $( 'form' ).each(function(){
                     this.reset();
                 });
-            }
+            },
+            onChangePage(pageOfItems) {
+            // update page of items
+            this.pageOfItems = pageOfItems;
+        }
         },
 
         filters: {
@@ -246,4 +256,22 @@
         flex-wrap: nowrap;
         align-items: center;
     }
+
+.pagination{
+    display: flex;
+}
+.pagination li {
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    color: white;
+    background-color: white;
+    font-size: 1em;
+  }
+  .pagination li.pagination-active {
+    background-color: green;
+  }
+  
+.pagination  li:hover:not(.active) {background-color: yellow;}
 </style>
