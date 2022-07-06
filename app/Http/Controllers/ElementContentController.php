@@ -16,7 +16,13 @@ class ElementContentController extends Controller
     {
         if (Auth::guard('web')->check()) {
             if (Auth::guard('web')->check()) {
-                $element_contents = ElementContent::where(['created_author' => Auth::guard('web')->user()->id])->with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('label', 'desc')->get()->unique('id_global');//все уникальные
+                $element_contents = ElementContent::  where(['created_author' => Auth::guard('web')->user()->id])
+                                                    ->where('type_content_id', request('type_content_id'))
+                                                    ->with('created_authors:id,name')
+                                                    ->with('updated_authors:id,name')
+                                                    ->orderBy('label', 'desc')
+                                                    ->get()
+                                                    ->unique('id_global');//все уникальные
                 $ids = [];
                 foreach ($element_contents as $element_content){
                     $ids[] = ElementContent::where('id_global', $element_content->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first()->id;
@@ -26,12 +32,12 @@ class ElementContentController extends Controller
                 //return response()->json($element_contents);
             } else {
                 if (Auth::guard('api')->check()) {
-                    $type_contents = ElementContent::where(['created_author' => Auth::guard('api')->user()->id])->with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('label',
+                    $element_contents = ElementContent::where(['created_author' => Auth::guard('api')->user()->id])->where('type_content_id', request('type_content_id'))->with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('label',
                         'desc')->get();
-                    return response()->json($type_contents);
+                    return response()->json($element_contents);
                 }
             }
-            //$element_contents = ElementContent::where('owner', Auth::guard('web')->id())->where('type_content_id', request('type_content_id'))->get();
+            //$element_contents = ElementContent::where('owner', Auth::guard('web')->id())->where('element_content_id', request('element_content_id'))->get();
             //return view('element_content.index')->with('element_contents', $element_contents);
         }
     }
@@ -123,11 +129,11 @@ class ElementContentController extends Controller
             }
         }
     }
-    public function destroy($id){
+    public function destroy(){
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
-                $destroy_elem = ElementContent::where('id', $id)->first();
+                $destroy_elem = ElementContent::where('id', request('id'))->first();
                 $type_content_id = $destroy_elem->type_content_id;
                 $message = ''; $type_message = 'success';
                 if ($destroy_elem->status == 'Destroy') {
@@ -172,8 +178,8 @@ class ElementContentController extends Controller
             $newElementContent->status = 'Draft';
             $newElementContent->based_element = $element->id;
             if ($newElementContent->save()) {
-//                return redirect()->route('element-content.get-all-version', $elementContent->id_global)->with('success', 'Новая версия успешно создана');
-                return redirect()->route('element-content.index', $element->type_content_id)->with('success', 'Новая версия успешно создана');
+               return redirect()->route('element-content.get-all-version', $elementContent->id_global)->with('success', 'Новая версия успешно создана');
+                // return redirect()->route('element-content.index', $element->type_content_id)->with('success', 'Новая версия успешно создана');
             } else {
                 return redirect()->back()->with('error', 'Что-то пошло не так');
             }
@@ -182,14 +188,14 @@ class ElementContentController extends Controller
         }
     }
     
-    public function getAllVersionElementContent($id)
+    public function getAllVersionElementContent()
     {
         if (Auth::guard('web')->check()) {
-            $element_contents = ElementContent::where('id_global', $id)->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
+            $element_contents = ElementContent::where('id_global', request('id_global'))->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
             return view('element_content.all-version-element-content')->with('element_contents', $element_contents);
         } else {
             if (Auth::guard('api')->check()) {
-                $element_content = ElementContent::where('id_global', $id)->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
+                $element_content = ElementContent::where('id_global', request('id_global'))->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
                 return response()->json($element_content);
             } else {
                 return response()->json('item not found');

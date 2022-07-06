@@ -21,11 +21,14 @@ class UsersController extends Controller
     {
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
+            //dd($user->hasRole('Admin'));
             if ($user->hasRole('SuperAdmin')) {
                 $users = User::all();
-            }
-            if ($user->hasRole('Admin')) {
+            } else if ($user->hasRole('Admin')) {
                 $users = User::where('parent_id', Auth::id())->orWhere('id', Auth::id())->get();
+            }
+            else{
+                return redirect()->route('home')->with('success', 'У вас недостаточно полномочий');
             }
             return view('users.index')->with('users', $users);
         }
@@ -163,17 +166,34 @@ class UsersController extends Controller
             print_r('Авторизируйтесь');
         }
     }
-
-
+    public function profile(){
+        if (Auth::guard('web')->check()) {
+            $user = Auth::guard('web')->user();
+            //dd($user);
+            return view('users.profile')->with('user', $user);
+        }
+    }
+    public function profileUpdate(UserRequest $request, $id){
+        if (Auth::guard('web')->check()) {
+            $user = Auth::guard('web')->user();
+            if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
+                $edit_user = User::where('id', $id)->first();
+                $edit_user->name = $request->input('name');
+                $edit_user->email = $request->input('email');
+                $edit_user->save();
+                return view('users.profile', $user);
+            }
+        }
+    }
     public function rolesCreateView()
     {
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
-            if ($user->hasRole('SuperAdmin')) {
+            //if ($user->hasRole('SuperAdmin')) {
                 $roles = Role::all();
                 $permissions = Permission::all();
                 return view('users.roles-create-view', ['roles' => $roles, 'permissions' => $permissions]);
-            }
+            //}
         }
     }
 
@@ -185,6 +205,10 @@ class UsersController extends Controller
             if ($user->hasRole('SuperAdmin')) {
                 $message = ''; $type_message = 'success';
                 if ($type_action == 'role') {
+                    // $validated = $req->validate([
+                    //     'permissions' => 'required',
+                    //     'roles' => 'required',
+                    // ]);
                     $role = Role::create(['name' => $req->input('role')]);
                     $message = 'Роль '. $role->name. ' успешно создана. Роли даны полномочия: ';
                     foreach ($req->input('permissions') as $permission) {
@@ -216,17 +240,19 @@ class UsersController extends Controller
         //todo:
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
-            if ($user->hasRole('SuperAdmin')) {
+            //if ($user->hasRole('SuperAdmin')) {
+                
                 $message = ''; $type_message = 'success';
                 $message = 'Роль '. $req->input('role'). ' выдана следующим пользователям: ';
                 foreach ($req->input('users') as $user_id) {
-                    $users = User::where('id', $user_id)->first();
-                    $users->assignRole($req->input('role'));
+                    $user = User::where('name', $user_id)->first();
+                    //dd($user);
+                    $user->assignRole($req->input('role'));
                     $message .= $user_id.', ';
                 }
                 $message = substr($message, 0, -2);
                 return redirect()->route('users.roles-create-view')->with($type_message, $message);
-            }
+            //}
         }
     }
 
