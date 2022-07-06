@@ -123,7 +123,7 @@
                     </div>
                 </div>
             </div>
-        </div>34
+        </div>
     </div>
 </template>
 
