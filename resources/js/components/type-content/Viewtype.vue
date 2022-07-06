@@ -79,14 +79,16 @@
                 <div class="col-9 left-block">
                     <div class="left-block__draggable-layout" v-for="(mas, index) in clonedItems" :key="index">
                         <i class="fa fa-trash mr-2 mt-2 text-primary lg" @click="deleteRow(index)"></i>
-                        <draggable class="left-block__draggable-layout__draggable-parent" v-model="clonedItems[index]" :options="clonedItemOptions">
-                            <div class="clickable left-block__draggable-layout__draggable-parent__item" v-for="(item, indexing) in mas" :key="uuid(item)" >
-                                <p class="pl-2 pt-3 text-secondary"><i :class="item.class"></i> {{item.title}}</p>
-                                <div class="button-group">
-                                    <button class="btn btn-outline-primary mr-2" @click="EditItem(item.uid)"><i class="fa fa-pencil fa-sm"></i></button>
-                                    <button class="btn btn-outline-primary mr-2" @click="deleteItem(index, indexing)"><i class="fa fa-trash fa-sm"></i></button>
+                        <draggable class="left-block__draggable-layout__draggable-parent"  ghost-class="ghost" v-model="clonedItems[index]" :options="clonedItemOptions">
+                            <transition-group type="transition" name="flip-list">
+                                <div class="clickable left-block__draggable-layout__draggable-parent__item" v-for="(item, indexing) in mas" :key="uuid(item)" >
+                                    <p class="pl-2 pt-3 text-secondary"><i :class="item.class"></i> {{item.title}}</p>
+                                    <div class="button-group">
+                                        <button class="btn btn-outline-primary mr-2" @click="EditItem(item.uid)"><i class="fa fa-pencil fa-sm"></i></button>
+                                        <button class="btn btn-outline-primary mr-2" @click="deleteItem(index, indexing)"><i class="fa fa-trash fa-sm"></i></button>
+                                    </div>
                                 </div>
-                            </div>
+                            </transition-group>
                         </draggable>
                     </div>
                 </div>
@@ -121,7 +123,7 @@
                     </div>
                 </div>
             </div>
-        </div>34
+        </div>
     </div>
 </template>
 
@@ -352,7 +354,7 @@
         border-radius: 5px;
         height: 45px;
         margin: 5px auto;
-        cursor: grab;
+        cursor: move;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -370,6 +372,17 @@
     }
     i:hover {
         cursor: pointer;
+    }
+
+/*это класс от транзишина он дает задержку*/
+    .flip-list-move{
+        transition: transform 0.5s;
+    }
+    /*это класс от драгабла он дает тень прозрачность и подцветку*/
+    .ghost{
+        border-left: 6px solid rgb(0, 183, 255);
+        box-shadow: 10px 10px 5px -1px rgb(0, 0, 0, 0.14);
+        opacity: .7;
     }
     ._vue-flash-msg-container_right-bottom {
         z-index: 10000000 !important;

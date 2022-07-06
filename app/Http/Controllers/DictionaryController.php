@@ -94,13 +94,13 @@ class DictionaryController extends Controller
     public function update(DictionaryRequest $request, $id)
     {
         if (Auth::guard('web')->check()) {
-            $edit_dictionary = Dictionary::find($request->id);
-            $edit_dictionary->name = $request->name;
-            $edit_dictionary->description = $request->description;
-            $edit_dictionary->code = $request->code;
+            $dictionary = Dictionary::find($id);
+            $dictionary->name = $request->name;
+            $dictionary->description = $request->description;
+            $dictionary->code = $request->code;
             $dictionary->updated_author = Auth::guard('web')->user()->id;
-            $edit_dictionary->save();
-            $dictionary = Dictionary::where('id', $edit_dictionary->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
+            $dictionary->save();
+            $dictionary = Dictionary::find($id)->with('created_author:id,name')->with('updated_author:id,name')->get();
             return response()->json($dictionary);
 
         } else if (Auth::guard('api')->check()) {
@@ -110,7 +110,7 @@ class DictionaryController extends Controller
             $dictionary->code = $request->code;
             $dictionary->updated_author = Auth::guard('api')->user()->id;
             $dictionary->save();
-            $dictionary = Dictionary::where('id', $id)->with('created_author:id,name')->with('updated_author:id,name')->get();
+            $dictionary = Dictionary::find($id)->with('created_author:id,name')->with('updated_author:id,name')->get();
             return response()->json($dictionary);
         }
     }

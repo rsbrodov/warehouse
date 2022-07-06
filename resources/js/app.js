@@ -10,16 +10,20 @@ import Sortable from 'vue-sortable'
 
 
 import store from './store/index'
+import JwPagination from 'jw-vue-pagination';
+Vue.component('jw-pagination', JwPagination);
 
 Vue.component('Index', require('./components/type-content/Index.vue').default);
 Vue.component('Indexdictionary', require('./components/dictionary/Index.vue').default);
 Vue.component('Indexdictionaryelement', require('./components/dictironary-element/Index.vue').default);
 Vue.component('Viewtype', require('./components/type-content/Viewtype.vue').default);
+
 Vue.use(Vuelidate)
 Vue.use( Moment );
 Vue.use(BootstrapVue);
 Vue.use(FlashMessage);
 Vue.use(Sortable)
+
 
 const app = new Vue({
     el: '#app',
