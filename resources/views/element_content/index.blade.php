@@ -83,6 +83,9 @@
                             <a href="{{route('element-content.edit', $element_content->id)}}" class="btn btn-primary"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
                         </div>
                         <div class="col-4">
+                            <a href="{{route('element-content.get-all-version', $element_content->id_global)}}" class="btn btn-primary"><i class="fa fa-cubes fa-lg" aria-hidden="true"></i></a>
+                        </div>
+                        <div class="col-4">
                             @if($element_content->status == 'Draft' or $element_content->status == 'Archive')
                                 <a href="{{route('element-content.destroy', $element_content->id)}}" class="btn btn-danger"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
                             @elseif($element_content->status == 'Destroy')

@@ -55,10 +55,13 @@ Route::get('/users/roles/{id}/delete', [UsersController::class, 'deleteRole'])->
 Route::get('/users/permissions/{id}/delete', [UsersController::class, 'deletePermission'])->name('users.delete-permission');
 Route::post('/users/roles-create-form/{type_action}', [UsersController::class, 'rolesCreateForm'])->name('users.roles-create-form');
 Route::post('/users/roles-assign/', [UsersController::class, 'assignRole'])->name('users.roles-assign');
+
 Route::middleware(['auth:web'])->group(function () {
     Route::get('/users/', [UsersController::class, 'index'])->name('users.index');
     Route::get('/users/create', [UsersController::class, 'create'])->name('users.create');
     Route::post('/users/', [UsersController::class, 'store'])->name('users.store');
+    Route::get('/users/profile/', [UsersController::class, 'profile'])->name('users.profile');
+    Route::put('/users/profile/', [UsersController::class, 'profileUpdate'])->name('users.profile-update');
     Route::get('/users/{id}', [UsersController::class, 'show'])->name('users.show');
     Route::get('/users/{id}/edit', [UsersController::class, 'edit'])->name('users.edit');
     Route::put('/users/{id}', [UsersController::class, 'update'])->name('users.update'); // put работает, если в форму добавить @method('PUT')
@@ -66,6 +69,7 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('/users/{id}/activate', [UsersController::class, 'activate'])->name('users.activate');
     Route::get('/users/{id}/block', [UsersController::class, 'block'])->name('users.block');
     Route::get('/users/{id}/delete', [UsersController::class, 'delete'])->name('users.delete');
+    
 });
 // СПРАВОЧНИКИ
 Route::middleware(['auth:web'])->group(function () {
@@ -124,6 +128,5 @@ Route::middleware(['auth:web'])->group(function () {
     Route::put('/element-content/{id}', [ElementContentController::class, 'update'])->name('element-content.update');
     Route::get('/element-content/{id}/del', [ElementContentController::class, 'destroy'])->name('element-content.destroy');
     Route::get('/element-content/{id}/{parameter}', [ElementContentController::class, 'createNewVersion'])->name('element-content.create-new-version');
+    Route::get('/all-version-element-content/{id_global}', [ElementContentController::class, 'getAllVersionElementContent'])->name('element-content.get-all-version');
 });
-
-

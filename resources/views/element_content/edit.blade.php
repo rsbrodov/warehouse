@@ -42,9 +42,11 @@
                 </div>
                 <?php $status_array = []; ?>
                 @if($element_content->status === 'Draft')
-                    <?php $status_array = ['Draft', 'Published'];?>
+                    <?php $status_array = ['Draft', 'Published', 'Destroy'];?>
                 @elseif($element_content->status === 'Published' or $element_content->status === 'Archive')
                     <?php $status_array = ['Published', 'Archive'];?>
+                @elseif($element_content->status === 'Destroy')
+                    <?php $status_array = ['Published', 'Archive', 'Destroy'];?>
                 @endif
                 <div class="form-group row">
                     <label for="status" class="col-md-4 col-form-label text-md-right">Статус</label>

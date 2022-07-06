@@ -19,6 +19,7 @@
                                 <label for="permission">{{$permission->name}}</label>
                             </div>
                         @endforeach
+                        {{-- @error('permissions') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror --}}
                         <button type="submit" class="btn btn-success">Создать</button>
                     </div>
                 </form>
@@ -38,6 +39,7 @@
                                 <label for="permission">{{$role->name}}</label>
                             </div>
                         @endforeach
+                        {{-- @error('roles') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror --}}
                         <button type="submit" class="btn btn-success">Создать</button>
                     </div>
                 </form>
@@ -50,7 +52,8 @@
                         <label for="role">Роль</label>
 
                             <select id="role" type="text" class="form-control" name="role">
-                                @foreach($roles = \Spatie\Permission\Models\Role::where('name', '<>','SuperAdmin')->get() as $role)
+                                {{-- @foreach($roles = \Spatie\Permission\Models\Role::where('name', '<>','SuperAdmin')->get() as $role) --}}
+                                @foreach($roles = \Spatie\Permission\Models\Role::get() as $role)
                                     <option value="{{$role->name}}">{{$role->name}}</option>
                                 @endforeach
                             </select>
