@@ -210,25 +210,31 @@ class UsersController extends Controller
                     //     'roles' => 'required',
                     // ]);
                     $role = Role::create(['name' => $req->input('role')]);
-                    $message = 'Роль '. $role->name. ' успешно создана. Роли даны полномочия: ';
-                    foreach ($req->input('permissions') as $permission) {
-                        $role->givePermissionTo($permission);
-                        $message .= $permission.', ';
+                    $message = 'Роль '. $role->name. ' успешно создана. ';
+                    if($req->input('permissions')) {
+                        $message .= 'Роли даны полномочия: ';
+                        foreach ($req->input('permissions') as $permission) {
+                            $role->givePermissionTo($permission);
+                            $message .= $permission.', ';
+                        }
+                        $message = substr($message, 0, -2);
                     }
-                    $message = substr($message, 0, -2);
                 } else if ($type_action == 'permission') {
                     $permission = Permission::create(['name' => $req->input('permission')]);
                     $roles = Role::all();
-                    $message = 'Полномочие '. $permission->name. ' успешно создано. Полномочие присвоено следующим ролям: ';
-                    foreach ($roles as $role) {
-                        foreach ($req->input('roles') as $r) {
-                            if ($role->name == $r) {
-                                $role->givePermissionTo($req->input('permission'));
-                                $message .= $role->name.', ';
+                    $message = 'Полномочие '. $permission->name. ' успешно создано. ';
+                    if($req->input('roles') ) {
+                        $message .= 'Полномочие присвоено следующим ролям: ';
+                        foreach ($roles as $role) {
+                            foreach ($req->input('roles') as $r) {
+                                if ($role->name == $r) {
+                                    $role->givePermissionTo($req->input('permission'));
+                                    $message .= $role->name.', ';
+                                }
                             }
                         }
+                        $message = substr($message, 0, -2);
                     }
-                    $message = substr($message, 0, -2);
                 }
                 return redirect()->route('users.roles-create-view')->with($type_message, $message);
             }
