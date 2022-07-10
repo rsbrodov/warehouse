@@ -39,12 +39,44 @@ class TypeContent extends Model
     public function checkingApiUrl($apiUrl, $idGlobal = null) {
        if($idGlobal){
            if(($typeContentExistence = TypeContent::where('api_url', $apiUrl)->whereNotIn('id_global', [$idGlobal])->first()) !== null){
-               return 'error';
+               return array(
+                'code'      =>  422,
+                'message'   =>  'The given data was invalid',
+                'errors' => [
+                    'api_url' => 'API URL должен быть уникальным']
+            );
            }
        } else {
            if(($typeContentExistence = TypeContent::where('api_url', $apiUrl)->first()) !== null){
-               return 'error';
+               return array(
+                'code'      =>  422,
+                'message'   =>  'The given data was invalid',
+                'errors' => [
+                    'api_url' => 'API URL должен быть уникальным']
+            );
            }
        }
     }
+
+    public function checkingName($name, $idGlobal = null) {
+        if($idGlobal){
+            if(($typeContentExistence = TypeContent::where('name', $name)->whereNotIn('id_global', [$idGlobal])->first()) !== null){
+                return array(
+                 'code'      =>  422,
+                 'message'   =>  'The given data was invalid',
+                 'errors' => [
+                     'name' => 'Название должно быть уникальным']
+             );
+            }
+        } else {
+            if(($typeContentExistence = TypeContent::where('name', $name)->first()) !== null){
+                return array(
+                 'code'      =>  422,
+                 'message'   =>  'The given data was invalid',
+                 'errors' => [
+                     'name' => 'Название должно быть уникальным']
+             );
+            }
+        }
+     }
 }

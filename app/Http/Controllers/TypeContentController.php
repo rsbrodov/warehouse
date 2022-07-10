@@ -39,7 +39,7 @@ class TypeContentController extends Controller
     public function getListTypeContent()
     {
         if (Auth::guard('web')->check()) {
-            $type_contents = TypeContent::where(['created_author' => Auth::guard('web')->user()->id])->with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('name', 'desc')->get()->unique('id_global');//все уникальные
+            $type_contents = TypeContent::with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('name', 'desc')->get()->unique('id_global');//все уникальные
             $ids = [];
             foreach ($type_contents as $type_content){
                 $ids[] = TypeContent::where('id_global', $type_content->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first()->id;
@@ -48,7 +48,7 @@ class TypeContentController extends Controller
             return response()->json($type_contents);
         } else {
             if (Auth::guard('api')->check()) {
-                $type_contents = TypeContent::where(['created_author' => Auth::guard('api')->user()->id])->with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('name',
+                $type_contents = TypeContent::with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('name',
                     'desc')->get();
                 return response()->json($type_contents);
             }
@@ -74,6 +74,14 @@ class TypeContentController extends Controller
     public function store(TypeContentRequest $request)
     {
         $model = new TypeContent();
+        $check_api = $model->checkingApiUrl($request->api_url);
+        $check_name = $model->checkingName($request->name);
+        if($check_api){
+            return response()->json($check_api, 422);
+        }
+        if($check_name){
+            return response()->json($check_name, 422);
+        }
         if (Auth::guard('web')->check()) {
             $new_type_content = TypeContent::create([
                 'id_global' => Str::uuid()->toString(),

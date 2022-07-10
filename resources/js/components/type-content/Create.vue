@@ -36,8 +36,11 @@
                         <input autocomplete="off" id="name" class="form-control" type="text" v-model="form.name"
                                :class="{invalid: ($v.form.name.$dirty && !$v.form.name.required)}">
                             <small class="helper-text invalid" v-if="$v.form.name.$dirty && !$v.form.name.required">
-                                Необходимо заполнить «Наименование».
+                                Необходимо заполнить «Наименование».<br>
                             </small>
+                            <small class="helper-text invalid" v-if="errors.name">
+                            {{errors.name}}<br>
+                        </small>
                     </div>
 
                     <div class="block col-6">
@@ -45,7 +48,10 @@
                         <input autocomplete="off" id="api_url" class="form-control" type="text" v-model="form.api_url"
                                :class="{invalid: ($v.form.api_url.$dirty && !$v.form.api_url.required)}">
                         <small class="helper-text invalid" v-if="$v.form.api_url.$dirty && !$v.form.api_url.required">
-                            Необходимо заполнить «API URL».
+                            Необходимо заполнить «API URL».<br>
+                        </small>
+                        <small class="helper-text invalid" v-if="errors.api_url">
+                            {{errors.api_url}}<br>
                         </small>
                         <a class="btn btn-warning btn-sm mt-1" @click="generateUrl()"><i class="fa fa-undo" aria-hidden="true"></i> Сгенерировать</a>
 
@@ -102,6 +108,7 @@
         data:function(){
             return {
                 icons:null,
+                errors:{},
                 users:null,
                 ru:ru,
                 form:{
@@ -133,8 +140,10 @@
                             message: 'Тик контента успешно создан',
                             time: 3000,
                         });
-                    }).catch(errors => {
-                        console.log(errors);
+                    }).catch(error => {
+                        if (error.response.status === 422) {
+                            this.errors = error.response.data.errors || {};
+                        }
                     });
                 }
             },
