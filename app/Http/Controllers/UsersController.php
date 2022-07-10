@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Storage;
 
 class UsersController extends Controller
 {
@@ -181,7 +182,20 @@ class UsersController extends Controller
                 $edit_user->name = $request->input('name');
                 $edit_user->email = $request->input('email');
                 $edit_user->save();
-                return view('users.profile', $user);
+                return redirect()->route('users.profile')->with('user', $user);
+            }
+        }
+    }
+    public function profileImageUpload(Request $request, $id){
+        if (Auth::guard('web')->check()) {
+            $user = Auth::guard('web')->user();
+            if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
+                $path = $request->file('image')->store('profiles', 'public');
+                $edit_user = User::where('id', $id)->first();
+                Storage::disk('public')->delete($edit_user->photo);
+                $edit_user->photo = $path;
+                $edit_user->save();
+                return redirect()->route('users.profile')->with('user', $user);
             }
         }
     }

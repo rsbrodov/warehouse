@@ -324,13 +324,13 @@ class HomeController extends Controller
         }
     }
     public function imageUpload(Request $request){
-        //$path = $request->file('image')->store('uploads', 'public');
-        $path = Image::make($request->file('image')->getRealPath())->resize(200, 200)->store('uploads', 'public');
+        $path = $request->file('image')->store('uploads', 'public');
+        //$path = Image::make($request->file('image')->getRealPath())->resize(200, 200)->store('uploads', 'public');
         return view('image-show', ['path' => $path]);
     }
     public function imageShow(){
         $directory = 'public/uploads';
-        $images = Storage::disk('local')->allFiles($directory);
+        $images = Storage::disk('public')->allFiles('uploads');
         //dd($images);
         return view('image-show', ['images' => $images]);
     }
