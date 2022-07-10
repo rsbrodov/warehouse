@@ -43,8 +43,8 @@ Route::get('/home-test', [App\Http\Controllers\HomeController::class, 'test'])->
 Route::get('/home-test2', [App\Http\Controllers\HomeController::class, 'test2'])->name('home-test2');
 Route::get('/home-delete-test10000TC', [App\Http\Controllers\HomeController::class, 'deleteTEST10000TC'])->name('home-delete-test10000TC');
 Route::get('/home-delete-test10000D', [App\Http\Controllers\HomeController::class, 'deleteTEST10000D'])->name('home-delete-test10000D');
-    Route::post('/home-image-upload', [App\Http\Controllers\HomeController::class, 'imageUpload'])->name('image.upload');
-
+Route::post('/home-image-upload', [App\Http\Controllers\HomeController::class, 'imageUpload'])->name('image.upload');
+Route::get('/home-image-show', [App\Http\Controllers\HomeController::class, 'imageShow'])->name('image.show');
 
 //Route::get('/users/link/{data}', [UsersController::class, 'linkHandler'])->name('link.handler');
 
@@ -61,7 +61,8 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('/users/create', [UsersController::class, 'create'])->name('users.create');
     Route::post('/users/', [UsersController::class, 'store'])->name('users.store');
     Route::get('/users/profile/', [UsersController::class, 'profile'])->name('users.profile');
-    Route::put('/users/profile/', [UsersController::class, 'profileUpdate'])->name('users.profile-update');
+    Route::put('/users/profile/{id}', [UsersController::class, 'profileUpdate'])->name('users.profile-update');
+    Route::put('/users/profile-image-upload/{id}', [UsersController::class, 'profileImageUpload'])->name('users.profile-image-upload');
     Route::get('/users/{id}', [UsersController::class, 'show'])->name('users.show');
     Route::get('/users/{id}/edit', [UsersController::class, 'edit'])->name('users.edit');
     Route::put('/users/{id}', [UsersController::class, 'update'])->name('users.update'); // put работает, если в форму добавить @method('PUT')

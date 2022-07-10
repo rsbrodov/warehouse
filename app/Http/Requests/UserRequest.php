@@ -26,6 +26,7 @@ class UserRequest extends FormRequest
         $rules = [
             'name' => 'required',
             'email' => ['required', 'string', 'email', 'max:255',
+                //Rule::unique('users')->ignore($this->user()->id, 'id'), // как вариант можно попробовать так, если нижняя строка не работает:)
                 Rule::unique('users')->ignore($this->id),
             ],
             'password' => 'required|confirmed|min:6',

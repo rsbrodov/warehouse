@@ -9,6 +9,7 @@
                 <button class="form-control btn-outline-success" type="submit">Загрузка</button>
             </form>
             @isset($path)
+            {{$path}}
                 <img class="img-fluid" src="{{asset('/storage/' . $path)}}">
             @endisset
 
@@ -16,7 +17,7 @@
                 Загруженные фотографии: <br>
             @foreach($images as $image)
                 <?php print_r($image); ?>
-                <img class="img-fluid" src="{{asset($image)}}">
+                <img class="img-fluid" src="{{asset('/storage/' . $image)}}">
             @endforeach
             @endisset
         </div>
