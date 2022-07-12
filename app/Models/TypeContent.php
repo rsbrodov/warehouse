@@ -43,7 +43,7 @@ class TypeContent extends Model
                 'code'      =>  422,
                 'message'   =>  'The given data was invalid',
                 'errors' => [
-                    'api_url' => 'API URL должен быть уникальным']
+                    'api_url' => '«API URL» должен быть уникальным']
             );
            }
        } else {
@@ -52,7 +52,7 @@ class TypeContent extends Model
                 'code'      =>  422,
                 'message'   =>  'The given data was invalid',
                 'errors' => [
-                    'api_url' => 'API URL должен быть уникальным']
+                    'api_url' => '«API URL» должен быть уникальным']
             );
            }
        }
@@ -65,7 +65,7 @@ class TypeContent extends Model
                  'code'      =>  422,
                  'message'   =>  'The given data was invalid',
                  'errors' => [
-                     'name' => 'Название должно быть уникальным']
+                     'name' => '«Наименование» должно быть уникальным']
              );
             }
         } else {
@@ -74,7 +74,7 @@ class TypeContent extends Model
                  'code'      =>  422,
                  'message'   =>  'The given data was invalid',
                  'errors' => [
-                     'name' => 'Название должно быть уникальным']
+                     'name' => '«Наименование» должно быть уникальным']
              );
             }
         }
