@@ -28,7 +28,7 @@
             <div class="d-flex ">
                 <div class="mr-2" ><span class="fa fa-question-circle-o fa-lg" aria-hidden="true"></span></div>
                 <div class="mr-2"><a href="{{route('users.profile')}}" class="d-block">{{Auth::guard('web')->user()->name}}</a></div>
-                <div class="mr-2"><img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image"></div>
+                <div class="mr-2"><img src="{{asset('/storage/' . Auth::guard('web')->user()->photo)}}" class="img-circle elevation-2" alt="User Image"></div>
             </div>
 
         </li>
