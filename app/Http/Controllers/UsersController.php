@@ -17,7 +17,6 @@ class UsersController extends Controller
     {
         //$this->middleware('auth');
     }
-
     public function index()
     {
         if (Auth::guard('web')->check()) {
@@ -190,12 +189,17 @@ class UsersController extends Controller
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
-                $path = $request->file('image')->store('profiles', 'public');
-                $edit_user = User::where('id', $id)->first();
-                Storage::disk('public')->delete($edit_user->photo);
-                $edit_user->photo = $path;
-                $edit_user->save();
-                return redirect()->route('users.profile')->with('user', $user);
+                if($request->file('image')){
+                    $path = $request->file('image')->store('profiles', 'public');
+                    $edit_user = User::where('id', $id)->first();
+                    Storage::disk('public')->delete($edit_user->photo);
+                    $edit_user->photo = $path;
+                    $edit_user->save();
+                    return redirect()->route('users.profile')->with('user', $user);
+                } else {
+                    return redirect()->route('users.profile')->with('user', $user)->with('warning', 'Фото не выбрано!');
+                }
+                
             }
         }
     }
