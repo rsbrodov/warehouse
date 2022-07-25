@@ -40,7 +40,7 @@
         <div class="container-fluid">
             <!-- Stack the columns on mobile by making one full-width and the other half-width -->
             <div class="row">
-                <div class="col"><b><h1>{{typeContentOne.name}}</h1></b></div>
+                <div class="col"><b><h2>{{typeContentOne.name}}</h2></b></div>
                 <div class="col"></div>
             </div>
             <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->

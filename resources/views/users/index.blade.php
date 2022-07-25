@@ -2,23 +2,18 @@
 @extends('admin.main')
 @section('content')
     <div class="container" xmlns:white-space="http://www.w3.org/1999/xhtml">
-        <a class="btn btn-info" href="{{ route('home') }}"> Домой</a>
-        <div class="d-flex justify-content-center"><h1>Пользователи</h1></div>
-        <table class="table table-bordered table-hover">
+        <table class="table table-bordered table-hover mt-5">
             <tr>
                 <th>ID</th>
-                <th>Создатель</th>
                 <th>Имя</th>
                 <th>Email</th>
                 <th>Статус</th>
                 <th>Создан</th>
-                <th>Обновлен</th>
                 <th>Действия</th>
             </tr>
             @foreach($users as $user)
                 <tr>
                     <td>{{$user->id}}</td>
-                    <td>{{\App\Models\User::where('id', $user->parent_id)->first()->name}}</td>
                     <td>{{$user->name}}</td>
                     <td>{{$user->email}}</td>
                     <td class="
@@ -33,7 +28,6 @@
                     @endif
                         ">{{$user->status}}</td>
                     <td>{{$user->created_at}}</td>
-                    <td>{{$user->updated_at}}</td>
                     <td nowrap>
                         <a href="{{route('users.show', ($user->id))}}"
                            class="btn btn-success ">

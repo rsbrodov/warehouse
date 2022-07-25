@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="d-flex justify-content-center"><h1>Справочники</h1></div>
+        <!-- <div class="d-flex justify-content-center"><h1>Справочники</h1></div> -->
         <FlashMessage :position="'right bottom'"></FlashMessage>
         <!-- Modal Dictionary create -->
         <div class="modal fade" id="dictionaryCreate" aria-hidden="true">

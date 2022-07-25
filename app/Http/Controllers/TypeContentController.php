@@ -76,11 +76,11 @@ class TypeContentController extends Controller
         $model = new TypeContent();
         $check_api = $model->checkingApiUrl($request->api_url);
         $check_name = $model->checkingName($request->name);
-        if($check_api){
-            return response()->json($check_api, 422);
-        }
         if($check_name){
             return response()->json($check_name, 422);
+        }
+        if($check_api){
+            return response()->json($check_api, 422);
         }
         if (Auth::guard('web')->check()) {
             $new_type_content = TypeContent::create([

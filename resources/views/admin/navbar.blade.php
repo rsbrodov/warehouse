@@ -1,9 +1,18 @@
 <!-- Navbar -->
-<nav class="main-header navbar navbar-expand navbar-black navbar-light d-flex justify-content-between">
+<nav class="main-header navbar navbar-expand navbar-black navbar-light d-flex justify-content-between" style="height: 57px;">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
-        <li class="nav-item">
+        {{-- <li class="nav-item">
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fa fa-bars fa-lg" aria-hidden="true"></i></a>
+        </li> --}}
+
+
+        <li class="nav-item d-none d-sm-inline-block title">
+            @if(App\Models\UrlTitle::where('url', Route::current()->getName())->first())
+                {{App\Models\UrlTitle::where('url', Route::current()->getName())->first()->title}}
+            @else
+                {{Route::current()->getName()}}
+            @endif
         </li>
 {{--        <li class="nav-item d-none d-sm-inline-block">--}}
 {{--            <a href="/home" class="nav-link">Кабинет</a>--}}
@@ -11,14 +20,18 @@
 {{--        <li class="nav-item d-none d-sm-inline-block">--}}
 {{--            <a href="/" class="nav-link">На сайт</a>--}}
 {{--        </li>--}}
-        <li class="nav-item d-none d-sm-inline-block">
+
+
+
+
+        {{-- <li class="nav-item d-none d-sm-inline-block">
             <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 {{ __('Выход') }}
             </a>
         </li>
         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
             @csrf
-        </form>
+        </form> --}}
     </ul>
 
     <!-- Right navbar links -->
@@ -156,4 +169,18 @@
     </ul>
 </nav>
 <!-- /.navbar -->
+<style>
+    .title{
+        padding-top: 5px;
+        padding-left: 10px;
+        font-family: 'Roboto';
+        font-style: italic;
+        font-weight: 400;
+        font-size: 30px;
+        line-height: 23px;
+        color: #716464;
+    }
+    
+    
 
+</style>
