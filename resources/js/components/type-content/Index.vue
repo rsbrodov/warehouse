@@ -26,7 +26,7 @@
             </div>
         </div>
 
-        <div class="text-center"><h3>Контентная модель</h3></div>
+        <!-- <div class="text-center"><h3>Контентная модель</h3></div> -->
         <div class="row mt-4">
             <div class="header-block row">
                 <div class="search-form col-6">

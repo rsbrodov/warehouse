@@ -15,7 +15,7 @@
                 <img src="{{asset('/storage/' . Auth::guard('web')->user()->photo)}}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block">{{Auth::guard('web')->user()->name}}</a>
+                <a href="{{route('users.profile')}}" class="d-block">{{Auth::guard('web')->user()->name}}</a>
             </div>
         </div>
 
