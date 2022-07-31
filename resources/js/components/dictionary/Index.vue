@@ -111,7 +111,7 @@
 <script>
     import {mapGetters, mapActions} from 'vuex'
     import Create from './create'
-    import CreateElement from "../dictironary-element/CreateElement";
+    import CreateElement from "../dictionary-element/CreateElement";
     import Edit from "./Edit";
     import Loader from "../helpers/Loader";
     import moment from 'moment'

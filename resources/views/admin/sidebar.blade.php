@@ -1,3 +1,17 @@
+<?php
+$type_contents = \App\Models\TypeContent::where(['created_author' => Auth::guard('web')->user()->id, 'status' => 'Published'])->with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('name', 'desc')->get()->unique('id_global');//все уникальные
+$ids = [];
+foreach ($type_contents as $type_content){
+    $ids[] = \App\Models\TypeContent::where('id_global', $type_content->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first()->id;
+}
+$type_contents = \App\Models\TypeContent::whereIn('id', $ids)->orderBy('created_at', 'asc')->get();
+$current_page = false;
+foreach ($type_contents as $type_content){
+    if(request()->route('type_content_id') == $type_content->id){
+        $current_page = true;
+    }
+}
+?>
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
@@ -35,107 +49,77 @@
         <nav class="mt-2">
 
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-
-                <li class="nav-item">
-                    <a href="{{ route('users.index') }}" class="nav-link">
-                        <i class="fa fa-user-circle fa-lg" aria-hidden="true"></i>
-                        <p>Пользователи{{--<i class="right fas fa-angle-left"></i>--}}
+                <li class="nav-item @if(Route::current()->getName() == 'dictionary.index' || Route::current()->getName() == 'type-content.index') menu-is-opening menu-open @endif">
+                    <a href="#" class="nav-link">
+                        <span class="fa fa-list-alt fa-lg"></span>
+                        <p>Контентная модель
+                            <i class="fa fa-angle-left right"></i>
                         </p>
                     </a>
-
-                    {{--                    <ul class="nav nav-treeview">--}}
-                    {{--                        <li class="nav-item">--}}
-                    {{--                            <a href="../../index.html" class="nav-link">--}}
-                    {{--                                <i class="far fa-circle nav-icon"></i>--}}
-                    {{--                                <p>Dashboard v1</p>--}}
-                    {{--                            </a>--}}
-                    {{--                        </li>--}}
-                    {{--                        <li class="nav-item">--}}
-                    {{--                            <a href="../../index2.html" class="nav-link">--}}
-                    {{--                                <i class="far fa-circle nav-icon"></i>--}}
-                    {{--                                <p>Dashboard v2</p>--}}
-                    {{--                            </a>--}}
-                    {{--                        </li>--}}
-                    {{--                    </ul>--}}
+                    <ul class="nav nav-treeview"
+                        @if(Route::current()->getName() == 'dictionary.index' || Route::current()->getName() == 'type-content.index')
+                            style="display: block;"
+                        @endif
+                        >
+                        <li class="nav-item">
+                            <a href="{{ route('dictionary.index') }}" class="nav-link ml-2 @if(Route::current()->getName() == 'dictionary.index') active @endif">
+                                {{-- <i class="fa fa-folder-open fa-lg" aria-hidden="true"></i> --}}
+                                <p>Справочники</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('type-content.index') }}" class="nav-link ml-2 @if(Route::current()->getName() == 'type-content.index') active @endif">
+                                {{-- <i class="fa fa-puzzle-piece fa-lg" aria-hidden="true"></i> --}}
+                                <p>Типы контента</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('dictionary.index') }}" class="nav-link">
-                        <i class="fa fa-folder-open fa-lg" aria-hidden="true"></i>
-                        <p>Справочники</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('type-content.index') }}" class="nav-link">
-                        <i class="fa fa-puzzle-piece fa-lg" aria-hidden="true"></i>
-                        <p>Типы контента</p>
-                    </a>
-                </li>
-                <?php
-                $type_contents = \App\Models\TypeContent::where(['created_author' => Auth::guard('web')->user()->id, 'status' => 'Published'])->with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('name', 'desc')->get()->unique('id_global');//все уникальные
-                $ids = [];
-                foreach ($type_contents as $type_content){
-                    $ids[] = \App\Models\TypeContent::where('id_global', $type_content->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first()->id;
-                }
-                $type_contents = \App\Models\TypeContent::whereIn('id', $ids)->orderBy('created_at', 'asc')->get();
-                $current_page = false;
-                foreach ($type_contents as $type_content){
-                    if(request()->route('type_content_id') == $type_content->id){
-                        $current_page = true;
-                    }
-                }
-                ?>
-                <li class="nav-item">
+                <li class="nav-item border-down @if($current_page == true) menu-is-opening menu-open @endif">
                     <a href="#" class="nav-link">
-                        <span class="fa fa-coffee fa-lg"></span>
+                        <span class="fa fa-id-card-o fa-lg"></span>
                         <p>Менеджер контента
                             <i class="fa fa-angle-left right"></i>
                         </p>
                     </a>
-
                     <ul class="nav nav-treeview"
                             @if($current_page == true)
                                 style="display: block;"
                             @endif
                         >
+                        @if($type_contents)
+                        <li class="nav-item">
+                                <a href="#" class="nav-link
+                                    @if(request()->route('type_content_id') == $type_content->id)
+                                        active
+                                    @endif
+                                ml-2"><p>Весь контент</p></a>
+                            </li>
+                        @endif
                         @foreach($type_contents as $type_content)
                             <li class="nav-item">
                                 <a href="/element-content/{{$type_content->id}}" class="nav-link
                                     @if(request()->route('type_content_id') == $type_content->id)
                                         active
                                     @endif
-                                ml-2"><i class="fa {{$type_content->icon}} fa-lg"></i><p>{{$type_content->name}}</p></a>
+                                ml-2"><i class="fa {{$type_content->icon}} fa-lg"></i> <p>{{$type_content->name}}</p></a>
                             </li>
                         @endforeach
                     </ul>
                 </li>
-                {{--                <li class="nav-item">--}}
-                {{--                    <a href="#" class="nav-link">--}}
-                {{--                        <i class="nav-icon fas fa-table"></i>--}}
-                {{--                        <p>--}}
-                {{--                            Отчеты--}}
-                {{--                            <i class="fas fa-angle-left right"></i>--}}
-                {{--                        </p>--}}
-                {{--                    </a>--}}
-                {{--                    <ul class="nav nav-treeview">--}}
-                {{--                        <li class="nav-item">--}}
-                {{--                            <a href="../tables/simple.html" class="nav-link">--}}
-                {{--                                <i class="far fa-circle nav-icon"></i>--}}
-                {{--                                <p>Simple Tables</p>--}}
-                {{--                            </a>--}}
-                {{--                        </li>--}}
-                {{--                        <li class="nav-item">--}}
-                {{--                            <a href="../tables/data.html" class="nav-link">--}}
-                {{--                                <i class="far fa-circle nav-icon"></i>--}}
-                {{--                                <p>DataTables</p>--}}
-                {{--                            </a>--}}
-                {{--                        </li>--}}
+                
+                <li class="nav-item mt-3">
+                    <a href="{{ route('users.index') }}" class="nav-link">
+                        <i class="fa fa-users fa-lg" aria-hidden="true"></i>
+                        <p>Пользователи{{--<i class="right fas fa-angle-left"></i>--}}
+                        </p>
+                    </a>
+                </li>
 
-                {{--                    </ul>--}}
-                {{--                </li>--}}
-                <li class="nav-header">НАСТРОЙКИ</li>
+                {{-- <li class="nav-header">НАСТРОЙКИ</li> --}}
                 <li class="nav-item">
                     <a href="{{ route('users.roles-create-view') }}" class="nav-link">
-                        <i class="fa fa-users fa-lg" aria-hidden="true"></i>
+                        <i class="fa fa-universal-access fa-lg" aria-hidden="true"></i>
                         <p>Роли/полномочия</p>
                     </a>
                 </li>
@@ -147,120 +131,17 @@
                         </p>
                     </a>
                 </li>
-{{--                                <li class="nav-item">--}}
-{{--                                    <a href="../kanban.html" class="nav-link">--}}
-{{--                                        <i class="nav-icon fas fa-columns"></i>--}}
-{{--                                        <p>--}}
-{{--                                            Kanban Board--}}
-{{--                                        </p>--}}
-{{--                                    </a>--}}
-{{--                                </li>--}}
-{{--                                <li class="nav-item">--}}
-{{--                                    <a href="#" class="nav-link">--}}
-{{--                                        <i class="nav-icon far fa-envelope"></i>--}}
-{{--                                        <p>--}}
-{{--                                            Mailbox--}}
-{{--                                            <i class="fas fa-angle-left right"></i>--}}
-{{--                                        </p>--}}
-{{--                                    </a>--}}
-{{--                                    <ul class="nav nav-treeview">--}}
-{{--                                        <li class="nav-item">--}}
-{{--                                            <a href="../mailbox/mailbox.html" class="nav-link">--}}
-{{--                                                <i class="far fa-circle nav-icon"></i>--}}
-{{--                                                <p>Inbox</p>--}}
-{{--                                            </a>--}}
-{{--                                        </li>--}}
-{{--                                        <li class="nav-item">--}}
-{{--                                            <a href="../mailbox/compose.html" class="nav-link">--}}
-{{--                                                <i class="far fa-circle nav-icon"></i>--}}
-{{--                                                <p>Compose</p>--}}
-{{--                                            </a>--}}
-{{--                                        </li>--}}
-{{--                                        <li class="nav-item">--}}
-{{--                                            <a href="../mailbox/read-mail.html" class="nav-link">--}}
-{{--                                                <i class="far fa-circle nav-icon"></i>--}}
-{{--                                                <p>Read</p>--}}
-{{--                                            </a>--}}
-{{--                                        </li>--}}
-{{--                                    </ul>--}}
-{{--                                </li>--}}
-{{--                                <li class="nav-header">MISCELLANEOUS</li>--}}
-{{--                                <li class="nav-item">--}}
-{{--                                    <a href="../../iframe.html" class="nav-link">--}}
-{{--                                        <i class="nav-icon fas fa-ellipsis-h"></i>--}}
-{{--                                        <p>Tabbed IFrame Plugin</p>--}}
-{{--                                    </a>--}}
-{{--                                </li>--}}
-{{--                                <li class="nav-item">--}}
-{{--                                    <a href="https://adminlte.io/docs/3.1/" class="nav-link">--}}
-{{--                                        <i class="nav-icon fas fa-file"></i>--}}
-{{--                                        <p>Documentation</p>--}}
-{{--                                    </a>--}}
-{{--                                </li>--}}
-{{--                                <li class="nav-header">MULTI LEVEL EXAMPLE</li>--}}
-{{--                                <li class="nav-item">--}}
-{{--                                    <a href="#" class="nav-link">--}}
-{{--                                        <i class="fas fa-circle nav-icon"></i>--}}
-{{--                                        <p>Level 1</p>--}}
-{{--                                    </a>--}}
-{{--                                </li>--}}
-{{--                                <li class="nav-item">--}}
-{{--                                    <a href="#" class="nav-link">--}}
-{{--                                        <i class="nav-icon fas fa-circle"></i>--}}
-{{--                                        <p>--}}
-{{--                                            Level 1--}}
-{{--                                            <i class="right fas fa-angle-left"></i>--}}
-{{--                                        </p>--}}
-{{--                                    </a>--}}
-{{--                                    <ul class="nav nav-treeview">--}}
-{{--                                        <li class="nav-item">--}}
-{{--                                            <a href="#" class="nav-link">--}}
-{{--                                                <i class="far fa-circle nav-icon"></i>--}}
-{{--                                                <p>Level 2</p>--}}
-{{--                                            </a>--}}
-{{--                                        </li>--}}
-{{--                                        <li class="nav-item">--}}
-{{--                                            <a href="#" class="nav-link">--}}
-{{--                                                <i class="far fa-circle nav-icon"></i>--}}
-{{--                                                <p>--}}
-{{--                                                    Level 2--}}
-{{--                                                    <i class="right fas fa-angle-left"></i>--}}
-{{--                                                </p>--}}
-{{--                                            </a>--}}
-{{--                                            <ul class="nav nav-treeview">--}}
-{{--                                                <li class="nav-item">--}}
-{{--                                                    <a href="#" class="nav-link">--}}
-{{--                                                        <i class="far fa-dot-circle nav-icon"></i>--}}
-{{--                                                        <p>Level 3</p>--}}
-{{--                                                    </a>--}}
-{{--                                                </li>--}}
-{{--                                                <li class="nav-item">--}}
-{{--                                                    <a href="#" class="nav-link">--}}
-{{--                                                        <i class="far fa-dot-circle nav-icon"></i>--}}
-{{--                                                        <p>Level 3</p>--}}
-{{--                                                    </a>--}}
-{{--                                                </li>--}}
-{{--                                                <li class="nav-item">--}}
-{{--                                                    <a href="#" class="nav-link">--}}
-{{--                                                        <i class="far fa-dot-circle nav-icon"></i>--}}
-{{--                                                        <p>Level 3</p>--}}
-{{--                                                    </a>--}}
-{{--                                                </li>--}}
-{{--                                            </ul>--}}
-{{--                                        </li>--}}
-{{--                                        <li class="nav-item">--}}
-{{--                                            <a href="#" class="nav-link">--}}
-{{--                                                <i class="far fa-circle nav-icon"></i>--}}
-{{--                                                <p>Level 2</p>--}}
-{{--                                            </a>--}}
-{{--                                        </li>--}}
-{{--                                    </ul>--}}
-{{--                                </li>--}}
             </ul>
-
-
         </nav>
         <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
 </aside>
+<style>
+    /*.menu-is-opening{
+        background-color: #1f1f1f;
+    }*/
+    .border-down{
+        border-bottom: 1px solid #4f5962;"
+    }
+</style>

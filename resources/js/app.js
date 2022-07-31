@@ -15,8 +15,9 @@ Vue.component('jw-pagination', JwPagination);
 
 Vue.component('Index', require('./components/type-content/Index.vue').default);
 Vue.component('Indexdictionary', require('./components/dictionary/Index.vue').default);
-Vue.component('Indexdictionaryelement', require('./components/dictironary-element/Index.vue').default);
+Vue.component('Indexdictionaryelement', require('./components/dictionary-element/Index.vue').default);
 Vue.component('Viewtype', require('./components/type-content/Viewtype.vue').default);
+Vue.component('Indexelementcontent', require('./components/element-content/Index.vue').default);
 
 Vue.use(Vuelidate)
 Vue.use( Moment );
