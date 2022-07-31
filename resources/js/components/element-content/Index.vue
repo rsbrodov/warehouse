@@ -23,36 +23,47 @@
         </div> -->
         <div class="row mt-4">
             <div class="header-block row">
-                <!-- <div class="search-form col-6">
+                <div class="search-form col-6">
                     <div class="form">
                         <form action="" method="post">
                             <div class="form-group row">
                                 <div class="col-4">
-                                    <input autocomplete="off" type="text" name="name" placeholder="Код справочника"
-                                           id="code" class="form-control" v-model="filter_form.code">
+                                    <input autocomplete="off" type="text" name="label" placeholder="Заголовок"
+                                        id="code" class="form-control" v-model="filter_form.label">
                                 </div>
                                 <div class="col-4">
-                                    <input autocomplete="off" type="text" name="name"
-                                           placeholder="Наименование справочника" id="name" class="form-control"
-                                           v-model="filter_form.name">
+                                    <input autocomplete="off" type="text" name="url"
+                                        placeholder="URL контента" id="name" class="form-control"
+                                        v-model="filter_form.url">
                                 </div>
                                 <div class="col-4">
-                                    <select id="archive" class="form-control" name="archive"
-                                            v-model="filter_form.archive">
+                                    <select id="status" class="form-control" name="status" v-model="filter_form.status">
                                         <option value=''>Все</option>
-                                        <option value='0'>Действующий</option>
-                                        <option value='1'>Архивный</option>
+                                        <option value='Draft'>Черновик</option>
+                                        <option value='Published'>Опубликовано</option>
+                                        <option value='Archive'>В архиве</option>
+                                        <option value='Destroy'>На удаление</option>
                                     </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-4">
+                                    <input autocomplete="off" type="text" name="active_from" v-model="filter_form.active_from" placeholder="Период действия с" id="active_from" class="form-control datepicker-here">
+                                </div>
+                                <div class="col-4">
+                                    <input  autocomplete="off" type="text" name="active_after" v-model="filter_form.active_after" placeholder="Период действия по" id="active_after" class="form-control datepicker-here">
                                 </div>
                             </div>
                         </form>
                     </div>
-                </div> -->
-                <!-- <div class="create col-6 text-right">
+                </div> 
+                <div class="create col-6 text-right">
                     <button id="hideshow" class="btn btn-outline-primary btn-unbordered" @click="toggleSearch()"><span class="fa fa-search fa-lg" aria-hidden="true"></span></button>
                     <button id="clean" class="btn btn-outline-primary btn-unbordered" style="display: none;"  @click="cleanSearch()"><span class="fa fa-paint-brush fa-lg" aria-hidden="true"></span> Очистить</button>
                     <button type="button" class="btn-create btn btn-outline-primary btn-unbordered" @click="openModal('dictionaryCreate')"><span class="fa fa-plus-circle fa-lg"></span></button>
-                </div>-->
+                    <!-- <a href="{{route('element-content.create', request()->route('type_content_id'))}}" class="btn-create btn btn-primary"><span class="fa fa-plus-circle fa-lg"></span></a> -->
+                </div>
             </div>
         </div>
         <table class="table table-bordered table-hover mt-4">
@@ -77,17 +88,11 @@
                 <td>{{ element | date }}</td>
                 <td>{{element.updated_authors.name}}</td>
                 <td>{{ element | dateUpdated }}</td>
-
-                <!-- <td nowrap>
-                    <a class="btn btn-outline-primary btn-unbordered" @click="openModal('dictionaryEdit', dictionary)"><i
-                        class="fa fa-pencil fa-lg"></i></a>
-                    <a class="btn btn-outline-primary btn-unbordered" @click="archDictionary(dictionary.id)"><i
-                        class="fa fa-exchange fa-lg"></i></a>
-                    <a class="btn btn-outline-primary btn-unbordered" @click="openModal('dictionaryElementCreate', dictionary)"><i
-                        class="fa fa-plus fa-lg"></i></a>
-                    <a :href="'/dictionary/'+dictionary.id+'/dictionary-element/'" class="btn btn-outline-primary btn-unbordered"><i
-                        class="fa fa-eye fa-lg" aria-hidden="true"></i></a>
-                </td> --> 
+                <!-- :href нужно убрать когда будут добавлены компоненты -->
+                <td nowrap>
+                    <a :href="'/element-content/'+ element.id +'/edit'" class="btn btn-outline-primary btn-unbordered" @click="openModal('typeContentEdit', type_content)"><i class="fa fa-pencil fa-lg"></i></a>
+                    <a :href="'/all-version-element-content/'+element.id" class="btn btn-outline-primary btn-unbordered"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a>
+                </td>
             </tr>
         </table>
     </div>
@@ -103,6 +108,13 @@
         data:function(){
             return {
                 id: window.location.href.split('/').slice(-1)[0],
+                filter_form:{
+                    label:null,
+                    url:null,
+                    status:null,
+                    active_from:null,
+                    active_after:null,
+                },
             }
         },
 
@@ -118,9 +130,6 @@
                 }
 
             },
-            /*removeDictionaryElement(id){
-                this.deleteDictionaryElement(id);
-            },*/
             openModal(id){
                 if(id == 'dictionaryElementCreate') {
                     $('#dictionaryElementCreate').modal('show');
@@ -128,6 +137,13 @@
             },
             toggleSearch(){
                 $('.form').toggle('show');
+                $('#clean').toggle('show');
+                $('#hideshow').toggleClass('btn-primary btn-secondary');
+                if( $('#hideshow').hasClass('btn-primary')){
+                    $('#hideshow').html('<span class="fa fa-search fa-lg"></span>');
+                } else if( $('#hideshow').hasClass('btn-secondary')){
+                    $('#hideshow').html('Свернуть');
+                }
             },
             cleanSearch(){
                 $( 'form' ).each(function(){
@@ -177,6 +193,5 @@
             $('.form').hide();
         }
     }
-</script>
 </script>
 

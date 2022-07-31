@@ -12,38 +12,6 @@ class ElementContentController extends Controller
     {
         //$this->middleware('auth');
     }
-    public function index()
-    {
-        if (Auth::guard('web')->check()) {
-            if (Auth::guard('web')->check()) {
-                $element_contents = ElementContent::  where(['created_author' => Auth::guard('web')->user()->id])
-                                                    ->where('type_content_id', request('type_content_id'))
-                                                    ->with('created_authors:id,name')
-                                                    ->with('updated_authors:id,name')
-                                                    ->orderBy('label', 'desc')
-                                                    ->get()
-                                                    ->unique('id_global');//все уникальные
-                $ids = [];
-                foreach ($element_contents as $element_content){
-                    $ids[] = ElementContent::where('id_global', $element_content->id_global)
-                    ->orderBy('version_major', 'desc')
-                    ->orderBy('version_minor', 'desc')
-                    ->first()->id;
-                }
-                $element_contents = ElementContent::whereIn('id', $ids)->orderBy('created_at', 'asc')->get();
-                return view('element_content.index')->with('element_contents', $element_contents);
-                //return response()->json($element_contents);
-            } else {
-                if (Auth::guard('api')->check()) {
-                    $element_contents = ElementContent::where(['created_author' => Auth::guard('api')->user()->id])->where('type_content_id', request('type_content_id'))->with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('label',
-                        'desc')->get();
-                    return response()->json($element_contents);
-                }
-            }
-           
-        }
-    }
-
     public function findElementContentID($id)
     {
         if (Auth::guard('web')->check()) {
@@ -75,9 +43,9 @@ class ElementContentController extends Controller
         }
     }
 
-    public function index2()
+    public function index()
     {
-        return view('element_content.index2');
+        return view('element_content.index');
     }
 
     public function create()
