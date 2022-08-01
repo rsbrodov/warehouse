@@ -3,11 +3,11 @@
         <!-- <div class="d-flex justify-content-center"><h1>Справочники</h1></div> -->
         <!-- <FlashMessage :position="'right bottom'"></FlashMessage> -->
         <!-- Modal Dictionary create -->
-        <!-- <div class="modal fade" id="dictionaryCreate" aria-hidden="true">
+        <div class="modal fade" id="ElementContentCreate" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
-                <Create @close-modal="closeModal('dictionaryCreate', 1)"></Create>
+                <Create @close-modal="closeModal('ElementContentCreate', 1)"></Create>
             </div>
-        </div> -->
+        </div>
 
         <!-- Modal Dictionary edit -->
         <!-- <div class="modal fade" id="dictionaryEdit" aria-hidden="true">
@@ -61,7 +61,7 @@
                 <div class="create col-6 text-right">
                     <button id="hideshow" class="btn btn-outline-primary btn-unbordered" @click="toggleSearch()"><span class="fa fa-search fa-lg" aria-hidden="true"></span></button>
                     <button id="clean" class="btn btn-outline-primary btn-unbordered" style="display: none;"  @click="cleanSearch()"><span class="fa fa-paint-brush fa-lg" aria-hidden="true"></span> Очистить</button>
-                    <button type="button" class="btn-create btn btn-outline-primary btn-unbordered" @click="openModal('dictionaryCreate')"><span class="fa fa-plus-circle fa-lg"></span></button>
+                    <button type="button" class="btn-create btn btn-outline-primary btn-unbordered" @click="openModal('ElementContentCreate')"><span class="fa fa-plus-circle fa-lg"></span></button>
                     <!-- <a href="{{route('element-content.create', request()->route('type_content_id'))}}" class="btn-create btn btn-primary"><span class="fa fa-plus-circle fa-lg"></span></a> -->
                 </div>
             </div>
@@ -103,8 +103,9 @@
     import {mapGetters, mapActions} from 'vuex'
     import Loader from "../helpers/Loader";
     import moment from 'moment'
+    import Create from './create'
     export default{
-        components:{Loader, moment},
+        components:{Loader, moment, Create},
         data:function(){
             return {
                 id: window.location.href.split('/').slice(-1)[0],
@@ -125,14 +126,14 @@
         methods: {
             ...mapActions(['getElementContent', 'getLoading']),
             closeModal(id){
-                if(id == 'dictionaryElementCreate'){
-                    $("#dictionaryElementCreate").modal("hide");
+                if(id == 'ElementContentCreate'){
+                    $("#ElementContentCreate").modal("hide");
                 }
 
             },
             openModal(id){
-                if(id == 'dictionaryElementCreate') {
-                    $('#dictionaryElementCreate').modal('show');
+                if(id == 'ElementContentCreate') {
+                    $('#ElementContentCreate').modal('show');
                 }
             },
             toggleSearch(){
