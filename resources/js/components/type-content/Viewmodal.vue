@@ -27,7 +27,7 @@
                         <label for="name"><b>Тип поля:</b></label>
                         <input autocomplete="off" id="name" class="form-control" type="text" v-model="vv.name" disabled="true">
                     </div>
-                    <div class="block col-6" v-if="vv.type == 'select' || vv.type == 'radio'">
+                    <div class="block col-6" v-if="vv.type == 'select' || vv.type == 'radio' || vv.type == 'checkbox'">
                         <label for="dictionary_id"><b>Справочник:</b></label>
                         <select id="dictionary_id" class="form-control"
                                 v-model="vv.dictionary_id">

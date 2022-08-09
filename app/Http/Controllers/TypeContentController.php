@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TypeContentRequest;
+use App\Models\ElementContent;
 use App\Models\Icons;
 use App\Models\TypeContent;
 use Illuminate\Http\Request;
@@ -170,180 +171,17 @@ class TypeContentController extends Controller
     }
 
     public function enter($id){
-        $type_content = TypeContent::find($id);
+        $element_content = ElementContent::find($id);
 
-        $object = (object)[
-            [
-                "idRow" => "1",
-                "col"   => [
-                    [
-                        "idCol"   => "row1/col1",
-                        "element" => [
-                            [
-                                "id"       => 1,
-                                "type"     => "text",
-                                "order"    => 1,
-                                "title"    => "Название единорога",
-                                "name"     => "name",
-                                "required" => true,
-                            ],
-                            [
-                                "id"       => 2,
-                                "type"     => "text",
-                                "order"    => 3,
-                                "title"    => "Цена единорога",
-                                "required" => true,
-                                "name"     => "cost",
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            [
-                "idRow" => "2",
-                "col"   => [
-                    [
-                        "idCol"   => "row2/col2",
-                        "element" => [
-                            [
-                                "id"         => 1,
-                                "type"       => "checkbox",
-                                "order"      => 4,
-                                "title"      => "Пол единорога (БД)",
-                                "name"       => "sex",
-                                "required"   => true,
-                                "parameters" => "9ca1da69-7104-4b15-ad89-a645d143abef",
-                            ],
-                            [
-                                "id"       => 3,
-                                "type"     => "text",
-                                "order"    => 2,
-                                "title"    => "Размер единорога",
-                                "name"     => "size",
-                                "required" => true,
-                            ],
-                            [
-                                "id"       => 2,
-                                "type"     => "textarea",
-                                "order"    => 2,
-                                "title"    => "Описание единорога",
-                                "name"     => "description",
-                                "required" => true,
-
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            [
-                "idRow" => "2",
-                "col"   => [
-                    [
-                        "idCol"   => "row2/col2",
-                        "element" => [
-                            [
-                                "id"       => 1,
-                                "type"     => "text",
-                                "order"    => 4,
-                                "title"    => "Местоположение единорога",
-                                "name"     => "location",
-                                "required" => true,
-                            ],
-                            [
-                                "id"         => 3,
-                                "type"       => "select",
-                                "order"      => 2,
-                                "title"      => "Наличие разрешения на управление (БД)",
-                                "name"       => "permission",
-                                "required"   => true,
-                                "parameters" => "dd882515-16ea-4d3a-ba87-6cb05126702e",
-                            ],
-                            [
-                                "id"         => 2,
-                                "type"       => "select",
-                                "order"      => 2,
-                                "title"      => "Тип допуска (БД)",
-                                "name"       => "admission",
-                                "required"   => true,
-                                "parameters" => "a0114e96-d434-4d91-845b-0b76eb531cef",
-                            ],
-                            //                            [
-                            //                                "id" => 2,
-                            //                                "type" => "select",
-                            //                                "order" => 2,
-                            //                                "title" => "Тип допуска",
-                            //                                "name" => "description",
-                            //                                "required" => true,
-                            //                                "parameters" =>  [
-                            //                                    [
-                            //                                        "label"=> "Полный",
-                            //                                        "value"=>"Full",
-                            //                                    ],
-                            //                                    [
-                            //                                        "label"=> "Ограниченный",
-                            //                                        "value"=>"Partly",
-                            //                                    ],
-                            //                                    [
-                            //                                        "label"=> "Отсутствует",
-                            //                                        "value"=>"Denied",
-                            //                                    ]
-                            //                                ]
-                            //                            ],
-                            //                            [
-                            //                                "id" => 2,
-                            //                                "type" => "radio",
-                            //                                "order" => 2,
-                            //                                "title" => "Предпочитаемый способ езды",
-                            //                                "name" => "rideType",
-                            //                                "required" => true,
-                            //                                "parameters" =>  [
-                            //                                    [
-                            //                                        "label"=> "Шаг",
-                            //                                        "value"=>"Step",
-                            //                                    ],
-                            //                                    [
-                            //                                        "label"=> "Рысь",
-                            //                                        "value"=>"Trott",
-                            //                                    ],
-                            //                                    [
-                            //                                        "label"=> "Галоп",
-                            //                                        "value"=>"Gallop",
-                            //                                    ],
-                            //                                    [
-                            //                                        "label"=> "Карьер",
-                            //                                        "value"=>"Quarry",
-                            //                                    ]
-                            //                                ]
-                            //                            ],
-                            [
-                                "id"         => 2,
-                                "type"       => "radio",
-                                "order"      => 2,
-                                "title"      => "Предпочитаемый способ езды (БД)",
-                                "name"       => "rideType",
-                                "required"   => true,
-                                "parameters" => "81f52fa0-e5e1-41d4-a530-0102e4d0bbdb",
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ];
-        $type_content->body = serialize($object);
-        $type_content->save();
-
-
-        $type_content = TypeContent::find($id);
-        $rows = unserialize($type_content->body);
-        return view('type_content.enter', ['rows' => $rows]);
-      /*  foreach ($rows as $row){
-            foreach ($row['col'] as $column){
-                foreach ($column['element'] as $field){
-                    print_r($field);
-                    print_r('<pre>');
-                }
-            }
-        }*/
+        $type_content = TypeContent::find($element_content->type_content_id);
+        //$rows = unserialize($type_content->body);
+        $body = json_decode($type_content->body);
+        return view('type_content.enter', [
+            'body' => $body,
+            'type_content' => $type_content,
+            'element_content' => $element_content
+        ]);
+      
     }
 
 
@@ -639,7 +477,7 @@ class TypeContentController extends Controller
             return response()->json('object not found');
         }
     }
-    public function bodyType($id)
+    public function getBody($id)
     {
         $type_content = TypeContent::find($id);
         if(!empty($type_content)){

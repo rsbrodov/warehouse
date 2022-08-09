@@ -80,7 +80,7 @@
                     <div class="left-block__draggable-layout" v-for="(mas, index) in clonedItems" :key="index">
                         <i class="fa fa-trash mr-2 mt-2 text-primary lg" @click="deleteRow(index)"></i>
                         <draggable class="left-block__draggable-layout__draggable-parent"  ghost-class="ghost" v-model="clonedItems[index]" :options="clonedItemOptions">
-                            <transition-group type="transition" name="flip-list">
+                            <!-- <transition-group type="transition" name="flip-list"> -->
                                 <div class="clickable left-block__draggable-layout__draggable-parent__item" v-for="(item, indexing) in mas" :key="uuid(item)" >
                                     <p class="pl-2 pt-3 text-secondary"><i :class="item.class"></i> {{item.title}}</p>
                                     <div class="button-group">
@@ -88,7 +88,7 @@
                                         <button class="btn btn-outline-primary mr-2" @click="deleteItem(index, indexing)"><i class="fa fa-trash fa-sm"></i></button>
                                     </div>
                                 </div>
-                            </transition-group>
+                            <!-- </transition-group> -->
                         </draggable>
                     </div>
                 </div>
@@ -176,6 +176,11 @@
                         class: "fa fa-text-height fa-lg",
                         name: "Текстовое поле",
                         type: "text",
+                    },
+                    {
+                        class: "fa fa-check-square-o fa-lg",
+                        name: "Чек-лист",
+                        type: "checkbox",
                     },
                 ],
 
