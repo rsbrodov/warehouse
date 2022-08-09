@@ -91,7 +91,8 @@
                 <!-- :href нужно убрать когда будут добавлены компоненты -->
                 <td nowrap>
                     <a :href="'/element-content/'+ element.id +'/edit'" class="btn btn-outline-primary btn-unbordered" @click="openModal('typeContentEdit', type_content)"><i class="fa fa-pencil fa-lg"></i></a>
-                    <a :href="'/all-version-element-content/'+element.id" class="btn btn-outline-primary btn-unbordered"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a>
+                    <!-- <a :href="'/all-version-element-content/'+element.id" class="btn btn-outline-primary btn-unbordered"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a> -->
+                    <a :href="'/element-content/enter/'+element.id" class="btn btn-outline-primary btn-unbordered"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a>
                 </td>
             </tr>
         </table>
