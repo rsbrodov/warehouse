@@ -99,6 +99,7 @@ Route::get('/type-content/create-icons', [TypeContentController::class, 'createI
 
 
 Route::middleware(['auth:web'])->group(function () {
+    Route::post('/type-content/publish-type-content/', [TypeContentController::class, 'publish']);
     Route::post('/type-content/save-body/', [TypeContentController::class, 'saveBody']);
     Route::get('/type-content/getTypeContentID/{id}', [TypeContentController::class, 'getTypeContentID']);
     Route::get('/type-content/get-body/{id}', [TypeContentController::class, 'getBody']);
@@ -110,13 +111,12 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('/type-content/create', [TypeContentController::class, 'create'])->name('type-content.create');
     Route::post('/type-content/', [TypeContentController::class, 'store'])->name('type-content.store');
     Route::get('/type-content/{id}/edit', [TypeContentController::class, 'edit'])->name('type-content.edit');
-    Route::get('/type-content/{id}/publish', [TypeContentController::class, 'publish'])->name('type-content.publish');
     Route::get('/element-content/enter/{id}', [TypeContentController::class, 'enter'])->name('type-content.enter');
     Route::get('/all-version-type-content/{id}', [TypeContentController::class, 'getAllVersionTypeContent'])->name('type-content.get-all-version'); // норм что здесь нет type_content?
     Route::get('/descript-version-type-content/{id}', [TypeContentController::class, 'getShowDescription'])->name('type-content.descript-version');
     //Route::get('/type-content/{id}/{type}', [TypeContentController::class, 'createElemen'])->name('type-content.create-elemen');
     Route::get('/type-content/{id}/{parametr}', [TypeContentController::class, 'createNewVersion'])->name('type-content.create-new-version');
-    Route::put('/type-content/{id}', [TypeContentController::class, 'update'])->name('type-content.update');
+    //Route::put('/type-content/{id}', [TypeContentController::class, 'update'])->name('type-content.update');
     Route::delete('/type-content/{id}', [TypeContentController::class, 'destroy'])->name('type-content.destroy');
     
 });
