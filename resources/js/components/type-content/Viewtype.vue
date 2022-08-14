@@ -111,10 +111,26 @@
                             </button>
                         </div>
                         <div class="p-2" v-if="typeContentOne.status == 'Published'">
-                            <button class="btn btn-primary form-control text-left" @click="newVersionTypeContent()">
+                            <button class="btn btn-primary form-control text-left" @click='openContextMenu($event)'>
                                 <i class="fa fa-refresh fa-lg" aria-hidden="true"></i> Выпустить новую версию
                             </button>
                         </div>
+
+                        <context-menu :display="showContextMenu" ref="menu">
+                            <ul>
+                                <div>
+                                    <button class="btn btn-primary form-control text-left btn-sm" @click='saveBody()'>
+                                        <i class="fa fa-refresh" aria-hidden="true"></i> Версия первого порядка (x+1.0)
+                                    </button>
+                                </div>
+                                <div class="mt-2">
+                                    <button class="btn btn-primary form-control text-left btn-sm" @click='saveBody()'>
+                                        <i class="fa fa-refresh" aria-hidden="true"></i> Версия второго порядка (x.y+1)
+                                    </button>
+                                </div>
+                            </ul>
+                        </context-menu>
+
                         <div class="p-2" v-if="typeContentOne.status == 'Published'">
                             <button class="btn btn-primary form-control text-left" @click="newVersionTypeContent()">
                                 <i class="fa fa-trash fa-lg" aria-hidden="true"></i> Отправить в архив
@@ -152,12 +168,14 @@
     import Viewmodal from "./Viewmodal";
     import Editmodal from "./Editmodal";
     import {mapActions, mapGetters} from "vuex";
+    import ContextMenu from "../helpers/ContextMenu.vue"
 
     export default {
         name: "Viewtype",
-        components: {draggable, Viewmodal, Editmodal},
+        components: {draggable, Viewmodal, Editmodal, ContextMenu},
         data() {
             return {
+                showContextMenu: false,
                 type_content_id: window.location.href.split('/')[5],
                 copy: null,
                 data: null,
@@ -225,6 +243,9 @@
 
         methods: {
              ...mapActions(['getTypeContentOne']),
+            openContextMenu(event) {
+                this.$refs.menu.open(event);
+            },
             handleClone(item) {
                 let cloneMe = JSON.parse(JSON.stringify(item));
                 this.$set(cloneMe, 'title', '');
