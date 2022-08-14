@@ -37,7 +37,7 @@ export default {
         },
         open(event) {
             // updates position of context menu 
-            let pagel_x = event.pageX-200;
+            let pagel_x = event.pageX-300;
             this.left = pagel_x || pagel_x;
             this.top = event.pageY || event.clientY;
             // make element focused 
