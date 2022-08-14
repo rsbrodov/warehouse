@@ -115,16 +115,21 @@
                                 <i class="fa fa-refresh fa-lg" aria-hidden="true"></i> Выпустить новую версию
                             </button>
                         </div>
+                        <div class="p-2" v-if="typeContentOne.status == 'Archive'">
+                            <button class="btn btn-primary form-control text-left" @click='openContextMenu($event)'>
+                                <i class="fa fa-cloud-download fa-lg" aria-hidden="true"></i> Востановить из архива
+                            </button>
+                        </div>
 
                         <context-menu :display="showContextMenu" ref="menu">
                             <ul>
                                 <div>
-                                    <button class="btn btn-primary form-control text-left btn-sm" @click='saveBody()'>
+                                    <button class="btn btn-primary form-control text-left btn-sm" @click='createNewVersion("major")'>
                                         <i class="fa fa-refresh" aria-hidden="true"></i> Версия первого порядка (x+1.0)
                                     </button>
                                 </div>
                                 <div class="mt-2">
-                                    <button class="btn btn-primary form-control text-left btn-sm" @click='saveBody()'>
+                                    <button class="btn btn-primary form-control text-left btn-sm" @click='createNewVersion("minor")'>
                                         <i class="fa fa-refresh" aria-hidden="true"></i> Версия второго порядка (x.y+1)
                                     </button>
                                 </div>
@@ -363,6 +368,23 @@
                     .catch(error => {
                         console.log(error);
                     })
+            },
+            async createNewVersion(version){
+                await axios.get('http://127.0.0.1:8000/type-content/new-version/'+ this.type_content_id + '/' + version)
+                .then(response => {
+                    if (response.status === 200){
+                        this.flashMessage.success({
+                            message: 'Новая версия создана',
+                            time: 3000,
+                        });
+                    }
+                })
+                .catch(error => {
+                    this.flashMessage.error({
+                        message: error.response.data.errors.version_error,
+                        time: 3000,
+                    });
+                })
             },
         },
 

@@ -40,17 +40,19 @@ class TypeContentController extends Controller
     public function getListTypeContent()
     {
         if (Auth::guard('web')->check()) {
-            $type_contents = TypeContent::with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('name', 'desc')->get()->unique('id_global');//все уникальные
+            $type_contents = TypeContent::with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('name', 'desc')->get()->unique('id_global'); //все уникальные
             $ids = [];
-            foreach ($type_contents as $type_content){
+            foreach ($type_contents as $type_content) {
                 $ids[] = TypeContent::where('id_global', $type_content->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first()->id;
             }
             $type_contents = TypeContent::whereIn('id', $ids)->orderBy('created_at', 'asc')->get();
             return response()->json($type_contents);
         } else {
             if (Auth::guard('api')->check()) {
-                $type_contents = TypeContent::with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('name',
-                    'desc')->get();
+                $type_contents = TypeContent::with('created_authors:id,name')->with('updated_authors:id,name')->orderBy(
+                    'name',
+                    'desc'
+                )->get();
                 return response()->json($type_contents);
             }
         }
@@ -71,17 +73,17 @@ class TypeContentController extends Controller
             return view('type_content.create')->with('icons', $icons);
         }
     }
-    
+
 
     public function store(TypeContentRequest $request)
     {
         $model = new TypeContent();
         $check_api = $model->checkingApiUrl($request->api_url);
         $check_name = $model->checkingName($request->name);
-        if($check_name){
+        if ($check_name) {
             return response()->json($check_name, 422);
         }
-        if($check_api){
+        if ($check_api) {
             return response()->json($check_api, 422);
         }
         if (Auth::guard('web')->check()) {
@@ -119,7 +121,7 @@ class TypeContentController extends Controller
             return response()->json($type_content);
         }
     }
-    
+
     public function update(TypeContentRequest $request, $id)
     {
         if (Auth::guard('web')->check()) {
@@ -160,7 +162,8 @@ class TypeContentController extends Controller
             }
         }
     }
-    public function publish(Request $request){
+    public function publish(Request $request)
+    {
         $type_content = TypeContent::where('id', $request->id)->first();
         if ($type_content->status == 'Draft') {
             $type_content->status = 'Published';
@@ -168,7 +171,8 @@ class TypeContentController extends Controller
         }
         return response()->json('item was updated');
     }
-    public function enter($id){
+    public function enter($id)
+    {
         $element_content = ElementContent::find($id);
 
         $type_content = TypeContent::find($element_content->type_content_id);
@@ -179,18 +183,16 @@ class TypeContentController extends Controller
             'type_content' => $type_content,
             'element_content' => $element_content
         ]);
-      
     }
     public function destroy($id)
     {
         $type_content = TypeContent::find($id);
         if ($type_content) {
             $type_content->delete();
-            return response()->json('item was deleted');    
+            return response()->json('item was deleted');
         } else {
             return response()->json('item not found');
         }
-        
     }
 
     public function getAllVersionTypeContent($id)
@@ -223,45 +225,61 @@ class TypeContentController extends Controller
     }
     public function createNewVersion($id, $parametr)
     {
-        //todo проверить эту портянку на то что при создании новой версии и существующем черновике выдается ошибка!
         $type = TypeContent::find($id);
-        $exist_other_draft = TypeContent::where(['id_global'=>$type->id_global, 'status' => 'Draft'])->count();
-        if($exist_other_draft){
-            alert('ERROR!');
-            return redirect()->back()->with('error', 'Черновик уже существует. Удалите его или отредактируйте.');
+        $exist_other_draft = TypeContent::where(['id_global' => $type->id_global, 'status' => 'Draft'])->count();
+        if ($exist_other_draft) {
+            $error = array(
+                'code'      =>  422,
+                'message'   =>  'The given data was invalid',
+                'errors' => [
+                    'version_error' => 'У вас уже есть черновик этого типа контента, Вы можете опубликовать новую версию из него'
+                ]
+            );
+            return response()->json($error, 422);
         }
-        // endtodo: вот до сюдова
-
-        //проверка параметров
         if ($parametr == 'major' || $parametr == 'minor') {
             if ($parametr == 'major') {
                 //если мажор то мы просто создаем дубликат наивысшей строки по version_major
-                $typeContent = TypeContent::where('id_global', $id)->orderBy('version_major', 'desc')->first();
-                //replicate - встроенный метод дублирования в laravel
-                $newTypeContent = $typeContent->replicate();//тут лежит наш новый объект
-                $newTypeContent->version_major = $typeContent->version_major + 1;//изменяем объект с учетом наших параметров затем сохраняем
+                $typeContent = TypeContent::where('id_global', $type->id_global)
+                ->orderBy('version_major', 'desc')
+                ->first();
+                $newTypeContent = $typeContent->replicate(); //тут лежит наш новый объект
+                $newTypeContent->version_major = $typeContent->version_major + 1; //изменяем объект с учетом наших параметров затем сохраняем
+                $newTypeContent->status = 'Draft';
                 $newTypeContent->version_minor = 0;
             } else {
                 //если минор то просто ищим наивысшей строки по version_major и version_minor ну и изменяем версию
-
-                $typeContent = TypeContent::where('id_global', $id)->orderBy('version_major',
-                    'desc')->orderBy('version_minor', 'desc')->first();
-
+                $typeContent = TypeContent::where('id_global', $type->id_global)
+                ->orderBy('version_major','desc')
+                ->orderBy('version_minor', 'desc')
+                ->first();
                 $newTypeContent = $typeContent->replicate();
                 $newTypeContent->version_minor = $typeContent->version_minor + 1;
+                $newTypeContent->status = 'Draft';
             }
             if ($newTypeContent->save()) {
-
-                return redirect()->route('type-content.get-all-version', $typeContent->id_global)->with('success',
-                    'Новая версия успешно создана');
-
+                return response()->json($newTypeContent);
             } else {
-                return redirect()->back()->with('error', 'Что-то пошло не так');
+                $error = array(
+                    'code'      =>  422,
+                    'message'   =>  'The given data was invalid',
+                    'errors' => [
+                        'version_error' => 'Ошибка в формировании новой версии типа контента, перезагрузите страницу и попробуйте снова.'
+                    ]
+                );
             }
         } else {
-            return redirect()->back()->with('error', 'Что-то пошло не так');
+            $error = array(
+                'code'      =>  422,
+                'message'   =>  'The given data was invalid',
+                'errors' => [
+                    'version_error' => 'Ошибка передачи параметра мажор или минор. Перезагрузите страницу и попробуйте снова.'
+                ]
+            );
+            return response()->json($error, 422);
         }
     }
+
 
     public function createIcons()
     {
@@ -289,7 +307,7 @@ class TypeContentController extends Controller
     public function getShowDescription($id)
     {
         $typeContent = TypeContent::find($id);
-        $body = ($typeContent->body) ? json_decode($typeContent->body): null;
+        $body = ($typeContent->body) ? json_decode($typeContent->body) : null;
         return view('type_content.descript-version-type-content', [
             'id' => $id,
             'typeContent' => $typeContent,
@@ -301,28 +319,26 @@ class TypeContentController extends Controller
     {
         $icons = Icons::all();
         return response()->json($icons);
-
     }
 
     public function saveBody(Request $request)
     {
         $type_content = TypeContent::find($request->id);
-        if(!empty($type_content)){
+        if (!empty($type_content)) {
             $type_content->body = json_encode($request->body);
             $type_content->save();
             return response()->json($type_content);
-        }else{
+        } else {
             return response()->json('object not found');
         }
     }
     public function getBody($id)
     {
         $type_content = TypeContent::find($id);
-        if(!empty($type_content)){
+        if (!empty($type_content)) {
             return response()->json(json_decode($type_content->body));
-        }else{
+        } else {
             return response()->json('object not found');
         }
     }
-    
 }
