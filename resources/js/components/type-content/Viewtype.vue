@@ -95,12 +95,48 @@
 
                 <div class="col-3">
                     <div class="d-flex flex-column">
-                        <div class="p-2"><button class="btn btn-primary form-control text-left" @click="saveBody()"><i
-                            class="fa fa-save fa-lg" aria-hidden="true"></i> Сохранить черновик</button></div>
-                        <div class="p-2"><a href="" class="btn btn-primary form-control text-left"><i
-                            class="fa fa-check-circle fa-lg" aria-hidden="true"></i> Публикация типа</a></div>
-                        <div class="p-2"><a href="" class="btn btn-primary form-control text-left">
-                            <i class="fa fa-trash fa-lg" aria-hidden="true"></i> Удалить тип</a></div>
+                        <div class="p-2" v-if="typeContentOne.status == 'Draft'">
+                            <button class="btn btn-primary form-control text-left" @click="saveBody()">
+                                <i class="fa fa-save fa-lg" aria-hidden="true"></i> Сохранить черновик
+                            </button>
+                        </div>
+                        <div class="p-2" v-if="typeContentOne.status == 'Draft'">
+                            <button class="btn btn-primary form-control text-left" @click="publishTypeContent()">
+                                <i class="fa fa-check-circle fa-lg" aria-hidden="true"></i> Публикация типа
+                            </button>
+                        </div>
+                        <div class="p-2" v-if="typeContentOne.status == 'Draft'">
+                            <button class="btn btn-primary form-control text-left" @click="deleteTypeContent()">
+                                <i class="fa fa-trash fa-lg" aria-hidden="true"></i> Удалить тип
+                            </button>
+                        </div>
+                        <div class="p-2" v-if="typeContentOne.status == 'Published'">
+                            <button class="btn btn-primary form-control text-left" @click='openContextMenu($event)'>
+                                <i class="fa fa-refresh fa-lg" aria-hidden="true"></i> Выпустить новую версию
+                            </button>
+                        </div>
+
+                        <context-menu :display="showContextMenu" ref="menu">
+                            <ul>
+                                <div>
+                                    <button class="btn btn-primary form-control text-left btn-sm" @click='saveBody()'>
+                                        <i class="fa fa-refresh" aria-hidden="true"></i> Версия первого порядка (x+1.0)
+                                    </button>
+                                </div>
+                                <div class="mt-2">
+                                    <button class="btn btn-primary form-control text-left btn-sm" @click='saveBody()'>
+                                        <i class="fa fa-refresh" aria-hidden="true"></i> Версия второго порядка (x.y+1)
+                                    </button>
+                                </div>
+                            </ul>
+                        </context-menu>
+
+                        <div class="p-2" v-if="typeContentOne.status == 'Published'">
+                            <button class="btn btn-primary form-control text-left" @click="newVersionTypeContent()">
+                                <i class="fa fa-trash fa-lg" aria-hidden="true"></i> Отправить в архив
+                            </button>
+                        </div>
+                        <hr>
                         <div class="p-2">
                             <button @click="pushRow()" class="btn btn-outline-secondary form-control text-left"><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Добавить строку</button>
                         </div>
@@ -132,12 +168,14 @@
     import Viewmodal from "./Viewmodal";
     import Editmodal from "./Editmodal";
     import {mapActions, mapGetters} from "vuex";
+    import ContextMenu from "../helpers/ContextMenu.vue"
 
     export default {
         name: "Viewtype",
-        components: {draggable, Viewmodal, Editmodal},
+        components: {draggable, Viewmodal, Editmodal, ContextMenu},
         data() {
             return {
+                showContextMenu: false,
                 type_content_id: window.location.href.split('/')[5],
                 copy: null,
                 data: null,
@@ -205,6 +243,9 @@
 
         methods: {
              ...mapActions(['getTypeContentOne']),
+            openContextMenu(event) {
+                this.$refs.menu.open(event);
+            },
             handleClone(item) {
                 let cloneMe = JSON.parse(JSON.stringify(item));
                 this.$set(cloneMe, 'title', '');
@@ -239,7 +280,6 @@
                 }
 
             },
-
             uuid(e) {
                 if (e.uid) return e.uid;
                 const key = Math.random()
@@ -273,6 +313,37 @@
                             message: 'Данные сохранены',
                             time: 3000,
                         });
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+            },
+            async publishTypeContent(){
+                await axios.post('http://127.0.0.1:8000/type-content/publish-type-content', {id: this.type_content_id})
+                .then(response => {
+                    if (response.status === 200){
+                        this.flashMessage.success({
+                            message: 'Тип контента опубликован',
+                            time: 3000,
+                        });
+                        this.getTypeContentOne(this.type_content_id);
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+            },
+
+            async deleteTypeContent(){
+                await axios.delete('http://127.0.0.1:8000/type-content/'+ this.type_content_id)
+                .then(response => {
+                    if (response.status === 200){
+                        this.flashMessage.success({
+                            message: 'Тип контента удален, перенаправление на страницу со списком',
+                            time: 3000,
+                        });
+                        window.location.href = "http://127.0.0.1:8000/type-content/index"
                     }
                 })
                 .catch(error => {

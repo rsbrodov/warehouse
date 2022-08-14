@@ -71,6 +71,7 @@ class TypeContentController extends Controller
             return view('type_content.create')->with('icons', $icons);
         }
     }
+    
 
     public function store(TypeContentRequest $request)
     {
@@ -118,19 +119,9 @@ class TypeContentController extends Controller
             return response()->json($type_content);
         }
     }
-
-
-
-    public function show(TypeContent $typeContent, $id)
-    {
-        $type_content = TypeContent::find($id);
-        return view('type_content.show')->with('type_content', $type_content);
-    }
-
-
+    
     public function update(TypeContentRequest $request, $id)
     {
-        
         if (Auth::guard('web')->check()) {
             $type = TypeContent::where('id', $request->id)->first();
             if ($type->status === 'Draft' or $type->status === 'Archive') {
@@ -169,7 +160,14 @@ class TypeContentController extends Controller
             }
         }
     }
-
+    public function publish(Request $request){
+        $type_content = TypeContent::where('id', $request->id)->first();
+        if ($type_content->status == 'Draft') {
+            $type_content->status = 'Published';
+            $type_content->save();
+        }
+        return response()->json('item was updated');
+    }
     public function enter($id){
         $element_content = ElementContent::find($id);
 
@@ -183,44 +181,16 @@ class TypeContentController extends Controller
         ]);
       
     }
-
-
-
-    public function publish($id){
-        if (Auth::guard('web')->check()) {
-            $user = Auth::guard('web')->user();
-            if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
-                $type_content = TypeContent::where('id', $id)->first();
-                if ($type_content->status == 'Draft') {
-                    $type_content->status = 'Published';
-                }
-                $type_content->save();
-                return redirect()->route('type-content.get-all-version', $type_content->id_global)->with('success', 'Тип ' . $type_content->name . ' успешно опубликован');
-            }
-        }
-    }
     public function destroy($id)
     {
-        if (Auth::guard('web')->check()) {
-            $type_content = TypeContent::find($id);
-            if ($type_content) {
-                $type_content->delete();
-                return redirect()->route('type-content.index')->with('success',
-                    'Тип ' . $type_content->name . ' успешно удален');
-            } else {
-
-            }
+        $type_content = TypeContent::find($id);
+        if ($type_content) {
+            $type_content->delete();
+            return response()->json('item was deleted');    
         } else {
-            if (Auth::guard('api')->check()) {
-                $type_content = TypeContent::find($id);
-                if ($type_content) {
-                    $type_content->delete();
-                    return response()->json('item was deleted');
-                }
-            } else {
-                return response()->json('item not found');
-            }
+            return response()->json('item not found');
         }
+        
     }
 
     public function getAllVersionTypeContent($id)
@@ -318,43 +288,6 @@ class TypeContentController extends Controller
 
     public function getShowDescription($id)
     {
-       /* $data = [
-            0 => [
-                'type' => 'date',
-                'name' => 'Дата и время',
-                'null' => 'null',
-                'sort' => '0',
-            ],
-            1 => [
-                'type' => 'input',
-                'name' => 'Введите значение',
-                'null' => 'null',
-                'typeInput' => 'text',
-                'sort' => '1',
-            ],
-            2 => [
-                'type' => 'textarea',
-                'name' => 'Ваш ответ',
-                'null' => 'null',
-                'row' => '1',
-                'sort' => '2',
-            ],
-        ];
-        array_push($data, [
-            'name' => 'Ваш ответ',
-            'null' => 'null',
-            'row' => '1',
-            'sort' => '3',
-        ]);*/
-        //$typeContent = TypeContent::find($id);
-       /* print_r('<pre>');
-        print_r($data);
-        print_r('</pre>');
-
-        print_r($data);
-        //print_r($typeContent['body']);
-        exit();*/
-        //$body = ()
         $typeContent = TypeContent::find($id);
         $body = ($typeContent->body) ? json_decode($typeContent->body): null;
         return view('type_content.descript-version-type-content', [
@@ -363,101 +296,6 @@ class TypeContentController extends Controller
             'body' => $body,
         ]);
     }
-
-    public function createDescription(TypeContent $typeContent, $request)
-    {
-        //$typeContent тут наша модель
-        $data = [
-            0 => [
-                'type' => 'date',
-                'name' => 'Дата и время',
-                'null' => 'null',
-                'sort' => '0',
-            ],
-            1 => [
-                'type' => 'input',
-                'name' => 'Введите значение',
-                'null' => 'null',
-                'typeInput' => 'text',
-                'sort' => '1',
-            ],
-            2 => [
-                'type' => 'textarea',
-                'name' => 'Ваш ответ',
-                'null' => 'null',
-                'row' => '1',
-                'sort' => '2',
-            ],
-        ];
-        array_push($data, [
-            'name' => 'Ваш ответ',
-            'null' => 'null',
-            'row' => '1',
-            'sort' => '3',
-            'sort' => '3',
-        ]);
-        //$typeContent = TypeContent::find($id);
-        print_r('<pre>');
-        print_r($data);
-        print_r('</pre>');
-
-        print_r($data);
-        //print_r($typeContent['body']);
-        exit();
-        //$body = ()
-        return view('type_content.descript-version-type-content', [
-            'id' => $id,
-            'body' => $body,
-        ]);
-    }
-
-    /*public function createElemen(TypeContent $typeContent, $id, $type)
-    {
-        //проверить каждый ШАГ!!!
-        $typeContent = TypeContent::find($id);
-        $data = ($typeContent->body) ? json_decode($typeContent->body): [];
-
-        switch ($type) {
-            case 'input':
-                array_push($data, [
-                    'type' => 'input',
-                    'name' => 'Значение',
-                    'null' => 'null',
-                    'typeInput' => 'text',
-                    'sort' => '0',
-                ]);
-                break;
-            case 'textarea':
-                array_push($data, [
-                    'type' => 'textarea',
-                    'name' => 'Текстовое поле',
-                    'null' => 'null',
-                    'row' => '1',
-                    'sort' => '0',
-                ]);
-                break;
-            case 'date':
-                array_push($data, [
-                    'type' => 'date',
-                    'name' => 'Дата и время',
-                    'null' => 'null',
-                    'sort' => '0',
-                ]);
-                break;
-        }
-
-        //$typeContent->where('id', $id)->update(['body' => json_encode($data)]);
-
-        $typeContent->body = json_encode($data);
-        $typeContent->save();
-
-        //return redirect()->route('users.index', $id);
-        return view('type_content.descript-version-type-content', [
-            'id' => $id,
-            'typeContent' => $typeContent,
-            'body' => json_decode($typeContent->body),
-        ]);
-    }*/
 
     public function getIcons()
     {
@@ -486,4 +324,5 @@ class TypeContentController extends Controller
             return response()->json('object not found');
         }
     }
+    
 }

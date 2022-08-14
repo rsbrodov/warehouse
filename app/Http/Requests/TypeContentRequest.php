@@ -31,9 +31,6 @@ class TypeContentRequest extends FormRequest
             'icon' => 'nullable|max:150',
             'active_from' => 'nullable|date',
             'active_after' => 'nullable|date',
-            //'api_url' => ['required', 'alpha_dash', 'max:150',
-               // Rule::unique('type_contents')->ignore($this->id),
-            //],
             'body' => 'nullable|max:1000',
         ];
         if (in_array($this->method(), ['PUT', 'PATCH'])) {
