@@ -12,7 +12,6 @@
 <template>
     <div id="app">
         <!-- Modal -->
-        <FlashMessage :position="'right bottom'" style='z-index:20001;'></FlashMessage>
         <div class="modal fade" id="createElement" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <Viewmodal
@@ -38,45 +37,13 @@
         <!--End Modal -->
 
         <div class="container-fluid">
-            <!-- Stack the columns on mobile by making one full-width and the other half-width -->
-            <div class="row">
-                <div class="col"><b><h2>{{typeContentOne.name}}</h2></b></div>
-                <div class="col"></div>
-            </div>
-            <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
-            <div class="row">
-                <div class="col-9">
-                    <div class="flex-cont">
-                        <div class="flex-elem"><b>Идентификатор: </b>{{typeContentOne.id}}</div>
-                        <div class="flex-elem"><b>API URL: </b>{{typeContentOne.api_url}}</div>
-                        <div class="flex-elem"><b>Владелец: </b> Admin</div>
-                        <div class="flex-elem">
-                            <b>Период действия: </b>{{typeContentOne.status | date}}
-                        </div>
-                        <div class="flex-elem"><b>Статус: </b>{{typeContentOne.status | status}}</div>
-                        <div class="flex-elem"><b>Версия: </b>{{typeContentOne.version_major}}.{{typeContentOne.version_minor}}</div>
-                    </div>
-                </div>
-                <div class="col-3 text-right"><a href="#" class="btn btn-outline-secondary"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a></div>
-            </div>
-
-            <nav>
-                <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <button class="nav-link active" id="nav-structure-tab" data-bs-toggle="tab" data-bs-target="#nav-structure" type="button" role="tab" aria-controls="nav-structure" aria-selected="true">Состав полей</button>
-                    <button class="nav-link" id="nav-access-tab" data-bs-toggle="tab" data-bs-target="#nav-access" type="button" role="tab" aria-controls="nav-access" aria-selected="false">Доступ</button>
-                    <button class="nav-link" id="nav-story-tab" data-bs-toggle="tab" data-bs-target="#nav-story" type="button" role="tab" aria-controls="nav-story" aria-selected="false">История изменений</button>
-                </div>
-            </nav>
-            <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="nav-structure" role="tabpanel" aria-labelledby="nav-structure-tab">Какой-то состав полей</div>
-                <div class="tab-pane fade" id="nav-access" role="tabpanel" aria-labelledby="nav-access-tab">Доступ к чему-то</div>
-                <div class="tab-pane fade" id="nav-story" role="tabpanel" aria-labelledby="nav-story-tab">Пока это просто кнопка:<a class="nav-link" :href="'/all-version-type-content/'+typeContentOne.id_global">История изменений</a></div>
-            </div>
-
-            <br>
+            <Onetype/>
+            <hr>
             <br>
             <div class="row ">
                 <div class="col-9 left-block">
+                <FlashMessage :position="'right bottom'" style='z-index:20001;'></FlashMessage>
+
                     <div class="left-block__draggable-layout" v-for="(mas, index) in clonedItems" :key="index">
                         <i class="fa fa-trash mr-2 mt-2 text-primary lg" @click="deleteRow(index)"></i>
                         <draggable class="left-block__draggable-layout__draggable-parent"  ghost-class="ghost" v-model="clonedItems[index]" :options="clonedItemOptions">
@@ -174,10 +141,11 @@
     import Editmodal from "./Editmodal";
     import {mapActions, mapGetters} from "vuex";
     import ContextMenu from "../helpers/ContextMenu.vue"
+    import Onetype from './Onetype.vue';
 
     export default {
         name: "Viewtype",
-        components: {draggable, Viewmodal, Editmodal, ContextMenu},
+        components: {draggable, Viewmodal, Editmodal, ContextMenu, Onetype},
         data() {
             return {
                 showContextMenu: false,
@@ -345,10 +313,12 @@
                 .then(response => {
                     if (response.status === 200){
                         this.flashMessage.success({
-                            message: 'Тип контента удален, перенаправление на страницу со списком',
+                            message: 'Тип контента удален, Вы будете перенаправлены на страницу со списком типов контента через 3 секунды',
                             time: 3000,
                         });
-                        window.location.href = "http://127.0.0.1:8000/type-content/index"
+                        window.setTimeout(function(){
+                            window.location.href = "http://127.0.0.1:8000/type-content/index"
+                        }, 3000);
                     }
                 })
                 .catch(error => {
@@ -377,6 +347,7 @@
                             message: 'Новая версия создана',
                             time: 3000,
                         });
+                        //$('._vue-flash-msg-body__text').append('<a href="http://127.0.0.1:8000/type-content/view-new/'+response.data.id+'">Ссылка</a>');
                     }
                 })
                 .catch(error => {

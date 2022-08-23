@@ -113,6 +113,7 @@
         components:{Create, Edit, Loader},
         data:function(){
             return {
+                test: this.$BASE_URL,
                 filter_form:{
                     status:'',
                     name:'',
