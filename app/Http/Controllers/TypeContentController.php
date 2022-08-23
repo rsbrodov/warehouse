@@ -197,17 +197,14 @@ class TypeContentController extends Controller
 
     public function getAllVersionTypeContent($id)
     {
-        if (Auth::guard('web')->check()) {
-            $type_contents = TypeContent::where('id_global', $id)->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
-            return view('type_content.all-version-type-content')->with('type_contents', $type_contents);
-        } else {
-            if (Auth::guard('api')->check()) {
-                $type_content = TypeContent::where('id_global', $id)->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
-                return response()->json($type_content);
-            } else {
-                return response()->json('item not found');
-            }
-        }
+        $id_global = TypeContent::find($id)->id_global;
+        $type_content = TypeContent::where('id_global', $id_global)->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
+        return response()->json($type_content);
+    }
+
+    public function getAllVersion($id)
+    {
+        return view('type_content.all-version-type-content');
     }
     public function View($id)
     {

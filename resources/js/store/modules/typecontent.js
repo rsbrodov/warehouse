@@ -3,6 +3,7 @@ export default{
         type_contents: [],
         new_type_contents: '',
         type_content_one: null,
+        type_contents_all_version: [],
     },
     getters: {
         typeContents(state){
@@ -14,10 +15,16 @@ export default{
         newTypeContents(state){
             return state.new_type_contents
         },
+        typeContentsAllVersion(state){
+            return state.type_contents_all_version
+        },
     },
     mutations: {
         updateTypeContents(state, type_contents){
             state.type_contents = type_contents
+        },
+        updateTypeContentsAllVersion(state, type_contents_all_version){
+            state.type_contents_all_version = type_contents_all_version
         },
         updateTypeContentOne(state, type_content_one){
             state.type_content_one = type_content_one
@@ -32,6 +39,20 @@ export default{
             await axios.get('http://127.0.0.1:8000/type-content/getListTypeContent')
                 .then(response => {
                     commit('updateTypeContents', response.data)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+                .finally(() => {
+                    commit('setLoading', false);
+                });
+
+        },
+        async getTypeContentsAllVersion({commit}, id) {
+            commit('setLoading', true);
+            await axios.get('http://127.0.0.1:8000/type-content/getAllVersionTypeContent/'+id)
+                .then(response => {
+                    commit('updateTypeContentsAllVersion', response.data)
                 })
                 .catch(err => {
                     console.log(err)

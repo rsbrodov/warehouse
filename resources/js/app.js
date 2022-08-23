@@ -18,14 +18,14 @@ Vue.component('Indexdictionary', require('./components/dictionary/Index.vue').de
 Vue.component('Indexdictionaryelement', require('./components/dictionary-element/Index.vue').default);
 Vue.component('Viewtype', require('./components/type-content/Viewtype.vue').default);
 Vue.component('Indexelementcontent', require('./components/element-content/Index.vue').default);
+Vue.component('Allversion', require('./components/type-content/Allversion.vue').default);
 
 Vue.use(Vuelidate)
 Vue.use( Moment );
 Vue.use(BootstrapVue);
 Vue.use(FlashMessage);
 Vue.use(Sortable)
-
-
+Vue.prototype.$BASE_URL = 'http://127.0.0.1:8000'
 const app = new Vue({
     el: '#app',
     store,
