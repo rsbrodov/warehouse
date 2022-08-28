@@ -19,9 +19,8 @@ class CreateElementContentsTable extends Migration
             $table->uuid('type_content_id');
             $table->foreign('type_content_id')->references('id')->on('type_contents');
             $table->string('label', 150);
-            $table->string('url', 150);
-            $table->bigInteger('owner')->unsigned()->nullable();
-            $table->foreign('owner')->references('id')->on('users');
+            $table->string('api_url', 150);
+            $table->text('description')->nullable();
             $table->dateTime('active_from')->nullable();
             $table->dateTime('active_after')->nullable();
             $table->enum('status', ['Draft', 'Published', 'Archive', 'Destroy'])->default('Draft');

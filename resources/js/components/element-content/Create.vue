@@ -6,7 +6,7 @@
                 <span aria-hidden="true" @click="$emit('close-modal')">&times;</span>
             </button>
         </div>
-        <form @submit.prevent="saveTypeContent()">
+        <form @submit.prevent="saveElementContent()">
         <div class="modal-body">
                 <div class="row mb-3">
                     <div class="block col-6">
@@ -22,14 +22,14 @@
                     </div>
 
                     <div class="block col-6">
-                        <label for="url"><b class="text-danger">*</b><b>API URL:</b></label>
-                        <input autocomplete="off" id="url" class="form-control" type="text" v-model="form.url"
-                               :class="{invalid: ($v.form.url.$dirty && !$v.form.url.required)}">
-                        <small class="helper-text invalid" v-if="$v.form.url.$dirty && !$v.form.url.required">
+                        <label for="api_url"><b class="text-danger">*</b><b>API URL:</b></label>
+                        <input autocomplete="off" id="api_url" class="form-control" type="text" v-model="form.api_url"
+                               :class="{invalid: ($v.form.api_url.$dirty && !$v.form.api_url.required)}">
+                        <small class="helper-text invalid" v-if="$v.form.api_url.$dirty && !$v.form.api_url.required">
                             Необходимо заполнить «API URL».<br>
                         </small>
-                        <small class="helper-text invalid" v-if="errors.url">
-                            {{errors.url}}<br>
+                        <small class="helper-text invalid" v-if="errors.api_url">
+                            {{errors.api_url}}<br>
                         </small>
                         <a class="btn btn-warning btn-sm mt-1" @click="generateUrl()"><i class="fa fa-undo" aria-hidden="true"></i> Сгенерировать</a>
 
@@ -87,9 +87,10 @@
             return {
                 errors:{},
                 ru:ru,
+                type_content_id: window.location.href.split('/').slice(-1)[0],
                 form:{
                     label:'',
-                    url:'',
+                    api_url:'',
                     active_from:'',
                     active_after:'',
                     description:'',
@@ -98,20 +99,20 @@
         },
 
         methods: {
-            ...mapActions(['newTypeContents']),
-            async saveTypeContent() {
+            ...mapActions(['newElementContents']),
+            async saveElementContent() {
                 this.$v.form.$touch();
                 if(this.$v.form.$invalid){
                     console.log('Form not subm')
-                }/*else {
-                    this.newTypeContents({
-                        icon: this.form.icon, name: this.form.name, owner: this.form.owner, api_url: this.form.api_url, 
-                        active_from: this.form.active_from, active_after: this.form.active_after, description: this.form.description
+                }else {
+                    this.newElementContents({
+                        label: this.form.label, api_url: this.form.api_url, 
+                        active_from: this.form.active_from, active_after: this.form.active_after, description: this.form.description, type_content_id: this.type_content_id
                     }).then(response => {
                         this.$emit('close-modal');
                         this.form.icon = ''; this.form.name = ''; this.form.owner = ''; this.form.api_url = ''; this.form.active_from = ''; this.form.active_after = ''; this.form.description = '';
                         this.flashMessage.success({
-                            message: 'Тик контента успешно создан',
+                            message: 'Элемент контента успешно создан',
                             time: 3000,
                         });
                     }).catch(error => {
@@ -119,10 +120,10 @@
                             this.errors = error.response.data.errors || {};
                         }
                     });
-                }*/
+                }
             },
             generateUrl(){
-                this.form.url =  url_slug(this.form.label)   
+                this.form.api_url =  url_slug(this.form.label)   
             },
         },
         async created(){
@@ -131,7 +132,7 @@
         validations: {
             form:{
                 label: {required},
-                url: {required},
+                api_url: {required},
             }
         },
     }

@@ -83,7 +83,7 @@
             </tr>
             <tr v-else v-for="(element, index) in ElementContent" :key="index">
                 <td>{{element.label}}</td>
-                <td>{{element.url}}</td>
+                <td>{{element.api_url}}</td>
                 <td :class="element.status | statusColor"><b>{{ element.status | status }}</b></td>
                 <td>{{ element | date }}</td>
                 <td>{{element.updated_authors.name}}</td>
@@ -112,7 +112,7 @@
                 id: window.location.href.split('/').slice(-1)[0],
                 filter_form:{
                     label:null,
-                    url:null,
+                    api_url:null,
                     status:null,
                     active_from:null,
                     active_after:null,
@@ -196,4 +196,21 @@
         }
     }
 </script>
+<style scoped>
+    table > :not(:first-child) {
+        border-top: 1px solid currentColor !important;
+    }
+    .header-block{
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+    }
+    .modal-backdrop {
+        z-index: 1040 !important;
+    }
+    .modal-content {
+        margin: 2px auto;
+        z-index: 1100 !important;
+    }
+</style>
 
