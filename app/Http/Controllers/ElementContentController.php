@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ElementContentRequest;
 use App\Models\ElementContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +20,7 @@ class ElementContentController extends Controller
                 where('type_content_id', $id)
                 ->with('created_authors:id,name')
                 ->with('updated_authors:id,name')
-                ->orderBy('label', 'desc')
+                ->orderBy('created_at', 'asc')
                 ->get()
                 ->unique('id_global');//все уникальные
             $ids = [];
@@ -48,35 +49,30 @@ class ElementContentController extends Controller
         return view('element_content.index');
     }
 
-    public function create()
+    public function store(ElementContentRequest $request)
     {
+        //return $request;
         if (Auth::guard('web')->check()) {
-            return view('element_content.create');
-        }
-    }
-    public function store(Request $request)
-    {
-        if (Auth::guard('web')->check()) {
-            //dd('ElementContent '.request('type_content_id'));
             $new_element_content = ElementContent::create(
                 [
                     'id_global'      => Str::uuid()->toString(),
                     'type_content_id'=> request('type_content_id'),
                     'label'          => $request->label,
-                    'owner'          => Auth::guard('web')->user()->id,
+                    'description'          => $request->description,
                     'active_from'    => date_create($request->active_from),
                     'active_after'   => date_create($request->active_after),
                     'status'         => 'DRAFT',
                     'version_major'  => '1',
                     'version_minor'  => '0',
-                    'url'            => str_slug($request->url),
+                    'api_url'            => str_slug($request->api_url),
                     'based_element'  => null,
                     'body'  => '',
                     'created_author' => Auth::guard('web')->user()->id,
                     'updated_author' => Auth::guard('web')->user()->id,
                 ]
             );
-            return redirect()->route('element-content.index', request('type_content_id'))->with('success', 'Элемент ' . $new_element_content->label . ' успешно добавлен');
+            
+            return response()->json($new_element_content);
         }
     }
     public function edit($id)

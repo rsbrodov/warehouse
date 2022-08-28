@@ -126,8 +126,7 @@ Route::middleware(['auth:web'])->group(function () {
 Route::middleware(['auth:web'])->group(function () {
     Route::get('element-content/findElementContentID/{id}', [ElementContentController::class, 'findElementContentID']);
     Route::get('/element-content/{type_content_id}', [ElementContentController::class, 'index'])->name('element-content.index');
-    Route::get('/element-content/{type_content_id}/create', [ElementContentController::class, 'create'])->name('element-content.create');
-    Route::post('/element-content/{type_content_id}', [ElementContentController::class, 'store'])->name('element-content.store');
+    Route::post('/element-content/store/{type_content_id}', [ElementContentController::class, 'store'])->name('element-content.store');
     Route::get('/element-content/{id}/edit', [ElementContentController::class, 'edit'])->name('element-content.edit');
     Route::put('/element-content/{id}', [ElementContentController::class, 'update'])->name('element-content.update');
     Route::get('/element-content/{id}/del', [ElementContentController::class, 'destroy'])->name('element-content.destroy');

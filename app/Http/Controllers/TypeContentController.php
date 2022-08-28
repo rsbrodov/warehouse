@@ -176,7 +176,6 @@ class TypeContentController extends Controller
         $element_content = ElementContent::find($id);
 
         $type_content = TypeContent::find($element_content->type_content_id);
-        //$rows = unserialize($type_content->body);
         $body = json_decode($type_content->body);
         return view('type_content.enter', [
             'body' => $body,
