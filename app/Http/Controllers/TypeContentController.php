@@ -139,6 +139,7 @@ class TypeContentController extends Controller
             $type->active_from = date_format(date_create($request->active_from), 'Y-m-d H:m:s');
             $type->active_after = date_format(date_create($request->active_after), 'Y-m-d H:m:s');
             $type->icon = $request->icon;
+            $type->status = $request->status;
             $type->owner = $request->owner;
             $type->updated_author = Auth::guard('web')->user()->id;
             $type->save();
@@ -162,15 +163,7 @@ class TypeContentController extends Controller
             }
         }
     }
-    public function publish(Request $request)
-    {
-        $type_content = TypeContent::where('id', $request->id)->first();
-        if ($type_content->status == 'Draft') {
-            $type_content->status = 'Published';
-            $type_content->save();
-        }
-        return response()->json('item was updated');
-    }
+    
     public function enter($id)
     {
         $element_content = ElementContent::find($id);
