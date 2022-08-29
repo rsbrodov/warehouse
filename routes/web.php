@@ -99,7 +99,6 @@ Route::get('/type-content/create-icons', [TypeContentController::class, 'createI
 
 
 Route::middleware(['auth:web'])->group(function () {
-    Route::post('/type-content/publish-type-content/', [TypeContentController::class, 'publish']);
     Route::post('/type-content/save-body/', [TypeContentController::class, 'saveBody']);
     Route::get('/type-content/getTypeContentID/{id}', [TypeContentController::class, 'getTypeContentID']);
     Route::get('/type-content/get-body/{id}', [TypeContentController::class, 'getBody']);
