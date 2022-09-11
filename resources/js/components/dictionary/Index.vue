@@ -78,7 +78,7 @@
             <tr v-else-if="getLoading === true" style="border:none">
                 <td class="text-center text-danger" colspan="6"><Loader/></td>
             </tr>
-            <tr v-else v-for="(dictionary, index) in pageOfItems" :key="index">
+            <tr v-else v-for="(dictionary, index) in filteredDictionary" :key="index">
                 <td>{{dictionary.code}}</td>
                 <td>{{dictionary.name}}</td>
                 <td>{{dictionary.description}}</td>
@@ -100,9 +100,9 @@
             </tr>
         </table>
 
-        <div class="card-footer pb-0 pt-3">
+        <!-- <div class="card-footer pb-0 pt-3">
             <jw-pagination :items="filteredDictionary" @changePage="onChangePage"></jw-pagination>
-        </div>
+        </div> -->
 
     </div>
 </template>
@@ -130,7 +130,7 @@
                     name:'',
                     code:'',
                 },
-                pageOfItems: []
+                //pageOfItems: []
             }
         },
 
@@ -210,10 +210,10 @@
                     this.reset();
                 });
             },
-            onChangePage(pageOfItems) {
+            /*onChangePage(pageOfItems) {
             // update page of items
             this.pageOfItems = pageOfItems;
-        }
+        }*/
         },
 
         filters: {
