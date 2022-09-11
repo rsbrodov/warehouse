@@ -454,7 +454,7 @@ export default {
 /*draggable column*/
 .left-block__draggable-column{
     display: flex;
-    flex:1 1 auto;
+    flex:1;
     background-color: white;
     min-height: 50px;
     margin: 5px auto;
@@ -462,7 +462,7 @@ export default {
 /*column*/
 .left-block__draggable-layout__column{
     display: flex;
-    flex:1 1 auto;
+    flex:1;
     background-color: white;
     min-height: 50px;
     margin: 5px auto;

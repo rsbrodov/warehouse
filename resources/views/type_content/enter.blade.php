@@ -16,7 +16,7 @@
                 <div class="flex-elem">
                     <b>Период действия: </b>
                 </div>
-                
+
             </div>
         </div>
         <div class="col-3 text-right"><a href="#" class="btn btn-outline-secondary"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a></div>
@@ -33,35 +33,45 @@
 
     <div class="row ">
         <div class="col-9 left-block">
+            <?//print_r('<pre>')?>
+            <?//print_r($body)?>
+            <?//print_r('</pre>')?>
             <form action="" method="post">
                 <div class="form-group container">
                     @foreach ($body as $row)
-                        @foreach ($row as $column)
-                                <div class="block mt-4">
-                                    <label for="{{$column->name}}" class="">{{$column->title}}</label>
-                                    @if($column->type === 'text')
-                                        <input autocomplete="off" type="{{$column->type}}" class="form-control @error($column->name) is-invalid @enderror" id="{{$column->name}}" name="{{$column->name}}">
-                                    @elseif($column->type === 'checkbox' or $column->type === 'radio')
-                                    <div class="row">
-                                        @foreach($dictionary_elems = \App\Models\DictionaryElement::where('dictionary_id', $column->dictionary_id)->get() as $dictionary_elem)
-                                            <div class="col-3">
-                                                <input type="{{$column->type}}" id="{{$column->name}}" name="{{$column->name}}" value="{{$dictionary_elem->id}}">
-                                                <label for="{{$dictionary_elem->value}}">{{$dictionary_elem->value}}</label>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                    @elseif($column->type === 'textarea')
-                                        <textarea name="{{$column->type}}" id="{{$column->type}}" class="form-control"></textarea>
-                                    @elseif($column->type === 'select')
-                                        <select id="{{$column->name}}" class="form-control" name="{{$column->name}}">
-                                            @foreach($dictionary_elems = \App\Models\DictionaryElement::where('dictionary_id', $column->dictionary_id)->get() as $dictionary_elem)
-                                                <option value="{{$dictionary_elem->id}}">{{$dictionary_elem->value}}</option>
-                                            @endforeach
-                                        </select>
-                                    @endif
-                                    @error($column->name) <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
+                        <div class="row-block">
+                            @foreach ($row as $column)
+                                <?//print_r($column)?>
+                                <div class="columns mt-4">
+                                    @foreach ($column as $element)
+                                        <div class="block mt-4">
+                                            <label for="{{$element->name}}" class="">{{$element->title}}</label>
+                                            @if($element->type === 'text')
+                                                <input autocomplete="off" type="{{$element->type}}" class="form-control @error($element->name) is-invalid @enderror" id="{{$element->name}}" name="{{$element->name}}">
+                                            @elseif($element->type === 'checkbox' or $element->type === 'radio')
+                                                <div class="row">
+                                                    @foreach($dictionary_elems = \App\Models\DictionaryElement::where('dictionary_id', $element->dictionary_id)->get() as $dictionary_elem)
+                                                        <div class="col-3">
+                                                            <input type="{{$element->type}}" id="{{$element->name}}" name="{{$element->name}}" value="{{$dictionary_elem->id}}">
+                                                            <label for="{{$dictionary_elem->value}}">{{$dictionary_elem->value}}</label>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            @elseif($element->type === 'textarea')
+                                                <textarea name="{{$element->type}}" id="{{$element->type}}" class="form-control"></textarea>
+                                            @elseif($element->type === 'select')
+                                                <select id="{{$element->name}}" class="form-control" name="{{$element->name}}">
+                                                    @foreach($dictionary_elems = \App\Models\DictionaryElement::where('dictionary_id', $element->dictionary_id)->get() as $dictionary_elem)
+                                                        <option value="{{$dictionary_elem->id}}">{{$dictionary_elem->value}}</option>
+                                                    @endforeach
+                                                </select>
+                                            @endif
+                                            @error($element->name) <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
+                                        </div>
+                                    @endforeach
                                 </div>
-                        @endforeach
+                            @endforeach
+                        </div>
                     @endforeach
                     {{-- <button type="submit" class="btn btn-success form-control mt-4">Сохранить</button> --}}
                 </div>
@@ -88,6 +98,17 @@
         }
         .flex-elem{
             margin: 5px
+        }
+
+
+        .row-block{
+            display: flex;
+            flex-wrap: nowrap;
+            margin: 0 -5px;
+        }
+        .columns {
+            flex: 1 0 auto;
+            margin: 0 5px;
         }
     </style>
 @endsection
