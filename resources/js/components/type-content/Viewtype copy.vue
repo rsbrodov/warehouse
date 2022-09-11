@@ -39,38 +39,25 @@
                 <div class="col-9 left-block">
                     <FlashMessage :position="'right bottom'" style='z-index:20001;'></FlashMessage>
 
-                    <div class="left-block__layout" v-for="(mas, index) in clonedItems" :key="index">
-<!--                        <i class="fa fa-trash mr-2 mt-2 text-primary lg" @click="deleteRow(index)"></i>-->
-                        <!-- <transition-group type="transition" name="flip-list"> -->
-
+                    <div class="left-block__draggable-layout" v-for="(mas, index) in clonedItems" :key="index">
+                        <i class="fa fa-trash mr-2 mt-2 text-primary lg" @click="deleteRow(index)"></i>
                         <draggable
-                            class="left-block__draggable-column"
-                            ghost-class="ghost_column"
-                            v-model="clonedItems[index]"
-                            :options="clonedItemOptionsColumns">
-                            <div class="clickable left-block__draggable-layout__column"
-                                 v-for="(column, i) in mas" :key="i">
-                                <draggable
-                                    class="left-block__draggable-layout__draggable-element"
-                                    ghost-class="ghost"
-                                    :list="clonedItems[index][i]"
-                                    :options="clonedItemOptions">
-                                    <div class="clickable left-block__draggable-layout__element"
-
-                                        v-for="(item, indexing) in column"
-                                         :key="uuid(item)">
-                                        <p class="pl-2 pt-3 text-secondary"><i :class="item.class"></i> {{ item.title }}</p>
-                                        <div class="button-group" v-if="typeContentOne.status == 'Draft'">
-                                            <button class="btn btn-outline-primary mr-2" @click="EditItem(item.uid)"><i
-                                                    class="fa fa-pencil fa-sm"></i></button>
-                                            <button class="btn btn-outline-primary mr-2" @click="deleteItem(index, indexing)"><i
-                                                    class="fa fa-trash fa-sm"></i></button>
-                                        </div>
-                                    </div>
-                                </draggable>
+                            class="left-block__draggable-layout__draggable-parent" g
+                            host-class="ghost"
+                            v-model="clonedItems[index]" :options="clonedItemOptions">
+                            <!-- <transition-group type="transition" name="flip-list"> -->
+                            <div class="clickable left-block__draggable-layout__draggable-parent__item"
+                                v-for="(item, indexing) in mas" :key="uuid(item)">
+                                <p class="pl-2 pt-3 text-secondary"><i :class="item.class"></i> {{ item.title }}</p>
+                                <div class="button-group" v-if="typeContentOne.status == 'Draft'">
+                                    <button class="btn btn-outline-primary mr-2" @click="EditItem(item.uid)"><i
+                                            class="fa fa-pencil fa-sm"></i></button>
+                                    <button class="btn btn-outline-primary mr-2" @click="deleteItem(index, indexing)"><i
+                                            class="fa fa-trash fa-sm"></i></button>
+                                </div>
                             </div>
+                            <!-- </transition-group> -->
                         </draggable>
-                        <!-- </transition-group> -->
                     </div>
                 </div>
 
@@ -129,14 +116,8 @@
                             <button @click="pushRow()" class="btn btn-outline-secondary form-control text-left"><i
                                     class="fa fa-bars fa-lg" aria-hidden="true"></i> Добавить строку</button>
                         </div>
-
-                        <draggable v-model="availableColumn" :options="availableItemOptions" :clone="handleCloneColumn([])">
-                            <div class="p-2" v-for="column in availableColumn">
-                                <a href="" class="btn btn-outline-secondary form-control text-left">
-                                    <i :class="column.class" aria-hidden="true"></i> {{ column.name }}
-                                </a>
-                            </div>
-                        </draggable>
+                        <div class="p-2"><a href="" class="btn btn-outline-secondary form-control text-left"><i
+                                    class="fa fa-columns fa-lg" aria-hidden="true"></i> Добавить колонку</a></div>
 
 
                         <draggable v-model="availableItems" :options="availableItemOptions" :clone="handleClone"
@@ -173,19 +154,8 @@ export default {
             data: null,
             clonedItems: [
                 [
-                    [
-                    ],
-                    [
-                    ],
-                    []
 
-                ],
-            ],
-            availableColumn: [
-                {
-                    class: "fa fa-columns fa-lg",
-                    name: "Добавить колонку",
-                },
+                ]
             ],
             availableItems: [
                 {
@@ -228,9 +198,6 @@ export default {
             clonedItemOptions: {
                 group: "items"
             },
-            clonedItemOptionsColumns: {
-                group: "items"
-            },
 
             availableItemOptions: {
                 group: {
@@ -266,10 +233,6 @@ export default {
             this.$set(cloneMe, "uid", key);
 
             this.copy = key;
-            return cloneMe;
-        },
-        handleCloneColumn(item) {
-            let cloneMe = item;
             return cloneMe;
         },
         moveAction(item) {
@@ -312,9 +275,7 @@ export default {
             this.openModal('editElement');
         },
         pushRow() {
-            let dop_array = [
-                []
-            ];
+            let dop_array = [];
             this.clonedItems.push(dop_array);
         },
         saveBody() {
@@ -437,58 +398,41 @@ export default {
 .left-block {
     z-index: 1;
     background-color: #ededed;
-    border:1px solid #E1E1E1
-
 }
-/*строка*/
-.left-block__layout {
+
+.left-block__draggable-layout {
     background-color: white;
     min-height: 110px;
     max-height: 11000px;
     text-align: right;
     padding-bottom: 10px;
     margin-top: 20px;
-    display: flex;
 
 }
-/*draggable column*/
-.left-block__draggable-column{
-    display: flex;
-    flex:1;
-    background-color: white;
-    min-height: 50px;
-    margin: 5px auto;
-}
-/*column*/
-.left-block__draggable-layout__column{
-    display: flex;
-    flex:1;
-    background-color: white;
-    min-height: 50px;
-    margin: 5px auto;
-}
-/*draggable элемента его div*/
-.left-block__draggable-layout__draggable-element {
-    background-color: #ededed;
+
+.left-block__draggable-layout__draggable-parent {
+    background-color: #c4c4c4;
     border-radius: 5px;
+    min-height: 60px;
     width: 96%;
     margin: 0 auto;
     padding-bottom: 10px;
     padding-top: 10px;
 }
 
-/*элемент инпут*/
-.left-block__draggable-layout__element {
-    display: flex;
+.left-block__draggable-layout__draggable-parent__item {
     background-color: white;
+    width: 98%;
+    border-radius: 5px;
     height: 45px;
-    margin: 5px;
+    margin: 5px auto;
     cursor: move;
+    display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.left-block__draggable-layout__element:active {
+.left-block__draggable-layout__draggable-parent__item:active {
     cursor: grabbing;
 }
 
