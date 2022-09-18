@@ -107,8 +107,13 @@
             margin: 0 -5px;
         }
         .columns {
-            flex: 1 0 auto;
+            flex: 1;
             margin: 0 5px;
+            border: 1px solid #E1E1E1;
+            border-radius: 5px;
+        }
+        .block {
+            margin: 5px;
         }
     </style>
 @endsection
