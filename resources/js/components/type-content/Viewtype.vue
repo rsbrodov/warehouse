@@ -39,37 +39,40 @@
                 <div class="col-9 left-block">
                     <FlashMessage :position="'right bottom'" style='z-index:20001;'></FlashMessage>
 
-                    <div class="left-block__layout" v-for="(mas, index) in clonedItems" :key="index">
-<!--                        <i class="fa fa-trash mr-2 mt-2 text-primary lg" @click="deleteRow(index)"></i>-->
+                    <div class="left-block__layout" v-for="(row, row_index) in clonedItems" :key="row_index">
                         <!-- <transition-group type="transition" name="flip-list"> -->
 
                         <draggable
                             class="left-block__draggable-column"
                             ghost-class="ghost_column"
-                            v-model="clonedItems[index]"
-                            :options="clonedItemOptionsColumns">
+                            v-model="clonedItems[row_index]"
+                            :options="clonedColumnOptions"
+                            tag="v-layout">
                             <div class="clickable left-block__draggable-layout__column"
-                                 v-for="(column, i) in mas" :key="i">
+                                 v-for="(column, column_index) in row" :key="column_index">
                                 <draggable
                                     class="left-block__draggable-layout__draggable-element"
                                     ghost-class="ghost"
-                                    :list="clonedItems[index][i]"
-                                    :options="clonedItemOptions">
+                                    :list="clonedItems[row_index][column_index]"
+                                    :options="clonedItemOptions"
+                                    tag="v-layout"
+                                    :group="{ name: 'column' }">
                                     <div class="clickable left-block__draggable-layout__element"
 
-                                        v-for="(item, indexing) in column"
+                                        v-for="(item, index_element) in column"
                                          :key="uuid(item)">
                                         <p class="pl-2 pt-3 text-secondary"><i :class="item.class"></i> {{ item.title }}</p>
                                         <div class="button-group" v-if="typeContentOne.status == 'Draft'">
                                             <button class="btn btn-outline-primary mr-2" @click="EditItem(item.uid)"><i
                                                     class="fa fa-pencil fa-sm"></i></button>
-                                            <button class="btn btn-outline-primary mr-2" @click="deleteItem(index, indexing)"><i
+                                            <button class="btn btn-outline-primary mr-2" @click="deleteItem(row_index, column_index, index_element)"><i
                                                     class="fa fa-trash fa-sm"></i></button>
                                         </div>
                                     </div>
                                 </draggable>
                             </div>
                         </draggable>
+                        <i class="fa fa-trash mr-2 mt-2 text-primary lg" @click="deleteRow(row_index)"></i>
                         <!-- </transition-group> -->
                     </div>
                 </div>
@@ -130,7 +133,10 @@
                                     class="fa fa-bars fa-lg" aria-hidden="true"></i> Добавить строку</button>
                         </div>
 
-                        <draggable v-model="availableColumn" :options="availableItemOptions" :clone="handleCloneColumn([])">
+                        <draggable
+                            v-model="availableColumn"
+                            :options="availableColumnOptions"
+                            :clone="handleCloneColumn">
                             <div class="p-2" v-for="column in availableColumn">
                                 <a href="" class="btn btn-outline-secondary form-control text-left">
                                     <i :class="column.class" aria-hidden="true"></i> {{ column.name }}
@@ -139,9 +145,13 @@
                         </draggable>
 
 
-                        <draggable v-model="availableItems" :options="availableItemOptions" :clone="handleClone"
-                            @end="moveAction">
-                            <div class="p-2" v-for="item in availableItems">
+                        <draggable v-model="availableItems"
+                                   :options="availableItemOptions"
+                                   :clone="handleClone"
+                                    @end="moveAction"
+                                   :group="{ name: 'column' }"
+                        >
+                            <div class="p-2 right-drag-elem" v-for="item in availableItems">
                                 <a class="btn btn-outline-secondary form-control text-left">
                                     <i :class="item.class" aria-hidden="true"></i> {{ item.name }}
                                 </a>
@@ -225,10 +235,8 @@ export default {
                 },
             ],
 
+
             clonedItemOptions: {
-                group: "items"
-            },
-            clonedItemOptionsColumns: {
                 group: "items"
             },
 
@@ -239,7 +247,20 @@ export default {
                     put: false
                 },
                 sort: false
-            }
+            },
+
+            clonedColumnOptions: {
+                group: "columns"
+            },
+
+            availableColumnOptions: {
+                group: {
+                    name: "columns",
+                    pull: "clone",
+                    put: false
+                },
+                sort: false
+            },
         };
     },
     computed: {
@@ -268,16 +289,16 @@ export default {
             this.copy = key;
             return cloneMe;
         },
-        handleCloneColumn(item) {
-            let cloneMe = item;
+        handleCloneColumn() {
+            let cloneMe = [];
             return cloneMe;
         },
         moveAction(item) {
             this.openModal('createElement');
         },
 
-        deleteItem(index, indexing) {
-            this.clonedItems[index].splice(indexing, 1);
+        deleteItem(row, column, element) {
+            this.clonedItems[row][column].splice(element, 1);
         },
         deleteRow(index) {
             if (this.clonedItems.length > 1) {
@@ -466,7 +487,9 @@ export default {
     background-color: white;
     min-height: 50px;
     margin: 5px auto;
+    cursor: move;
 }
+
 /*draggable элемента его div*/
 .left-block__draggable-layout__draggable-element {
     background-color: #ededed;
@@ -475,6 +498,10 @@ export default {
     margin: 0 auto;
     padding-bottom: 10px;
     padding-top: 10px;
+}
+/*column наведение*/
+.left-block__draggable-layout__draggable-element:hover{
+    border:1px solid #007bff;
 }
 
 /*элемент инпут*/
@@ -486,6 +513,10 @@ export default {
     cursor: move;
     justify-content: space-between;
     align-items: center;
+}
+/*элемент инпут наведение*/
+.left-block__draggable-layout__element:hover {
+    border:1px solid #007bff;
 }
 
 .left-block__draggable-layout__element:active {
@@ -502,8 +533,9 @@ export default {
     font-size: 18px;
 }
 
-i:hover {
-    cursor: pointer;
+
+.right-drag-elem{
+    cursor: move;
 }
 
 /*это класс от транзишина он дает задержку*/
