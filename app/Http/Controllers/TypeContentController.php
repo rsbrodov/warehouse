@@ -163,7 +163,7 @@ class TypeContentController extends Controller
             }
         }
     }
-    
+
     public function enter($id)
     {
         $element_content = ElementContent::find($id);
@@ -176,6 +176,14 @@ class TypeContentController extends Controller
             'element_content' => $element_content
         ]);
     }
+
+    public function enterVue($id)
+    {
+        print_r(123);
+        //return view('type_content.enter2');
+    }
+
+
     public function destroy($id)
     {
         $type_content = TypeContent::find($id);
