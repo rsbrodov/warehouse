@@ -70,7 +70,7 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('/users/{id}/activate', [UsersController::class, 'activate'])->name('users.activate');
     Route::get('/users/{id}/block', [UsersController::class, 'block'])->name('users.block');
     Route::get('/users/{id}/delete', [UsersController::class, 'delete'])->name('users.delete');
-    
+
 });
 // СПРАВОЧНИКИ
 Route::middleware(['auth:web'])->group(function () {
@@ -99,6 +99,7 @@ Route::get('/type-content/create-icons', [TypeContentController::class, 'createI
 
 
 Route::middleware(['auth:web'])->group(function () {
+    Route::get('/element/enter-vue/{$id}', [TypeContentController::class, 'enterVue'])->name('type-content.enter-vue');
     Route::post('/type-content/save-body/', [TypeContentController::class, 'saveBody']);
     Route::get('/type-content/getTypeContentID/{id}', [TypeContentController::class, 'getTypeContentID']);
     Route::get('/type-content/get-body/{id}', [TypeContentController::class, 'getBody']);
@@ -118,7 +119,7 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('/type-content/new-version/{id}/{parametr}', [TypeContentController::class, 'createNewVersion']);
     //Route::put('/type-content/{id}', [TypeContentController::class, 'update'])->name('type-content.update');
     Route::delete('/type-content/{id}', [TypeContentController::class, 'destroy'])->name('type-content.destroy');
-    
+
 });
 
 // ЭЛЕМЕНТЫ КОНТЕНТА
