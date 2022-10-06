@@ -64,6 +64,12 @@ class TypeContentController extends Controller
         return response()->json($type_content);
     }
 
+    public function getElementContentID($id)
+    {
+        $element_content = ElementContent::where('id', $id)->with('type_contents')->with('created_authors:id,name')->first();
+        return response()->json($element_content);
+    }
+
 
 
     public function create()
@@ -179,8 +185,7 @@ class TypeContentController extends Controller
 
     public function enterVue($id)
     {
-        print_r(123);
-        //return view('type_content.enter2');
+        return view('type_content.enter2');
     }
 
 

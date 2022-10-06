@@ -35,6 +35,11 @@ class ElementContent extends Model
     public function updated_authors() {
         return $this->belongsTo(User::class, 'updated_author');
     }
+
+    public function type_contents() {
+        return $this->belongsTo(TypeContent::class, 'type_content_id');
+    }
+
     public function checkingApiUrl($apiUrl, $idGlobal = null) {
         if($idGlobal){
             if(($elementContentExistence = ElementContent::where('url', $apiUrl)->whereNotIn('id_global', [$idGlobal])->first()) !== null){

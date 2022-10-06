@@ -1,6 +1,7 @@
 export default{
     state: {
         element_content: [],
+        element_content_one: null,
         new_element_content: null,
     },
     getters: {
@@ -10,6 +11,9 @@ export default{
         NewElementContent(state){
             return state.new_element_content
         },
+        elementContentOne(state){
+            return state.element_content_one
+        },
     },
     mutations: {
         UPDATE(state, element_content){
@@ -17,6 +21,9 @@ export default{
         },
         NEW(state, new_element_content){
             state.new_element_content = new_element_content
+        },
+        updateElementContentOne(state, element_content_one){
+            state.element_content_one = element_content_one
         },
     },
     actions: {
@@ -39,5 +46,18 @@ export default{
             const element_content = await axios.get('http://127.0.0.1:8000/element-content/findElementContentID/'+form.type_content_id);
             ctx.commit('UPDATE', element_content.data)
         },
+        async getElementContentOne({commit}, id) {
+            //commit('setLoading', true);
+            await axios.get('http://127.0.0.1:8000/type-content/getElementContentID/' + id)
+                .then(response => {
+                    commit('updateElementContentOne', response.data)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            /*.finally(() => {
+                commit('setLoading', false);
+            });*/
+        }
     },
 }
