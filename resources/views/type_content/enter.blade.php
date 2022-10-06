@@ -36,31 +36,35 @@
             <?//print_r('<pre>')?>
             <?//print_r($body)?>
             <?//print_r('</pre>')?>
-            <form action="" method="post">
+            <form action="{{route('element-content.saveDraft', $element_content), $element_content->id}}" method="post">
+                @csrf
+                @method('PUT')
                 <div class="form-group container">
+                    <?php $i=0; ?>
                     @foreach ($body as $row)
                         <div class="row-block">
                             @foreach ($row as $column)
                                 <?//print_r($column)?>
                                 <div class="columns mt-4">
                                     @foreach ($column as $element)
+                                            <?php $i++; ?>
                                         <div class="block mt-4">
-                                            <label for="{{$element->name}}" class="">{{$element->title}}</label>
+                                            <label for="{{$element->name}}" class="">@if($element->required)<span class="text-danger">*</span>@endif{{$element->title}}</label>
                                             @if($element->type === 'text')
-                                                <input autocomplete="off" type="{{$element->type}}" class="form-control @error($element->name) is-invalid @enderror" id="{{$element->name}}" name="{{$element->name}}">
+                                                <input autocomplete="off" type="{{$element->type}}" class="form-control @error($element->name) is-invalid @enderror" id="{{$element->name}}" name="{{$element->type.$i}}">
                                             @elseif($element->type === 'checkbox' or $element->type === 'radio')
                                                 <div class="row">
                                                     @foreach($dictionary_elems = \App\Models\DictionaryElement::where('dictionary_id', $element->dictionary_id)->get() as $dictionary_elem)
                                                         <div class="col-3">
-                                                            <input type="{{$element->type}}" id="{{$element->name}}" name="{{$element->name}}" value="{{$dictionary_elem->id}}">
+                                                            <input type="{{$element->type}}" id="{{$element->name}}" name="{{$element->type.$i}}" value="{{$dictionary_elem->id}}">
                                                             <label for="{{$dictionary_elem->value}}">{{$dictionary_elem->value}}</label>
                                                         </div>
                                                     @endforeach
                                                 </div>
                                             @elseif($element->type === 'textarea')
-                                                <textarea name="{{$element->type}}" id="{{$element->type}}" class="form-control"></textarea>
+                                                <textarea name="{{$element->type.$i}}" id="{{$element->type.$i}}" class="form-control"></textarea>
                                             @elseif($element->type === 'select')
-                                                <select id="{{$element->name}}" class="form-control" name="{{$element->name}}">
+                                                <select id="{{$element->name}}" class="form-control" name="{{$element->type.$i}}">
                                                     @foreach($dictionary_elems = \App\Models\DictionaryElement::where('dictionary_id', $element->dictionary_id)->get() as $dictionary_elem)
                                                         <option value="{{$dictionary_elem->id}}">{{$dictionary_elem->value}}</option>
                                                     @endforeach
@@ -75,10 +79,13 @@
                     @endforeach
                     {{-- <button type="submit" class="btn btn-success form-control mt-4">Сохранить</button> --}}
                 </div>
+                <div class="p-2"><button type="submit" class="btn btn-success form-control text-left"><i
+                            class="fa fa-save fa-lg" aria-hidden="true"></i> Сохранить черновик</button></div>
             </form>
         </div>
         <div class="col-3">
             <div class="d-flex flex-column">
+
                 <div class="p-2"><button type="submit" class="btn btn-primary form-control text-left"><i
                     class="fa fa-save fa-lg" aria-hidden="true"></i> Сохранить черновик</button></div>
                 <div class="p-2"><a href="" class="btn btn-primary form-control text-left"><i

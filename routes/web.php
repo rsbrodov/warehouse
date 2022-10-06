@@ -132,4 +132,5 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('/element-content/{id}/del', [ElementContentController::class, 'destroy'])->name('element-content.destroy');
     Route::get('/element-content/{id}/{parameter}', [ElementContentController::class, 'createNewVersion'])->name('element-content.create-new-version');
     Route::get('/all-version-element-content/{id_global}', [ElementContentController::class, 'getAllVersionElementContent'])->name('element-content.get-all-version');
+    Route::put('/element-content/enter/{id}/saveDraft', [ElementContentController::class, 'saveDraft'])->name('element-content.saveDraft');
 });

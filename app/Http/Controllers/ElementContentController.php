@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ElementContentRequest;
 use App\Models\ElementContent;
+use App\Models\TypeContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -40,7 +41,7 @@ class ElementContentController extends Controller
                     return response()->json($element_contents);
                 }
             }*/
-           
+
         }
     }
 
@@ -71,7 +72,7 @@ class ElementContentController extends Controller
                     'updated_author' => Auth::guard('web')->user()->id,
                 ]
             );
-            
+
             return response()->json($new_element_content);
         }
     }
@@ -190,7 +191,7 @@ class ElementContentController extends Controller
             return redirect()->back()->with('error', 'Что-то пошло не так');
         }
     }
-    
+
     public function getAllVersionElementContent()
     {
         if (Auth::guard('web')->check()) {
@@ -203,6 +204,34 @@ class ElementContentController extends Controller
             } else {
                 return response()->json('item not found');
             }
+        }
+    }
+    public function saveDraft(Request $request, $id)
+    {
+        if (Auth::guard('web')->check()) {
+            $element_content = ElementContent::find($id);
+            $type_content = TypeContent::find($element_content->type_content_id);
+            $body = json_decode($type_content->body);
+            $error = [];
+            $i = 0;
+            foreach ($body as $row){
+                foreach ($row as $column){
+                    foreach ($column as $element){
+                        $i++;
+                        print_r($element->name.' : '.$request[$element->type.$i].'</br>');
+                        if ($element->required==1 and !$request[$element->type.$i]) {
+                            $error[] = [
+                                'errors' => [
+                                    'field_name'      =>  $element->name,
+                                    'field_type'      =>  $element->type.$i,
+                                    'filled_error' => 'Поле не заполнено',
+                                ]
+                            ];
+                        }
+                    }
+                }
+            }
+            dd($error);
         }
     }
 }
