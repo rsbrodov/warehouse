@@ -101,9 +101,11 @@ Route::get('/type-content/create-icons', [TypeContentController::class, 'createI
 Route::middleware(['auth:web'])->group(function () {
     Route::get('/element/enter-vue/{id}', [TypeContentController::class, 'enterVue'])->name('type-content.enter-vue');
     Route::post('/type-content/save-body/', [TypeContentController::class, 'saveBody']);
+    Route::post('/type-content/save-body-element/', [TypeContentController::class, 'saveBodyElement']);
     Route::get('/type-content/getTypeContentID/{id}', [TypeContentController::class, 'getTypeContentID']);
     Route::get('/type-content/getElementContentID/{id}', [TypeContentController::class, 'getElementContentID']);
     Route::get('/type-content/get-body/{id}', [TypeContentController::class, 'getBody']);
+    Route::get('/type-content/get-body-element-content/{id}', [TypeContentController::class, 'getBodyElementContent']);
     Route::post('/type-content/store/', [App\Http\Controllers\TypeContentController::class, 'store']);
     Route::post('/type-content/{id}', [TypeContentController::class, 'update']);
     Route::get('/type-content/view-new/{id}', [TypeContentController::class, 'viewNew'])->name('type-content.view-new');
