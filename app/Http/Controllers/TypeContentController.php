@@ -334,11 +334,34 @@ class TypeContentController extends Controller
             return response()->json('object not found');
         }
     }
+
+    public function saveBodyElement(Request $request)
+    {
+        $elementContent = ElementContent::find($request->id);
+        if (!empty($elementContent)) {
+            $elementContent->body = json_encode($request->body);
+            $elementContent->save();
+            return response()->json($elementContent);
+        } else {
+            return response()->json('object not found');
+        }
+    }
+
+
     public function getBody($id)
     {
         $type_content = TypeContent::find($id);
         if (!empty($type_content)) {
             return response()->json(json_decode($type_content->body));
+        } else {
+            return response()->json('object not found');
+        }
+    }
+    public function getBodyElementContent($id)
+    {
+        $elementContent = ElementContent::find($id);
+        if (!empty($elementContent)) {
+            return response()->json(json_decode($elementContent->body));
         } else {
             return response()->json('object not found');
         }
