@@ -24,14 +24,40 @@ import draggable from "vuedraggable";
                         <div class="row-block" v-for="(row, row_index) in body" :key="row_index">
                             <div class="columns mt-4" v-for="(column, column_index) in row" :key="column_index">
                                 <div class="block mt-4" v-for="(element, element_index) in column" :key="element_index">
-                                    <label :for="element.name"><span class="text-danger" v-if="element.required == 1">*</span>{{element.title}}</label>
-                                    <input autocomplete="off"
+                                    <div class="label">
+                                        <label :for="element.name"><span class="text-danger" v-if="element.required == 1">*</span>{{element.title}}</label>
+                                    </div>
+                                    <input v-if="element.type == 'text'"
+                                           autocomplete="off"
                                            v-model="elementBody[element.uid].value"
                                            :type="element.type"
                                            class="form-control"
                                            :disabled="elementContentOne.status != 'Draft'"
                                            :id="element.title"
                                            :name="element.name">
+                                    <textarea v-else-if="element.type == 'textarea'"
+                                           autocomplete="off"
+                                           v-model="elementBody[element.uid].value"
+                                           :type="element.type"
+                                           class="form-control"
+                                           :disabled="elementContentOne.status != 'Draft'"
+                                           :id="element.title"
+                                           :name="element.name"
+                                           rows="5" />
+                                    <select v-else-if="element.type == 'select'"
+                                            :id="element.uid"
+                                            class="form-control"
+                                            v-model="elementBody[element.uid].value">
+                                        <option disabled selected value> -- Выберите вариант -- </option>
+                                        <option v-for="(dropdown, index) in dropdownTemp" :key="index" :value="dropdown.id">{{dropdown.value}}</option>
+                                    </select>
+                                    <div v-else-if="element.type == 'file'"
+                                         class="block-img"  >
+                                        <img :id="element.uid"
+                                             src="https://zor.com/de/media/catalog/product/cache/3/image/9df78eab33525d08d6e5fb8d27136e95/p/l/placeholder_big_3.jpg"
+                                             class="p-2"
+                                             style="max-height: 320px; width:100%"/>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -107,15 +133,12 @@ export default {
             element_content_id: window.location.href.split('/')[5],
             url: window.location.href.split('/')[4],
             body: undefined,
-            elementBody: {/*
-                '140495fc70d32': {value: 123},
-                '9cd029b455c85': {value: 1232},
-                'a947a5b1732e8': {value: 1232},
-                '92ddfd3cebdd9': {value: 1232},
-                '605bf1d11e13a': {value: 1232},
-                '11a5fbda5cbbc': {value: 1232},
-                'a5efb03a1b641': {value: null},*/
-            },
+            elementBody: {},
+            dropdownTemp: [
+                {id: 1, value: 'Вариант 1'},
+                {id: 2, value: 'Вариант 2'},
+                {id: 3, value: 'Вариант 3'},
+            ]
         };
     },
     computed: {
@@ -143,11 +166,7 @@ export default {
         async getValueElementContent() {
             await axios.get('http://127.0.0.1:8000/type-content/get-body-element-content/' + this.elementContentOne.id)
                 .then(response => {
-                    if (Object.keys(response.data).length === 0) {
-                        this.elementBody = [[]];
-                    } else {
-                        this.elementBody = response.data
-                    }
+                    this.elementBody = response.data
                 })
                 .catch(error => {
                     console.log(error);
@@ -205,10 +224,15 @@ export default {
 .columns {
     flex: 1;
     margin: 0 5px;
-    border: 1px solid #E1E1E1;
-    border-radius: 5px;
+    /*border: 1px solid #E1E1E1;*/
+    /*border-radius: 5px;*/
 }
 .block {
     margin: 5px;
+    flex-wrap: nowrap;
+}
+.block-img {
+    border: 1px solid #E1E1E1;
+    border-radius: 5px;
 }
 </style>
