@@ -170,19 +170,6 @@ class TypeContentController extends Controller
         }
     }
 
-    public function enter($id)
-    {
-        $elementContent = ElementContent::find($id);
-
-        $typeContent = TypeContent::find($elementContent->type_content_id);
-        $body = json_decode($typeContent->body);
-        return view('type_content.enter', [
-            'body' => $body,
-            'type_content' => $typeContent,
-            'element_content' => $elementContent
-        ]);
-    }
-
     public function enterVue($id)
     {
         return view('type_content.enter2');
@@ -360,10 +347,20 @@ class TypeContentController extends Controller
     public function getBodyElementContent($id)
     {
         $elementContent = ElementContent::find($id);
-        if (!empty($elementContent)) {
+        if (!empty($elementContent->body)) {
             return response()->json(json_decode($elementContent->body));
         } else {
-            return response()->json('object not found');
+            $typeContent = TypeContent::find($elementContent->type_content_id);
+            $body = json_decode($typeContent->body);
+            $error = [];
+            foreach ($body as $row){
+                foreach ($row as $column){
+                    foreach ($column as $element){
+                        $error[$element->uid] = ['value' => null];
+                    }
+                }
+            }
+            return response()->json($error);
         }
     }
 }

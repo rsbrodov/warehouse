@@ -57,7 +57,7 @@
                             </div>
                         </form>
                     </div>
-                </div> 
+                </div>
                 <div class="create col-6 text-right">
                     <button id="hideshow" class="btn btn-outline-primary btn-unbordered" @click="toggleSearch()"><span class="fa fa-search fa-lg" aria-hidden="true"></span></button>
                     <button id="clean" class="btn btn-outline-primary btn-unbordered" style="display: none;"  @click="cleanSearch()"><span class="fa fa-paint-brush fa-lg" aria-hidden="true"></span> Очистить</button>
@@ -91,8 +91,8 @@
                 <!-- :href нужно убрать когда будут добавлены компоненты -->
                 <td nowrap>
                     <a :href="'/element-content/'+ element.id +'/edit'" class="btn btn-outline-primary btn-unbordered" @click="openModal('typeContentEdit', type_content)"><i class="fa fa-pencil fa-lg"></i></a>
-                    <!-- <a :href="'/all-version-element-content/'+element.id" class="btn btn-outline-primary btn-unbordered"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a> -->
-                    <a :href="'/element-content/enter/'+element.id" class="btn btn-outline-primary btn-unbordered"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a>
+<!--                    <a :href="'/element-content/enter/'+element.id" class="btn btn-outline-primary btn-unbordered"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a>-->
+                    <a :href="'/element/enter-vue/'+element.id" class="btn btn-outline-primary btn-unbordered"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a>
                 </td>
             </tr>
         </table>
