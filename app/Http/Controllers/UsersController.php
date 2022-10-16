@@ -46,7 +46,7 @@ class UsersController extends Controller
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
 
-            $new_user = User::create([
+            $newUser = User::create([
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
                 'password' => Hash::make($request->input('password')),
@@ -54,11 +54,11 @@ class UsersController extends Controller
                 'parent_id' => Auth::id()
             ]);
             if ($user->hasRole('SuperAdmin')) {
-                $new_user->assignRole('Admin'); //назначить роль юзеру
+                $newUser->assignRole('Admin'); //назначить роль юзеру
             } else if ($user->hasRole('Admin')) {
-                $new_user->assignRole($request->input('role')); //назначить роль юзеру
+                $newUser->assignRole($request->input('role')); //назначить роль юзеру
             }
-            return redirect()->route('users.index')->with('success', 'Пользователь ' . $new_user->name . ' успешно добавлен');
+            return redirect()->route('users.index')->with('success', 'Пользователь ' . $newUser->name . ' успешно добавлен');
         }
     }
 
@@ -67,8 +67,8 @@ class UsersController extends Controller
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
-                $edit_user = User::where('id', $id)->first();
-                return view('users.edit', ['edit_user' => $edit_user]); // вью - это физический файл, рут - это виртуальный путь, который ведет к методу
+                $editUser = User::where('id', $id)->first();
+                return view('users.edit', ['edit_user' => $editUser]); // вью - это физический файл, рут - это виртуальный путь, который ведет к методу
             }
         }
     }
@@ -84,11 +84,11 @@ class UsersController extends Controller
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
-                $edit_user = User::where('id', $id)->first();
-                $edit_user->name = $request->input('name');
-                $edit_user->email = $request->input('email');
-                $edit_user->save();
-                return redirect()->route('users.index')->with('success', 'Пользователь ' . $edit_user->name . ' успешно отредактирован');
+                $editUser = User::where('id', $id)->first();
+                $editUser->name = $request->input('name');
+                $editUser->email = $request->input('email');
+                $editUser->save();
+                return redirect()->route('users.index')->with('success', 'Пользователь ' . $editUser->name . ' успешно отредактирован');
             }
         }
     }
@@ -98,12 +98,12 @@ class UsersController extends Controller
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
-                $act_user = User::where('id', $id)->first();
-                if ($act_user->status == 'MODERATED') {
-                    $act_user->status = 'ACTIVATED';
+                $actUser = User::where('id', $id)->first();
+                if ($actUser->status == 'MODERATED') {
+                    $actUser->status = 'ACTIVATED';
                 }
-                $act_user->save();
-                return redirect()->route('users.index')->with('success', 'Пользователь ' . $act_user->name . ' активирован!');
+                $actUser->save();
+                return redirect()->route('users.index')->with('success', 'Пользователь ' . $actUser->name . ' активирован!');
             }
         }
     }
@@ -113,18 +113,18 @@ class UsersController extends Controller
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
-                $del_user = User::where('id', $id)->first();
-                $message = ''; $type_message = 'success';
-                if ($del_user->status == 'BLOCKED') {
-                    $del_user->status = 'MODERATED';
-                    $message = 'Пользователь ' . $del_user->name . ' разблокирован и находится на модерации';
+                $delUser = User::where('id', $id)->first();
+                $message = ''; $typeMessage = 'success';
+                if ($delUser->status == 'BLOCKED') {
+                    $delUser->status = 'MODERATED';
+                    $message = 'Пользователь ' . $delUser->name . ' разблокирован и находится на модерации';
                 } else {
-                    $del_user->status = 'BLOCKED';
-                    $message = 'Пользователь ' . $del_user->name . ' заблокирован!';
-                    $type_message = 'warning';
+                    $delUser->status = 'BLOCKED';
+                    $message = 'Пользователь ' . $delUser->name . ' заблокирован!';
+                    $typeMessage = 'warning';
                 }
-                $del_user->save();
-                return redirect()->route('users.index')->with($type_message, $message);
+                $delUser->save();
+                return redirect()->route('users.index')->with($typeMessage, $message);
             }
         } else {
             print_r('Авторизируйтесь');
@@ -136,18 +136,18 @@ class UsersController extends Controller
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
-                $del_user = User::where('id', $id)->first();
-                $message = ''; $type_message = 'success';
-                if ($del_user->status == 'DELETED') {
-                    $del_user->status = 'MODERATED';
-                    $message = 'Пользователь ' . $del_user->name . ' восстановлен и находится на модерации';
+                $delUser = User::where('id', $id)->first();
+                $message = ''; $typeMessage = 'success';
+                if ($delUser->status == 'DELETED') {
+                    $delUser->status = 'MODERATED';
+                    $message = 'Пользователь ' . $delUser->name . ' восстановлен и находится на модерации';
                 } else {
-                    $del_user->status = 'DELETED';
-                    $message = 'Пользователь ' . $del_user->name . ' удален!';
-                    $type_message = 'info';
+                    $delUser->status = 'DELETED';
+                    $message = 'Пользователь ' . $delUser->name . ' удален!';
+                    $typeMessage = 'info';
                 }
-                $del_user->save();
-                return redirect()->route('users.index')->with($type_message, $message);
+                $delUser->save();
+                return redirect()->route('users.index')->with($typeMessage, $message);
             }
         }
     }
@@ -177,10 +177,10 @@ class UsersController extends Controller
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
-                $edit_user = User::where('id', $id)->first();
-                $edit_user->name = $request->input('name');
-                $edit_user->email = $request->input('email');
-                $edit_user->save();
+                $editUser = User::where('id', $id)->first();
+                $editUser->name = $request->input('name');
+                $editUser->email = $request->input('email');
+                $editUser->save();
                 return redirect()->route('users.profile')->with('user', $user);
             }
         }
@@ -191,15 +191,15 @@ class UsersController extends Controller
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
                 if($request->file('image')){
                     $path = $request->file('image')->store('profiles', 'public');
-                    $edit_user = User::where('id', $id)->first();
-                    Storage::disk('public')->delete($edit_user->photo);
-                    $edit_user->photo = $path;
-                    $edit_user->save();
+                    $editUser = User::where('id', $id)->first();
+                    Storage::disk('public')->delete($editUser->photo);
+                    $editUser->photo = $path;
+                    $editUser->save();
                     return redirect()->route('users.profile')->with('user', $user);
                 } else {
                     return redirect()->route('users.profile')->with('user', $user)->with('warning', 'Фото не выбрано!');
                 }
-                
+
             }
         }
     }
@@ -215,14 +215,14 @@ class UsersController extends Controller
         }
     }
 
-    public function rolesCreateForm(Request $req, $type_action)
+    public function rolesCreateForm(Request $req, $typeAction)
     {
         //dd($req->input());
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin')) {
-                $message = ''; $type_message = 'success';
-                if ($type_action == 'role') {
+                $message = ''; $typeMessage = 'success';
+                if ($typeAction == 'role') {
                     // $validated = $req->validate([
                     //     'permissions' => 'required',
                     //     'roles' => 'required',
@@ -237,7 +237,7 @@ class UsersController extends Controller
                         }
                         $message = substr($message, 0, -2);
                     }
-                } else if ($type_action == 'permission') {
+                } else if ($typeAction == 'permission') {
                     $permission = Permission::create(['name' => $req->input('permission')]);
                     $roles = Role::all();
                     $message = 'Полномочие '. $permission->name. ' успешно создано. ';
@@ -254,7 +254,7 @@ class UsersController extends Controller
                         $message = substr($message, 0, -2);
                     }
                 }
-                return redirect()->route('users.roles-create-view')->with($type_message, $message);
+                return redirect()->route('users.roles-create-view')->with($typeMessage, $message);
             }
         }
     }
@@ -265,17 +265,17 @@ class UsersController extends Controller
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             //if ($user->hasRole('SuperAdmin')) {
-                
-                $message = ''; $type_message = 'success';
+
+                $message = ''; $typeMessage = 'success';
                 $message = 'Роль '. $req->input('role'). ' выдана следующим пользователям: ';
-                foreach ($req->input('users') as $user_id) {
-                    $user = User::where('name', $user_id)->first();
+                foreach ($req->input('users') as $userId) {
+                    $user = User::where('name', $userId)->first();
                     //dd($user);
                     $user->assignRole($req->input('role'));
-                    $message .= $user_id.', ';
+                    $message .= $userId.', ';
                 }
                 $message = substr($message, 0, -2);
-                return redirect()->route('users.roles-create-view')->with($type_message, $message);
+                return redirect()->route('users.roles-create-view')->with($typeMessage, $message);
             //}
         }
     }

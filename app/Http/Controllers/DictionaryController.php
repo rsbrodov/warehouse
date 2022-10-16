@@ -56,7 +56,7 @@ class DictionaryController extends Controller
     public function store(DictionaryRequest $request)
     {
         if (Auth::guard('web')->check()) {
-            $new_dictionary = Dictionary::create([
+            $newDictionary = Dictionary::create([
                 'code' => $request->code,
                 'name' => $request->name,
                 'description' => $request->description,
@@ -64,7 +64,7 @@ class DictionaryController extends Controller
                 'created_author' => Auth::guard('web')->user()->id,
                 'updated_author' => Auth::guard('web')->user()->id
             ]);
-            $dictionary = Dictionary::where('id', $new_dictionary->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
+            $dictionary = Dictionary::where('id', $newDictionary->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
             return response()->json($dictionary);
 
         } else if (Auth::guard('api')->check()) {
@@ -81,12 +81,12 @@ class DictionaryController extends Controller
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('Admin') or $user->hasRole('SuperAdmin')) {
-                $dictionary_elements = DictionaryElement::where('dictionary_id', $id)->get();
-                return view('dictionary.show', ['dictionary_elements' => $dictionary_elements, 'dictionary_id' => $id]);
+                $dictionaryElements = DictionaryElement::where('dictionary_id', $id)->get();
+                return view('dictionary.show', ['dictionary_elements' => $dictionaryElements, 'dictionary_id' => $id]);
             }
         } else if (Auth::guard('api')->check()) {
-            $dictionary_element = DictionaryElement::where(['dictionary_id' => $id])->with('created_author:id,name')->with('updated_author:id,name')->get();
-            return response()->json($dictionary_element);
+            $dictionaryElement = DictionaryElement::where(['dictionary_id' => $id])->with('created_author:id,name')->with('updated_author:id,name')->get();
+            return response()->json($dictionaryElement);
         }
     }
 

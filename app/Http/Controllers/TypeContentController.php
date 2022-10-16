@@ -40,34 +40,34 @@ class TypeContentController extends Controller
     public function getListTypeContent()
     {
         if (Auth::guard('web')->check()) {
-            $type_contents = TypeContent::with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('name', 'desc')->get()->unique('id_global'); //все уникальные
+            $typeContents = TypeContent::with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('name', 'desc')->get()->unique('id_global'); //все уникальные
             $ids = [];
-            foreach ($type_contents as $type_content) {
-                $ids[] = TypeContent::where('id_global', $type_content->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first()->id;
+            foreach ($typeContents as $typeContent) {
+                $ids[] = TypeContent::where('id_global', $typeContent->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first()->id;
             }
-            $type_contents = TypeContent::whereIn('id', $ids)->orderBy('created_at', 'asc')->get();
-            return response()->json($type_contents);
+            $typeContents = TypeContent::whereIn('id', $ids)->orderBy('created_at', 'asc')->get();
+            return response()->json($typeContents);
         } else {
             if (Auth::guard('api')->check()) {
-                $type_contents = TypeContent::with('created_authors:id,name')->with('updated_authors:id,name')->orderBy(
+                $typeContents = TypeContent::with('created_authors:id,name')->with('updated_authors:id,name')->orderBy(
                     'name',
                     'desc'
                 )->get();
-                return response()->json($type_contents);
+                return response()->json($typeContents);
             }
         }
     }
 
     public function getTypeContentID($id)
     {
-        $type_content = TypeContent::find($id);
-        return response()->json($type_content);
+        $typeContent = TypeContent::find($id);
+        return response()->json($typeContent);
     }
 
     public function getElementContentID($id)
     {
-        $element_content = ElementContent::where('id', $id)->with('type_contents')->with('created_authors:id,name')->first();
-        return response()->json($element_content);
+        $elementContent = ElementContent::where('id', $id)->with('type_contents')->with('created_authors:id,name')->first();
+        return response()->json($elementContent);
     }
 
 
@@ -84,16 +84,16 @@ class TypeContentController extends Controller
     public function store(TypeContentRequest $request)
     {
         $model = new TypeContent();
-        $check_api = $model->checkingApiUrl($request->api_url);
-        $check_name = $model->checkingName($request->name);
-        if ($check_name) {
-            return response()->json($check_name, 422);
+        $checkApi = $model->checkingApiUrl($request->api_url);
+        $checkName = $model->checkingName($request->name);
+        if ($checkName) {
+            return response()->json($checkName, 422);
         }
-        if ($check_api) {
-            return response()->json($check_api, 422);
+        if ($checkApi) {
+            return response()->json($checkApi, 422);
         }
         if (Auth::guard('web')->check()) {
-            $new_type_content = TypeContent::create([
+            $newTypeContent = TypeContent::create([
                 'id_global' => Str::uuid()->toString(),
                 'name' => $request->name,
                 'description' => $request->description,
@@ -109,9 +109,9 @@ class TypeContentController extends Controller
                 'created_author' => Auth::guard('web')->user()->id,
                 'updated_author' => Auth::guard('web')->user()->id
             ]);
-            return response()->json($new_type_content);
+            return response()->json($newTypeContent);
         } elseif (Auth::guard('api')->check()) {
-            $new_type_content = TypeContent::create([
+            $newTypeContent = TypeContent::create([
                 'id_global' => Str::uuid()->toString(),
                 'name' => $request->name,
                 'description' => $request->description,
@@ -123,8 +123,8 @@ class TypeContentController extends Controller
                 'created_author' => Auth::guard('api')->user()->id,
                 'updated_author' => Auth::guard('api')->user()->id
             ]);
-            $type_content = TypeContent::find($new_type_content->id)->with('created_authors:id,name')->with('updated_authors:id,name')->get();
-            return response()->json($type_content);
+            $typeContent = TypeContent::find($newTypeContent->id)->with('created_authors:id,name')->with('updated_authors:id,name')->get();
+            return response()->json($typeContent);
         }
     }
 
@@ -133,10 +133,10 @@ class TypeContentController extends Controller
         if (Auth::guard('web')->check()) {
             $type = TypeContent::where('id', $request->id)->first();
             if ($type->status === 'Draft' or $type->status === 'Archive') {
-                $other_published = TypeContent::where(['id_global' => $type->id_global, 'status' => 'Published'])->first();
-                if (isset($other_published)) {
-                    $other_published->status = 'Archive';
-                    $other_published->save();
+                $otherPublished = TypeContent::where(['id_global' => $type->id_global, 'status' => 'Published'])->first();
+                if (isset($otherPublished)) {
+                    $otherPublished->status = 'Archive';
+                    $otherPublished->save();
                 }
             }
             $type->name = $request->name;
@@ -149,8 +149,8 @@ class TypeContentController extends Controller
             $type->owner = $request->owner;
             $type->updated_author = Auth::guard('web')->user()->id;
             $type->save();
-            $type_content = TypeContent::where('id', $request->id)->with('created_authors:id,name')->with('updated_authors:id,name')->first();
-            return response()->json($type_content);
+            $typeContent = TypeContent::where('id', $request->id)->with('created_authors:id,name')->with('updated_authors:id,name')->first();
+            return response()->json($typeContent);
         } else {
             if (Auth::guard('api')->check()) {
                 $type = TypeContent::find($id);
@@ -164,22 +164,22 @@ class TypeContentController extends Controller
                 $type->updated_author = Auth::guard('api')->user()->id;
                 $type->updated_author = Auth::guard('api')->user()->id;
                 $type->save();
-                $type_content = TypeContent::where('id', $type->id)->with('created_authors:id,name')->with('updated_authors:id,name')->first();
-                return response()->json($type_content);
+                $typeContent = TypeContent::where('id', $type->id)->with('created_authors:id,name')->with('updated_authors:id,name')->first();
+                return response()->json($typeContent);
             }
         }
     }
 
     public function enter($id)
     {
-        $element_content = ElementContent::find($id);
+        $elementContent = ElementContent::find($id);
 
-        $type_content = TypeContent::find($element_content->type_content_id);
-        $body = json_decode($type_content->body);
+        $typeContent = TypeContent::find($elementContent->type_content_id);
+        $body = json_decode($typeContent->body);
         return view('type_content.enter', [
             'body' => $body,
-            'type_content' => $type_content,
-            'element_content' => $element_content
+            'type_content' => $typeContent,
+            'element_content' => $elementContent
         ]);
     }
 
@@ -191,9 +191,9 @@ class TypeContentController extends Controller
 
     public function destroy($id)
     {
-        $type_content = TypeContent::find($id);
-        if ($type_content) {
-            $type_content->delete();
+        $typeContent = TypeContent::find($id);
+        if ($typeContent) {
+            $typeContent->delete();
             return response()->json('item was deleted');
         } else {
             return response()->json('item not found');
@@ -202,9 +202,9 @@ class TypeContentController extends Controller
 
     public function getAllVersionTypeContent($id)
     {
-        $id_global = TypeContent::find($id)->id_global;
-        $type_content = TypeContent::where('id_global', $id_global)->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
-        return response()->json($type_content);
+        $idGlobal = TypeContent::find($id)->id_global;
+        $typeContent = TypeContent::where('id_global', $idGlobal)->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
+        return response()->json($typeContent);
     }
 
     public function getAllVersion($id)
@@ -214,12 +214,12 @@ class TypeContentController extends Controller
     public function View($id)
     {
         if (Auth::guard('web')->check()) {
-            $type_content = TypeContent::where('id_global', $id)->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->first();
-            return view('type_content.view')->with('type_content', $type_content);
+            $typeContent = TypeContent::where('id_global', $id)->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->first();
+            return view('type_content.view')->with('type_content', $typeContent);
         } else {
             if (Auth::guard('api')->check()) {
-                $type_content = TypeContent::where('id_global', $id)->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
-                return response()->json($type_content);
+                $typeContent = TypeContent::where('id_global', $id)->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
+                return response()->json($typeContent);
             } else {
                 return response()->json('item not found');
             }
@@ -228,8 +228,8 @@ class TypeContentController extends Controller
     public function createNewVersion($id, $parametr)
     {
         $type = TypeContent::find($id);
-        $exist_other_draft = TypeContent::where(['id_global' => $type->id_global, 'status' => 'Draft'])->count();
-        if ($exist_other_draft) {
+        $existOtherDraft = TypeContent::where(['id_global' => $type->id_global, 'status' => 'Draft'])->count();
+        if ($existOtherDraft) {
             $error = array(
                 'code'      =>  422,
                 'message'   =>  'The given data was invalid',
@@ -325,11 +325,11 @@ class TypeContentController extends Controller
 
     public function saveBody(Request $request)
     {
-        $type_content = TypeContent::find($request->id);
-        if (!empty($type_content)) {
-            $type_content->body = json_encode($request->body);
-            $type_content->save();
-            return response()->json($type_content);
+        $typeContent = TypeContent::find($request->id);
+        if (!empty($typeContent)) {
+            $typeContent->body = json_encode($request->body);
+            $typeContent->save();
+            return response()->json($typeContent);
         } else {
             return response()->json('object not found');
         }
@@ -350,9 +350,9 @@ class TypeContentController extends Controller
 
     public function getBody($id)
     {
-        $type_content = TypeContent::find($id);
-        if (!empty($type_content)) {
-            return response()->json(json_decode($type_content->body));
+        $typeContent = TypeContent::find($id);
+        if (!empty($typeContent)) {
+            return response()->json(json_decode($typeContent->body));
         } else {
             return response()->json('object not found');
         }

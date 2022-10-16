@@ -1,18 +1,18 @@
 <?php
-$type_contents = \App\Models\TypeContent::where(['created_author' => Auth::guard('web')->user()->id, 'status' => 'Published'])->with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('name', 'desc')->get()->unique('id_global');//все уникальные
+$typeContents = \App\Models\TypeContent::where(['created_author' => Auth::guard('web')->user()->id, 'status' => 'Published'])->with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('name', 'desc')->get()->unique('id_global');//все уникальные
 $ids = [];
-foreach ($type_contents as $type_content){
-    $ids[] = \App\Models\TypeContent::where('id_global', $type_content->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first()->id;
+foreach ($typeContents as $typeContent) {
+    $ids[] = \App\Models\TypeContent::where('id_global', $typeContent->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first()->id;
 }
-$type_contents = \App\Models\TypeContent::whereIn('id', $ids)->orderBy('created_at', 'asc')->get();
-$current_page = false;
-foreach ($type_contents as $type_content){
-    if(request()->route('type_content_id') == $type_content->id){
-        $current_page = true;
+$typeContents = \App\Models\TypeContent::whereIn('id', $ids)->orderBy('created_at', 'asc')->get();
+$currentPage = false;
+foreach ($typeContents as $typeContent) {
+    if (request()->route('type_content_id') == $typeContent->id) {
+        $currentPage = true;
     }
 }
 ?>
-<!-- Main Sidebar Container -->
+    <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="/home" class="brand-link">
@@ -26,7 +26,8 @@ foreach ($type_contents as $type_content){
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="{{asset('/storage/' . Auth::guard('web')->user()->photo)}}" class="img-circle elevation-2" alt="User Image">
+                <img src="{{asset('/storage/' . Auth::guard('web')->user()->photo)}}" class="img-circle elevation-2"
+                     alt="User Image">
             </div>
             <div class="info">
                 <a href="{{route('users.profile')}}" class="d-block">{{Auth::guard('web')->user()->name}}</a>
@@ -34,18 +35,18 @@ foreach ($type_contents as $type_content){
         </div>
 
         <!-- SidebarSearch Form -->
-    {{--        <div class="form-inline">--}}
-    {{--            <div class="input-group" data-widget="sidebar-search">--}}
-    {{--                <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">--}}
-    {{--                <div class="input-group-append">--}}
-    {{--                    <button class="btn btn-sidebar">--}}
-    {{--                        <i class="fas fa-search fa-fw"></i>--}}
-    {{--                    </button>--}}
-    {{--                </div>--}}
-    {{--            </div>--}}
-    {{--        </div>--}}
+        {{--        <div class="form-inline">--}}
+        {{--            <div class="input-group" data-widget="sidebar-search">--}}
+        {{--                <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">--}}
+        {{--                <div class="input-group-append">--}}
+        {{--                    <button class="btn btn-sidebar">--}}
+        {{--                        <i class="fas fa-search fa-fw"></i>--}}
+        {{--                    </button>--}}
+        {{--                </div>--}}
+        {{--            </div>--}}
+        {{--        </div>--}}
 
-    <!-- Sidebar Menu -->
+        <!-- Sidebar Menu -->
         <nav class="mt-2">
 
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -60,22 +61,24 @@ foreach ($type_contents as $type_content){
                         @if(Route::current()->getName() == 'dictionary.index' || Route::current()->getName() == 'type-content.index')
                             style="display: block;"
                         @endif
-                        >
+                    >
                         <li class="nav-item">
-                            <a href="{{ route('dictionary.index') }}" class="nav-link ml-2 @if(Route::current()->getName() == 'dictionary.index') active @endif">
+                            <a href="{{ route('dictionary.index') }}"
+                               class="nav-link ml-2 @if(Route::current()->getName() == 'dictionary.index') active @endif">
                                 {{-- <i class="fa fa-folder-open fa-lg" aria-hidden="true"></i> --}}
                                 <p>Справочники</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('type-content.index') }}" class="nav-link ml-2 @if(Route::current()->getName() == 'type-content.index') active @endif">
+                            <a href="{{ route('type-content.index') }}"
+                               class="nav-link ml-2 @if(Route::current()->getName() == 'type-content.index') active @endif">
                                 {{-- <i class="fa fa-puzzle-piece fa-lg" aria-hidden="true"></i> --}}
                                 <p>Типы контента</p>
                             </a>
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item border-down @if($current_page == true) menu-is-opening menu-open @endif">
+                <li class="nav-item border-down @if($currentPage == true) menu-is-opening menu-open @endif">
                     <a href="#" class="nav-link">
                         <span class="fa fa-id-card-o fa-lg"></span>
                         <p>Менеджер контента
@@ -83,31 +86,32 @@ foreach ($type_contents as $type_content){
                         </p>
                     </a>
                     <ul class="nav nav-treeview"
-                            @if($current_page == true)
-                                style="display: block;"
-                            @endif
-                        >
-                        @if($type_contents)
-                        <li class="nav-item">
+                        @if($currentPage == true)
+                            style="display: block;"
+                        @endif
+                    >
+                        @if($typeContents)
+                            <li class="nav-item">
                                 <a href="#" class="nav-link
-                                    @if(request()->route('type_content_id') == $type_content->id)
+                                    @if(request()->route('type_content_id') == $typeContent->id)
                                         active
                                     @endif
                                 ml-2"><p>Весь контент</p></a>
                             </li>
                         @endif
-                        @foreach($type_contents as $type_content)
+                        @foreach($typeContents as $typeContent)
                             <li class="nav-item">
-                                <a href="/element-content/{{$type_content->id}}" class="nav-link
-                                    @if(request()->route('type_content_id') == $type_content->id)
+                                <a href="/element-content/{{$typeContent->id}}" class="nav-link
+                                    @if(request()->route('type_content_id') == $typeContent->id)
                                         active
                                     @endif
-                                ml-2"><i class="fa {{$type_content->icon}} fa-lg"></i> <p>{{$type_content->name}}</p></a>
+                                ml-2"><i class="fa {{$typeContent->icon}} fa-lg"></i>
+                                    <p>{{$typeContent->name}}</p></a>
                             </li>
                         @endforeach
                     </ul>
                 </li>
-                
+
                 <li class="nav-item mt-3">
                     <a href="{{ route('users.index') }}" class="nav-link">
                         <i class="fa fa-users fa-lg" aria-hidden="true"></i>
@@ -141,7 +145,8 @@ foreach ($type_contents as $type_content){
     /*.menu-is-opening{
         background-color: #1f1f1f;
     }*/
-    .border-down{
-        border-bottom: 1px solid #4f5962;"
+    .border-down {
+        border-bottom: 1px solid #4f5962;
+    "
     }
 </style>

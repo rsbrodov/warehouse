@@ -46,10 +46,10 @@ class HomeController extends Controller
             $user = Auth::user();
             //$user->assignRole('SuperAdmin');
             if($user->hasRole('SuperAdmin')){
-                $user_id = Auth::id();
+                $userId = Auth::id();
                 $user = Auth::user();
                 $users = User::all();
-                return view('users.user-create-view', ['user_id' => $user_id, 'user_login' => $user->name, 'users' => $users]);
+                return view('users.user-create-view', ['user_id' => $userId, 'user_login' => $user->name, 'users' => $users]);
             }
         }else{
             return 'not auth';
@@ -60,10 +60,10 @@ class HomeController extends Controller
     {
 
         $dic = Dictionary::create(['code'=>'1523', 'name'=> 'namre', 'description'=> 'sdfsdrfsd', 'archive'=>0, 'created_author'=>1, 'updated_author'=>1]);
-        $dictionary_element = DictionaryElement::create(['dictionary_id'=> $dic->id, 'value'=> 'sfsdf', 'created_author'=>1, 'updated_author'=>1]);
+        $dictionaryElement = DictionaryElement::create(['dictionary_id'=> $dic->id, 'value'=> 'sfsdf', 'created_author'=>1, 'updated_author'=>1]);
         //$user = User::create(['name'=>'admin', 'email'=> 'admin@mail.ru', 'pass'=> 'sdfsdrfsd', 'archive'=>0, 'created_author'=>1, 'updated_author'=>1]);
         print_r($dic);
-        print_r($dictionary_element);
+        print_r($dictionaryElement);
     }
 
     public function test()
@@ -178,7 +178,7 @@ class HomeController extends Controller
                     ]
                 ],
             ];
-            $rand_words_1 = [
+            $randWords1 = [
                 'Безотказная',
                 'Развратная',
                 'Раскрытая',
@@ -193,7 +193,7 @@ class HomeController extends Controller
                 'Космическая',
                 'Протёкшая',
             ];
-            $rand_words_2 = [
+            $randWords2 = [
                 'императрица',
                 'богиня',
                 'машина',
@@ -208,7 +208,7 @@ class HomeController extends Controller
                 'пальма',
                 'швабра',
             ];
-            $rand_words_3 = [
+            $randWords3 = [
                 'на выезде',
                 'на задании',
                 'вышла на охоту',
@@ -220,13 +220,13 @@ class HomeController extends Controller
                 'отключилась',
                 'в жопе',
             ];
-            $random_status = [
+            $randomStatus = [
                 'Published',
                 'Draft',
                 'Archive'
             ];
             for ($i = 0; $i < 5000; $i++){
-                $str = $rand_words_1[rand(0, count($rand_words_1)-1)] . ' ' . $rand_words_2[rand(0, count($rand_words_2)-1)] . ' ' . $rand_words_3[rand(0, count($rand_words_3)-1)];
+                $str = $randWords1[rand(0, count($randWords1)-1)] . ' ' . $randWords2[rand(0, count($randWords2)-1)] . ' ' . $randWords3[rand(0, count($randWords3)-1)];
                 \App\Models\TypeContent::create(
                     [
                         'id_global'      => \Illuminate\Support\Str::uuid()->toString(),
@@ -235,7 +235,7 @@ class HomeController extends Controller
                         'owner'          => 'TEST10000',
                         'active_from'    => date_create('2022-01-01'),
                         'active_after'   => date_create('2023-02-02'),
-                        'status'         => $random_status[rand(0, count($random_status)-1)],
+                        'status'         => $randomStatus[rand(0, count($randomStatus)-1)],
                         'version_major'  => '1',
                         'version_minor'  => '0',
                         'icon'           => 'fa-battery',
@@ -255,7 +255,7 @@ class HomeController extends Controller
     }
     public function test2()
     {
-        $rand_words_1 = [
+        $randWords1 = [
             'честных',
             'безумных',
             'квадратных',
@@ -265,7 +265,7 @@ class HomeController extends Controller
             'неизвестных',
             'великолепных'
         ];
-        $rand_words_2 = [
+        $randWords2 = [
             'дел',
             'стрел',
             'людей',
@@ -277,7 +277,7 @@ class HomeController extends Controller
         ];
 
         //for ($i = 0; $i < 5000; $i++){
-            $str = $rand_words_1[rand(0, count($rand_words_1)-1)] . ' ' . $rand_words_2[rand(0, count($rand_words_2)-1)] . ' ';
+            $str = $randWords1[rand(0, count($randWords1)-1)] . ' ' . $randWords2[rand(0, count($randWords2)-1)] . ' ';
             $dictionary = \App\Models\Dictionary::create([
                    'code' => 'TEST10000',
                    'name' => 'Справочник '.$str,

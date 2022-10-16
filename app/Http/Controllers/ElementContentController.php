@@ -17,7 +17,7 @@ class ElementContentController extends Controller
     public function findElementContentID($id)
     {
         if (Auth::guard('web')->check()) {
-            $element_contents = ElementContent::
+            $elementContents = ElementContent::
                 where('type_content_id', $id)
                 ->with('created_authors:id,name')
                 ->with('updated_authors:id,name')
@@ -25,15 +25,15 @@ class ElementContentController extends Controller
                 ->get()
                 ->unique('id_global');//все уникальные
             $ids = [];
-            return $element_contents;
-            foreach ($element_contents as $element_content){
-                $ids[] = ElementContent::where('id_global', $element_content->id_global)
+            return $elementContents;
+            foreach ($elementContents as $elementContent){
+                $ids[] = ElementContent::where('id_global', $elementContent->id_global)
                 ->orderBy('version_major', 'desc')
                 ->orderBy('version_minor', 'desc')
                 ->first()->id;
             }
-            $element_contents = ElementContent::whereIn('id', $ids)->orderBy('created_at', 'asc')->get();
-            return response()->json($element_contents);
+            $elementContents = ElementContent::whereIn('id', $ids)->orderBy('created_at', 'asc')->get();
+            return response()->json($elementContents);
             /* else {
                 if (Auth::guard('api')->check()) {
                     $element_contents = ElementContent::where(['created_author' => Auth::guard('api')->user()->id])->where('type_content_id', request('type_content_id'))->with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('label',
@@ -54,7 +54,7 @@ class ElementContentController extends Controller
     {
         //return $request;
         if (Auth::guard('web')->check()) {
-            $new_element_content = ElementContent::create(
+            $newElementContent = ElementContent::create(
                 [
                     'id_global'      => Str::uuid()->toString(),
                     'type_content_id'=> request('type_content_id'),
@@ -73,7 +73,7 @@ class ElementContentController extends Controller
                 ]
             );
 
-            return response()->json($new_element_content);
+            return response()->json($newElementContent);
         }
     }
     public function edit($id)
@@ -81,8 +81,8 @@ class ElementContentController extends Controller
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
-                $element_content = ElementContent::where('id', $id)->first();
-                return view('element_content.edit', ['element_content' => $element_content]);
+                $elementContent = ElementContent::where('id', $id)->first();
+                return view('element_content.edit', ['element_content' => $elementContent]);
             }
         }
     }
@@ -90,28 +90,28 @@ class ElementContentController extends Controller
     {
         if (Auth::guard('web')->check()) {
             //$element_content = ElementContent::find($id)->with('created_authors:id,name')->with('updated_authors:id,name');
-            $ac_fr = date_create($request['active_from']);
-            date_format($ac_fr, 'Y-m-d H:m:s');
-            $ac_af = date_create($request['active_after']);
-            date_format($ac_af, 'Y-m-d H:m:s');
+            $acFr = date_create($request['active_from']);
+            date_format($acFr, 'Y-m-d H:m:s');
+            $acAf = date_create($request['active_after']);
+            date_format($acAf, 'Y-m-d H:m:s');
             $element = ElementContent::find(request('id'));
             if ($element->status === 'Draft' or $element->status === 'Archive') {
-                $other_published = ElementContent::where(['id_global' => $element->id_global, 'status' => 'Published'])->first();
-                if (isset($other_published)) {
-                    $other_published->status = 'Archive';
-                    $other_published->save();
+                $otherPublished = ElementContent::where(['id_global' => $element->id_global, 'status' => 'Published'])->first();
+                if (isset($otherPublished)) {
+                    $otherPublished->status = 'Archive';
+                    $otherPublished->save();
                 }
             }
             if (!$element->checkingApiUrl($request['url'], $element['id_global'])) {
                 $element->label = $request['label'];
                 $element->url = $request['url'];
-                $element->active_from = $ac_fr;
-                $element->active_after = $ac_af;
+                $element->active_from = $acFr;
+                $element->active_after = $acAf;
                 $element->status = $request['status'];
                 $element->body = $request['body'];
                 $element->updated_author = Auth::guard('web')->user()->id;
                 $element->save();
-                $element_content = ElementContent::find(request('id'))->with('created_authors:id,name')->with('updated_authors:id,name');
+                $elementContent = ElementContent::find(request('id'))->with('created_authors:id,name')->with('updated_authors:id,name');
                 return redirect()->route('element-content.index', $element->type_content_id)->with('success', 'Элемент ' . $element->label . ' успешно отредактирован');
                 //return response()->json($element_content);
             } else {
@@ -128,8 +128,8 @@ class ElementContentController extends Controller
                  $element->body = $request['body'];
                  $element->updated_author = Auth::guard('api')->user()->id;
                  $element->save();
-                 $element_content = ElementContent::find($element->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
-                return response()->json($element_content);
+                 $elementContent = ElementContent::find($element->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
+                return response()->json($elementContent);
             }
         }
     }
@@ -137,31 +137,31 @@ class ElementContentController extends Controller
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
-                $destroy_elem = ElementContent::where('id', request('id'))->first();
-                $type_content_id = $destroy_elem->type_content_id;
-                $message = ''; $type_message = 'success';
-                if ($destroy_elem->status == 'Destroy') {
-                    $exist_other_draft = ElementContent::where(['id_global'=>$destroy_elem->id_global, 'status' => 'Draft'])->count();
-                    if($exist_other_draft){
+                $destroyElem = ElementContent::where('id', request('id'))->first();
+                $typeContentId = $destroyElem->type_content_id;
+                $message = ''; $typeMessage = 'success';
+                if ($destroyElem->status == 'Destroy') {
+                    $existOtherDraft = ElementContent::where(['id_global'=>$destroyElem->id_global, 'status' => 'Draft'])->count();
+                    if($existOtherDraft){
                         return redirect()->back()->with('error', 'Вы не сможете восстановить этот элемент, пока не закончите работу с существующим черновиком');
                     }
-                    $destroy_elem->status = 'Draft';
-                    $message = 'Элемент ' . $destroy_elem->label . ' восстановлен';
+                    $destroyElem->status = 'Draft';
+                    $message = 'Элемент ' . $destroyElem->label . ' восстановлен';
                 } else {
-                    $destroy_elem->status = 'Destroy';
-                    $message = 'Элемент ' . $destroy_elem->label . ' удален';
-                    $type_message = 'info';
+                    $destroyElem->status = 'Destroy';
+                    $message = 'Элемент ' . $destroyElem->label . ' удален';
+                    $typeMessage = 'info';
                 }
-                $destroy_elem->save();
-                return redirect()->route('element-content.index', $type_content_id)->with($type_message, $message);
+                $destroyElem->save();
+                return redirect()->route('element-content.index', $typeContentId)->with($typeMessage, $message);
             }
         }
     }
     public function createNewVersion($id, $parameter)
     {
         $element = ElementContent::find($id);
-        $exist_other_draft = ElementContent::where(['id_global'=>$element->id_global, 'status' => 'Draft'])->count();
-        if($exist_other_draft){
+        $existOtherDraft = ElementContent::where(['id_global'=>$element->id_global, 'status' => 'Draft'])->count();
+        if($existOtherDraft){
             return redirect()->back()->with('error', 'Черновик уже существует. Удалите его или отредактируйте.');
         }
         //проверка параметров
@@ -195,12 +195,12 @@ class ElementContentController extends Controller
     public function getAllVersionElementContent()
     {
         if (Auth::guard('web')->check()) {
-            $element_contents = ElementContent::where('id_global', request('id_global'))->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
-            return view('element_content.all-version-element-content')->with('element_contents', $element_contents);
+            $elementContents = ElementContent::where('id_global', request('id_global'))->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
+            return view('element_content.all-version-element-content')->with('element_contents', $elementContents);
         } else {
             if (Auth::guard('api')->check()) {
-                $element_content = ElementContent::where('id_global', request('id_global'))->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
-                return response()->json($element_content);
+                $elementContent = ElementContent::where('id_global', request('id_global'))->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
+                return response()->json($elementContent);
             } else {
                 return response()->json('item not found');
             }
@@ -209,9 +209,9 @@ class ElementContentController extends Controller
     public function saveDraft(Request $request, $id)
     {
         if (Auth::guard('web')->check()) {
-            $element_content = ElementContent::find($id);
-            $type_content = TypeContent::find($element_content->type_content_id);
-            $body = json_decode($type_content->body);
+            $elementContent = ElementContent::find($id);
+            $typeContent = TypeContent::find($elementContent->type_content_id);
+            $body = json_decode($typeContent->body);
             $error = [];
             $i = 0;
             foreach ($body as $row){
