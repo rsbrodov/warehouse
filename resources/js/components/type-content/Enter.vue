@@ -46,11 +46,19 @@ import draggable from "vuedraggable";
                                            rows="5" />
                                     <select v-else-if="element.type == 'select'"
                                             :id="element.uid"
+                                            :disabled="elementContentOne.status != 'Draft'"
                                             class="form-control"
                                             v-model="elementBody[element.uid].value">
                                         <option disabled selected value> -- Выберите вариант -- </option>
                                         <option v-for="(dropdown, index) in dropdownTemp" :key="index" :value="dropdown.id">{{dropdown.value}}</option>
                                     </select>
+                                    <datepicker v-else-if="element.type == 'datetime'"
+                                                :id="element.uid"
+                                                :disabled="elementContentOne.status != 'Draft'"
+                                                class="form-control"
+                                                v-model="elementBody[element.uid].value"
+                                                :language="ru">
+                                    </datepicker>
                                     <div v-else-if="element.type == 'file'"
                                          class="block-img"  >
                                         <img :id="element.uid"
@@ -73,13 +81,18 @@ import draggable from "vuedraggable";
                         </button>
                     </div>
                     <div class="p-2" v-if="elementContentOne.status == 'Draft'">
-                        <button class="btn btn-primary form-control text-left">
+                        <button class="btn btn-primary form-control text-left" @click="changeStatus('Published', 'Элемент контента опубликован')">
                             <i class="fa fa-check-circle fa-lg" aria-hidden="true"></i> Публикация контента
                         </button>
                     </div>
-                    <div class="p-2" v-if="elementContentOne.status == 'Draft'">
+                    <div class="p-2" v-if="elementContentOne.status == 'Draft' || elementContentOne.status == 'Archive'" @click="changeStatus('Destroy', 'Элемент контента помечен на удаление')">
                         <button class="btn btn-primary form-control text-left">
-                            <i class="fa fa-trash fa-lg" aria-hidden="true"></i> Удалить контента
+                            <i class="fa fa-trash fa-lg" aria-hidden="true"></i> Пометить на удаление
+                        </button>
+                    </div>
+                    <div class="p-2" v-if="elementContentOne.status == 'Destroy'" >
+                        <button class="btn btn-primary form-control text-left" @click="deleteElementContent()">
+                            <i class="fa fa-trash fa-lg" aria-hidden="true"></i> Удалить элемент контента
                         </button>
                     </div>
                     <div class="p-2" v-if="elementContentOne.status == 'Published'">
@@ -87,8 +100,14 @@ import draggable from "vuedraggable";
                             <i class="fa fa-refresh fa-lg" aria-hidden="true"></i> Выпустить новую версию
                         </button>
                     </div>
-                    <div class="p-2" v-if="elementContentOne.status == 'Archive'">
-                        <button class="btn btn-primary form-control text-left">
+                    <div class="p-2" v-if="elementContentOne.status == 'Published'">
+                        <button class="btn btn-primary form-control text-left" @click="changeStatus('Draft', 'Элемент контента переведен в статус Черновик')">
+                            <i class="fa fa-reply-all fa-lg" aria-hidden="true"></i> Депубликация контента
+                        </button>
+                    </div>
+
+                    <div class="p-2" v-if="elementContentOne.status == 'Publish'">
+                        <button class="btn btn-primary form-control text-left" @click="changeStatus('Draft', 'Элемент контента восстановлен из архива')">
                             <i class="fa fa-cloud-download fa-lg" aria-hidden="true"></i> Востановить из архива
                         </button>
                     </div>
@@ -109,7 +128,7 @@ import draggable from "vuedraggable";
                     </context-menu>
 
                     <div class="p-2" v-if="elementContentOne.status == 'Published'">
-                        <button class="btn btn-primary form-control text-left" >
+                        <button class="btn btn-primary form-control text-left" @click="changeStatus('Archive', 'Элемент контента отправлен в архив')">
                             <i class="fa fa-trash fa-lg" aria-hidden="true"></i> Отправить в архив
                         </button>
                     </div>
@@ -123,12 +142,15 @@ import draggable from "vuedraggable";
 import OneElement from "./OneElement";
 import ContextMenu from "../helpers/ContextMenu";
 import {mapActions, mapGetters} from "vuex";
+import Datepicker from 'vuejs-datepicker';
+import {ru} from "vuejs-datepicker/dist/locale";
 
 export default {
     name: "Enter",
-    components: { OneElement, ContextMenu },
+    components: { OneElement, ContextMenu, Datepicker },
     data() {
         return {
+            ru:ru,
             showContextMenu: false,
             element_content_id: window.location.href.split('/')[5],
             url: window.location.href.split('/')[4],
@@ -146,7 +168,7 @@ export default {
     },
 
     methods: {
-        ...mapActions(['getElementContentOne']),
+        ...mapActions(['getElementContentOne', 'updateElementContent']),
         openContextMenu(event) {
             this.$refs.menu.open(event);
         },
@@ -185,6 +207,40 @@ export default {
                 .catch(error => {
                     console.log(error);
                 })
+        },
+        async deleteElementContent() {
+            await axios.delete('http://127.0.0.1:8000/element-content/' + this.element_content_id)
+                .then(response => {
+                    if (response.status === 200) {
+                        this.flashMessage.success({
+                            message: 'Элемент контента удален, Вы будете перенаправлены на страницу со списком элементов контента через 3 секунды',
+                            time: 3000,
+                        });
+                        window.setTimeout(function () {
+                            window.location.href = "http://127.0.0.1:8000/element-content/'" + this.elementContentOne.type_contents.id
+                        }, 3000);
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        async changeStatus(status, message) {
+            this.updateElementContent({
+                    id: this.elementContentOne.id, label: this.elementContentOne.label, api_url: this.elementContentOne.api_url,
+                    active_from: this.elementContentOne.active_from, active_after: this.elementContentOne.active_after, description: this.elementContentOne.description, status: status,
+                }
+            ).then(response => {
+                this.$emit('close-modal');
+                this.flashMessage.success({
+                    message: message,
+                    time: 3000,
+                });
+                this.getElementContentOne(this.element_content_id);
+            }).catch(errors => {
+                console.log(errors);
+            });
+
         },
     },
 

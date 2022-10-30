@@ -9,18 +9,21 @@
             </div>
         </div>
 
-        <!-- Modal Dictionary edit -->
-        <!-- <div class="modal fade" id="dictionaryEdit" aria-hidden="true">
+        <!-- Modal edit -->
+        <div class="modal fade" id="elementContentEdit" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <Edit
-                    :dictionary_id="dictionary.id"
-                    :dictionary_name="dictionary.name"
-                    :dictionary_code="dictionary.code"
-                    :dictionary_description="dictionary.description"
-                    @close-modal="closeModal('dictionaryEdit')"
+                    :id="element_content.id"
+                    :api_url="element_content.api_url"
+                    :label="element_content.label"
+                    :status="element_content.status"
+                    :active_from="element_content.active_from"
+                    :active_after="element_content.active_after"
+                    :description="element_content.description"
+                    @close-modal="closeModal('elementContentEdit')"
                 />
             </div>
-        </div> -->
+        </div>
         <div class="row mt-4">
             <div class="header-block row">
                 <div class="search-form col-6">
@@ -90,8 +93,9 @@
                 <td>{{ element | dateUpdated }}</td>
                 <!-- :href нужно убрать когда будут добавлены компоненты -->
                 <td nowrap>
-                    <a :href="'/element-content/'+ element.id +'/edit'" class="btn btn-outline-primary btn-unbordered" @click="openModal('typeContentEdit', type_content)"><i class="fa fa-pencil fa-lg"></i></a>
+<!--                    <a :href="'/element-content/'+ element.id +'/edit'" class="btn btn-outline-primary btn-unbordered" @click="openModal('typeContentEdit', type_content)"><i class="fa fa-pencil fa-lg"></i></a>-->
 <!--                    <a :href="'/element-content/enter/'+element.id" class="btn btn-outline-primary btn-unbordered"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a>-->
+                    <a class="btn btn-outline-primary btn-unbordered" @click="openModal('elementContentEdit', element)"><i class="fa fa-pencil fa-lg"></i></a>
                     <a :href="'/element/enter-vue/'+element.id" class="btn btn-outline-primary btn-unbordered"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a>
                 </td>
             </tr>
@@ -105,8 +109,9 @@
     import Loader from "../helpers/Loader";
     import moment from 'moment'
     import Create from './create'
+    import Edit from "./Edit";
     export default{
-        components:{Loader, moment, Create},
+        components:{Loader, moment, Create, Edit},
         data:function(){
             return {
                 id: window.location.href.split('/').slice(-1)[0],
@@ -117,6 +122,15 @@
                     active_from:null,
                     active_after:null,
                 },
+                element_content:{
+                    id:null,
+                    api_url:null,
+                    label:null,
+                    status:null,
+                    active_after:null,
+                    active_from:null,
+                    description:null
+                }
             }
         },
 
@@ -127,14 +141,22 @@
         methods: {
             ...mapActions(['getElementContent', 'getLoading']),
             closeModal(id){
-                if(id == 'ElementContentCreate'){
-                    $("#ElementContentCreate").modal("hide");
-                }
+                $("#"+id).modal("hide");
 
             },
-            openModal(id){
+            openModal(id, element_content){
                 if(id == 'ElementContentCreate') {
                     $('#ElementContentCreate').modal('show');
+                }
+                if(id == 'elementContentEdit') {
+                    this.element_content.id = element_content.id;
+                    this.element_content.api_url = element_content.api_url;
+                    this.element_content.label = element_content.label;
+                    this.element_content.status = element_content.status;
+                    this.element_content.active_after = element_content.active_after;
+                    this.element_content.active_from = element_content.active_from;
+                    this.element_content.description = element_content.description;
+                    $('#elementContentEdit').modal('show');
                 }
             },
             toggleSearch(){
@@ -156,7 +178,7 @@
 
         filters: {
             status: function (status) {
-                let status_array = {Draft: 'Черновик', Published: 'Опубликовано', Archive:'В архиве'};
+                let status_array = {Draft: 'Черновик', Published: 'Опубликовано', Archive:'В архиве', Destroy:'Помечен на удаление'};
                 if(status){
                     return status_array[status];
                 }else{
@@ -164,7 +186,7 @@
                 }
             },
             statusColor: function (status) {
-                let status_array = {Draft: 'text-dark', Published: 'text-success', Archive:'text-warning'};
+                let status_array = {Draft: 'text-dark', Published: 'text-success', Archive:'text-warning', Destroy:'text-danger'};
                 if(status){
                     return status_array[status];
                 }else{

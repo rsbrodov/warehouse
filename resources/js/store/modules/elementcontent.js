@@ -58,6 +58,11 @@ export default{
             /*.finally(() => {
                 commit('setLoading', false);
             });*/
-        }
+        },
+        async updateElementContent(ctx, form, id){
+            const element_content = await axios.post('http://127.0.0.1:8000/element-content/'+form.id, form);
+            const element_contents = await axios.get('http://127.0.0.1:8000/type-content/getElementContentID/' + form.id);
+            ctx.commit('UPDATE', element_contents.data)
+        },
     },
 }

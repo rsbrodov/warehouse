@@ -17,31 +17,16 @@ class ElementContentController extends Controller
     public function findElementContentID($id)
     {
         if (Auth::guard('web')->check()) {
+            $typeContent = TypeContent::find($id);
+            $typeContents = TypeContent::where('id_global', $typeContent->id_global)->pluck('id');
             $elementContents = ElementContent::
-                where('type_content_id', $id)
+                whereIn('type_content_id', $typeContents)
                 ->with('created_authors:id,name')
                 ->with('updated_authors:id,name')
                 ->orderBy('created_at', 'asc')
                 ->get()
                 ->unique('id_global');//все уникальные
-            $ids = [];
             return $elementContents;
-            foreach ($elementContents as $elementContent){
-                $ids[] = ElementContent::where('id_global', $elementContent->id_global)
-                ->orderBy('version_major', 'desc')
-                ->orderBy('version_minor', 'desc')
-                ->first()->id;
-            }
-            $elementContents = ElementContent::whereIn('id', $ids)->orderBy('created_at', 'asc')->get();
-            return response()->json($elementContents);
-            /* else {
-                if (Auth::guard('api')->check()) {
-                    $element_contents = ElementContent::where(['created_author' => Auth::guard('api')->user()->id])->where('type_content_id', request('type_content_id'))->with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('label',
-                        'desc')->get();
-                    return response()->json($element_contents);
-                }
-            }*/
-
         }
     }
 
@@ -89,35 +74,29 @@ class ElementContentController extends Controller
     public function update(Request $request)
     {
         if (Auth::guard('web')->check()) {
-            //$element_content = ElementContent::find($id)->with('created_authors:id,name')->with('updated_authors:id,name');
-            $acFr = date_create($request['active_from']);
-            date_format($acFr, 'Y-m-d H:m:s');
-            $acAf = date_create($request['active_after']);
-            date_format($acAf, 'Y-m-d H:m:s');
-            $element = ElementContent::find(request('id'));
-            if ($element->status === 'Draft' or $element->status === 'Archive') {
+            $element = ElementContent::find($request->id);
+            if ($element->status === 'Draft' || $element->status === 'Archive') {
                 $otherPublished = ElementContent::where(['id_global' => $element->id_global, 'status' => 'Published'])->first();
                 if (isset($otherPublished)) {
                     $otherPublished->status = 'Archive';
                     $otherPublished->save();
                 }
             }
-            if (!$element->checkingApiUrl($request['url'], $element['id_global'])) {
-                $element->label = $request['label'];
-                $element->url = $request['url'];
-                $element->active_from = $acFr;
-                $element->active_after = $acAf;
-                $element->status = $request['status'];
-                $element->body = $request['body'];
+            //if (!$element->checkingApiUrl($request['url'], $element['id_global'])) {
+                $element->label = $request->label;
+                $element->api_url = $request->api_url;
+                $element->active_from = $request->active_from;
+                $element->active_after = $request->active_after;
+                $element->status = $request->status;
+                $element->description = $request->description;
                 $element->updated_author = Auth::guard('web')->user()->id;
                 $element->save();
                 $elementContent = ElementContent::find(request('id'))->with('created_authors:id,name')->with('updated_authors:id,name');
-                return redirect()->route('element-content.index', $element->type_content_id)->with('success', 'Элемент ' . $element->label . ' успешно отредактирован');
-                //return response()->json($element_content);
-            } else {
-                return response()->json(123);
-            }
-        } else {
+
+           // } else {
+                return response()->json($elementContent);
+            //}
+        } /*else {
             if (Auth::guard('api')->check()) {
                 $element = ElementContent::find(request('id'));
                  $element->label = $request['label'];
@@ -130,10 +109,10 @@ class ElementContentController extends Controller
                  $element->save();
                  $elementContent = ElementContent::find($element->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
                 return response()->json($elementContent);
-            }
-        }
+            }*/
+        //}
     }
-    public function destroy(){
+    /*public function destroy(){
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
@@ -156,7 +135,19 @@ class ElementContentController extends Controller
                 return redirect()->route('element-content.index', $typeContentId)->with($typeMessage, $message);
             }
         }
+    }*/
+
+    public function destroy($id)
+    {
+        $typeContent = ElementContent::find($id);
+        if ($typeContent) {
+            $typeContent->delete();
+            return response()->json('item was deleted');
+        } else {
+            return response()->json('item not found');
+        }
     }
+
     public function createNewVersion($id, $parameter)
     {
         $element = ElementContent::find($id);
