@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TypeContentRequest;
+use App\Models\DictionaryElement;
+use App\Models\Dictionary;
 use App\Models\ElementContent;
 use App\Models\Icons;
 use App\Models\TypeContent;
@@ -362,5 +364,24 @@ class TypeContentController extends Controller
             }
             return response()->json($error);
         }
+    }
+    public function getDropdownListById($id)
+    {
+        $typeContent = TypeContent::find($id);
+        $body = json_decode($typeContent->body);
+        $dropdownList = [];
+        foreach ($body as $row){
+            foreach ($row as $column){
+                foreach ($column as $key=>$element){
+                    if($key == 'dictionary_id'){
+                        $dictionaryElements = DictionaryElement::where('dictionary_id', $element)->get();
+                        foreach ($dictionaryElements as $dictionaryElement) {
+                            $dropdownList[$column->uid][$dictionaryElement['id']] = $dictionaryElement['value'];
+                        }
+                    }
+                }
+            }
+        }
+        dd($dropdownList);
     }
 }
