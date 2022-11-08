@@ -34,7 +34,8 @@ import draggable from "vuedraggable";
                                            class="form-control"
                                            :disabled="elementContentOne.status != 'Draft'"
                                            :id="element.title"
-                                           :name="element.name">
+                                           :name="element.name"
+                                           :class="{invalid: (errors[element.uid])}">
                                     <textarea v-else-if="element.type == 'textarea'"
                                            autocomplete="off"
                                            v-model="elementBody[element.uid].value"
@@ -43,11 +44,13 @@ import draggable from "vuedraggable";
                                            :disabled="elementContentOne.status != 'Draft'"
                                            :id="element.title"
                                            :name="element.name"
+                                           :class="{invalid: (errors[element.uid])}"
                                            rows="5" />
                                     <select v-else-if="element.type == 'select'"
                                             :id="element.uid"
                                             :disabled="elementContentOne.status != 'Draft'"
                                             class="form-control"
+                                            :class="{invalid: (errors[element.uid])}"
                                             v-model="elementBody[element.uid].value">
                                         <option disabled selected value> -- Выберите вариант -- </option>
                                         <option v-for="(dropdown, index) in dropdownTemp" :key="index" :value="dropdown.id">{{dropdown.value}}</option>
@@ -56,6 +59,7 @@ import draggable from "vuedraggable";
                                                 :id="element.uid"
                                                 :disabled="elementContentOne.status != 'Draft'"
                                                 class="form-control"
+                                                :class="{invalid: (errors[element.uid])}"
                                                 v-model="elementBody[element.uid].value"
                                                 :language="ru">
                                     </datepicker>
@@ -66,6 +70,9 @@ import draggable from "vuedraggable";
                                              class="p-2"
                                              style="max-height: 320px; width:100%"/>
                                     </div>
+                                    <small class="helper-text invalid" v-if="errors[element.uid]">
+                                        {{errors[element.uid]}}<br>
+                                    </small>
                                 </div>
                             </div>
                         </div>
@@ -160,7 +167,8 @@ export default {
                 {id: 1, value: 'Вариант 1'},
                 {id: 2, value: 'Вариант 2'},
                 {id: 3, value: 'Вариант 3'},
-            ]
+            ],
+            errors: [],
         };
     },
     computed: {
@@ -198,6 +206,7 @@ export default {
             axios.post('http://127.0.0.1:8000/type-content/save-body-element', { id: this.element_content_id, body: this.elementBody })
                 .then(response => {
                     if (response.status === 200) {
+                        this.errors = [];
                         this.flashMessage.success({
                             message: 'Данные сохранены',
                             time: 3000,
@@ -205,7 +214,7 @@ export default {
                     }
                 })
                 .catch(error => {
-                    console.log(error);
+                   this.errors = error.response.data.message;
                 })
         },
         async deleteElementContent() {

@@ -327,6 +327,13 @@ class TypeContentController extends Controller
     public function saveBodyElement(Request $request)
     {
         $elementContent = ElementContent::find($request->id);
+        $errors = $elementContent->validateElementContent($elementContent->type_content_id, $request->body);
+        if($errors){
+            return response()->json([
+                'message' => $errors
+            ], 400);
+        }
+        $elementContent = ElementContent::find($request->id);
         if (!empty($elementContent)) {
             $elementContent->body = json_encode($request->body);
             $elementContent->save();
