@@ -23,6 +23,11 @@
         <div class="row">
             <div class="col-9">
                 <div class="flex-cont">
+                    <div class="flex-elem title-one"><b>
+                        <a :href="'/type-content/api-url/' + typeContentOne.api_url" class="btn">
+                            <i class="fa fa-circle-o fa-lg" aria-hidden="true">API URL</i>
+                        </a></b>
+                    </div>
                     <div class="flex-elem"><b>Идентификатор: </b>{{ typeContentOne.id }}</div>
                     <div class="flex-elem"><b>API URL: </b>{{ typeContentOne.api_url }}</div>
                     <div class="flex-elem"><b>Владелец: </b> Admin</div>
@@ -45,7 +50,7 @@
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
-            
+
         </div>
     </div>
 </template>

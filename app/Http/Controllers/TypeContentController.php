@@ -391,4 +391,13 @@ class TypeContentController extends Controller
         }
         dd($dropdownList);
     }
+    public function getApiUrl($apiUrl)
+    {
+        $typeContent = TypeContent::where('api_url', $apiUrl)->first();
+        if (isset($typeContent->api_url)) {
+            print_r($typeContent);
+        } else {
+            print_r('Exception');
+        }
+    }
 }

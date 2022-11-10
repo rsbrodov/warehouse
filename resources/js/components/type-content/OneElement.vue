@@ -24,6 +24,11 @@
             <div class="col-9">
                 <div class="flex-cont">
                     <div class="flex-elem title-one"><b>{{ elementContentOne.type_contents.name }}</b></div>
+                    <div class="flex-elem title-one"><b>
+                        <a :href="'/element-content/api-url/' + elementContentOne.api_url" class="btn">
+                            <i class="fa fa-circle-o fa-lg" aria-hidden="true">API URL</i>
+                        </a></b>
+                    </div>
                     <div class="flex-elem"><b>API URL: </b>{{ elementContentOne.api_url }}</div>
                     <div class="flex-elem"><b>Статус: </b>{{ elementContentOne.status | status }}</div>
                     <div class="flex-elem"><b>Версия:
