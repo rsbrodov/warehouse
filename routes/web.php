@@ -99,6 +99,7 @@ Route::get('/type-content/create-icons', [TypeContentController::class, 'createI
 
 
 Route::middleware(['auth:web'])->group(function () {
+    Route::get('/type-content/api-url/{apiUrl}', [TypeContentController::class, 'getApiUrl']);
     Route::get('/element/enter-vue/{id}', [TypeContentController::class, 'enterVue'])->name('type-content.enter-vue');
     Route::post('/type-content/save-body/', [TypeContentController::class, 'saveBody']);
     Route::post('/type-content/save-body-element/', [TypeContentController::class, 'saveBodyElement']);
@@ -126,6 +127,7 @@ Route::middleware(['auth:web'])->group(function () {
 
 // ЭЛЕМЕНТЫ КОНТЕНТА
 Route::middleware(['auth:web'])->group(function () {
+    Route::get('/element-content/api-url/{apiUrl}', [ElementContentController::class, 'getApiUrl']);
     Route::get('element-content/findElementContentID/{id}', [ElementContentController::class, 'findElementContentID']);
     Route::get('/element-content/{type_content_id}', [ElementContentController::class, 'index'])->name('element-content.index');
     Route::post('/element-content/store/{type_content_id}', [ElementContentController::class, 'store'])->name('element-content.store');

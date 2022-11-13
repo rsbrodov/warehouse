@@ -197,6 +197,7 @@ class ElementContentController extends Controller
             }
         }
     }
+
     public function saveDraft(Request $request, $id)
     {
         if (Auth::guard('web')->check()) {
@@ -223,6 +224,16 @@ class ElementContentController extends Controller
                 }
             }
             dd($error);
+        }
+    }
+
+    public function getApiUrl($apiUrl)
+    {
+        $elementContent = ElementContent::where('api_url', $apiUrl)->first();
+        if (isset($elementContent->api_url)) {
+            print_r($elementContent);
+        } else {
+            print_r('Exception');
         }
     }
 }
