@@ -121,7 +121,8 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('/type-content/new-version/{id}/{parametr}', [TypeContentController::class, 'createNewVersion']);
     //Route::put('/type-content/{id}', [TypeContentController::class, 'update'])->name('type-content.update');
     Route::delete('/type-content/{id}', [TypeContentController::class, 'destroy'])->name('type-content.destroy');
-    Route::get('/type-content/dropdownlistby/{id}', [TypeContentController::class, 'getDropdownListById'])->name('type-content.getDropdownListById');
+    //Route::get('/type-content/dropdownlistby/{id}', [TypeContentController::class, 'getDropdownListById'])->name('type-content.getDropdownListById');
+    Route::get('/select/dropdownlistby/{id}', [TypeContentController::class, 'getDropdownListById'])->name('type-content.getDropdownListById');
 });
 
 // ЭЛЕМЕНТЫ КОНТЕНТА

@@ -74,4 +74,25 @@ class ElementContent extends Model
         }
         return $error;
     }
+
+    public function pushingDropDownList($id)
+    {
+        $typeContent = TypeContent::find($id);
+        $body = json_decode($typeContent->body);
+        $dictionaryList = [];
+        $i = 0;
+        foreach ($body as $row) {
+            foreach ($row as $column) {
+                foreach ($column as $element) {
+                    if (!empty($element->dictionary_id)) {
+                        $dictionaryElements = DictionaryElement::where('dictionary_id', $element->dictionary_id)->get();
+                        foreach($dictionaryElements as $dictionaryElement){
+                            $dictionaryList[$element->uid][$dictionaryElement->id] = $dictionaryElement->value;
+                        }
+                    }
+                }
+            }
+        }
+        return $dictionaryList;
+    }
 }

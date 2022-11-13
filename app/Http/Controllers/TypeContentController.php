@@ -372,7 +372,16 @@ class TypeContentController extends Controller
             return response()->json($error);
         }
     }
+
     public function getDropdownListById($id)
+    {
+        $elementContentModel = new ElementContent();
+        $dropDownList = $elementContentModel->pushingDropDownList($id);
+        return response()->json($dropDownList);
+    }
+
+
+    /*public function getDropdownListById($id)
     {
         $typeContent = TypeContent::find($id);
         $body = json_decode($typeContent->body);
@@ -390,5 +399,5 @@ class TypeContentController extends Controller
             }
         }
         dd($dropdownList);
-    }
+    }*/
 }

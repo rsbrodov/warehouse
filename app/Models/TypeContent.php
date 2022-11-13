@@ -58,25 +58,26 @@ class TypeContent extends Model
        }
     }
 
-    public function checkingName($name, $idGlobal = null) {
-        if($idGlobal){
-            if(($typeContentExistence = TypeContent::where('name', $name)->whereNotIn('id_global', [$idGlobal])->first()) !== null){
+    public function checkingName($name, $idGlobal = null)
+    {
+        if ($idGlobal) {
+            if (($typeContentExistence = TypeContent::where('name', $name)->whereNotIn('id_global', [$idGlobal])->first()) !== null) {
                 return array(
-                 'code'      =>  422,
-                 'message'   =>  'The given data was invalid',
-                 'errors' => [
-                     'name' => '«Наименование» должно быть уникальным']
-             );
+                    'code' => 422,
+                    'message' => 'The given data was invalid',
+                    'errors' => [
+                        'name' => '«Наименование» должно быть уникальным']
+                );
             }
         } else {
-            if(($typeContentExistence = TypeContent::where('name', $name)->first()) !== null){
+            if (($typeContentExistence = TypeContent::where('name', $name)->first()) !== null) {
                 return array(
-                 'code'      =>  422,
-                 'message'   =>  'The given data was invalid',
-                 'errors' => [
-                     'name' => '«Наименование» должно быть уникальным']
-             );
+                    'code' => 422,
+                    'message' => 'The given data was invalid',
+                    'errors' => [
+                        'name' => '«Наименование» должно быть уникальным']
+                );
             }
         }
-     }
+    }
 }
