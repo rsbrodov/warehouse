@@ -66,8 +66,14 @@ class ElementContent extends Model
         foreach ($body as $row) {
             foreach ($row as $column) {
                 foreach ($column as $element) {
-                    if ($element->required == 1 && !$request[$element->uid]['value']) {
-                        $error[$element->uid] = 'Необходимо заполнить «'.$element->title.'»';
+                    if($element->type == 'checkbox'){
+                        if ($element->required == 1 && count($request[$element->uid]) < 2) {
+                            $error[$element->uid] = 'Необходимо заполнить «'.$element->title.'»';
+                        }
+                    }else{
+                        if ($element->required == 1 && !$request[$element->uid]['value']) {
+                            $error[$element->uid] = 'Необходимо заполнить «'.$element->title.'»';
+                        }
                     }
                 }
             }

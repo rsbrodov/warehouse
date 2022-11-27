@@ -82,7 +82,6 @@ class ElementContentController extends Controller
                     $otherPublished->save();
                 }
             }
-            //if (!$element->checkingApiUrl($request['url'], $element['id_global'])) {
                 $element->label = $request->label;
                 $element->api_url = $request->api_url;
                 $element->active_from = $request->active_from;
@@ -92,25 +91,8 @@ class ElementContentController extends Controller
                 $element->updated_author = Auth::guard('web')->user()->id;
                 $element->save();
                 $elementContent = ElementContent::find(request('id'))->with('created_authors:id,name')->with('updated_authors:id,name');
-
-           // } else {
                 return response()->json($elementContent);
-            //}
-        } /*else {
-            if (Auth::guard('api')->check()) {
-                $element = ElementContent::find(request('id'));
-                 $element->label = $request['label'];
-                 $element->owner = $request['owner'];
-                 $element->active_from = $request['active_from'];
-                 $element->active_after = $request['active_after'];
-                 $element->url = $request['url'];
-                 $element->body = $request['body'];
-                 $element->updated_author = Auth::guard('api')->user()->id;
-                 $element->save();
-                 $elementContent = ElementContent::find($element->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
-                return response()->json($elementContent);
-            }*/
-        //}
+        }
     }
     /*public function destroy(){
         if (Auth::guard('web')->check()) {

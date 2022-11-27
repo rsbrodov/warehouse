@@ -64,6 +64,16 @@ import draggable from "vuedraggable";
                                             <label class="mr-2">{{dropdown}}</label>
                                         </span>
                                     </div>
+                                    <div v-else-if="element.type == 'checkbox'">
+                                        <span v-for="(dropdown, index) in dropdownList[element.uid]" :key="index">
+                                            <input type="checkbox"
+                                                   :value="index"
+                                                   :id="index"
+                                                   v-model="elementBody[element.uid][index]"
+                                                   :class="{invalid: (errors[element.uid])}">
+                                            <label class="mr-2">{{dropdown}}</label>
+                                        </span>
+                                    </div>
                                     <datepicker v-else-if="element.type == 'datetime'"
                                                 :id="element.uid"
                                                 :disabled="elementContentOne.status != 'Draft'"

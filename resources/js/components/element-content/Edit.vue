@@ -6,7 +6,7 @@
                 <span aria-hidden="true" @click="$emit('close-modal', 'editElementContent')">&times;</span>
             </button>
         </div>
-        <form @submit.prevent="updateTypeContent()">
+        <form @submit.prevent="update()">
         <div class="modal-body">
                 <div class="row mb-3">
                     <div class="block col-6">
@@ -76,7 +76,7 @@
     export default {
         name: "Edit",
         components: {Datepicker},
-        props: ['id', 'api_url', 'status', 'description', 'status', 'active_from', 'active_after', 'label'],
+        props: ['id', 'api_url', 'status', 'description', 'status', 'active_from', 'active_after', 'label', 'type_content_id'],
         data:function(){
             return {
                 ru:ru,
@@ -88,6 +88,7 @@
                     active_from:null,
                     active_after:null,
                     description:null,
+                    type_content_id:null,
                 }
             }
         },
@@ -99,24 +100,24 @@
                 this.form_edit.active_from = this.active_from
                 this.form_edit.active_after = this.active_after
                 this.form_edit.description = this.description
+                this.form_edit.status = this.status
+                this.form_edit.type_content_id = this.type_content_id
                 return this.form_edit;
             }
         },
 
         methods: {
-            ...mapActions(['update']),
-            async updateTypeContent() {
+            ...mapActions(['updateElementContent']),
+            async update() {
                 this.$v.$touch();
                 if (this.$v.$invalid) {
-                    console.log('Form not subm')
                 } else {
-                    console.log(123);
-                    this.update({id: this.form_edit.id, owner: this.form_edit.owner, icon: this.form_edit.icon, name: this.form_edit.name, api_url: this.form_edit.api_url,
-                     active_from: this.form_edit.active_from, active_after: this.form_edit.active_after, description: this.form_edit.description, status: this.form_edit.status}
+                    this.updateElementContent({id: this.form_edit.id, label: this.form_edit.label, api_url: this.form_edit.api_url, active_from: this.form_edit.active_from,
+                        active_after: this.form_edit.active_after, description: this.form_edit.description, status: this.form_edit.status, type_content_id: this.form_edit.type_content_id}
                     ).then(response => {
                         this.$emit('close-modal');
                         this.flashMessage.success({
-                            message: 'Тип контента отредактирован',
+                            message: 'Элемент контента отредактирован',
                             time: 3000,
                         });
                     }).catch(errors => {
