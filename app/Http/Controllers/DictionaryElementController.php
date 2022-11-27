@@ -105,9 +105,10 @@ class DictionaryElementController extends Controller
     public function destroy($id)
     {
         $dictionaryElement = DictionaryElement::find($id);
+        $dictionaryId = $dictionaryElement->dictionary_id;
         if ($dictionaryElement) {
             $dictionaryElement->delete();
-            return response()->json('item was deleted');
+            return response()->json($dictionaryId);
         } else {
             return response()->json('item not found');
         }

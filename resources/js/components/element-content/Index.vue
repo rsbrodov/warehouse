@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- <div class="d-flex justify-content-center"><h1>Справочники</h1></div> -->
-        <!-- <FlashMessage :position="'right bottom'"></FlashMessage> -->
+         <FlashMessage :position="'right bottom'"></FlashMessage>
         <!-- Modal Dictionary create -->
         <div class="modal fade" id="ElementContentCreate" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
@@ -20,6 +20,7 @@
                     :active_from="element_content.active_from"
                     :active_after="element_content.active_after"
                     :description="element_content.description"
+                    :type_content_id="id"
                     @close-modal="closeModal('elementContentEdit')"
                 />
             </div>
