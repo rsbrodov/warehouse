@@ -41,6 +41,7 @@ class ElementContentController extends Controller
     {
         $result = $this->elementContentService->update($request);
         return $result;
+
     }
 
     public function destroy($id)

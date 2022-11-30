@@ -1,6 +1,7 @@
 <template>
 <div>
         <!-- Modal Dictionary create -->
+        <FlashMessage :position="'right bottom'"></FlashMessage>
         <div class="modal fade" id="dictionaryElementCreate" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <CreateElement :dictionary_id="id" @close-modal="closeModal('dictionaryElementCreate')"></CreateElement>
@@ -57,7 +58,13 @@
 
             },
             removeDictionaryElement(id){
-                this.deleteDictionaryElement(id);
+                this.deleteDictionaryElement(id)
+                    .then(response => {
+                        this.flashMessage.success({
+                            message: 'Элемент справочника успешно удален',
+                            time: 3000,
+                        });
+                    });
             },
             openModal(id){
                 if(id == 'dictionaryElementCreate') {
