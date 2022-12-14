@@ -25,16 +25,14 @@ export default{
             ctx.commit('UPDATE', dictionary_element.data)
         },
         async newDictionaryElement(ctx, form){
-            const new_dictionary = await axios.post('http://127.0.0.1:8000/dictionary-element/create/', form);
-            const dictionary_element = await axios.get('http://127.0.0.1:8000/dictionary/findDictionary');
-            ctx.commit('UPDATE', dictionary_element.data)
+            await axios.post('http://127.0.0.1:8000/dictionary-element/create/', form);
+            const dictionary_elements = await axios.get('http://127.0.0.1:8000/dictionary/findElementDictionaryID/' + form.form.dictionary_id);
+            ctx.commit('UPDATE', dictionary_elements.data)
         },
         async deleteDictionaryElement(ctx, id){
-            const dictionary_element_one = await axios.get('http://127.0.0.1:8000/dictionary/findID/'+id);
-            //let dictionary = dictionary_element_one.data[0];
-            await axios.delete('http://127.0.0.1:8000/dictionary-element/'+id);
-           // const dictionary_element = await axios.get('http://127.0.0.1:8000/dictionary/findDictionary/' + dictionary.dictionary_id);*/
-            ctx.commit('DELETE', id)
+            const dictionary_id_after_delete = await axios.delete('http://127.0.0.1:8000/dictionary-element/'+id);
+            const dictionary_elements = await axios.get('http://127.0.0.1:8000/dictionary/findElementDictionaryID/'+dictionary_id_after_delete.data);
+            ctx.commit('UPDATE', dictionary_elements.data)
         },
     },
 }

@@ -53,8 +53,27 @@ import draggable from "vuedraggable";
                                             :class="{invalid: (errors[element.uid])}"
                                             v-model="elementBody[element.uid].value">
                                         <option disabled selected value> -- Выберите вариант -- </option>
-                                        <option v-for="(dropdown, index) in dropdownTemp" :key="index" :value="dropdown.id">{{dropdown.value}}</option>
+                                        <option v-for="(dropdown, index) in dropdownList[element.uid]" :key="index" :value="index">{{dropdown}}</option>
                                     </select>
+                                    <div v-else-if="element.type == 'radio'">
+                                        <span v-for="(dropdown, index) in dropdownList[element.uid]" :key="index">
+                                            <input type="radio"
+                                                   :value="index"
+                                                   v-model="elementBody[element.uid].value"
+                                                   :class="{invalid: (errors[element.uid])}">
+                                            <label class="mr-2">{{dropdown}}</label>
+                                        </span>
+                                    </div>
+                                    <div v-else-if="element.type == 'checkbox'">
+                                        <span v-for="(dropdown, index) in dropdownList[element.uid]" :key="index">
+                                            <input type="checkbox"
+                                                   :value="index"
+                                                   :id="index"
+                                                   v-model="elementBody[element.uid][index]"
+                                                   :class="{invalid: (errors[element.uid])}">
+                                            <label class="mr-2">{{dropdown}}</label>
+                                        </span>
+                                    </div>
                                     <datepicker v-else-if="element.type == 'datetime'"
                                                 :id="element.uid"
                                                 :disabled="elementContentOne.status != 'Draft'"
@@ -168,6 +187,7 @@ export default {
                 {id: 2, value: 'Вариант 2'},
                 {id: 3, value: 'Вариант 3'},
             ],
+            dropdownList: [],
             errors: [],
         };
     },
@@ -197,6 +217,17 @@ export default {
             await axios.get('http://127.0.0.1:8000/type-content/get-body-element-content/' + this.elementContentOne.id)
                 .then(response => {
                     this.elementBody = response.data
+
+
+                    axios.get('http://127.0.0.1:8000/select/dropdownlistby/' + this.elementContentOne.type_contents.id)
+                        .then(response => {
+                            this.dropdownList = response.data
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        })
+
+
                 })
                 .catch(error => {
                     console.log(error);
