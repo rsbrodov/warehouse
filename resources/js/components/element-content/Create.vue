@@ -106,7 +106,7 @@
                     console.log('Form not subm')
                 }else {
                     this.newElementContents({
-                        label: this.form.label, api_url: this.form.api_url, 
+                        label: this.form.label, api_url: this.form.api_url,
                         active_from: this.form.active_from, active_after: this.form.active_after, description: this.form.description, type_content_id: this.type_content_id
                     }).then(response => {
                         this.$emit('close-modal');
@@ -123,11 +123,11 @@
                 }
             },
             generateUrl(){
-                this.form.api_url =  url_slug(this.form.label)   
+                this.form.api_url =  url_slug(this.form.label)
             },
         },
         async created(){
-            
+
         },
         validations: {
             form:{
