@@ -1,7 +1,7 @@
 <template>
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Создание элемента контента</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Создание элемента конте567нта</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true" @click="$emit('close-modal')">&times;</span>
             </button>
@@ -10,7 +10,7 @@
         <div class="modal-body">
                 <div class="row mb-3">
                     <div class="block col-6">
-                        <label for="label"><b class="text-danger">*</b><b>Заголовок</b></label>
+                        <label for="label"><b class="text-danger">*</b><b>Заголовок2</b></label>
                         <input autocomplete="off" id="label" class="form-control" type="text" v-model="form.label"
                                :class="{invalid: ($v.form.label.$dirty && !$v.form.label.required)}">
                             <small class="helper-text invalid" v-if="$v.form.label.$dirty && !$v.form.label.required">
@@ -106,7 +106,7 @@
                     console.log('Form not subm')
                 }else {
                     this.newElementContents({
-                        label: this.form.label, api_url: this.form.api_url, 
+                        label: this.form.label, api_url: this.form.api_url,
                         active_from: this.form.active_from, active_after: this.form.active_after, description: this.form.description, type_content_id: this.type_content_id
                     }).then(response => {
                         this.$emit('close-modal');
@@ -123,11 +123,11 @@
                 }
             },
             generateUrl(){
-                this.form.api_url =  url_slug(this.form.label)   
+                this.form.api_url =  url_slug(this.form.label)
             },
         },
         async created(){
-            
+
         },
         validations: {
             form:{

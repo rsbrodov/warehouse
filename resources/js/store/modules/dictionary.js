@@ -29,7 +29,7 @@ export default{
     actions: {
         async getDictionary({commit}){
             commit('setLoading', true);
-            await axios.get('http://127.0.0.1:8000/dictionary/findDictionary')
+            await axios.get(BASE_URL + 'dictionary/findDictionary')
                 .then(response => {
                     commit('UPDATE', response.data)
                 })

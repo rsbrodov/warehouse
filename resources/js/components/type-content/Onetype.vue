@@ -14,20 +14,18 @@
     <div id="app">
         <!-- Stack the columns on mobile by making one full-width and the other half-width -->
         <div class="row">
-            <div class="col"><b>
-                    <h2>{{ typeContentOne.name }}</h2>
-                </b></div>
+            <div class="col">
+                <div style="display: flex">
+                    <b><h2>{{ typeContentOne.name }}</h2></b>
+                    <a :href="'/type-content/api-url/' + typeContentOne.api_url" class="ml-3 mt-2 btn btn-sm btn-outline-secondary form-control pb-1" style="width:50px; max-height:27px;">API</a>
+                </div>
+            </div>
             <div class="col"></div>
         </div>
         <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
         <div class="row">
             <div class="col-9">
                 <div class="flex-cont">
-                    <div class="flex-elem title-one"><b>
-                        <a :href="'/type-content/api-url/' + typeContentOne.api_url" class="btn">
-                            <i class="fa fa-circle-o fa-lg" aria-hidden="true">API URL</i>
-                        </a></b>
-                    </div>
                     <div class="flex-elem"><b>Идентификатор: </b>{{ typeContentOne.id }}</div>
                     <div class="flex-elem"><b>API URL: </b>{{ typeContentOne.api_url }}</div>
                     <div class="flex-elem"><b>Владелец: </b> Admin</div>

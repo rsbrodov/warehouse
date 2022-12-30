@@ -97,7 +97,7 @@ class DictionaryElementService
         }
         $dictionaryElement = DictionaryElement::where(['dictionary_id' => $dictionary->id])->with('created_author:id,name')->with('updated_author:id,name')->get();
         if ($dictionaryElement) {
-            return response()->json($dictionaryElement);
+            return response()->json($dictionary->id);
         } else {
             return response()->json('elements not found');
         }
