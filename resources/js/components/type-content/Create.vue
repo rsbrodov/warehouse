@@ -131,7 +131,7 @@
                     console.log('Form not subm')
                 }else {
                     this.newTypeContents({
-                        icon: this.form.icon, name: this.form.name, owner: this.form.owner, api_url: this.form.api_url, 
+                        icon: this.form.icon, name: this.form.name, owner: this.form.owner, api_url: this.form.api_url,
                         active_from: this.form.active_from, active_after: this.form.active_after, description: this.form.description
                     }).then(response => {
                         this.$emit('close-modal');
@@ -154,7 +154,7 @@
                     });
             },
             generateUrl(){
-                this.form.api_url =  url_slug(this.form.name)   
+                this.form.api_url =  url_slug(this.form.name)
             },
             getUsers(){
                 axios.get('http://127.0.0.1:8000/users-list')

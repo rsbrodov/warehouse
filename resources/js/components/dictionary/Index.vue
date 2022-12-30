@@ -272,6 +272,6 @@
   .pagination li.pagination-active {
     background-color: green;
   }
-  
+
 .pagination  li:hover:not(.active) {background-color: yellow;}
 </style>

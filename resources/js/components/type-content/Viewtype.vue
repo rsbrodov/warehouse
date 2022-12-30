@@ -68,11 +68,13 @@
                                             <button class="btn btn-outline-primary mr-2" @click="deleteItem(row_index, column_index, index_element)"><i
                                                     class="fa fa-trash fa-sm"></i></button>
                                         </div>
+
                                     </div>
                                 </draggable>
                             </div>
                         </draggable>
-                        <i class="fa fa-trash mr-2 mt-2 text-primary lg" @click="deleteRow(row_index)"></i>
+                        <i v-if="typeContentOne.status == 'Draft'"
+                           class="fa fa-trash mr-2 mt-2 text-primary lg" @click="deleteRow(row_index)"></i>
                         <!-- </transition-group> -->
                     </div>
                 </div>
