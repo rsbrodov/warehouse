@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ElementContentRequest;
 use App\Models\ElementContent;
 use App\Models\TypeContent;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Services\ElementContentService;
 
@@ -62,10 +64,15 @@ class ElementContentController extends Controller
         return $result;
     }
 
-    public function getAllVersionElementContent()
+    public function getAllVersionElementContent($id)
     {
-        $result = $this->elementContentService->getAllVersionElementContent();
+        $result = $this->elementContentService->getAllVersionElementContent($id);
         return $result;
+    }
+
+    public function getAllVersion($id)
+    {
+        return view('element_content.all-version-element-content');
     }
 
     public function saveDraft(Request $request, $id)
@@ -78,5 +85,21 @@ class ElementContentController extends Controller
     {
         $result = $this->elementContentService->getApiUrl($apiUrl);
         return $result;
+    }
+
+    public function uploadImage(Request $request)
+    {
+        if ($request->file('file')){
+            $image = $request->file('file');
+           // $path = $request->file('file')->store('uploads', 'public');
+            $name = md5(Carbon::now().'_'.$image->getClientOriginalName()).'.'.$image->getClientOriginalExtension();
+            $filePath = Storage::disk('public')->putFileAs('/images', $image, $name);
+            return response()->json(['message' => url('/storage/'.$filePath)]);
+            /*if($path){
+                return response()->json(['message' => $path]);
+            }*/
+        }else{
+            return response()->json(['message' => 'error uploaded file'], 503);
+        }
     }
 }

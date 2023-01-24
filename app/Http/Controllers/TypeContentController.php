@@ -40,7 +40,7 @@ class TypeContentController extends Controller
 
     public function update(TypeContentRequest $request, $id)
     {
-        $result = $this->typeContentService->store($request, $id);
+        $result = $this->typeContentService->update($request, $id);
         return $result;
     }
 

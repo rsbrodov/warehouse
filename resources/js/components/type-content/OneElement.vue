@@ -24,10 +24,8 @@
             <div class="col-9">
                 <div class="flex-cont">
                     <div class="flex-elem title-one"><b>{{ elementContentOne.type_contents.name }}</b></div>
-                    <div class="flex-elem title-one"><b>
-                        <a :href="'/element-content/api-url/' + elementContentOne.api_url" class="btn">
-                            <i class="fa fa-circle-o fa-lg" aria-hidden="true">API URL</i>
-                        </a></b>
+                    <div class="flex-elem title-one">
+                        <a :href="'/type-content/api-url/' + elementContentOne.api_url" class="ml-1 btn btn-sm btn-outline-secondary form-control" style="width:50px; max-height:25px; line-height:1">API</a>
                     </div>
                     <div class="flex-elem"><b>API URL: </b>{{ elementContentOne.api_url }}</div>
                     <div class="flex-elem"><b>Статус: </b>{{ elementContentOne.status | status }}</div>
@@ -43,9 +41,9 @@
         </div>
         <nav class="mt-3">
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <a :class="setClass('enter-vue')" :href="'/type-content/enter-vue/' + elementContentOne.id">Контент</a>
+                <a :class="setClass('enter-vue')" :href="'/element/enter-vue/' + elementContentOne.id">Контент</a>
                 <a :class="setClass('nav-link')" >Доступ</a>
-                <a :class="setClass('all-version-type-content')">История изменений</a>
+                <a :class="setClass('all-version-element-content')" :href="'/element-content/all-version-element-content/' + elementContentOne.id">История изменений</a>
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
@@ -84,23 +82,22 @@ export default {
         await this.getElementContentOne(this.element_content_id);
     },
     filters: {
-        date: function (element_content) {
-            if (!element_content.active_from && !element_content.active_after) {
+        date: function (element) {
+            if(!element.active_from && !element.active_after){
                 return "Не задан";
-            } else if (!element_content.active_from && element_content.active_after) {
-                return "До " + moment(element_content.active_after).format('DD.MM.YYYY');
-            } else if (element_content.active_from && !element_content.active_after) {
-                return moment(element_content.active_from).format('DD.MM.YYYY') + " - бессрочно";
-            } else {
-                return moment(element_content.active_from).format('DD.MM.YYYY') + " - " + moment(element_content.active_after).format('DD.MM.YYYY');
+            }else if(!element.active_from && element.active_after){
+                return "До "+ moment(element.active_after).format('DD.MM.YYYY');
+            } else if(element.active_from && !element.active_after){
+                return moment(element.active_from).format('DD.MM.YYYY') + " - бессрочно";
+            }else{
+                return moment(element.active_from).format('DD.MM.YYYY') + " - " + moment(element.active_after).format('DD.MM.YYYY');
             }
-
         },
         dateUpdated: function (element_content) {
             return moment(element_content.updated_at).format('DD.MM.YYYY HH:II');
         },
         status: function (status) {
-            let status_array = { Draft: 'Черновик', Published: 'Опубликовано', Archive: 'В архиве' };
+            let status_array = { Draft: 'Черновик', Published: 'Опубликовано', Archive: 'В архиве', Destroy: 'На удаление' };
             if (status) {
                 return status_array[status];
             } else {

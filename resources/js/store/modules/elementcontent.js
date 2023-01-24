@@ -3,6 +3,7 @@ export default{
         element_content: [],
         element_content_one: null,
         new_element_content: null,
+        element_contents_all_version: [],
     },
     getters: {
         ElementContent(state){
@@ -14,6 +15,9 @@ export default{
         elementContentOne(state){
             return state.element_content_one
         },
+        elementContentsAllVersion(state){
+            return state.element_contents_all_version
+        },
     },
     mutations: {
         UPDATE(state, element_content){
@@ -24,6 +28,9 @@ export default{
         },
         updateElementContentOne(state, element_content_one){
             state.element_content_one = element_content_one
+        },
+        updateElementContentsAllVersion(state, element_contents_all_version){
+            state.element_contents_all_version = element_contents_all_version
         },
     },
     actions: {
@@ -59,10 +66,24 @@ export default{
                 commit('setLoading', false);
             });*/
         },
-        async updateElementContent(ctx, form, id){
+        async updateElementContent(ctx, form){
             await axios.post('http://127.0.0.1:8000/element-content/'+form.id, form);
             const element_content = await axios.get('http://127.0.0.1:8000/element-content/findElementContentID/'+form.type_content_id);
             ctx.commit('UPDATE', element_content.data)
+        },
+        async getElementContentsAllVersion({commit}, id) {
+            commit('setLoading', true);
+            await axios.get('http://127.0.0.1:8000/element-content/getAllVersionElementContent/'+id)
+                .then(response => {
+                    commit('updateElementContentsAllVersion', response.data)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+                .finally(() => {
+                    commit('setLoading', false);
+                });
+
         },
     },
 }

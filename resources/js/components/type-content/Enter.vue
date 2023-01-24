@@ -84,10 +84,17 @@ import draggable from "vuedraggable";
                                     </datepicker>
                                     <div v-else-if="element.type == 'file'"
                                          class="block-img"  >
-                                        <img :id="element.uid"
-                                             src="https://zor.com/de/media/catalog/product/cache/3/image/9df78eab33525d08d6e5fb8d27136e95/p/l/placeholder_big_3.jpg"
+
+                                        <vue-dropzone v-if="!elementContentOne.body"
+                                            ref="myVueDropzone"
+                                            id="dropzone"
+                                            :options="dropzoneOptions"
+                                            @vdropzone-complete="afterUploadComplete(element.uid)"></vue-dropzone>
+                                        <img v-else
+                                             :id="element.uid"
+                                             :src="elementBody[element.uid].value"
                                              class="p-2"
-                                             style="max-height: 320px; width:100%"/>
+                                             style="width:90%; height: auto"/>
                                     </div>
                                     <small class="helper-text invalid" v-if="errors[element.uid]">
                                         {{errors[element.uid]}}<br>
@@ -122,7 +129,7 @@ import draggable from "vuedraggable";
                         </button>
                     </div>
                     <div class="p-2" v-if="elementContentOne.status == 'Published'">
-                        <button class="btn btn-primary form-control text-left">
+                        <button class="btn btn-primary form-control text-left" @click='openContextMenu($event)'>
                             <i class="fa fa-refresh fa-lg" aria-hidden="true"></i> Выпустить новую версию
                         </button>
                     </div>
@@ -132,7 +139,7 @@ import draggable from "vuedraggable";
                         </button>
                     </div>
 
-                    <div class="p-2" v-if="elementContentOne.status == 'Publish'">
+                    <div class="p-2" v-if="elementContentOne.status == 'Archive'">
                         <button class="btn btn-primary form-control text-left" @click="changeStatus('Draft', 'Элемент контента восстановлен из архива')">
                             <i class="fa fa-cloud-download fa-lg" aria-hidden="true"></i> Востановить из архива
                         </button>
@@ -141,19 +148,21 @@ import draggable from "vuedraggable";
                     <context-menu :display="showContextMenu" ref="menu">
                         <ul>
                             <div>
-                                <button class="btn btn-primary form-control text-left btn-sm">
+                                <button class="btn btn-primary form-control text-left btn-sm"
+                                        @click='createNewVersion("major")'>
                                     <i class="fa fa-refresh" aria-hidden="true"></i> Версия первого порядка (x+1.0)
                                 </button>
                             </div>
                             <div class="mt-2">
-                                <button class="btn btn-primary form-control text-left btn-sm">
+                                <button class="btn btn-primary form-control text-left btn-sm"
+                                        @click='createNewVersion("minor")'>
                                     <i class="fa fa-refresh" aria-hidden="true"></i> Версия второго порядка (x.y+1)
                                 </button>
                             </div>
                         </ul>
                     </context-menu>
 
-                    <div class="p-2" v-if="elementContentOne.status == 'Published'">
+                    <div class="p-2" v-if="elementContentOne.status == 'Published' || elementContentOne.status == 'Destroy'">
                         <button class="btn btn-primary form-control text-left" @click="changeStatus('Archive', 'Элемент контента отправлен в архив')">
                             <i class="fa fa-trash fa-lg" aria-hidden="true"></i> Отправить в архив
                         </button>
@@ -170,12 +179,15 @@ import ContextMenu from "../helpers/ContextMenu";
 import {mapActions, mapGetters} from "vuex";
 import Datepicker from 'vuejs-datepicker';
 import {ru} from "vuejs-datepicker/dist/locale";
+import vue2Dropzone from 'vue2-dropzone'
+import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 
 export default {
     name: "Enter",
-    components: { OneElement, ContextMenu, Datepicker },
+    components: { OneElement, ContextMenu, Datepicker, vueDropzone: vue2Dropzone },
     data() {
         return {
+            upload_url: null,
             ru:ru,
             showContextMenu: false,
             element_content_id: window.location.href.split('/')[5],
@@ -189,6 +201,23 @@ export default {
             ],
             dropdownList: [],
             errors: [],
+            dropzoneOptions: {
+                url: 'http://127.0.0.1:8000/upload-image',
+                thumbnailWidth: 150,
+                maxFilesize: 5,
+                headers: { "My-Awesome-Header": "header value" },
+                parallelUploads: 1,
+                maxFiles: 1,
+                //autoProcessQueue: false,//автоматическая отправка на бэк после загрузки
+                addRemoveLinks: true,
+                init: function() {
+                    this.on("success", function(file, responseText) {
+                        console.log(responseText);
+                        localStorage.setItem('lastUpload', responseText.message)
+                        //this.elementBody[element.uid].value
+                    });
+                }
+            }
         };
     },
     computed: {
@@ -257,7 +286,7 @@ export default {
                             time: 3000,
                         });
                         window.setTimeout(function () {
-                            window.location.href = "http://127.0.0.1:8000/element-content/'" + this.elementContentOne.type_contents.id
+                            window.location.href = "http://127.0.0.1:8000/type-content/index"
                         }, 3000);
                     }
                 })
@@ -269,6 +298,7 @@ export default {
             this.updateElementContent({
                     id: this.elementContentOne.id, label: this.elementContentOne.label, api_url: this.elementContentOne.api_url,
                     active_from: this.elementContentOne.active_from, active_after: this.elementContentOne.active_after, description: this.elementContentOne.description, status: status,
+                    type_content_id: this.elementContentOne.type_contents.id,
                 }
             ).then(response => {
                 this.$emit('close-modal');
@@ -281,6 +311,29 @@ export default {
                 console.log(errors);
             });
 
+        },
+        async afterUploadComplete(response) {
+            this.elementBody[response].value = localStorage.getItem('lastUpload');
+        },
+
+        async createNewVersion(version) {
+            await axios.get('http://127.0.0.1:8000/element-content/new-version/' + this.element_content_id + '/' + version)
+                .then(response => {
+                    if (response.status === 200) {
+                        this.flashMessage.success({
+                            message: 'Новая версия создана. Перейдите в раздел История изменений',
+                            time: 3000,
+                        });
+                        this.$refs.menu.close();
+                        //$('._vue-flash-msg-body__text').append('<a href="http://127.0.0.1:8000/type-content/view-new/'+response.data.id+'">Ссылка</a>');
+                    }
+                })
+                .catch(error => {
+                    this.flashMessage.error({
+                        message: error.response.data.errors.version_error,
+                        time: 3000,
+                    });
+                })
         },
     },
 
@@ -330,5 +383,6 @@ export default {
 .block-img {
     border: 1px solid #E1E1E1;
     border-radius: 5px;
+    text-align: center;
 }
 </style>

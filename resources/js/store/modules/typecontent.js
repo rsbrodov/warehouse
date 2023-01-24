@@ -80,7 +80,7 @@ export default{
                 /*.finally(() => {
                     commit('setLoading', false);
                 });*/
-            
+
 
         },
         async update(ctx, form, id){
