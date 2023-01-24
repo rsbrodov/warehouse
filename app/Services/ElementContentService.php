@@ -21,8 +21,8 @@ class ElementContentService
                     'type_content_id'=> request('type_content_id'),
                     'label'          => $request->label,
                     'description'          => $request->description,
-                    'active_from'    => date_create($request->active_from),
-                    'active_after'   => date_create($request->active_after),
+                    'active_from'    => $request->active_from ? date_create($request->active_from) : null,
+                    'active_after'   => $request->active_after ? date_create($request->active_after) : null,
                     'status'         => 'DRAFT',
                     'version_major'  => '1',
                     'version_minor'  => '0',
@@ -140,53 +140,60 @@ class ElementContentService
         }
     }
 
-    public function createNewVersion($id, $parameter)
+    public function createNewVersion($id, $parametr)
     {
-        $element = ElementContent::find($id);
-        $existOtherDraft = ElementContent::where(['id_global'=>$element->id_global, 'status' => 'Draft'])->count();
-        if($existOtherDraft){
-            return redirect()->back()->with('error', 'Черновик уже существует. Удалите его или отредактируйте.');
+        $type = ElementContent::find($id);
+        $existOtherDraft = ElementContent::where(['id_global' => $type->id_global, 'status' => 'Draft'])->count();
+        if ($existOtherDraft) {
+            $error = array(
+                'code'      =>  422,
+                'message'   =>  'The given data was invalid',
+                'errors' => [
+                    'version_error' => 'У вас уже есть черновик этого элемента контента, Вы можете опубликовать новую версию из него'
+                ]
+            );
+            return response()->json($error, 422);
         }
-        //проверка параметров
-        if ($parameter == 'major' || $parameter == 'minor') {
-            if ($parameter == 'major') {
+        if ($parametr == 'major' || $parametr == 'minor') {
+            if ($parametr == 'major') {
                 //если мажор то мы просто создаем дубликат наивысшей строки по version_major
-                $elementContent = ElementContent::where('id_global', $element->id_global)->orderBy('version_major', 'desc')->first();
-                //replicate - встроенный метод дублирования в laravel
-                $newElementContent = $elementContent->replicate();//тут лежит наш новый объект
-                $newElementContent->version_major = $elementContent->version_major + 1;//изменяем объект с учетом наших параметров затем сохраняем
-                $newElementContent->version_minor = 0;
+                $typeContent = ElementContent::where('id_global', $type->id_global)
+                    ->orderBy('version_major', 'desc')
+                    ->first();
+                $newTypeContent = $typeContent->replicate(); //тут лежит наш новый объект
+                $newTypeContent->version_major = $typeContent->version_major + 1; //изменяем объект с учетом наших параметров затем сохраняем
+                $newTypeContent->status = 'Draft';
+                $newTypeContent->version_minor = 0;
             } else {
                 //если минор то просто ищим наивысшей строки по version_major и version_minor ну и изменяем версию
-                $elementContent = ElementContent::where('id_global', $element->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first();
-                $newElementContent = $elementContent->replicate();
-                $newElementContent->version_minor = $elementContent->version_minor + 1;
+                $typeContent = ElementContent::where('id_global', $type->id_global)
+                    ->orderBy('version_major','desc')
+                    ->orderBy('version_minor', 'desc')
+                    ->first();
+                $newTypeContent = $typeContent->replicate();
+                $newTypeContent->version_minor = $typeContent->version_minor + 1;
+                $newTypeContent->status = 'Draft';
             }
-            $newElementContent->status = 'Draft';
-            $newElementContent->based_element = $element->id;
-            if ($newElementContent->save()) {
-                return redirect()->route('element-content.get-all-version', $elementContent->id_global)->with('success', 'Новая версия успешно создана');
-                // return redirect()->route('element-content.index', $element->type_content_id)->with('success', 'Новая версия успешно создана');
+            if ($newTypeContent->save()) {
+                return response()->json($newTypeContent);
             } else {
-                return redirect()->back()->with('error', 'Что-то пошло не так');
+                $error = array(
+                    'code'      =>  422,
+                    'message'   =>  'The given data was invalid',
+                    'errors' => [
+                        'version_error' => 'Ошибка в формировании новой версии элемента контента, перезагрузите страницу и попробуйте снова.'
+                    ]
+                );
             }
         } else {
-            return redirect()->back()->with('error', 'Что-то пошло не так');
-        }
-    }
-
-    public function getAllVersionElementContent()
-    {
-        if (Auth::guard('web')->check()) {
-            $elementContents = ElementContent::where('id_global', request('id_global'))->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
-            return view('element_content.all-version-element-content')->with('element_contents', $elementContents);
-        } else {
-            if (Auth::guard('api')->check()) {
-                $elementContent = ElementContent::where('id_global', request('id_global'))->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
-                return response()->json($elementContent);
-            } else {
-                return response()->json('item not found');
-            }
+            $error = array(
+                'code'      =>  422,
+                'message'   =>  'The given data was invalid',
+                'errors' => [
+                    'version_error' => 'Ошибка передачи параметра мажор или минор. Перезагрузите страницу и попробуйте снова.'
+                ]
+            );
+            return response()->json($error, 422);
         }
     }
 
@@ -227,5 +234,12 @@ class ElementContentService
         } else {
             print_r('Exception');
         }
+    }
+
+    public function getAllVersionElementContent($id)
+    {
+        $idGlobal = ElementContent::find($id)->id_global;
+        $elementContent = ElementContent::where('id_global', $idGlobal)->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
+        return response()->json($elementContent);
     }
 }

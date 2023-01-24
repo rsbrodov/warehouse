@@ -393,6 +393,7 @@ export default {
                             message: 'Новая версия создана',
                             time: 3000,
                         });
+                        this.$refs.menu.close();
                         //$('._vue-flash-msg-body__text').append('<a href="http://127.0.0.1:8000/type-content/view-new/'+response.data.id+'">Ссылка</a>');
                     }
                 })

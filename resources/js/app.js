@@ -1,3 +1,5 @@
+import AllversionElementContent from "./components/element-content/AllversionElementContent";
+
 require('./bootstrap');
 
 window.Vue = require('vue').default;
@@ -19,6 +21,7 @@ Vue.component('Indexdictionaryelement', require('./components/dictionary-element
 Vue.component('Viewtype', require('./components/type-content/Viewtype.vue').default);
 Vue.component('Indexelementcontent', require('./components/element-content/Index.vue').default);
 Vue.component('Allversion', require('./components/type-content/Allversion.vue').default);
+Vue.component('Allversionelementcontent', require('./components/element-content/AllversionElementContent.vue').default);
 Vue.component('Enter', require('./components/type-content/Enter').default);
 
 Vue.use(Vuelidate)
