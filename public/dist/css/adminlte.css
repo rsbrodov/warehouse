@@ -6445,7 +6445,7 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
 }
 
 .modal-header .close, .modal-header .mailbox-attachment-close {
-  padding: 1rem;
+  padding: 2rem;
   margin: -1rem -1rem -1rem auto;
 }
 
