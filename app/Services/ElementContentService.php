@@ -258,10 +258,62 @@ class ElementContentService
         }
     }
 
+
     public function getAllVersionElementContent($id)
     {
         $idGlobal = ElementContent::find($id)->id_global;
         $elementContent = ElementContent::where('id_global', $idGlobal)->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
         return response()->json($elementContent);
+
+    public function checkingApiUrl($apiUrl, $idGlobal = null)
+    {
+        if ($idGlobal) {
+            if (($elementContentExistence = ElementContent::where('url', $apiUrl)->whereNotIn('id_global', [$idGlobal])->first()) !== null) {
+                return 'error';
+            }
+        } else {
+            if (($elementContentExistence = ElementContent::where('url', $apiUrl)->first()) !== null) {
+                return 'error';
+            }
+        }
+    }
+
+    public function validateElementContent($id, $request)
+    {
+        $typeContent = TypeContent::find($id);
+        $body = json_decode($typeContent->body);
+        $error = [];
+        $i = 0;
+        foreach ($body as $row) {
+            foreach ($row as $column) {
+                foreach ($column as $element) {
+                    if ($element->required == 1 && !$request[$element->uid]['value']) {
+                        $error[$element->uid] = 'Необходимо заполнить «'.$element->title.'»';
+                    }
+                }
+            }
+        }
+        return $error;
+    }
+
+    public function pushingDropDownList($id)
+    {
+        $typeContent = TypeContent::find($id);
+        $body = json_decode($typeContent->body);
+        $dictionaryList = [];
+        $i = 0;
+        foreach ($body as $row) {
+            foreach ($row as $column) {
+                foreach ($column as $element) {
+                    if (!empty($element->dictionary_id)) {
+                        $dictionaryElements = DictionaryElement::where('dictionary_id', $element->dictionary_id)->get();
+                        foreach($dictionaryElements as $dictionaryElement){
+                            $dictionaryList[$element->uid][$dictionaryElement->id] = $dictionaryElement->value;
+                        }
+                    }
+                }
+            }
+        }
+        return $dictionaryList;
     }
 }

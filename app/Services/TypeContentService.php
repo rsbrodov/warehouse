@@ -24,8 +24,8 @@ class TypeContentService
     public function store(TypeContentRequest $request)
     {
         $model = new TypeContent();
-        $checkApi = $model->checkingApiUrl($request->api_url);
-        $checkName = $model->checkingName($request->name);
+        $checkApi = $this->checkingApiUrl($request->api_url);
+        $checkName = $this->checkingName($request->name);
         if ($checkName) {
             return response()->json($checkName, 422);
         }
@@ -346,6 +346,56 @@ class TypeContentService
             print_r($typeContent);
         } else {
             print_r('Exception');
+        }
+    }
+
+    public function checkingApiUrl($apiUrl, $idGlobal = null)
+    {
+        if ($idGlobal) {
+            if (($typeContentExistence = TypeContent::where('api_url', $apiUrl)->whereNotIn('id_global', [$idGlobal])->first()) !== null) {
+                return [
+                    'code' => 422,
+                    'message' => 'The given data was invalid',
+                    'errors' => [
+                        'api_url' => '«API URL» должен быть уникальным'
+                    ]
+                ];
+            }
+        } else {
+            if (($typeContentExistence = TypeContent::where('api_url', $apiUrl)->first()) !== null) {
+                return [
+                    'code' => 422,
+                    'message' => 'The given data was invalid',
+                    'errors' => [
+                        'api_url' => '«API URL» должен быть уникальным'
+                    ]
+                ];
+            }
+        }
+    }
+
+    public function checkingName($name, $idGlobal = null)
+    {
+        if ($idGlobal) {
+            if (($typeContentExistence = TypeContent::where('name', $name)->whereNotIn('id_global', [$idGlobal])->first()) !== null) {
+                return [
+                    'code' => 422,
+                    'message' => 'The given data was invalid',
+                    'errors' => [
+                        'name' => '«Наименование» должно быть уникальным'
+                    ]
+                ];
+            }
+        } else {
+            if (($typeContentExistence = TypeContent::where('name', $name)->first()) !== null) {
+                return [
+                    'code' => 422,
+                    'message' => 'The given data was invalid',
+                    'errors' => [
+                        'name' => '«Наименование» должно быть уникальным'
+                    ]
+                ];
+            }
         }
     }
 }
