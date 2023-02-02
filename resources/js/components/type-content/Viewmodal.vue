@@ -29,7 +29,7 @@
                     </div>
                     <div class="block col-6" v-if="vv.type == 'select' || vv.type == 'radio' || vv.type == 'checkbox'">
                         <label for="dictionary_id"><b>Справочник:</b></label>
-                        <select id="dictionary_id" class="form-control"
+                        <select id="dictionary_id" class="form-control""
                                 v-model="vv.dictionary_id">
                             <option v-for="(dic, index) in Dictionary"
                                     :key="index"
@@ -84,7 +84,7 @@
             ...mapActions(['getDictionary']),
             saveDropElement() {
                 this.$emit('close-modal', 'createElement', this.vv)
-            }
+            },
         },
         async mounted(){
             this.getDictionary();

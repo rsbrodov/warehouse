@@ -21,7 +21,7 @@ import draggable from "vuedraggable";
             <div class="col-10 left-block">
                 <div class="left-block__layout">
                     <div class="rower">
-                        <div class="row-block" v-for="(row, row_index) in body" :key="row_index">
+                        <div class="row-block" v-for="(row, row_index) in elementBody" :key="row_index">
                             <div class="columns mt-4" v-for="(column, column_index) in row" :key="column_index">
                                 <div class="block mt-4" v-for="(element, element_index) in column" :key="element_index">
                                     <div class="label">
@@ -29,21 +29,21 @@ import draggable from "vuedraggable";
                                     </div>
                                     <input v-if="element.type == 'text'"
                                            autocomplete="off"
-                                           v-model="elementBody[element.uid].value"
+                                           v-model="element.value"
                                            :type="element.type"
                                            class="form-control"
                                            :disabled="elementContentOne.status != 'Draft'"
                                            :id="element.title"
-                                           :name="element.name"
+                                           :name="element.value"
                                            :class="{invalid: (errors[element.uid])}">
                                     <textarea v-else-if="element.type == 'textarea'"
                                            autocomplete="off"
-                                           v-model="elementBody[element.uid].value"
+                                           v-model="element.value"
                                            :type="element.type"
                                            class="form-control"
                                            :disabled="elementContentOne.status != 'Draft'"
                                            :id="element.title"
-                                           :name="element.name"
+                                           :name="element.value"
                                            :class="{invalid: (errors[element.uid])}"
                                            rows="5" />
                                     <select v-else-if="element.type == 'select'"
@@ -51,25 +51,25 @@ import draggable from "vuedraggable";
                                             :disabled="elementContentOne.status != 'Draft'"
                                             class="form-control"
                                             :class="{invalid: (errors[element.uid])}"
-                                            v-model="elementBody[element.uid].value">
+                                            v-model="element.value">
                                         <option disabled selected value> -- Выберите вариант -- </option>
-                                        <option v-for="(dropdown, index) in dropdownList[element.uid]" :key="index" :value="index">{{dropdown}}</option>
+                                        <option v-for="(dropdown, index) in element.parameter" :key="index" :value="dropdown">{{dropdown}}</option>
                                     </select>
                                     <div v-else-if="element.type == 'radio'">
-                                        <span v-for="(dropdown, index) in dropdownList[element.uid]" :key="index">
+                                        <span v-for="(dropdown, index) in element.parameter" :key="index">
                                             <input type="radio"
-                                                   :value="index"
-                                                   v-model="elementBody[element.uid].value"
+                                                   :value="dropdown"
+                                                   v-model="element.value"
                                                    :class="{invalid: (errors[element.uid])}">
                                             <label class="mr-2">{{dropdown}}</label>
                                         </span>
                                     </div>
                                     <div v-else-if="element.type == 'checkbox'">
-                                        <span v-for="(dropdown, index) in dropdownList[element.uid]" :key="index">
+                                        <span v-for="(dropdown, index) in element.parameter" :key="index">
                                             <input type="checkbox"
-                                                   :value="index"
+                                                   :value="dropdown"
                                                    :id="index"
-                                                   v-model="elementBody[element.uid][index]"
+                                                   v-model="element.value[dropdown]"
                                                    :class="{invalid: (errors[element.uid])}">
                                             <label class="mr-2">{{dropdown}}</label>
                                         </span>
@@ -79,7 +79,7 @@ import draggable from "vuedraggable";
                                                 :disabled="elementContentOne.status != 'Draft'"
                                                 class="form-control"
                                                 :class="{invalid: (errors[element.uid])}"
-                                                v-model="elementBody[element.uid].value"
+                                                v-model="element.value"
                                                 :language="ru">
                                     </datepicker>
                                     <div v-else-if="element.type == 'file'"
@@ -92,7 +92,7 @@ import draggable from "vuedraggable";
                                             @vdropzone-complete="afterUploadComplete(element.uid)"></vue-dropzone>
                                         <img v-else
                                              :id="element.uid"
-                                             :src="elementBody[element.uid].value"
+                                             :src="elementBody.value"
                                              class="p-2"
                                              style="width:90%; height: auto"/>
                                     </div>
@@ -167,6 +167,11 @@ import draggable from "vuedraggable";
                             <i class="fa fa-trash fa-lg" aria-hidden="true"></i> Отправить в архив
                         </button>
                     </div>
+                    <div class="p-2" v-if="elementContentOne.status == 'Draft'">
+                        <button class="btn btn-primary form-control text-left" @click="updateFields()">
+                            <i class="fa fa-refresh fa-lg" aria-hidden="true"></i> Обновить состав полей
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -192,14 +197,12 @@ export default {
             showContextMenu: false,
             element_content_id: window.location.href.split('/')[5],
             url: window.location.href.split('/')[4],
-            body: undefined,
-            elementBody: {},
+            elementBody: undefined,
             dropdownTemp: [
                 {id: 1, value: 'Вариант 1'},
                 {id: 2, value: 'Вариант 2'},
                 {id: 3, value: 'Вариант 3'},
             ],
-            dropdownList: [],
             errors: [],
             dropzoneOptions: {
                 url: 'http://127.0.0.1:8000/upload-image',
@@ -229,34 +232,10 @@ export default {
         openContextMenu(event) {
             this.$refs.menu.open(event);
         },
-        async getBodyTypeContent() {
-            await axios.get('http://127.0.0.1:8000/type-content/get-body/' + this.elementContentOne.type_contents.id)
-                .then(response => {
-                    if (Object.keys(response.data).length === 0) {
-                        this.body = [[]];
-                    } else {
-                        this.body = response.data
-                    }
-                })
-                .catch(error => {
-                    console.log(error);
-                })
-        },
         async getValueElementContent() {
             await axios.get('http://127.0.0.1:8000/type-content/get-body-element-content/' + this.elementContentOne.id)
                 .then(response => {
                     this.elementBody = response.data
-
-
-                    axios.get('http://127.0.0.1:8000/select/dropdownlistby/' + this.elementContentOne.type_contents.id)
-                        .then(response => {
-                            this.dropdownList = response.data
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        })
-
-
                 })
                 .catch(error => {
                     console.log(error);
@@ -335,11 +314,28 @@ export default {
                     });
                 })
         },
+        async updateFields() {
+            await axios.get('http://127.0.0.1:8000/element-content/update-fields/' + this.element_content_id)
+                .then(response => {
+                    if (response.status === 200) {
+                        this.flashMessage.success({
+                            message: 'Состав полей обновлен.',
+                            time: 3000,
+                        });
+                        this.getValueElementContent();
+                    }
+                })
+                .catch(error => {
+                    this.flashMessage.error({
+                        message: 'Возникла ошибка обновления',
+                        time: 3000,
+                    });
+                })
+        }
     },
 
     async created() {
         await this.getElementContentOne(this.element_content_id);
-        await this.getBodyTypeContent();
         await this.getValueElementContent();
     },
 

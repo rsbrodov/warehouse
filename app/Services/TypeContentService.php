@@ -287,12 +287,12 @@ class TypeContentService
     public function saveBodyElement(Request $request)
     {
         $elementContent = ElementContent::find($request->id);
-        $errors = $elementContent->validateElementContent($elementContent->type_content_id, $request->body);
+        /*$errors = $elementContent->validateElementContent($elementContent->type_content_id, $request->body);
         if($errors){
             return response()->json([
                 'message' => $errors
             ], 400);
-        }
+        }*/
         $elementContent = ElementContent::find($request->id);
         if (!empty($elementContent)) {
             $elementContent->body = json_encode($request->body);
@@ -316,21 +316,7 @@ class TypeContentService
     public function getBodyElementContent($id)
     {
         $elementContent = ElementContent::find($id);
-        if (!empty($elementContent->body)) {
-            return response()->json(json_decode($elementContent->body));
-        } else {
-            $typeContent = TypeContent::find($elementContent->type_content_id);
-            $body = json_decode($typeContent->body);
-            $error = [];
-            foreach ($body as $row){
-                foreach ($row as $column){
-                    foreach ($column as $element){
-                        $error[$element->uid] = ['value' => null];
-                    }
-                }
-            }
-            return response()->json($error);
-        }
+        return response()->json(json_decode($elementContent->body));
     }
 
     public function getDropdownListById($id)

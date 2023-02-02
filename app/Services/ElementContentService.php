@@ -16,6 +16,27 @@ class ElementContentService
     {
         //return $request;
         if (Auth::guard('web')->check()) {
+            $typeContent = TypeContent::find(request('type_content_id'));
+            $bodyForElement = json_decode($typeContent->body);
+            foreach ($bodyForElement as $row) {
+                foreach ($row as $column) {
+                    foreach ($column as $element) {
+                        $element->value = '';
+                        if($element->type == 'checkbox'){
+                            $element->value = (object)[];
+                        }
+                        unset($element->name);
+                        unset($element->class);
+                        if ($element->type == 'select' || $element->type == 'radio' || $element->type == 'checkbox') {
+                            $dictionaryElements = DictionaryElement::where('dictionary_id', $element->dictionary_id)->get();
+                            $element->parameter = [];
+                            foreach($dictionaryElements as $dictionaryElement){
+                                $element->parameter[] = $dictionaryElement->value;
+                            }
+                        }
+                    }
+                }
+            }
             $newElementContent = ElementContent::create(
                 [
                     'id_global'      => Str::uuid()->toString(),
@@ -29,7 +50,7 @@ class ElementContentService
                     'version_minor'  => '0',
                     'api_url'            => str_slug($request->api_url),
                     'based_element'  => null,
-                    'body'  => '',
+                    'body'  => json_encode($bodyForElement),
                     'created_author' => Auth::guard('web')->user()->id,
                     'updated_author' => Auth::guard('web')->user()->id,
                 ]
