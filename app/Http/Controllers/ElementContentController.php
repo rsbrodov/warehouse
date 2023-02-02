@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ElementContentRequest;
+use App\Models\Dictionary;
+use App\Models\DictionaryElement;
 use App\Models\ElementContent;
 use App\Models\TypeContent;
 use Carbon\Carbon;
@@ -11,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Services\ElementContentService;
+use Illuminate\Support\Arr;
 
 class ElementContentController extends Controller
 {
@@ -101,5 +104,91 @@ class ElementContentController extends Controller
         }else{
             return response()->json(['message' => 'error uploaded file'], 503);
         }
+    }
+    public function updateFields($id)
+    {
+        $elementContentData = [];
+        $elementContent = ElementContent::find($id);
+        $typeContentPublished = TypeContent::where(['id_global'=> TypeContent::find($elementContent->type_content_id)->id_global, 'status' => 'Published'])->first();
+        if($elementContent->body){
+            $body = json_decode($elementContent->body);
+            foreach ($body as $row){
+                foreach ($row as $column){
+                    foreach ($column as $element){
+                        if($element->type == 'select' || $element->type == 'radio' || $element->type == 'checkbox'){
+                            if(Dictionary::find($element->dictionary_id)){
+                                $p = [];
+                                $dictionaryElements = DictionaryElement::where(['dictionary_id' => $element->dictionary_id])->pluck('value', 'id')->toArray();
+                                foreach ($dictionaryElements as $dictionaryElement){
+                                    if(!in_array($dictionaryElement, (array)$element->parameter)){
+                                        $element->parameter[] = $dictionaryElement;
+                                    }
+                                }
+                                foreach ($element->parameter as $key => $parameter){
+                                    if(!in_array($parameter, $dictionaryElements ?? [])){
+                                        if(is_string($element->value) && $element->value != $parameter){
+                                            unset($element->parameter[$key]);
+                                        }elseif(is_array($element->value) || is_object($element->value)){
+                                            if(!in_array($parameter, (array)$element->value ?? [])){
+                                                unset($element->parameter[$key]);
+                                            }
+                                        }
+                                    }
+                                }
+                                /*заново перебираем массив так как он превращается в объект если удалить элемент массива посередине, так как сбиваются порядковые номера ключей массива*/
+                                foreach ($element->parameter as $key => $parameter){
+                                    $p[] = $parameter;
+                                }
+                                $element->parameter = $p;
+                                $elementContentData[$element->uid]['value'] = $element->value;
+                                if($element->parameter){
+                                    $elementContentData[$element->uid]['parameter'] = $element->parameter;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            $elementContent->body = json_encode($body);
+            $elementContent->save();
+            if($typeContentPublished){
+                if($typeContentPublished->id == $elementContent->type_content_id){
+                    return response()->json($elementContent);
+                }else{
+                    $elementContent->type_content_id = $typeContentPublished->id;
+                    $bodyForElement = json_decode($typeContentPublished->body);
+                    foreach ($bodyForElement as $row) {
+                        foreach ($row as $column) {
+                            foreach ($column as $element) {
+                                unset($element->name);
+                                unset($element->class);
+                                if(empty($elementContentData[$element->uid])){
+                                    $element->value = '';
+                                    if($element->type == 'checkbox'){
+                                        $element->value = (object)[];
+                                    }
+                                    if ($element->type == 'select' || $element->type == 'radio' || $element->type == 'checkbox') {
+                                        $dictionaryElements = DictionaryElement::where('dictionary_id', $element->dictionary_id)->get();
+                                        $element->parameter = [];
+                                        foreach($dictionaryElements as $dictionaryElement){
+                                            $element->parameter[] = $dictionaryElement->value;
+                                        }
+                                    }
+                                }else{
+                                    $element->value = $elementContentData[$element->uid]['value'];
+                                    if ($element->type == 'select' || $element->type == 'radio' || $element->type == 'checkbox') {
+                                        $element->parameter = $elementContentData[$element->uid]['parameter'];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            $elementContent->body = json_encode($bodyForElement);
+            $elementContent->save();
+            return response()->json($elementContent);
+        }
+        return $id;
     }
 }

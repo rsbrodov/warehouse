@@ -128,6 +128,7 @@ Route::middleware(['auth:web'])->group(function () {
 
 // ЭЛЕМЕНТЫ КОНТЕНТА
 Route::middleware(['auth:web'])->group(function () {
+    Route::get('/element-content/update-fields/{id}', [ElementContentController::class, 'updateFields']);
     Route::get('/element-content/all-version-element-content/{id}', [ElementContentController::class, 'getAllVersion'])->name('element-content.all-version');
     Route::get('/element-content/getAllVersionElementContent/{id}', [ElementContentController::class, 'getAllVersionElementContent']);
     Route::get('/element-content/api-url/{apiUrl}', [ElementContentController::class, 'getApiUrl']);
