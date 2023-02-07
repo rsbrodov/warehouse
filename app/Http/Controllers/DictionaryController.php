@@ -69,6 +69,12 @@ class DictionaryController extends Controller
         return $result;
     }
 
+    public function findDictionaryNotEmptyElement()
+    {
+        $result = $this->dictionaryService->findDictionaryNotEmptyElement();
+        return $result;
+    }
+
     public function findDictionaryID($id)
     {
         $result = $this->dictionaryService->findDictionaryID($id);

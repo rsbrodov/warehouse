@@ -264,6 +264,7 @@ class ElementContentService
         $idGlobal = ElementContent::find($id)->id_global;
         $elementContent = ElementContent::where('id_global', $idGlobal)->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
         return response()->json($elementContent);
+    }
 
     public function checkingApiUrl($apiUrl, $idGlobal = null)
     {

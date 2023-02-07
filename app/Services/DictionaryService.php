@@ -106,6 +106,19 @@ class DictionaryService
         }
     }
 
+    public function findDictionaryNotEmptyElement()
+    {
+        if (Auth::guard('web')->check()) {
+            $dictionaryElements = DictionaryElement::where(['created_author' => Auth::guard('web')->user()->id])->with('created_author:id,name')->with('updated_author:id,name')->orderBy('created_at', 'asc')->get();
+            $dictionaryId = [];
+            foreach ($dictionaryElements as $dictionaryElement) {
+                $dictionaryId[] = $dictionaryElement->dictionary_id;
+            }
+            $dictionary = Dictionary::where(['created_author' => Auth::guard('web')->user()->id])->whereIn('id', array_unique($dictionaryId))->with('created_author:id,name')->with('updated_author:id,name')->orderBy('created_at', 'asc')->get();
+            return response()->json($dictionary);
+        }
+    }
+
     public function findDictionaryID($id)
     {
         $dictionary = Dictionary::where(['id' => $id])->with('created_author:id,name')->with('updated_author:id,name')->orderBy('created_at', 'asc')->get();

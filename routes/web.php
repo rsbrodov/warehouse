@@ -75,6 +75,7 @@ Route::middleware(['auth:web'])->group(function () {
 // СПРАВОЧНИКИ
 Route::middleware(['auth:web'])->group(function () {
     Route::get('/dictionary/findDictionary', [DictionaryController::class, 'findDictionary']);
+    Route::get('/dictionary/findDictionaryNotEmptyElement', [DictionaryController::class, 'findDictionaryNotEmptyElement']);
     Route::post('/dictionary/store/', [DictionaryController::class, 'store']);
     Route::get('/dictionary/', [DictionaryController::class, 'index'])->name('dictionary.index');
     Route::get('/dictionary/{id}', [DictionaryController::class, 'show'])->name('dictionary.show');
