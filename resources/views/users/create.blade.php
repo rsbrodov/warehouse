@@ -38,12 +38,12 @@
                        name="password_confirmation" required autocomplete="current-password">
             </div>
         </div>
-        @if(Auth::user()->hasRole('Admin'))
+        @if(Auth::user()->hasRole('Admin') || Auth::user()->hasRole('SuperAdmin'))
             <div class="form-group row">
-                <label for="role" class="col-md-4 col-form-label text-md-right">Role</label>
+                <label for="role" class="col-md-4 col-form-label text-md-right">Роль</label>
                 <div class="col-md-6">
                     <select id="role" type="text" class="form-control" name="role">
-                        @foreach($roles = \Spatie\Permission\Models\Role::where('name', '<>','SuperAdmin')->get() as $role)
+                        @foreach($roles as $role)
                             <option value="{{$role->name}}">{{$role->name}}</option>
                         @endforeach
                     </select>
