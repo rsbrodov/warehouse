@@ -191,4 +191,26 @@ class ElementContentController extends Controller
         }
         return $id;
     }
+
+    public function getApiElement($typeContentApiUrl, $typeVersionMajor, $typeVersionMinor, $elementContentApiUrl, $versionMajor, $versionMinor)
+    {
+        $typeContent = TypeContent::where(['api_url' => $typeContentApiUrl, 'version_major' => $typeVersionMajor, 'version_minor' => $typeVersionMinor])->first();
+        $elementContent = ElementContent::where([
+            'type_content_id' => $typeContent->id,
+            'api_url' => $elementContentApiUrl,
+            'version_major' => $versionMajor,
+            'version_minor' => $versionMinor])
+            ->with('created_authors:id,name')
+            ->with('updated_authors:id,name')
+            ->first();
+        $elementContent->body = json_decode($elementContent->body);
+        $r = [];$r['id'] = $elementContent->id;$r['idGlobal'] = $elementContent->id_global;$r['typeContentId'] = $elementContent->type_content_id;$r['label'] = $elementContent->label;$r['apiUrl'] = $elementContent->api_url;$r['description'] = $elementContent->description;$r['activeFrom'] = $elementContent->active_from;$r['activeAfter'] = $elementContent->active_after;$r['status'] = $elementContent->status;$r['versionMajor'] = $elementContent->version_major;$r['versionMinor'] = $elementContent->version_minor;$r['body'] = $elementContent->body;$r['basedElement'] = $elementContent->based_element;$r['createdAuthors'] = $elementContent->created_authors;$r['updatedAuthors'] = $elementContent->updated_authors;
+        if (Auth::guard('web')->check()) {
+            $json_pretty = json_encode($r, JSON_PRETTY_PRINT);
+            $elementContent = "<pre>" . $json_pretty . "<pre/>";
+            return $elementContent;
+        }else{
+            return $r;
+        }
+    }
 }

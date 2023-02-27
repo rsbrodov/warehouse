@@ -7,14 +7,11 @@
                 <CreateElement :dictionary_id="id" @close-modal="closeModal('dictionaryElementCreate')"></CreateElement>
             </div>
         </div>
-        <div class="d-flex justify-content-center"><h1>Элементы справочника</h1></div>
         <div class="row mt-4">
             <div class="header-block row">
                 <div class="search-form col-10"></div>
-                <div class="create col-2">
-                    <button type="button" class="btn-create btn btn-primary" @click="openModal('dictionaryElementCreate', id)">
-                        <span class="fa fa-plus-circle fa-lg"></span>
-                    </button>
+                <div class="create col-2 text-right">
+                    <button type="button" class="btn-create btn btn-outline-primary btn-unbordered" @click="openModal('dictionaryElementCreate', id)"><span class="fa fa-plus-circle fa-lg"></span></button>
                 </div>
             </div>
         </div>
@@ -65,6 +62,7 @@
                             time: 3000,
                         });
                     });
+                this.getDictionaryElement(this.id);
             },
             openModal(id){
                 if(id == 'dictionaryElementCreate') {

@@ -78,7 +78,6 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('/dictionary/findDictionaryNotEmptyElement', [DictionaryController::class, 'findDictionaryNotEmptyElement']);
     Route::post('/dictionary/store/', [DictionaryController::class, 'store']);
     Route::get('/dictionary/', [DictionaryController::class, 'index'])->name('dictionary.index');
-    Route::get('/dictionary/{id}', [DictionaryController::class, 'show'])->name('dictionary.show');
     Route::post('/dictionary/{id}', [DictionaryController::class, 'update'])->name('dictionary.update');
     Route::delete('/dictionary/{id}', [DictionaryController::class, 'destroy'])->name('dictionary.destroy');
     Route::get('/dictionary/{id}/archive', [DictionaryController::class, 'archive'])->name('dictionary.archive');
@@ -100,7 +99,7 @@ Route::get('/type-content/create-icons', [TypeContentController::class, 'createI
 
 
 Route::middleware(['auth:web'])->group(function () {
-    Route::get('/type-content/api-url/{apiUrl}', [TypeContentController::class, 'getApiUrl']);
+    Route::get('/api/template/GetTypeContentId/{id}', [TypeContentController::class, 'getApiUrl']);
     Route::get('/element/enter-vue/{id}', [TypeContentController::class, 'enterVue'])->name('type-content.enter-vue');
     Route::post('/type-content/save-body/', [TypeContentController::class, 'saveBody']);
     Route::post('/type-content/save-body-element/', [TypeContentController::class, 'saveBodyElement']);
@@ -144,4 +143,6 @@ Route::middleware(['auth:web'])->group(function () {
     Route::delete('/element-content/{id}', [ElementContentController::class, 'destroy'])->name('element-content.destroy');
     Route::post('/upload-image', [ElementContentController::class, 'uploadImage'])->name('element-content.upload-image');
     Route::get('/element-content/new-version/{id}/{parametr}', [ElementContentController::class, 'createNewVersion']);
+
+    Route::get('/api/v1/element-content/{typeContentApiUrl}/{typeVersionMajor}/{typeVersionMinor}/{elementContentApiUrl}/{versionMajor}/{versionMinor}', [ElementContentController::class, 'getApiElement']);
 });

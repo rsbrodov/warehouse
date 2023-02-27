@@ -155,6 +155,7 @@ class ElementContentService
             whereIn('type_content_id', $typeContents)
                 ->with('created_authors:id,name')
                 ->with('updated_authors:id,name')
+                ->with('type_contents')
                 ->orderBy('created_at', 'asc')
                 ->get()
                 ->unique('id_global');//все уникальные

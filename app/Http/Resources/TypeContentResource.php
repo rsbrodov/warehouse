@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Http\Resources;
+
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class TypeContentResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     */
+    public function toArray($request)
+    {
+        return [
+            'id' => $this->id,
+            'idGlobal' => $this->id_global,
+            'name' => $this->name,
+            'description' => $this->description,
+            'status' => $this->status,
+            'apiUrl' => $this->api_url,
+            'owner' => $this->owner,
+            'icon' => $this->icon,
+            'activeFrom' => $this->active_from,
+            'activeBefore' => $this->active_before,
+            'basedType' => $this->based_type,
+            'createdDate' => date('d.m.Y H:i:s', strtotime($this->created_at)),
+            'createdAuthor' => $this->whenLoaded('createdAuthor', new UserTruncatedResource($this->createdAuthor)),
+            'updatedDate' => date('d.m.Y H:i:s', strtotime($this->updated_at)),
+            'updatedAuthor' => $this->whenLoaded('updatedAuthor', new UserTruncatedResource($this->updatedAuthor)),
+        ];
+    }
+}

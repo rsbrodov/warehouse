@@ -82,7 +82,7 @@
                 <td>{{dictionary.code}}</td>
                 <td>{{dictionary.name}}</td>
                 <td>{{dictionary.description}}</td>
-                <td>{{ dictionary | dateUpdated }}</td>
+                <td>{{ dictionary.updatedDate }}</td>
                 <td :class="dictionary.archive | statusColor"><b>{{ dictionary.archive | status }}</b></td>
 
                 <td nowrap>
@@ -99,11 +99,6 @@
                 </td>
             </tr>
         </table>
-
-        <!-- <div class="card-footer pb-0 pt-3">
-            <jw-pagination :items="filteredDictionary" @changePage="onChangePage"></jw-pagination>
-        </div> -->
-
     </div>
 </template>
 
@@ -218,7 +213,7 @@
 
         filters: {
             dateUpdated: function (dictionary) {
-                return moment(dictionary.updated_at).format('DD.MM.YYYY HH:II');
+                return moment(dictionary.updatedDate).format('DD.MM.YYYY HH:II');
             },
             status: function (status) {
                 if(status == 1){

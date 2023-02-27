@@ -112,12 +112,14 @@ class TypeContentService
 
     public function destroy($id)
     {
-        $typeContent = TypeContent::find($id);
-        if ($typeContent) {
-            $typeContent->delete();
-            return response()->json('item was deleted');
-        } else {
-            return response()->json('item not found');
+        try {
+            if (Auth::guard('web')->check() || Auth::guard('api')->check()) {
+                $typeContent = TypeContent::findOrFail($id);
+                $typeContent->delete();
+                return response()->noContent();
+            }
+        }catch (\Exception $e) {
+            return $e->getMessage();
         }
     }
 
@@ -125,7 +127,7 @@ class TypeContentService
     public function getListTypeContent()
     {
         if (Auth::guard('web')->check()) {
-            $typeContents = TypeContent::with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('name', 'desc')->get()->unique('id_global'); //все уникальные
+            $typeContents = TypeContent::orderBy('name', 'desc')->get()->unique('id_global');
             $ids = [];
             foreach ($typeContents as $typeContent) {
                 $ids[] = TypeContent::where('id_global', $typeContent->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first()->id;
@@ -145,8 +147,8 @@ class TypeContentService
 
     public function getTypeContentID($id)
     {
-        $typeContent = TypeContent::find($id);
-        return response()->json($typeContent);
+        $typeContent = TypeContent::where('id', $id)->with('created_authors:id,name')->with('updated_authors:id,name')->first();
+        return $typeContent;
     }
 
     public function getElementContentID($id)

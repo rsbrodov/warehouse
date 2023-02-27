@@ -87,7 +87,7 @@
             </tr>
             <tr v-else v-for="(element, index) in ElementContent" :key="index">
                 <td>{{element.label}}</td>
-                <td>{{element.api_url}}</td>
+                <td><p style="display:flex; justify-content: space-between; margin:0; padding:0">{{element.api_url}} <button class="btn btn-outline-primary btn-unbordered" @click="copyUrl(element)"><span class="fa fa-files-o fa-lg" aria-hidden="true"></span></button></p></td>
                 <td :class="element.status | statusColor"><b>{{ element.status | status }}</b></td>
                 <td>{{ element | date }}</td>
                 <td>{{element.updated_authors.name}}</td>
@@ -174,6 +174,21 @@
                 $( 'form' ).each(function(){
                     this.reset();
                 });
+            },
+            copyUrl(element){
+                try {
+                    console.log(element);
+                    navigator.clipboard.writeText('http://127.0.0.1:8000/api/v1/element-content/' +element.type_contents.api_url+'/'+element.type_contents.version_major+'/'+element.type_contents.version_minor+'/'+ element.api_url+'/'+element.version_major+'/'+element.version_minor)
+                    this.flashMessage.success({
+                        message: 'Скопировано в буфер обмена',
+                        time: 3000,
+                    });
+                } catch (e) {
+                    this.flashMessage.error({
+                        message: 'Ошибка копирования',
+                        time: 3000,
+                    });
+                }
             }
         },
 
