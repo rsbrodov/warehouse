@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Services;
 
+use App\Http\Resources\DictionaryElementResource;
 use App\Models\Dictionary;
 use App\Models\DictionaryElement;
 use Illuminate\Http\Request;
@@ -11,22 +13,18 @@ class DictionaryElementService
 
     public function store(Request $request)
     {
-        if (Auth::guard('web')->check()) {
-            $dictionaryElement = DictionaryElement::create([
-                'value' => $request->form['value'],
-                'dictionary_id' => $request->form['dictionary_id'],
-                'created_author' => Auth::guard('web')->user()->id,
-                'updated_author' => Auth::guard('web')->user()->id
-            ]);
-            return response()->json($dictionaryElement);
-        } else if (Auth::guard('api')->check()) {
-            $dictionary = Dictionary::where(['id' => $request['dictionary_id']])->first();
-            if (empty($dictionary)) {
-                return response()->json('dictionary not found');
+        try {
+            if (Auth::guard('web')->check() || Auth::guard('api')->check()) {
+                $dictionaryElement = DictionaryElement::create([
+                    'value' => $request->form['value'],
+                    'dictionary_id' => $request->form['dictionary_id'],
+                    'created_author' => Auth::guard('web')->user()->id ?? Auth::guard('api')->user()->id,
+                    'updated_author' => Auth::guard('web')->user()->id ?? Auth::guard('api')->user()->id,
+                ]);
+                return new DictionaryElementResource($dictionaryElement);
             }
-            $dic = DictionaryElement::create(['dictionary_id' => $request['dictionary_id'], 'value' => $request['value'], 'created_author' => Auth::guard('api')->user()->id, 'updated_author' => Auth::guard('api')->user()->id]);
-            $dictionaryElement = DictionaryElement::where('id', $dic->id)->with('created_author:id,name')->with('updated_author:id,name')->first();
-            return response()->json($dictionaryElement);
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
     }
 
@@ -51,41 +49,45 @@ class DictionaryElementService
             $dictionaryElement->updated_author = Auth::guard('api')->user()->id;
             $dictionaryElement->save();
 
-            $dictionary = DictionaryElement::find($id)->with('created_author:id,name')->with('updated_author:id,name')->get();
+            $dictionary = DictionaryElement::find($id)->with('createdAuthor:id,name')->with('updatedAuthor:id,name')->get();
             return response()->json($dictionary);
         }
     }
 
     public function destroy($id)
     {
-        $dictionaryElement = DictionaryElement::find($id);
-        if ($dictionaryElement) {
-            $dictionaryElement->delete();
-            return response()->json('item was deleted');
-        } else {
-            return response()->json('item not found');
+        try {
+            if (Auth::guard('web')->check() || Auth::guard('api')->check()) {
+                $dictionary = DictionaryElement::findOrFail($id);
+                $dictionary->delete();
+                return response()->noContent();
+            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
     }
 
     public function findElementDictionaryID($id)
     {
-        if (Auth::guard('web')->check()) {
-            $dictionaryElement = DictionaryElement::where(['dictionary_id' => $id])->with('created_author:id,name')->with('updated_author:id,name')->orderBy('created_at', 'asc')->get();
-            return response()->json($dictionaryElement);
-        } else if (Auth::guard('api')->check()) {
-            $dictionaryElement = DictionaryElement::where(['dictionary_id' => $id])->with('created_author:id,name')->with('updated_author:id,name')->orderBy('created_at', 'asc')->get();
-            return response()->json($dictionaryElement);
+        try {
+            if (Auth::guard('web')->check() || Auth::guard('api')->check()) {
+                $dictionaryElement = DictionaryElement::where(['dictionary_id' => $id])->orderBy('created_at', 'asc')->get();
+                return DictionaryElementResource::collection($dictionaryElement);
+            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
     }
 
     public function findID($id)
     {
-        if (Auth::guard('web')->check()) {
-            $dictionaryElement = DictionaryElement::where(['id' => $id])->with('created_author:id,name')->with('updated_author:id,name')->get();
-            return response()->json($dictionaryElement);
-        } else if (Auth::guard('api')->check()) {
-            $dictionaryElement = DictionaryElement::where(['id' => $id])->with('created_author:id,name')->with('updated_author:id,name')->get();
-            return response()->json($dictionaryElement);
+        try {
+            if (Auth::guard('web')->check() || Auth::guard('api')->check()) {
+                $dictionaryElement = DictionaryElement::find($id);
+                return DictionaryElementResource::collection($dictionaryElement);
+            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
     }
 
@@ -93,13 +95,13 @@ class DictionaryElementService
     {
         $dictionary = Dictionary::where(['code' => $code])->first();
         if (empty($dictionary)) {
-            return response()->json('dictionary not found');
+            return response()->json([]);
         }
-        $dictionaryElement = DictionaryElement::where(['dictionary_id' => $dictionary->id])->with('created_author:id,name')->with('updated_author:id,name')->get();
+        $dictionaryElement = DictionaryElement::where(['dictionary_id' => $dictionary->id])->get();
         if ($dictionaryElement) {
-            return response()->json($dictionary->id);
+            return DictionaryElementResource::collection($dictionaryElement);
         } else {
-            return response()->json('elements not found');
+            return response()->json([]);
         }
     }
 }

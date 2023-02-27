@@ -17,7 +17,7 @@
             <div class="col">
                 <div style="display: flex">
                     <b><h2>{{ typeContentOne.name }}</h2></b>
-                    <a :href="'/type-content/api-url/' + typeContentOne.api_url" class="ml-3 mt-2 btn btn-sm btn-outline-secondary form-control pb-1" style="width:50px; max-height:25px; line-height:1">API</a>
+                    <a :href="'/api/template/GetTypeContentId/' + typeContentOne.id" class="ml-3 mt-2 btn btn-sm btn-outline-secondary form-control pb-1" style="width:50px; max-height:25px; line-height:1" target="_blank">API</a>
                 </div>
             </div>
             <div class="col"></div>

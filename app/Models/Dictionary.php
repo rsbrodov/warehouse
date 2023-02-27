@@ -20,11 +20,11 @@ class Dictionary extends Model
         'created_author',
         'updated_author',
     ];
-    public function created_author() {
+    public function createdAuthor() {
         return $this->belongsTo(User::class, 'created_author');
     }
 
-    public function updated_author() {
+    public function updatedAuthor() {
         return $this->belongsTo(User::class, 'updated_author');
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\TechController;
+use App\Http\Controllers\ElementContentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -16,10 +16,12 @@ use App\Http\Controllers\HomeController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::get('/api/v1/element-content/{typeContentApiUrl}/{typeVersionMajor}/{typeVersionMinor}/{elementContentApiUrl}/{versionMajor}/{versionMinor}', [ElementContentController::class, 'getApiElement']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::get('/dictionary/test/', [App\Http\Controllers\DictionaryController::class, 'test']);
 
 //из библиотеки jwt
 Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
@@ -51,5 +53,5 @@ Route::group(['middleware' => 'auth:api'], function ($router) {
     Route::put('/template/updateTypeContent/{id}', [App\Http\Controllers\TypeContentController::class, 'update'])->middleware('auth:api');
     Route::delete('/template/deleteTypeContent/{id}', [App\Http\Controllers\TypeContentController::class, 'destroy'])->middleware('auth:api');
     Route::get('/template/getAllVersionTypeContent/{$id}', [App\Http\Controllers\TypeContentController::class, 'getAllVersionTypeContent'])->middleware('auth:api');
-    
+
 });

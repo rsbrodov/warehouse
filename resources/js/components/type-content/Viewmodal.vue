@@ -53,17 +53,16 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters} from "vuex";
 
     export default {
         name: "Viewmodal",
         props: ['copy', 'clonedItems'],
         data() {
             return {
+                Dictionary:[],
             }
         },
         computed:{
-            ...mapGetters(['Dictionary']),
             vv(){
                 let find;
                 let copy = this.copy;//он не хочет читать переменную, нужно ее таким образом пробрасывать чтоб он видил ее в фориче ЖЕСТЬ
@@ -81,7 +80,15 @@
             }
         },
         methods:{
-            ...mapActions(['getDictionary']),
+            async getDictionary() {
+                await axios.get('http://127.0.0.1:8000/dictionary/findDictionaryNotEmptyElement')
+                    .then(response => {
+                        this.Dictionary = response.data
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
+            },
             saveDropElement() {
                 this.$emit('close-modal', 'createElement', this.vv)
             },

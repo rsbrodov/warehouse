@@ -25,7 +25,7 @@
                 <div class="flex-cont">
                     <div class="flex-elem title-one"><b>{{ elementContentOne.type_contents.name }}</b></div>
                     <div class="flex-elem title-one">
-                        <a :href="'/type-content/api-url/' + elementContentOne.api_url" class="ml-1 btn btn-sm btn-outline-secondary form-control" style="width:50px; max-height:25px; line-height:1">API</a>
+                        <a :href="'/api/v1/element-content/' +elementContentOne.type_contents.api_url+'/'+elementContentOne.type_contents.version_major+'/'+elementContentOne.type_contents.version_minor+'/'+ elementContentOne.api_url+'/'+elementContentOne.version_major+'/'+elementContentOne.version_minor" class="ml-1 btn btn-sm btn-outline-secondary form-control" style="width:50px; max-height:25px; line-height:1" target="_blank">API</a>
                     </div>
                     <div class="flex-elem"><b>API URL: </b>{{ elementContentOne.api_url }}</div>
                     <div class="flex-elem"><b>Статус: </b>{{ elementContentOne.status | status }}</div>
@@ -41,7 +41,7 @@
         </div>
         <nav class="mt-3">
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <a :class="setClass('enter-vue')" :href="'/element/enter-vue/' + elementContentOne.id">Контент</a>
+                <a :class="setClass('enter-vue')" :href="'/element/enter-vue/'+elementContentOne.id">Контент</a>
                 <a :class="setClass('nav-link')" >Доступ</a>
                 <a :class="setClass('all-version-element-content')" :href="'/element-content/all-version-element-content/' + elementContentOne.id">История изменений</a>
             </div>

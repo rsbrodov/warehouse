@@ -3,116 +3,111 @@
 namespace App\Services;
 
 use App\Http\Requests\DictionaryRequest;
+use App\Http\Resources\DictionaryElementResource;
+use App\Http\Resources\DictionaryResource;
 use App\Models\Dictionary;
 use App\Models\DictionaryElement;
 use Illuminate\Support\Facades\Auth;
 
 class DictionaryService
 {
-
     public function store(DictionaryRequest $request)
     {
-        if (Auth::guard('web')->check()) {
-            $newDictionary = Dictionary::create([
-                'code' => $request->code,
-                'name' => $request->name,
-                'description' => $request->description,
-                'archive' => 0,
-                'created_author' => Auth::guard('web')->user()->id,
-                'updated_author' => Auth::guard('web')->user()->id
-            ]);
-            $dictionary = Dictionary::where('id', $newDictionary->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
-            return response()->json($dictionary);
-
-        } else if (Auth::guard('api')->check()) {
-            $dic = Dictionary::create(['code' => $request->code, 'name' => $request->name, 'description' => $request->description, 'archive' => 0, 'created_author' => Auth::guard('api')->user()->id, 'updated_author' => Auth::guard('api')->user()->id]);
-            $dictionary = Dictionary::where('id', $dic->id)->with('created_author:id,name')->with('updated_author:id,name')->get();
-            return response()->json($dictionary);
-        }
-    }
-
-    public function show($id)
-    {
-        if (Auth::guard('web')->check()) {
-            $user = Auth::guard('web')->user();
-            if ($user->hasRole('Admin') or $user->hasRole('SuperAdmin')) {
-                $dictionaryElements = DictionaryElement::where('dictionary_id', $id)->get();
-                return view('dictionary.show', ['dictionary_elements' => $dictionaryElements, 'dictionary_id' => $id]);
+        try {
+            if (Auth::guard('web')->check() || Auth::guard('api')->check()) {
+                $newDictionary = Dictionary::create([
+                    'code' => $request->code,
+                    'name' => $request->name,
+                    'description' => $request->description,
+                    'archive' => 0,
+                    'created_author' => Auth::guard('web')->user()->id ?? Auth::guard('api')->user()->id,
+                    'updated_author' => Auth::guard('web')->user()->id ?? Auth::guard('api')->user()->id
+                ]);
+                return new DictionaryResource($newDictionary);
             }
-        } else if (Auth::guard('api')->check()) {
-            $dictionaryElement = DictionaryElement::where(['dictionary_id' => $id])->with('created_author:id,name')->with('updated_author:id,name')->get();
-            return response()->json($dictionaryElement);
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
     }
 
     public function update(DictionaryRequest $request, $id)
     {
-        if (Auth::guard('web')->check()) {
-            $dictionary = Dictionary::find($id);
-            $dictionary->name = $request->name;
-            $dictionary->description = $request->description;
-            $dictionary->code = $request->code;
-            $dictionary->updated_author = Auth::guard('web')->user()->id;
-            $dictionary->save();
-            $dictionary = Dictionary::find($id)->with('created_author:id,name')->with('updated_author:id,name')->get();
-            return response()->json($dictionary);
-
-        } else if (Auth::guard('api')->check()) {
-            $dictionary = Dictionary::find($id);
-            $dictionary->name = $request->name;
-            $dictionary->description = $request->description;
-            $dictionary->code = $request->code;
-            $dictionary->updated_author = Auth::guard('api')->user()->id;
-            $dictionary->save();
-            $dictionary = Dictionary::find($id)->with('created_author:id,name')->with('updated_author:id,name')->get();
-            return response()->json($dictionary);
+        try {
+            if (Auth::guard('web')->check() || Auth::guard('api')->check()) {
+                $dictionary = Dictionary::find($id);
+                $dictionary->name = $request->name;
+                $dictionary->description = $request->description;
+                $dictionary->code = $request->code;
+                $dictionary->updated_author = Auth::guard('web')->user()->id ?? Auth::guard('api')->user()->id;
+                $dictionary->save();
+                return new DictionaryResource($dictionary);
+            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
     }
 
     public function destroy($id)
     {
-        $dictionary = Dictionary::find($id);
-        if ($dictionary) {
-            $dictionary->delete();
-            return response()->json('item was deleted');
-        } else {
-            return response()->json('item not found');
+        try {
+            if (Auth::guard('web')->check() || Auth::guard('api')->check()) {
+                $dictionary = Dictionary::findOrFail($id);
+                $dictionary->delete();
+                return response()->noContent();
+            }
+        }catch (\Exception $e) {
+            return $e->getMessage();
         }
     }
 
     public function archive($id)
     {
-        if (Auth::guard('web')->check()) {
-            $dictionary = Dictionary::where('id', $id)->first();
-            if ($dictionary->archive == 1) {
-                $dictionary->archive = 0;
-            } else {
-                $dictionary->archive = 1;
+        try {
+            if (Auth::guard('web')->check() || Auth::guard('api')->check()) {
+                $dictionary = Dictionary::findOrFail($id);
+                $dictionary->archive = $dictionary->archive == 1 ? false : true;
+                $dictionary->save();
+                return response()->noContent();
             }
-            $dictionary->save();
-            return response()->json($dictionary);
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
     }
 
     public function findDictionary()
     {
-        if (Auth::guard('web')->check()) {
-            $dictionary = Dictionary::where(['created_author' => Auth::guard('web')->user()->id])->with('created_author:id,name')->with('updated_author:id,name')->orderBy('created_at', 'asc')->get();
-            return response()->json($dictionary);
+        try {
+            if (Auth::guard('web')->check() || Auth::guard('api')->check()) {
+                $dictionary = Dictionary::where(['created_author' => Auth::guard('web')->user()->id ?? Auth::guard('api')->user()->id])
+                    ->orderBy('created_at', 'asc')
+                    ->get();
+                return DictionaryResource::collection($dictionary);
+            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
 
-        } else if (Auth::guard('api')->check()) {
-            $dictionary = Dictionary::where(['created_author' => Auth::guard('api')->user()->id])->with('created_author:id,name')->with('updated_author:id,name')->orderBy('created_at', 'asc')->get();
+    public function findDictionaryNotEmptyElement()
+    {
+        if (Auth::guard('web')->check()) {
+            $dictionaryElements = DictionaryElement::where(['created_author' => Auth::guard('web')->user()->id])->with('created_author:id,name')->with('updated_author:id,name')->orderBy('created_at', 'asc')->get();
+            $dictionaryId = [];
+            foreach ($dictionaryElements as $dictionaryElement) {
+                $dictionaryId[] = $dictionaryElement->dictionary_id;
+            }
+            $dictionary = Dictionary::where(['created_author' => Auth::guard('web')->user()->id, 'archive' => 0])->whereIn('id', array_unique($dictionaryId))->with('created_author:id,name')->with('updated_author:id,name')->orderBy('created_at', 'asc')->get();
             return response()->json($dictionary);
         }
     }
 
     public function findDictionaryID($id)
     {
-        $dictionary = Dictionary::where(['id' => $id])->with('created_author:id,name')->with('updated_author:id,name')->orderBy('created_at', 'asc')->get();
-        if ($dictionary) {
-            return response()->json($dictionary);
-        } else {
-            return response()->json('not found');
+        try {
+            $dictionary = Dictionary::find($id)->orderBy('created_at', 'asc')->get();
+            return DictionaryResource::collection($dictionary);
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
     }
 }

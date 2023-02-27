@@ -155,6 +155,7 @@ class ElementContentService
             whereIn('type_content_id', $typeContents)
                 ->with('created_authors:id,name')
                 ->with('updated_authors:id,name')
+                ->with('type_contents')
                 ->orderBy('created_at', 'asc')
                 ->get()
                 ->unique('id_global');//все уникальные
@@ -264,6 +265,7 @@ class ElementContentService
         $idGlobal = ElementContent::find($id)->id_global;
         $elementContent = ElementContent::where('id_global', $idGlobal)->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
         return response()->json($elementContent);
+    }
 
     public function checkingApiUrl($apiUrl, $idGlobal = null)
     {

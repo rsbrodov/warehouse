@@ -15,15 +15,10 @@ use App\Services\DictionaryService;
 class DictionaryController extends Controller
 {
     public $dictionaryService;
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function __construct(DictionaryService $service)
     {
         $this->dictionaryService = $service;
-        //$this->middleware('auth');
     }
 
     public function index()
@@ -36,12 +31,6 @@ class DictionaryController extends Controller
     public function store(DictionaryRequest $request)
     {
         $result = $this->dictionaryService->store($request);
-        return $result;
-    }
-
-    public function show($id)
-    {
-        $result = $this->dictionaryService->show($id);
         return $result;
     }
 
@@ -69,9 +58,20 @@ class DictionaryController extends Controller
         return $result;
     }
 
+    public function findDictionaryNotEmptyElement()
+    {
+        $result = $this->dictionaryService->findDictionaryNotEmptyElement();
+        return $result;
+    }
+
     public function findDictionaryID($id)
     {
         $result = $this->dictionaryService->findDictionaryID($id);
         return $result;
+    }
+
+    public function test()
+    {
+        return 123;
     }
 }

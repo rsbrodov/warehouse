@@ -120,8 +120,10 @@
                                     class="fa fa-columns fa-lg" aria-hidden="true"></i> Добавить колонку</a></div>
 
 
-                        <draggable v-model="availableItems" :options="availableItemOptions" :clone="handleClone"
-                            @end="moveAction">
+                        <draggable v-model="availableItems"
+                                   :options="availableItemOptions"
+                                   :clone="handleClone"
+                                   @end="moveAction">
                             <div class="p-2" v-for="item in availableItems">
                                 <a class="btn btn-outline-secondary form-control text-left">
                                     <i :class="item.class" aria-hidden="true"></i> {{ item.name }}
