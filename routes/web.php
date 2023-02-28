@@ -104,18 +104,17 @@ Route::middleware(['auth:web'])->group(function () {
     Route::post('/type-content/save-body/', [TypeContentController::class, 'saveBody']);
     Route::post('/type-content/save-body-element/', [TypeContentController::class, 'saveBodyElement']);
     Route::get('/type-content/getTypeContentID/{id}', [TypeContentController::class, 'getTypeContentID']);
-    Route::get('/type-content/getElementContentID/{id}', [TypeContentController::class, 'getElementContentID']);
     Route::get('/type-content/get-body/{id}', [TypeContentController::class, 'getBody']);
     Route::get('/type-content/get-body-element-content/{id}', [TypeContentController::class, 'getBodyElementContent']);
     Route::post('/type-content/store/', [App\Http\Controllers\TypeContentController::class, 'store']);
     Route::post('/type-content/{id}', [TypeContentController::class, 'update']);
-    Route::get('/type-content/view-new/{id}', [TypeContentController::class, 'viewNew'])->name('type-content.view-new');
+    Route::get('/type-content/view-new/{idGlobal}', [TypeContentController::class, 'viewNew'])->name('type-content.view-new');
     Route::get('/type-content/index', [TypeContentController::class, 'index'])->name('type-content.index');
     Route::get('/type-content/getListTypeContent', [TypeContentController::class, 'getListTypeContent'])->name('type-content.getListTypeContent');
     Route::get('/type-content/create', [TypeContentController::class, 'create'])->name('type-content.create');
     Route::post('/type-content/', [TypeContentController::class, 'store'])->name('type-content.store');
     Route::get('/type-content/{id}/edit', [TypeContentController::class, 'edit'])->name('type-content.edit');
-    Route::get('/type-content/getAllVersionTypeContent/{id}', [TypeContentController::class, 'getAllVersionTypeContent']);
+    Route::get('/type-content/getAllVersionTypeContent/{id}', [TypeContentController::class, 'getAllVersionTypeContentWeb']);
     Route::get('/type-content/all-version-type-content/{id}', [TypeContentController::class, 'getAllVersion'])->name('type-content.all-version');
     Route::get('/descript-version-type-content/{id}', [TypeContentController::class, 'getShowDescription'])->name('type-content.descript-version');
     //Route::get('/type-content/{id}/{type}', [TypeContentController::class, 'createElemen'])->name('type-content.create-elemen');
@@ -128,6 +127,7 @@ Route::middleware(['auth:web'])->group(function () {
 
 // ЭЛЕМЕНТЫ КОНТЕНТА
 Route::middleware(['auth:web'])->group(function () {
+    Route::get('/element-content/getElementContentID/{id}', [ElementContentController::class, 'getElementContentID']);
     Route::get('/element-content/update-fields/{id}', [ElementContentController::class, 'updateFields']);
     Route::get('/element-content/all-version-element-content/{id}', [ElementContentController::class, 'getAllVersion'])->name('element-content.all-version');
     Route::get('/element-content/getAllVersionElementContent/{id}', [ElementContentController::class, 'getAllVersionElementContent']);

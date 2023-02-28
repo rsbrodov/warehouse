@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Services;
 
 use App\Http\Requests\TypeContentRequest;
+use App\Http\Resources\TypeContentResource;
 use App\Models\DictionaryElement;
 use App\Models\ElementContent;
 use App\Models\Icons;
@@ -23,54 +25,38 @@ class TypeContentService
 
     public function store(TypeContentRequest $request)
     {
-        $model = new TypeContent();
-        $checkApi = $this->checkingApiUrl($request->api_url);
-        $checkName = $this->checkingName($request->name);
-        if ($checkName) {
-            return response()->json($checkName, 422);
-        }
-        if ($checkApi) {
-            return response()->json($checkApi, 422);
-        }
-        if (Auth::guard('web')->check()) {
-            $newTypeContent = TypeContent::create([
-                'id_global' => Str::uuid()->toString(),
-                'name' => $request->name,
-                'description' => $request->description,
-                'owner' => $request->owner,
-                'active_from' => date_create($request->active_from),
-                'active_after' => date_create($request->active_after),
-                'status' => 'DRAFT',
-                'version_major' => '1',
-                'version_minor' => '0',
-                'icon' => $request->icon,
-                'api_url' => $request->api_url,
-                'based_type' => null,
-                'created_author' => Auth::guard('web')->user()->id,
-                'updated_author' => Auth::guard('web')->user()->id
-            ]);
-            return response()->json($newTypeContent);
-        } elseif (Auth::guard('api')->check()) {
-            $newTypeContent = TypeContent::create([
-                'id_global' => Str::uuid()->toString(),
-                'name' => $request->name,
-                'description' => $request->description,
-                'owner' => $request->owner,
-                'icon' => $request->icon,
-                'active_from' => $request->active_from,
-                'active_after' => $request->active_after,
-                'api_url' => $request->api_url,
-                'created_author' => Auth::guard('api')->user()->id,
-                'updated_author' => Auth::guard('api')->user()->id
-            ]);
-            $typeContent = TypeContent::find($newTypeContent->id)->with('created_authors:id,name')->with('updated_authors:id,name')->get();
-            return response()->json($typeContent);
+        try {
+            $checkApi = $this->checkingApiUrl($request->apiUrl);
+            $checkName = $this->checkingName($request->name);
+            if ($checkName) return response()->json($checkName, 422);
+            if ($checkApi) return response()->json($checkApi, 422);
+            if (Auth::guard('web')->check() || Auth::guard('api')->check()) {
+                $newTypeContent = TypeContent::create([
+                    'id_global' => Str::uuid()->toString(),
+                    'name' => $request->name,
+                    'description' => $request->description,
+                    'owner' => $request->owner,
+                    'active_from' => date_create($request->activeFrom),
+                    'active_after' => date_create($request->activeAfter),
+                    'status' => 'DRAFT',
+                    'version_major' => '1',
+                    'version_minor' => '0',
+                    'icon' => $request->icon,
+                    'api_url' => $request->apiUrl,
+                    'based_type' => null,
+                    'created_author' => Auth::guard('web')->user()->id ?? Auth::guard('api')->user()->id,
+                    'updated_author' => Auth::guard('web')->user()->id ?? Auth::guard('api')->user()->id
+                ]);
+                return new TypeContentResource($newTypeContent);
+            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
     }
 
     public function update(TypeContentRequest $request, $id)
     {
-        if (Auth::guard('web')->check()) {
+        if (Auth::guard('web')->check() || Auth::guard('api')->check()) {
             $type = TypeContent::where('id', $request->id)->first();
             if ($type->status === 'Draft' or $type->status === 'Archive') {
                 $otherPublished = TypeContent::where(['id_global' => $type->id_global, 'status' => 'Published'])->first();
@@ -80,33 +66,16 @@ class TypeContentService
                 }
             }
             $type->name = $request->name;
-            $type->api_url = $request->api_url;
+            $type->api_url = $request->apiUrl;
             $type->description = $request->description;
-            $type->active_from = date_format(date_create($request->active_from), 'Y-m-d H:m:s');
-            $type->active_after = date_format(date_create($request->active_after), 'Y-m-d H:m:s');
+            $type->active_from = date_format(date_create($request->activeFrom), 'Y-m-d H:m:s');
+            $type->active_after = date_format(date_create($request->activeAfter), 'Y-m-d H:m:s');
             $type->icon = $request->icon;
             $type->status = $request->status;
             $type->owner = $request->owner;
-            $type->updated_author = Auth::guard('web')->user()->id;
+            $type->updated_author = Auth::guard('web')->user()->id ?? Auth::guard('api')->user()->id;
             $type->save();
-            $typeContent = TypeContent::where('id', $request->id)->with('created_authors:id,name')->with('updated_authors:id,name')->first();
-            return response()->json($typeContent);
-        } else {
-            if (Auth::guard('api')->check()) {
-                $type = TypeContent::find($id);
-                $type->name = $request->name;
-                $type->api_url = $request->api_url;
-                $type->description = $request->description;
-                $type->active_from = date_format(date_create($request->active_from), 'Y-m-d H:m:s');
-                $type->active_after = date_format(date_create($request->active_after), 'Y-m-d H:m:s');
-                $type->icon = $request->icon;
-                $type->owner = $request->owner;
-                $type->updated_author = Auth::guard('api')->user()->id;
-                $type->updated_author = Auth::guard('api')->user()->id;
-                $type->save();
-                $typeContent = TypeContent::where('id', $type->id)->with('created_authors:id,name')->with('updated_authors:id,name')->first();
-                return response()->json($typeContent);
-            }
+            return new TypeContentResource($type);
         }
     }
 
@@ -118,7 +87,7 @@ class TypeContentService
                 $typeContent->delete();
                 return response()->noContent();
             }
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
@@ -126,42 +95,43 @@ class TypeContentService
     //получение списка
     public function getListTypeContent()
     {
-        if (Auth::guard('web')->check()) {
-            $typeContents = TypeContent::orderBy('name', 'desc')->get()->unique('id_global');
-            $ids = [];
-            foreach ($typeContents as $typeContent) {
-                $ids[] = TypeContent::where('id_global', $typeContent->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first()->id;
+        try {
+            if (Auth::guard('web')->check() || Auth::guard('api')->check()) {
+                $typeContents = TypeContent::orderBy('name', 'desc')->get()->unique('id_global');
+                $ids = [];
+                foreach ($typeContents as $typeContent) {
+                    $ids[] = TypeContent::where('id_global', $typeContent->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first()->id;
+                }
+                $typeContents = TypeContent::whereIn('id', $ids)->orderBy('created_at', 'asc')->get();
+                return TypeContentResource::collection($typeContents);
             }
-            $typeContents = TypeContent::whereIn('id', $ids)->orderBy('created_at', 'asc')->get();
-            return response()->json($typeContents);
-        } else {
-            if (Auth::guard('api')->check()) {
-                $typeContents = TypeContent::with('created_authors:id,name')->with('updated_authors:id,name')->orderBy(
-                    'name',
-                    'desc'
-                )->get();
-                return response()->json($typeContents);
-            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
     }
 
     public function getTypeContentID($id)
     {
-        $typeContent = TypeContent::where('id', $id)->with('created_authors:id,name')->with('updated_authors:id,name')->first();
-        return $typeContent;
+        try {
+            $typeContent = TypeContent::findOrFail($id);
+            //return $id;
+            return new TypeContentResource($typeContent);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
-    public function getElementContentID($id)
+    public function getAllVersionTypeContent($idGlobal)
     {
-        $elementContent = ElementContent::where('id', $id)->with('type_contents')->with('created_authors:id,name')->first();
-        return response()->json($elementContent);
+        $typeContents = TypeContent::where('id_global', $idGlobal)->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
+        return TypeContentResource::collection($typeContents);
     }
 
-    public function getAllVersionTypeContent($id)
+    public function getAllVersionTypeContentWeb($id)
     {
-        $idGlobal = TypeContent::find($id)->id_global;
-        $typeContent = TypeContent::where('id_global', $idGlobal)->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
-        return response()->json($typeContent);
+        $current = TypeContent::findOrFail($id);
+        $typeContents = TypeContent::where('id_global', $current->id_global)->orderBy('version_major', 'asc')->orderBy('version_minor', 'asc')->get();
+        return TypeContentResource::collection($typeContents);
     }
 
     public function View($id)
@@ -185,8 +155,8 @@ class TypeContentService
         $existOtherDraft = TypeContent::where(['id_global' => $type->id_global, 'status' => 'Draft'])->count();
         if ($existOtherDraft) {
             $error = array(
-                'code'      =>  422,
-                'message'   =>  'The given data was invalid',
+                'code' => 422,
+                'message' => 'The given data was invalid',
                 'errors' => [
                     'version_error' => 'У вас уже есть черновик этого типа контента, Вы можете опубликовать новую версию из него'
                 ]
@@ -206,7 +176,7 @@ class TypeContentService
             } else {
                 //если минор то просто ищим наивысшей строки по version_major и version_minor ну и изменяем версию
                 $typeContent = TypeContent::where('id_global', $type->id_global)
-                    ->orderBy('version_major','desc')
+                    ->orderBy('version_major', 'desc')
                     ->orderBy('version_minor', 'desc')
                     ->first();
                 $newTypeContent = $typeContent->replicate();
@@ -217,8 +187,8 @@ class TypeContentService
                 return response()->json($newTypeContent);
             } else {
                 $error = array(
-                    'code'      =>  422,
-                    'message'   =>  'The given data was invalid',
+                    'code' => 422,
+                    'message' => 'The given data was invalid',
                     'errors' => [
                         'version_error' => 'Ошибка в формировании новой версии типа контента, перезагрузите страницу и попробуйте снова.'
                     ]
@@ -226,8 +196,8 @@ class TypeContentService
             }
         } else {
             $error = array(
-                'code'      =>  422,
-                'message'   =>  'The given data was invalid',
+                'code' => 422,
+                'message' => 'The given data was invalid',
                 'errors' => [
                     'version_error' => 'Ошибка передачи параметра мажор или минор. Перезагрузите страницу и попробуйте снова.'
                 ]
@@ -326,10 +296,10 @@ class TypeContentService
         $typeContent = TypeContent::find($id);
         $body = json_decode($typeContent->body);
         $dropdownList = [];
-        foreach ($body as $row){
-            foreach ($row as $column){
-                foreach ($column as $key=>$element){
-                    if($key == 'dictionary_id'){
+        foreach ($body as $row) {
+            foreach ($row as $column) {
+                foreach ($column as $key => $element) {
+                    if ($key == 'dictionary_id') {
                         $dictionaryElements = DictionaryElement::where('dictionary_id', $element)->get();
                         foreach ($dictionaryElements as $dictionaryElement) {
                             $dropdownList[$column->uid][$dictionaryElement['id']] = $dictionaryElement['value'];

@@ -14,11 +14,11 @@
             <div class="modal-dialog modal-lg" role="document">
                 <Edit
                     :id="element_content.id"
-                    :api_url="element_content.api_url"
+                    :apiUrl="element_content.apiUrl"
                     :label="element_content.label"
                     :status="element_content.status"
-                    :active_from="element_content.active_from"
-                    :active_after="element_content.active_after"
+                    :activeFrom="element_content.activeFrom"
+                    :activeAfter="element_content.activeAfter"
                     :description="element_content.description"
                     :type_content_id="id"
                     @close-modal="closeModal('elementContentEdit')"
@@ -87,10 +87,10 @@
             </tr>
             <tr v-else v-for="(element, index) in ElementContent" :key="index">
                 <td>{{element.label}}</td>
-                <td><p style="display:flex; justify-content: space-between; margin:0; padding:0">{{element.api_url}} <button class="btn btn-outline-primary btn-unbordered" @click="copyUrl(element)"><span class="fa fa-files-o fa-lg" aria-hidden="true"></span></button></p></td>
+                <td><p style="display:flex; justify-content: space-between; margin:0; padding:0">{{element.apiUrl}} <button class="btn btn-outline-primary btn-unbordered" @click="copyUrl(element)"><span class="fa fa-files-o fa-lg" aria-hidden="true"></span></button></p></td>
                 <td :class="element.status | statusColor"><b>{{ element.status | status }}</b></td>
                 <td>{{ element | date }}</td>
-                <td>{{element.updated_authors.name}}</td>
+                <td>{{element.updatedAuthor.name}}</td>
                 <td>{{ element | dateUpdated }}</td>
                 <!-- :href нужно убрать когда будут добавлены компоненты -->
                 <td nowrap>
@@ -125,11 +125,11 @@
                 },
                 element_content:{
                     id:null,
-                    api_url:null,
+                    apiUrl:null,
                     label:null,
                     status:null,
-                    active_after:null,
-                    active_from:null,
+                    activeAfter:null,
+                    activeFrom:null,
                     description:null
                 }
             }

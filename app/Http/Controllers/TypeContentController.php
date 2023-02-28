@@ -50,7 +50,7 @@ class TypeContentController extends Controller
         return $result;
     }
 
-    public function viewNew($id)
+    public function viewNew($idGlobal)
     {
         return view('type_content.view-new');
     }
@@ -78,15 +78,16 @@ class TypeContentController extends Controller
         return $result;
     }
 
-    public function getElementContentID($id)
+    public function getAllVersionTypeContent($idGlobal)
     {
-        $result = $this->typeContentService->getElementContentID($id);
+        $result = $this->typeContentService->getAllVersionTypeContent($idGlobal);
         return $result;
     }
 
-    public function getAllVersionTypeContent($id)
+    //получение всего списка для приложения. Для апи мы передаем глобал, а для приложения передаем id, для отрисовки верхней шапки!
+    public function getAllVersionTypeContentWeb($id)
     {
-        $result = $this->typeContentService->getAllVersionTypeContent($id);
+        $result = $this->typeContentService->getAllVersionTypeContentWeb($id);
         return $result;
     }
 
@@ -152,6 +153,7 @@ class TypeContentController extends Controller
 
     public function getApiUrl($id)
     {
+        //return 123;
         $result = $this->typeContentService->getTypeContentID($id);
         if (Auth::guard('web')->check()) {
             $r = [];$r['id'] = $result->id;$r['idGlobal'] = $result->id_global;$r['name'] = $result->name;$r['apiUrl'] = $result->api_url;$r['icon'] = $result->api_url;$r['icon'] = $result->description;$r['owner'] = $result->owner;$r['basedType'] = $result->based_type;$r['activeFrom'] = $result->active_from;$r['activeAfter'] = $result->active_after;$r['status'] = $result->status;$r['versionMajor'] = $result->version_major;$r['versionMinor'] = $result->version_minor;$r['body'] = $result->body;$r['createdAuthors'] = $result->created_authors;$r['updatedAuthors'] = $result->updated_authors;

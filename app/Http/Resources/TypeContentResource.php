@@ -20,8 +20,13 @@ class TypeContentResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'status' => $this->status,
+            'version' => [
+                'major' => $this->version_major,
+                'minor' => $this->version_minor,
+            ],
             'apiUrl' => $this->api_url,
             'owner' => $this->owner,
+            'body' => $this->body,
             'icon' => $this->icon,
             'activeFrom' => $this->active_from,
             'activeBefore' => $this->active_before,
