@@ -89,7 +89,7 @@
             <tr v-else v-for="(type_content, index) in filteredTypeContents" :key="index" >
                 <td style="white-space: nowrap"><i :class="'fa ' + type_content.icon+ ' fa-lg'" aria-hidden="true"></i> {{type_content.name}}</td>
                 <td>{{type_content.description}}</td>
-                <td>{{type_content.version_major +'.'+ type_content.version_minor}}</td>
+                <td>{{type_content.version.major +'.'+ type_content.version.minor}}</td>
                 <td :class="type_content.status | statusColor"><b>{{ type_content.status | status }}</b></td>
                 <td>{{ type_content | date }}</td>
                 <td>{{ type_content | dateUpdated }}</td>

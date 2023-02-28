@@ -22,7 +22,6 @@ class ElementContentController extends Controller
     public function __construct(ElementContentService $service)
     {
         $this->elementContentService = $service;
-        //$this->middleware('auth');
     }
 
     public function index()
@@ -200,8 +199,8 @@ class ElementContentController extends Controller
             'api_url' => $elementContentApiUrl,
             'version_major' => $versionMajor,
             'version_minor' => $versionMinor])
-            ->with('created_authors:id,name')
-            ->with('updated_authors:id,name')
+            ->with('createdAuthor:id,name')
+            ->with('updatedAuthor:id,name')
             ->first();
         $elementContent->body = json_decode($elementContent->body);
         $r = [];$r['id'] = $elementContent->id;$r['idGlobal'] = $elementContent->id_global;$r['typeContentId'] = $elementContent->type_content_id;$r['label'] = $elementContent->label;$r['apiUrl'] = $elementContent->api_url;$r['description'] = $elementContent->description;$r['activeFrom'] = $elementContent->active_from;$r['activeAfter'] = $elementContent->active_after;$r['status'] = $elementContent->status;$r['versionMajor'] = $elementContent->version_major;$r['versionMinor'] = $elementContent->version_minor;$r['body'] = $elementContent->body;$r['basedElement'] = $elementContent->based_element;$r['createdAuthors'] = $elementContent->created_authors;$r['updatedAuthors'] = $elementContent->updated_authors;
@@ -212,5 +211,11 @@ class ElementContentController extends Controller
         }else{
             return $r;
         }
+    }
+
+    public function getElementContentID($id)
+    {
+        $result = $this->elementContentService->getElementContentID($id);
+        return $result;
     }
 }

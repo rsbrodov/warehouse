@@ -1,5 +1,5 @@
 <?php
-$typeContents = \App\Models\TypeContent::where(['created_author' => Auth::guard('web')->user()->id, 'status' => 'Published'])->with('created_authors:id,name')->with('updated_authors:id,name')->orderBy('name', 'desc')->get()->unique('id_global');//все уникальные
+$typeContents = \App\Models\TypeContent::where(['status' => 'Published'])->orderBy('name', 'desc')->get()->unique('id_global');//все уникальные
 $ids = [];
 foreach ($typeContents as $typeContent) {
     $ids[] = \App\Models\TypeContent::where('id_global', $typeContent->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first()->id;

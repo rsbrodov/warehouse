@@ -44,14 +44,14 @@
                     </div>
 
                     <div class="block col-6">
-                        <label for="api_url"><b class="text-danger">*</b><b>API URL:</b></label>
-                        <input autocomplete="off" id="api_url" class="form-control" type="text" v-model="form.api_url"
-                               :class="{invalid: ($v.form.api_url.$dirty && !$v.form.api_url.required)}">
-                        <small class="helper-text invalid" v-if="$v.form.api_url.$dirty && !$v.form.api_url.required">
+                        <label for="apiUrl"><b class="text-danger">*</b><b>API URL:</b></label>
+                        <input autocomplete="off" id="apiUrl" class="form-control" type="text" v-model="form.apiUrl"
+                               :class="{invalid: ($v.form.apiUrl.$dirty && !$v.form.apiUrl.required)}">
+                        <small class="helper-text invalid" v-if="$v.form.apiUrl.$dirty && !$v.form.apiUrl.required">
                             Необходимо заполнить «API URL».<br>
                         </small>
-                        <small class="helper-text invalid" v-if="errors.api_url">
-                            {{errors.api_url}}<br>
+                        <small class="helper-text invalid" v-if="errors.apiUrl">
+                            {{errors.apiUrl}}<br>
                         </small>
                         <a class="btn btn-warning btn-sm mt-1" @click="generateUrl()"><i class="fa fa-undo" aria-hidden="true"></i> Сгенерировать</a>
 
@@ -60,20 +60,20 @@
 
                 <div class="row mb-3">
                     <div class="block col-6">
-                        <label for="active_from"><b>Период действия с:</b></label>
+                        <label for="activeFrom"><b>Период действия с:</b></label>
                         <datepicker
-                            :id="form.active_from"
-                            v-model="form.active_from"
+                            :id="form.activeFrom"
+                            v-model="form.activeFrom"
                             :language="ru"
                             class="form-control">
                         </datepicker>
                     </div>
 
                     <div class="block col-6">
-                        <label for="api_url"><b>Период действия по:</b></label>
+                        <label for="activeAfter"><b>Период действия по:</b></label>
                         <datepicker
-                            :id="form.active_after"
-                            v-model="form.active_after"
+                            :id="form.activeAfter"
+                            v-model="form.activeAfter"
                             :language="ru"
                             class="form-control">
                         </datepicker>
@@ -115,9 +115,9 @@
                     icon:'',
                     name:'',
                     owner:'',
-                    api_url:'',
-                    active_from:'',
-                    active_after:'',
+                    apiUrl:'',
+                    activeFrom:'',
+                    activeAfter:'',
                     description:'',
                 }
             }
@@ -131,11 +131,11 @@
                     console.log('Form not subm')
                 }else {
                     this.newTypeContents({
-                        icon: this.form.icon, name: this.form.name, owner: this.form.owner, api_url: this.form.api_url,
-                        active_from: this.form.active_from, active_after: this.form.active_after, description: this.form.description
+                        icon: this.form.icon, name: this.form.name, owner: this.form.owner, apiUrl: this.form.apiUrl,
+                        activeFrom: this.form.activeFrom, activeAfter: this.form.activeAfter, description: this.form.description
                     }).then(response => {
                         this.$emit('close-modal');
-                        this.form.icon = ''; this.form.name = ''; this.form.owner = ''; this.form.api_url = ''; this.form.active_from = ''; this.form.active_after = ''; this.form.description = '';
+                        this.form.icon = ''; this.form.name = ''; this.form.owner = ''; this.form.apiUrl = ''; this.form.activeFrom = ''; this.form.activeAfter = ''; this.form.description = '';
                         this.flashMessage.success({
                             message: 'Тик контента успешно создан',
                             time: 3000,
@@ -154,7 +154,7 @@
                     });
             },
             generateUrl(){
-                this.form.api_url =  url_slug(this.form.name)
+                this.form.apiUrl =  url_slug(this.form.name)
             },
             getUsers(){
                 axios.get('http://127.0.0.1:8000/users-list')
@@ -170,7 +170,7 @@
         validations: {
             form:{
                 name: {required},
-                api_url: {required},
+                apiUrl: {required},
             }
         },
     }

@@ -38,7 +38,7 @@ export default{
             commit('setLoading', true);
             await axios.get('http://127.0.0.1:8000/type-content/getListTypeContent')
                 .then(response => {
-                    commit('updateTypeContents', response.data)
+                    commit('updateTypeContents', response.data.data)
                 })
                 .catch(err => {
                     console.log(err)
@@ -52,7 +52,7 @@ export default{
             commit('setLoading', true);
             await axios.get('http://127.0.0.1:8000/type-content/getAllVersionTypeContent/'+id)
                 .then(response => {
-                    commit('updateTypeContentsAllVersion', response.data)
+                    commit('updateTypeContentsAllVersion', response.data.data)
                 })
                 .catch(err => {
                     console.log(err)
@@ -64,15 +64,15 @@ export default{
         },
         async newTypeContents(ctx, form){
             const new_dish = await axios.post('http://127.0.0.1:8000/type-content/store', form);
-            ctx.commit('addingTypeContents', new_dish.data);
+            ctx.commit('addingTypeContents', new_dish.data.data);
             const type_contents = await axios.get('http://127.0.0.1:8000/type-content/getListTypeContent');
-            ctx.commit('updateTypeContents', type_contents.data)
+            ctx.commit('updateTypeContents', type_contents.data.data)
         },
         async getTypeContentOne({commit}, id) {
             //commit('setLoading', true);
             await axios.get('http://127.0.0.1:8000/type-content/getTypeContentID/'+id)
                 .then(response => {
-                    commit('updateTypeContentOne', response.data)
+                    commit('updateTypeContentOne', response.data.data)
                 })
                 .catch(err => {
                     console.log(err)
@@ -86,7 +86,7 @@ export default{
         async update(ctx, form, id){
             const type_content = await axios.post('http://127.0.0.1:8000/type-content/'+id, form);
             const type_contents = await axios.get('http://127.0.0.1:8000/type-content/getListTypeContent');
-            ctx.commit('updateTypeContents', type_contents.data)
+            ctx.commit('updateTypeContents', type_contents.data.data)
         },
     },
 }

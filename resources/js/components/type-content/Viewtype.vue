@@ -407,8 +407,8 @@ export default {
 
         async changeStatus(status, message) {
             this.update({
-                id: this.typeContentOne.id, owner: this.typeContentOne.owner, icon: this.typeContentOne.icon, name: this.typeContentOne.name, api_url: this.typeContentOne.api_url,
-                active_from: this.typeContentOne.active_from, active_after: this.typeContentOne.active_after, description: this.typeContentOne.description, status: status,
+                id: this.typeContentOne.id, owner: this.typeContentOne.owner, icon: this.typeContentOne.icon, name: this.typeContentOne.name, apiUrl: this.typeContentOne.apiUrl,
+                    activeFrom: this.typeContentOne.activeFrom, activeAfter: this.typeContentOne.activeAfter, description: this.typeContentOne.description, status: status,
             }
             ).then(response => {
                 this.$emit('close-modal');

@@ -14,6 +14,26 @@ class ElementContentResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'idGlobal' => $this->id_global,
+            'label' => $this->label,
+            'description' => $this->description,
+            'apiUrl' => $this->api_url,
+            'typeContent' => new TypeContentResource($this->typeContent),
+            'status' => $this->status,
+            'version' => [
+                'major' => $this->version_major,
+                'minor' => $this->version_minor,
+            ],
+            'body' => $this->body,
+            'activeFrom' => $this->active_from,
+            'activeBefore' => $this->active_before,
+            'basedElement' => $this->based_element,
+            'createdDate' => date('d.m.Y H:i:s', strtotime($this->created_at)),
+            'createdAuthor' => $this->whenLoaded('createdAuthor', new UserTruncatedResource($this->createdAuthor)),
+            'updatedDate' => date('d.m.Y H:i:s', strtotime($this->updated_at)),
+            'updatedAuthor' => $this->whenLoaded('updatedAuthor', new UserTruncatedResource($this->updatedAuthor)),
+        ];
     }
 }

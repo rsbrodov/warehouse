@@ -12,25 +12,17 @@
 </style>
 <template>
     <div id="app">
-        <!-- Stack the columns on mobile by making one full-width and the other half-width -->
-        <div class="row">
-            <div class="col"><b>
-                    <h2>{{ elementContentOne.name }}</h2>
-                </b></div>
-            <div class="col"></div>
-        </div>
-        <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
         <div class="row">
             <div class="col-9">
                 <div class="flex-cont">
-                    <div class="flex-elem title-one"><b>{{ elementContentOne.type_contents.name }}</b></div>
+                    <div class="flex-elem title-one"><b>{{ elementContentOne.typeContent.name }}</b></div>
                     <div class="flex-elem title-one">
-                        <a :href="'/api/v1/element-content/' +elementContentOne.type_contents.api_url+'/'+elementContentOne.type_contents.version_major+'/'+elementContentOne.type_contents.version_minor+'/'+ elementContentOne.api_url+'/'+elementContentOne.version_major+'/'+elementContentOne.version_minor" class="ml-1 btn btn-sm btn-outline-secondary form-control" style="width:50px; max-height:25px; line-height:1" target="_blank">API</a>
+                        <a :href="'/api/v1/element-content/' +elementContentOne.typeContent.apiUrl+'/'+elementContentOne.typeContent.version.major+'/'+elementContentOne.typeContent.version.minor+'/'+ elementContentOne.apiUrl+'/'+elementContentOne.version.major+'/'+elementContentOne.version.minor" class="ml-1 btn btn-sm btn-outline-secondary form-control" style="width:50px; max-height:25px; line-height:1" target="_blank">API</a>
                     </div>
                     <div class="flex-elem"><b>API URL: </b>{{ elementContentOne.api_url }}</div>
                     <div class="flex-elem"><b>Статус: </b>{{ elementContentOne.status | status }}</div>
                     <div class="flex-elem"><b>Версия:
-                    </b>{{ elementContentOne.version_major }}.{{ elementContentOne.version_minor }}</div>
+                    </b>{{ elementContentOne.version.major }}.{{ elementContentOne.version.minor }}</div>
                     <div class="flex-elem">
                         <b>Период действия: </b>{{ elementContentOne.status | date }}
                     </div>

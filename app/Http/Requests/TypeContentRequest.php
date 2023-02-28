@@ -26,15 +26,15 @@ class TypeContentRequest extends FormRequest
     {
         $rules = [
             'name' => 'required|max:255',
-            'api_url' => 'required|max:255',
+            'apiUrl' => 'required|max:255',
             'description' => 'nullable|max:500',
             'icon' => 'nullable|max:150',
-            'active_from' => 'nullable|date',
-            'active_after' => 'nullable|date',
+            'activeFrom' => 'nullable|date',
+            'activeAfter' => 'nullable|date',
             'body' => 'nullable|max:1000',
         ];
         if (in_array($this->method(), ['PUT', 'PATCH'])) {
-            $rules['api_url'] = ['required', 'alpha_dash', 'max:150',
+            $rules['apiUrl'] = ['required', 'alpha_dash', 'max:150',
             ];
         }
         return $rules;
@@ -52,12 +52,12 @@ class TypeContentRequest extends FormRequest
             'name.max' => 'Вы ввели слишком длинное название',
             'description.max' => 'Вы ввели слишком длинное описание',
             'icon.max' => 'С иконкой явно что-то не так...',
-            'active_from.date' => 'Поле "Активен с..." должно содержать дату',
-            'active_after.date' => 'Поле "Активен до..." должно содержать дату',
-            'api_url.required' => 'Пожалуйста, введите символьный код',
-            'api_url.alpha_dash' => 'Используйте только латинские символы',
-            'api_url.max' => 'Символьный код не может быть длиннее 150 символов',
-            'api_url.unique' => 'Такой символьный код уже существует',
+            'activeFrom.date' => 'Поле "Активен с..." должно содержать дату',
+            'activeAfter.date' => 'Поле "Активен до..." должно содержать дату',
+            'apiUrl.required' => 'Пожалуйста, введите символьный код',
+            'apiUrl.alpha_dash' => 'Используйте только латинские символы',
+            'apiUrl.max' => 'Символьный код не может быть длиннее 150 символов',
+            'apiUrl.unique' => 'Такой символьный код уже существует',
             'body.max' => 'Body не может быть длиннее 1000 символов',
         ];
     }

@@ -40,10 +40,10 @@
                     </div>
 
                     <div class="block col-6">
-                        <label for="api_url"><b class="text-danger">*</b><b>API URL:</b></label>
-                        <input autocomplete="off" id="api_url" class="form-control" type="text" v-model="form_edit.api_url"
-                               :class="{invalid: ($v.vv.api_url.$dirty && !$v.vv.api_url.required)}">
-                        <small class="helper-text invalid" v-if="$v.vv.api_url.$dirty && !$v.vv.api_url.required">
+                        <label for="apiUrl"><b class="text-danger">*</b><b>API URL:</b></label>
+                        <input autocomplete="off" id="apiUrl" class="form-control" type="text" v-model="form_edit.apiUrl"
+                               :class="{invalid: ($v.vv.apiUrl.$dirty && !$v.vv.apiUrl.required)}">
+                        <small class="helper-text invalid" v-if="$v.vv.apiUrl.$dirty && !$v.vv.apiUrl.required">
                             Необходимо заполнить «API URL».
                         </small>
                         <a class="btn btn-warning btn-sm mt-1" @click="generateUrl()"><i class="fa fa-undo" aria-hidden="true"></i> Сгенерировать</a>
@@ -52,20 +52,20 @@
 
                 <div class="row mb-3">
                     <div class="block col-6">
-                        <label for="active_from"><b>Период действия с:</b></label>
+                        <label for="activeFrom"><b>Период действия с:</b></label>
                         <datepicker
-                            :id="form_edit.active_from"
-                            v-model="form_edit.active_from"
+                            :id="form_edit.activeFrom"
+                            v-model="form_edit.activeFrom"
                             :language="ru"
                             class="form-control">
                         </datepicker>
                     </div>
 
                     <div class="block col-6">
-                        <label for="api_url"><b>Период действия по:</b></label>
+                        <label for="activeAfter"><b>Период действия по:</b></label>
                          <datepicker
-                            :id="form_edit.active_after"
-                            v-model="form_edit.active_after"
+                            :id="form_edit.activeAfter"
+                            v-model="form_edit.activeAfter"
                             :language="ru"
                             class="form-control">
                         </datepicker>
@@ -97,7 +97,7 @@
     export default {
         name: "Edit",
         components: {Datepicker},
-        props: ['id', 'owner', 'icon', 'api_url', 'status', 'description', 'status', 'active_from', 'active_after', 'name'],
+        props: ['id', 'owner', 'icon', 'apiUrl', 'status', 'description', 'status', 'activeFrom', 'activeAfter', 'name'],
         data:function(){
             return {
                 ru:ru,
@@ -109,9 +109,9 @@
                     icon:null,
                     name:null,
                     status:null,
-                    api_url:null,
-                    active_from:null,
-                    active_after:null,
+                    apiUrl:null,
+                    activeFrom:null,
+                    activeAfter:null,
                     description:null,
                 }
             }
@@ -122,9 +122,10 @@
                 this.form_edit.owner = this.owner
                 this.form_edit.icon = this.icon
                 this.form_edit.name = this.name
-                this.form_edit.api_url = this.api_url
-                this.form_edit.active_from = this.active_from
-                this.form_edit.active_after = this.active_after
+                this.form_edit.status = this.status
+                this.form_edit.apiUrl = this.apiUrl
+                this.form_edit.activeFrom = this.activeFrom
+                this.form_edit.activeAfter = this.activeAfter
                 this.form_edit.description = this.description
                 return this.form_edit;
             }
@@ -144,8 +145,8 @@
                     console.log('Form not subm')
                 } else {
                     console.log(123);
-                    this.update({id: this.form_edit.id, owner: this.form_edit.owner, icon: this.form_edit.icon, name: this.form_edit.name, api_url: this.form_edit.api_url,
-                     active_from: this.form_edit.active_from, active_after: this.form_edit.active_after, description: this.form_edit.description, status: this.form_edit.status}
+                    this.update({id: this.form_edit.id, owner: this.form_edit.owner, icon: this.form_edit.icon, name: this.form_edit.name, apiUrl: this.form_edit.apiUrl,
+                        activeFrom: this.form_edit.activeFrom, activeAfter: this.form_edit.activeAfter, description: this.form_edit.description, status: this.form_edit.status}
                     ).then(response => {
                         this.$emit('close-modal');
                         this.flashMessage.success({
@@ -158,7 +159,7 @@
                 }
             },
             generateUrl(){
-                this.form_edit.api_url =  url_slug(this.form_edit.name)   
+                this.form_edit.apiUrl =  url_slug(this.form_edit.name)
             },
             getUsers(){
                 axios.get('http://127.0.0.1:8000/users-list')
@@ -170,12 +171,12 @@
         async created(){
             this.getIcons();
             this.getUsers();
-            
+
         },
         validations: {
             vv:{
                 name: {required},
-                api_url: {required},
+                apiUrl: {required},
             }
         },
     }

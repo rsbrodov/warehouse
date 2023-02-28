@@ -90,14 +90,18 @@ class DictionaryService
 
     public function findDictionaryNotEmptyElement()
     {
-        if (Auth::guard('web')->check()) {
-            $dictionaryElements = DictionaryElement::where(['created_author' => Auth::guard('web')->user()->id])->with('created_author:id,name')->with('updated_author:id,name')->orderBy('created_at', 'asc')->get();
-            $dictionaryId = [];
-            foreach ($dictionaryElements as $dictionaryElement) {
-                $dictionaryId[] = $dictionaryElement->dictionary_id;
+        try {
+            if (Auth::guard('web')->check()) {
+                $dictionaryElements = DictionaryElement::orderBy('created_at', 'asc')->get();
+                $dictionaryId = [];
+                foreach ($dictionaryElements as $dictionaryElement) {
+                    $dictionaryId[] = $dictionaryElement->dictionary_id;
+                }
+                $dictionary = Dictionary::where(['archive' => 0])->whereIn('id', array_unique($dictionaryId))->orderBy('created_at', 'asc')->get();
+                return DictionaryResource::collection($dictionary);
             }
-            $dictionary = Dictionary::where(['created_author' => Auth::guard('web')->user()->id, 'archive' => 0])->whereIn('id', array_unique($dictionaryId))->with('created_author:id,name')->with('updated_author:id,name')->orderBy('created_at', 'asc')->get();
-            return response()->json($dictionary);
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
     }
 

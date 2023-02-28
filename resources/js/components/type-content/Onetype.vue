@@ -27,14 +27,14 @@
             <div class="col-9">
                 <div class="flex-cont">
                     <div class="flex-elem"><b>Идентификатор: </b>{{ typeContentOne.id }}</div>
-                    <div class="flex-elem"><b>API URL: </b>{{ typeContentOne.api_url }}</div>
+                    <div class="flex-elem"><b>API URL: </b>{{ typeContentOne.apiUrl }}</div>
                     <div class="flex-elem"><b>Владелец: </b> Admin</div>
                     <div class="flex-elem">
                         <b>Период действия: </b>{{ typeContentOne.status | date }}
                     </div>
                     <div class="flex-elem"><b>Статус: </b>{{ typeContentOne.status | status }}</div>
                     <div class="flex-elem"><b>Версия:
-                        </b>{{ typeContentOne.version_major }}.{{ typeContentOne.version_minor }}</div>
+                        </b>{{ typeContentOne.version.major }}.{{ typeContentOne.version.minor }}</div>
                 </div>
             </div>
             <div class="col-3 text-right"><a href="#" class="btn btn-outline-secondary"><i class="fa fa-pencil fa-lg"

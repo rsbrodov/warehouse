@@ -30,12 +30,12 @@ class TypeContent extends Model
         'updated_author',
     ];
 
-    public function created_authors()
+    public function createdAuthor()
     {
         return $this->belongsTo(User::class, 'created_author');
     }
 
-    public function updated_authors()
+    public function updatedAuthor()
     {
         return $this->belongsTo(User::class, 'updated_author');
     }
