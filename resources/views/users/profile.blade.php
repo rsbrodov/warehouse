@@ -20,8 +20,8 @@
                 <img class="img-fluid" src="{{asset('/storage/' . $user->photo)}}">
                 @else --}}
                 {{-- <img class="img-fluid" src="{{asset('/storage/profile.png')}}"> --}}
-                <img src="{{asset('/storage/' . $user->photo)}}" width="255" height="255" class="img-circle mb-2" alt="User Image">
-                <form action="{{route('users.profile-image-upload', [$user->id])}}" method="post" enctype="multipart/form-data">
+                <img src="{{asset('/storage/' . $result['user']->photo)}}" width="255" height="255" class="img-circle mb-2" alt="User Image">
+                <form action="{{route('users.profile-image-upload', [$result['user']->id])}}" method="post" enctype="multipart/form-data">
                     @method('PUT')
                     @csrf
                     <input class="form-control" type="file" name="image">
@@ -33,34 +33,31 @@
                 </a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                     @csrf
-                </form> 
+                </form>
                 {{-- @endif --}}
             </div>
             <div class="col-9">
-                <form action="{{route('users.profile-update', [$user->id])}}" method="post">
+                <form action="{{route('users.profile-update', [$result['user']->id])}}" method="post">
                     @method('PUT')
                     @csrf
                     <div class="form-group">
                         <label for="name">Имя</label>
-                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" placeholder="Введите имя" value="{{$user->name}}">
+                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" placeholder="Введите имя" value="{{$result['user']->name}}">
                         @error('name') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                         <label for="email">Email</label>
-                        <input type="text" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Введите email" value="{{$user->email}}">
+                        <input type="text" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Введите email" value="{{$result['user']->email}}">
                         @error('email') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                         <label for="email">Роль</label>
-                        <input type="text" class="form-control " id="role" name="role" value="{{$user->email}}">
+                        <input type="text" class="form-control" disabled id="role" name="role" value="{{$result['role']}}">
                         <label for="password">Новый пароль</label>
-                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" value="{{old('password')}}">
+                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" value="{{old('password')}}">
                         @error('password')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                         <label for="password">Подтвердите новый пароль</label>
-                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password_confirmation" required autocomplete="current-password">
+                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password_confirmation" value="{{old('password_confirmation')}}">
                         <button type="submit" class="form-control btn-outline-success mt-3">Редактировать</button>
                     </div>
                 </form>
             </div>
-        </div>   
-        <div class="flex-cont"></div>
-        <div class="flex-elem"><b></div>
-        <div class="flex-elem"><b></div>
+        </div>
     </div>
 @endsection

@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -37,7 +38,8 @@ class UsersController extends Controller
     public function create()
     {
         if (Auth::guard('web')->check()) {
-            return view('users.create');
+            $roles = \Spatie\Permission\Models\Role::where('name', '<>', 'SuperAdmin')->get();
+            return view('users.create')->with('roles', $roles);
         }
     }
 
@@ -53,9 +55,7 @@ class UsersController extends Controller
                 'status' => 'MODERATED',
                 'parent_id' => Auth::id()
             ]);
-            if ($user->hasRole('SuperAdmin')) {
-                $newUser->assignRole('Admin'); //назначить роль юзеру
-            } else if ($user->hasRole('Admin')) {
+            if ($user->hasRole('Admin')) {
                 $newUser->assignRole($request->input('role')); //назначить роль юзеру
             }
             return redirect()->route('users.index')->with('success', 'Пользователь ' . $newUser->name . ' успешно добавлен');
@@ -169,22 +169,36 @@ class UsersController extends Controller
     public function profile(){
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
-            //dd($user);
-            return view('users.profile')->with('user', $user);
+            $role = DB::table('roles')->find($user->id)->name;
+            $result = [
+                'user' => $user,
+                'role' => $role,
+            ];
+            return view('users.profile')->with('result', $result);
         }
     }
     public function profileUpdate(UserRequest $request, $id){
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
-                $editUser = User::where('id', $id)->first();
+                $editUser = User::find($id);
+                $message = 'Данные успешно обновлены';
+                if ($request->input('password') && $request->input('password_confirmation')) {
+                    if ($request->input('password') === $request->input('password_confirmation')) {
+                        $editUser->password = Hash::make($request->input('password'));
+                        $message = 'Данные и пароль успешно обновлены';
+                    } else {
+                        return redirect()->route('users.profile')->with('warning', 'Пароли отличаются!');
+                    }
+                }
                 $editUser->name = $request->input('name');
                 $editUser->email = $request->input('email');
                 $editUser->save();
-                return redirect()->route('users.profile')->with('user', $user);
+                return redirect()->route('users.profile')->with('user', $user)->with('success', $message);
             }
         }
     }
+
     public function profileImageUpload(Request $request, $id){
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
@@ -197,7 +211,7 @@ class UsersController extends Controller
                     $editUser->save();
                     return redirect()->route('users.profile')->with('user', $user);
                 } else {
-                    return redirect()->route('users.profile')->with('user', $user)->with('warning', 'Фото не выбрано!');
+                    return redirect()->route('users.profile')->with('user', $user)->with('warning', 'Фото не выбрано');
                 }
 
             }

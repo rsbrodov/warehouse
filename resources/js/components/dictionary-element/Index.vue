@@ -17,12 +17,12 @@
         </div>
         <table class="table table-bordered table-hover mt-4">
             <tr>
-                <th>Список значений справочника</th>
-                <th>Управление</th>
+                <th class="col-11">Список значений справочника</th>
+                <th class="col-1 text-center">Управление</th>
             </tr>
             <tr v-for="(dictionary_element, index) in DictionaryElement" :key="index" >
                 <td>{{dictionary_element.value}}</td>
-                <td nowrap>
+                <td class="text-center" nowrap>
                 <button class="btn btn-danger del" @click="removeDictionaryElement(dictionary_element.id)"><i class="fa fa-trash fa-lg"></i></button>
                 </td>
             </tr>
