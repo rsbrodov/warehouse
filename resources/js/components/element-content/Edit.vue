@@ -32,22 +32,18 @@
                 <div class="row mb-3">
                     <div class="block col-6">
                         <label for="active_from"><b>Период действия с:</b></label>
-                        <datepicker
-                            :id="form_edit.active_from"
-                            v-model="form_edit.active_from"
-                            :language="ru"
-                            class="form-control">
-                        </datepicker>
+                        <input type="date"
+                               :id="form_edit.active_from"
+                               v-model="form_edit.active_from"
+                               class="form-control">
                     </div>
 
                     <div class="block col-6">
                         <label for="api_url"><b>Период действия по:</b></label>
-                         <datepicker
-                            :id="form_edit.active_after"
-                            v-model="form_edit.active_after"
-                            :language="ru"
-                            class="form-control">
-                        </datepicker>
+                        <input type="date"
+                               :id="form_edit.active_after"
+                               v-model="form_edit.active_after"
+                               class="form-control">
                     </div>
                 </div>
 

@@ -61,22 +61,18 @@
                 <div class="row mb-3">
                     <div class="block col-6">
                         <label for="activeFrom"><b>Период действия с:</b></label>
-                        <datepicker
-                            :id="form.activeFrom"
-                            v-model="form.activeFrom"
-                            :language="ru"
-                            class="form-control">
-                        </datepicker>
+                        <input type="date"
+                               :id="form.activeFrom"
+                               v-model="form.activeFrom"
+                               class="form-control">
                     </div>
 
                     <div class="block col-6">
                         <label for="activeAfter"><b>Период действия по:</b></label>
-                        <datepicker
-                            :id="form.activeAfter"
-                            v-model="form.activeAfter"
-                            :language="ru"
-                            class="form-control">
-                        </datepicker>
+                        <input type="date"
+                               :id="form.activeAfter"
+                               v-model="form.activeAfter"
+                               class="form-control">
                     </div>
                 </div>
 
