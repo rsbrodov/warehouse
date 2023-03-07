@@ -39,22 +39,32 @@
                 <div class="row mb-3">
                     <div class="block col-6">
                         <label for="active_from"><b>Период действия с:</b></label>
-                        <datepicker
-                            :id="form.active_from"
-                            v-model="form.active_from"
-                            :language="ru"
-                            class="form-control">
-                        </datepicker>
+                        <input type="date"
+                               :id="form.active_from"
+                               v-model="form.active_from"
+                               :language="ru"
+                               class="form-control">
+<!--                        <datepicker-->
+<!--                            :id="form.active_from"-->
+<!--                            v-model="form.active_from"-->
+<!--                            :language="ru"-->
+<!--                            class="form-control">-->
+<!--                        </datepicker>-->
                     </div>
 
                     <div class="block col-6">
                         <label for="api_url"><b>Период действия по:</b></label>
-                        <datepicker
-                            :id="form.active_after"
-                            v-model="form.active_after"
-                            :language="ru"
-                            class="form-control">
-                        </datepicker>
+                        <input type="date"
+                               :id="form.active_after"
+                               v-model="form.active_after"
+                               :language="ru"
+                               class="form-control">
+<!--                        <datepicker-->
+<!--                            :id="form.active_after"-->
+<!--                            v-model="form.active_after"-->
+<!--                            :language="ru"-->
+<!--                            class="form-control">-->
+<!--                        </datepicker>-->
                     </div>
                 </div>
 
