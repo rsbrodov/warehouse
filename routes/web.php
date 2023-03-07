@@ -63,6 +63,7 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('/users/profile/', [UsersController::class, 'profile'])->name('users.profile');
     Route::put('/users/profile/{id}', [UsersController::class, 'profileUpdate'])->name('users.profile-update');
     Route::put('/users/profile-image-upload/{id}', [UsersController::class, 'profileImageUpload'])->name('users.profile-image-upload');
+    Route::get('/users/profile-image-delete/{id}', [UsersController::class, 'profileImageDelete'])->name('users.profile-image-delete');
     Route::get('/users/{id}', [UsersController::class, 'show'])->name('users.show');
     Route::get('/users/{id}/edit', [UsersController::class, 'edit'])->name('users.edit');
     Route::put('/users/{id}', [UsersController::class, 'update'])->name('users.update'); // put работает, если в форму добавить @method('PUT')
