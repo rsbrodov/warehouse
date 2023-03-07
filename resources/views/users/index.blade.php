@@ -27,7 +27,7 @@
                         bg-secondary
                     @endif
                         ">{{$user->status}}</td>
-                    <td>{{$user->created_at}}</td>
+                    <td>{{$user->created_date}}</td>
                     <td nowrap>
                         <a href="{{route('users.show', ($user->id))}}"
                            class="btn btn-success ">

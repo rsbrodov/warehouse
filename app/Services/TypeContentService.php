@@ -102,7 +102,7 @@ class TypeContentService
                 foreach ($typeContents as $typeContent) {
                     $ids[] = TypeContent::where('id_global', $typeContent->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first()->id;
                 }
-                $typeContents = TypeContent::whereIn('id', $ids)->orderBy('created_at', 'asc')->get();
+                $typeContents = TypeContent::whereIn('id', $ids)->orderBy('created_date', 'asc')->get();
                 return TypeContentResource::collection($typeContents);
             }
         } catch (\Exception $e) {

@@ -18,9 +18,9 @@ class DictionaryElementResource extends JsonResource
             'id' => $this->id,
             'dictionaryID' => $this->dictionary_id,
             'value' => $this->value,
-            'createdDate' => date('d.m.Y H:i:s', strtotime($this->created_at)),
+            'createdDate' => date('d.m.Y H:i:s', strtotime($this->created_date)),
             'createdAuthor' => $this->whenLoaded('createdAuthor', new UserTruncatedResource($this->createdAuthor)),
-            'updatedDate' => date('d.m.Y H:i:s', strtotime($this->updated_at)),
+            'updatedDate' => date('d.m.Y H:i:s', strtotime($this->update_date)),
             'updatedAuthor' => $this->whenLoaded('updatedAuthor', new UserTruncatedResource($this->updatedAuthor)),
         ];
     }

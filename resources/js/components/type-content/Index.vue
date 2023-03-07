@@ -198,7 +198,7 @@
 
             },
             dateUpdated: function (type_content) {
-                return moment(type_content.updated_at).format('DD.MM.YYYY HH:II');
+                return moment(type_content.update_date).format('DD.MM.YYYY HH:II');
             },
             status: function (status) {
                 let status_array = {Draft: 'Черновик', Published: 'Опубликовано', Archive:'В архиве'};

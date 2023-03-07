@@ -78,16 +78,16 @@
                         <th>ID</th>
                         <th>Name</th>
                         <th>Полномочия</th>
-                        <th>Created_at</th>
-                        <th>Updated_at</th>
+                        <th>Created_date</th>
+                        <th>Update_date</th>
                     </tr>
                     @foreach($roles as $role)
                         <tr>
                             <td>{{$role->id}}</td>
                             <td>{{$role->name}}</td>
                             <td>@foreach($role->permissions as $permission) {{$permission->name}}, @endforeach </td>
-                            <td>{{$role->created_at}}</td>
-                            <td>{{$role->updated_at}}</td>
+                            <td>{{$role->created_date}}</td>
+                            <td>{{$role->update_date}}</td>
                             <td><a href="{{route('users.delete-role', ($role->id))}}"
                                    class="btn btn-success ">
                                     <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
@@ -102,15 +102,15 @@
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
-                        <th>Created_at</th>
-                        <th>Updated_at</th>
+                        <th>Created_date</th>
+                        <th>Update_date</th>
                     </tr>
                     @foreach($permissions as $permission)
                         <tr>
                             <td>{{$permission->id}}</td>
                             <td>{{$permission->name}}</td>
-                            <td>{{$permission->created_at}}</td>
-                            <td>{{$permission->updated_at}}</td>
+                            <td>{{$permission->created_date}}</td>
+                            <td>{{$permission->update_date}}</td>
                             <td><a href="{{route('users.delete-permission', ($permission->id))}}"
                                    class="btn btn-success ">
                                     <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
