@@ -35,7 +35,8 @@
                         text-secondary
                     @endif
                         ">{{$user->status}}</td>
-                    <td>{{date_format($user->created_at, 'd.m.Y')}}</td>
+                    <td>{{$user->created_date}}</td>
+
                     <td nowrap>
                         <a href="{{route('users.show', ($user->id))}}"
                            class="btn btn-outline-success btn-unbordered" title="Посмотреть">

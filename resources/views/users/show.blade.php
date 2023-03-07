@@ -22,8 +22,8 @@
                 bg-danger text-white
             @endif
                 ">{{ $user->status }}</div>
-            <strong>Создан:</strong> {{ $user->created_at }}<br>
-            <strong>Обновлен:</strong> {{ $user->updated_at }}<br>
+            <strong>Создан:</strong> {{ $user->created_date }}<br>
+            <strong>Обновлен:</strong> {{ $user->update_date }}<br>
             <a href="{{route('users.index')}}" class="btn btn-primary form-control">Вернуться</a>
         </div>
     </div>
