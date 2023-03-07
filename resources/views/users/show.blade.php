@@ -1,30 +1,26 @@
 <? use \App\Models\User; ?>
 @extends('admin.main')
 @section('content')
-    <div class="container">
-        <h1> {{ $user->name }}</h1>
-        <div class="jumbotron text-center">
-            <h2>{{ $user->name }}</h2>
-
-                <strong>ID:</strong> {{ $user->id }}<br>
-                <strong>Имя:</strong> {{ $user->name }}<br>
-                <strong>Email:</strong> {{ $user->email }}<br>
-                <strong>Создатель:</strong> {{User::where('id', $user->parent_id)->first()->name}}<br>
-                <strong>Статус:</strong>
-            <div class="p-3 mb-2
+    <div class="container-fluid">
+        <div class="">
+            <h2 class="mt-3">{{ $user->name }}</h2>
+                <p><b>ID: </b>{{ $user->id }}</p>
+                <p><b>Имя: </b>{{ $user->name }}</p>
+                <p><b>Email: </b>{{ $user->email }}</p>
+                <p><b>Создатель: </b>{{User::where('id', $user->parent_id)->first()->name}}</p>
+                <p><b>Статус: </b><span class="
             @if($user->status == 'ACTIVATED')
-                bg-success text-white
+                        text-success
             @elseif($user->status == 'MODERATED')
-                bg-secondary text-white
+                        text-secondary
             @elseif($user->status == 'BLOCKED')
-                bg-warning text-white
+                        text-warning
             @elseif($user->status == 'DELETED')
-                bg-danger text-white
-            @endif
-                ">{{ $user->status }}</div>
-            <strong>Создан:</strong> {{ $user->created_at }}<br>
-            <strong>Обновлен:</strong> {{ $user->updated_at }}<br>
-            <a href="{{route('users.index')}}" class="btn btn-primary form-control">Вернуться</a>
+                        text-danger
+            @endif">{{ $user->status }}</span></p>
+            <p><b>Создан: </b>{{ date('d.m.Y', strtotime($user->created_at)) }}</p>
+            <p><b>Обновлен: </b>{{ date('d.m.Y', strtotime($user->updated_at)) }}</p>
+            <a href="{{route('users.index')}}" class="btn btn-primary">Вернуться к списку</a>
         </div>
     </div>
 @endsection

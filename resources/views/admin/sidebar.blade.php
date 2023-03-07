@@ -121,12 +121,12 @@ foreach ($typeContents as $typeContent) {
                 </li>
 
                 {{-- <li class="nav-header">НАСТРОЙКИ</li> --}}
-                <li class="nav-item">
-                    <a href="{{ route('users.roles-create-view') }}" class="nav-link">
-                        <i class="fa fa-universal-access fa-lg" aria-hidden="true"></i>
-                        <p>Роли/полномочия</p>
-                    </a>
-                </li>
+{{--                <li class="nav-item">--}}
+{{--                    <a href="{{ route('users.roles-create-view') }}" class="nav-link">--}}
+{{--                        <i class="fa fa-universal-access fa-lg" aria-hidden="true"></i>--}}
+{{--                        <p>Роли/полномочия</p>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="fa fa-comment-o fa-lg" aria-hidden="true"></i>

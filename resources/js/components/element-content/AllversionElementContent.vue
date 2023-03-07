@@ -37,7 +37,7 @@
             </tr>
             <tr v-else v-for="(element_content, index) in elementContentsAllVersion" :key="index" >
                 <td style="white-space: nowrap"> {{element_content.label}}</td>
-                <td>{{element_content.version_major +'.'+ element_content.version_minor}}</td>
+                <td>{{element_content.version.major +'.'+ element_content.version.minor}}</td>
                 <td :class="element_content.status | statusColor"><b>{{ element_content.status | status }}</b></td>
                 <td>{{element_content.id}}</td>
                 <td>Admin</td>

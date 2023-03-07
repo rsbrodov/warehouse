@@ -53,7 +53,8 @@
                         <input type="text" class="form-control" disabled id="role" name="role" value="{{$result['role']}}">
 
                         <label for="description">О себе</label>
-                        <input type="text" class="form-control @error('description') is-invalid @enderror" id="description" name="description" placeholder="" maxlength="255" autocomplete="off" value="{{$result['user']->description}}">
+
+                        <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" placeholder="" maxlength="255" autocomplete="off" value="{{$result['user']->description}}"></textarea>
                         @error('description') <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
 
                         <label for="password">Новый пароль</label>
