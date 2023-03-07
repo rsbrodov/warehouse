@@ -24,6 +24,8 @@ class DictionaryService
                     'updated_author' => Auth::guard('web')->user()->id ?? Auth::guard('api')->user()->id
                 ]);
                 return new DictionaryResource($newDictionary);
+            }else{
+                return response()->json(['error' => 'Unauthenticated.'], 401);
             }
         } catch (\Exception $e) {
             return $e->getMessage();
@@ -41,6 +43,8 @@ class DictionaryService
                 $dictionary->updated_author = Auth::guard('web')->user()->id ?? Auth::guard('api')->user()->id;
                 $dictionary->save();
                 return new DictionaryResource($dictionary);
+            }else{
+                return response()->json(['error' => 'Unauthenticated.'], 401);
             }
         } catch (\Exception $e) {
             return $e->getMessage();
@@ -55,6 +59,9 @@ class DictionaryService
                 $dictionary->delete();
                 return response()->noContent();
             }
+            else{
+                return response()->json(['error' => 'Unauthenticated.'], 401);
+            }
         }catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -68,6 +75,8 @@ class DictionaryService
                 $dictionary->archive = $dictionary->archive == 1 ? false : true;
                 $dictionary->save();
                 return response()->noContent();
+            }else{
+                return response()->json(['error' => 'Unauthenticated.'], 401);
             }
         } catch (\Exception $e) {
             return $e->getMessage();
@@ -82,6 +91,8 @@ class DictionaryService
                     ->orderBy('created_date', 'asc')
                     ->get();
                 return DictionaryResource::collection($dictionary);
+            }else{
+                return response()->json(['error' => 'Unauthenticated.'], 401);
             }
         } catch (\Exception $e) {
             return $e->getMessage();
@@ -99,6 +110,8 @@ class DictionaryService
                 }
                 $dictionary = Dictionary::where(['archive' => 0])->whereIn('id', array_unique($dictionaryId))->orderBy('created_date', 'asc')->get();
                 return DictionaryResource::collection($dictionary);
+            }else{
+                return response()->json(['error' => 'Unauthenticated.'], 401);
             }
         } catch (\Exception $e) {
             return $e->getMessage();

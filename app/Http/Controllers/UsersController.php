@@ -193,6 +193,7 @@ class UsersController extends Controller
                 }
                 $editUser->name = $request->input('name');
                 $editUser->email = $request->input('email');
+                $editUser->description = $request->input('description');
                 $editUser->save();
                 return redirect()->route('users.profile')->with('user', $user)->with('success', $message);
             }
@@ -206,7 +207,9 @@ class UsersController extends Controller
                 if($request->file('image')){
                     $path = $request->file('image')->store('profiles', 'public');
                     $editUser = User::where('id', $id)->first();
-                    Storage::disk('public')->delete($editUser->photo);
+                    if($editUser->photo !== 'profiles/default.png') {
+                        Storage::disk('public')->delete($editUser->photo);
+                    }
                     $editUser->photo = $path;
                     $editUser->save();
                     return redirect()->route('users.profile')->with('user', $user);
@@ -217,6 +220,26 @@ class UsersController extends Controller
             }
         }
     }
+
+    public function profileImageDelete($id)
+    {
+        if (Auth::guard('web')->check()) {
+            $user = Auth::guard('web')->user();
+            if ($user->hasRole('SuperAdmin') or $user->hasRole('Admin')) {
+                $message = 'Фото профиля удалено';
+                $editUser = User::find($id);
+                if($editUser->photo !== 'profiles/default.png'){
+                    Storage::disk('public')->delete($editUser->photo);
+                    $editUser->photo = 'profiles/default.png';
+                    $editUser->save();
+                } else {
+                    $message = 'Фото профиля не задано';
+                }
+                return redirect()->route('users.profile')->with('user', $user)->with('success', $message);
+            }
+        }
+    }
+
     public function rolesCreateView()
     {
         if (Auth::guard('web')->check()) {

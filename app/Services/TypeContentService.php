@@ -48,6 +48,8 @@ class TypeContentService
                     'updated_author' => Auth::guard('web')->user()->id ?? Auth::guard('api')->user()->id
                 ]);
                 return new TypeContentResource($newTypeContent);
+            }else{
+                return response()->json(['error' => 'Unauthenticated.'], 401);
             }
         } catch (\Exception $e) {
             return $e->getMessage();
@@ -76,6 +78,8 @@ class TypeContentService
             $type->updated_author = Auth::guard('web')->user()->id ?? Auth::guard('api')->user()->id;
             $type->save();
             return new TypeContentResource($type);
+        }else{
+            return response()->json(['error' => 'Unauthenticated.'], 401);
         }
     }
 
@@ -86,6 +90,8 @@ class TypeContentService
                 $typeContent = TypeContent::findOrFail($id);
                 $typeContent->delete();
                 return response()->noContent();
+            }else{
+                return response()->json(['error' => 'Unauthenticated.'], 401);
             }
         } catch (\Exception $e) {
             return $e->getMessage();
@@ -104,6 +110,8 @@ class TypeContentService
                 }
                 $typeContents = TypeContent::whereIn('id', $ids)->orderBy('created_date', 'asc')->get();
                 return TypeContentResource::collection($typeContents);
+            }else{
+                return response()->json(['error' => 'Unauthenticated.'], 401);
             }
         } catch (\Exception $e) {
             return $e->getMessage();
@@ -114,7 +122,6 @@ class TypeContentService
     {
         try {
             $typeContent = TypeContent::findOrFail($id);
-            //return $id;
             return new TypeContentResource($typeContent);
         } catch (\Exception $e) {
             return $e->getMessage();
