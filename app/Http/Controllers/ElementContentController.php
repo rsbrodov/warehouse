@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ElementContentRequest;
+use App\Http\Resources\ElementContentResource;
+use App\Http\Resources\ElementContentShortResource;
 use App\Models\Dictionary;
 use App\Models\DictionaryElement;
 use App\Models\ElementContent;
@@ -191,25 +193,49 @@ class ElementContentController extends Controller
         return $id;
     }
 
-    public function getApiElement($typeContentApiUrl, $typeVersionMajor, $typeVersionMinor, $elementContentApiUrl, $versionMajor, $versionMinor)
+    public function getApiElement($typeContentApiUrl, $typeVersion, $elementContentApiUrl, $elementVersion)
     {
-        $typeContent = TypeContent::where(['api_url' => $typeContentApiUrl, 'version_major' => $typeVersionMajor, 'version_minor' => $typeVersionMinor])->first();
+        $typeVersionExplode = explode('_', $typeVersion);
+        $elementVersionExplode = explode('_', $elementVersion);
+        $typeContent = TypeContent::where(['api_url' => $typeContentApiUrl, 'version_major' => $typeVersionExplode[0], 'version_minor' => $typeVersionExplode[1]])->first();
         $elementContent = ElementContent::where([
             'type_content_id' => $typeContent->id,
             'api_url' => $elementContentApiUrl,
-            'version_major' => $versionMajor,
-            'version_minor' => $versionMinor])
+            'version_major' => $elementVersionExplode[0],
+            'version_minor' => $elementVersionExplode[1]])
             ->with('createdAuthor:id,name')
             ->with('updatedAuthor:id,name')
             ->first();
         $elementContent->body = json_decode($elementContent->body);
-        $r = [];$r['id'] = $elementContent->id;$r['idGlobal'] = $elementContent->id_global;$r['typeContentId'] = $elementContent->type_content_id;$r['label'] = $elementContent->label;$r['apiUrl'] = $elementContent->api_url;$r['description'] = $elementContent->description;$r['activeFrom'] = $elementContent->active_from;$r['activeAfter'] = $elementContent->active_after;$r['status'] = $elementContent->status;$r['versionMajor'] = $elementContent->version_major;$r['versionMinor'] = $elementContent->version_minor;$r['body'] = $elementContent->body;$r['basedElement'] = $elementContent->based_element;$r['createdAuthors'] = $elementContent->created_authors;$r['updatedAuthors'] = $elementContent->updated_authors;
         if (Auth::guard('web')->check()) {
-            $json_pretty = json_encode($r, JSON_PRETTY_PRINT);
+            $json_pretty = json_encode(new ElementContentShortResource($elementContent), JSON_PRETTY_PRINT);
             $elementContent = "<pre>" . $json_pretty . "<pre/>";
             return $elementContent;
         }else{
-            return $r;
+            return [];
+        }
+    }
+
+    public function getApiElementExplode($typeContentApiUrl, $typeVersion, $elementContentApiUrl, $elementVersion)
+    {
+        $typeVersionExplode = explode('_', $typeVersion);
+        $elementVersionExplode = explode('_', $elementVersion);
+        $typeContent = TypeContent::where(['api_url' => $typeContentApiUrl, 'version_major' => $typeVersionExplode[0], 'version_minor' => $typeVersionExplode[1]])->first();
+        $elementContent = ElementContent::where([
+            'type_content_id' => $typeContent->id,
+            'api_url' => $elementContentApiUrl,
+            'version_major' => $elementVersionExplode[0],
+            'version_minor' => $elementVersionExplode[1]])
+            ->with('createdAuthor:id,name')
+            ->with('updatedAuthor:id,name')
+            ->first();
+        $elementContent->body = json_decode($elementContent->body);
+        if (Auth::guard('web')->check()) {
+            $json_pretty = json_encode(new ElementContentResource($elementContent), JSON_PRETTY_PRINT);
+            $elementContent = "<pre>" . $json_pretty . "<pre/>";
+            return $elementContent;
+        }else{
+            return [];
         }
     }
 

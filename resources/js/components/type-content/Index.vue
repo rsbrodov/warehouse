@@ -12,15 +12,7 @@
         <div class="modal fade" id="typeContentEdit" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <Edit
-                    :id="type_content.id"
-                    :owner="type_content.owner"
-                    :api_url="type_content.api_url"
-                    :name="type_content.name"
-                    :status="type_content.status"
-                    :icon="type_content.icon"
-                    :active_from="type_content.active_from"
-                    :active_after="type_content.active_after"
-                    :description="type_content.description"
+                    v-model="type_content"
                     @close-modal="closeModal('typeContentEdit')"
                 />
             </div>
@@ -38,7 +30,7 @@
                                 </div>
                                 <div class="col-4">
                                     <select id="status" class="form-control" name="status" v-model="filter_form.status">
-                                        <option value=''>Все</option>
+                                        <option value='Draft,Published,Archive'>Все</option>
                                         <option value='Draft'>Черновик</option>
                                         <option value='Published'>Опубликовано</option>
                                         <option value='Archive'>В архиве</option>
@@ -80,13 +72,13 @@
                 <th>Дата последнего<br> редактирования</th>
                 <th>Действия</th>
             </tr>
-            <tr v-if="filteredTypeContents.length === 0 && getLoading === false">
+            <tr v-if="(!typeContents || typeContents.length === 0) && getLoading === false">
                 <td class="text-center text-danger" colspan="7"><b>Данные не найдены!</b></td>
             </tr>
             <tr v-else-if="getLoading === true" style="border:none">
                 <td class="text-center text-danger" colspan="6"><Loader/></td>
             </tr>
-            <tr v-else v-for="(type_content, index) in filteredTypeContents" :key="index" >
+            <tr v-else v-for="(type_content, index) in typeContents" :key="index" >
                 <td style="white-space: nowrap"><i :class="'fa ' + type_content.icon+ ' fa-lg'" aria-hidden="true"></i> {{type_content.name}}</td>
                 <td>{{type_content.description}}</td>
                 <td>{{type_content.version.major +'.'+ type_content.version.minor}}</td>
@@ -136,14 +128,6 @@
 
         computed:{
             ...mapGetters(['typeContents', 'getLoading']),
-            filteredTypeContents: function () {
-                return this.typeContents.filter((type_content) => {
-                //return this.$store.getters.type_contents.filter((type_content) => {
-                    return type_content.name.toLowerCase().match(this.filter_form.name);
-                }).filter((type_content) => {
-                    return type_content.status.match(this.filter_form.status);
-                });
-            }
         },
 
         methods: {
@@ -156,15 +140,7 @@
                 $('#'+id).modal('show');
 
                 if(id == 'typeContentEdit') {
-                    this.type_content.id = type_content.id;
-                    this.type_content.owner = type_content.owner;
-                    this.type_content.api_url = type_content.api_url;
-                    this.type_content.name = type_content.name;
-                    this.type_content.status = type_content.status;
-                    this.type_content.icon = type_content.icon;
-                    this.type_content.active_after = type_content.active_after;
-                    this.type_content.active_from = type_content.active_from;
-                    this.type_content.description = type_content.description;
+                    this.type_content = type_content;
                 }
             },
             toggleSearch(){

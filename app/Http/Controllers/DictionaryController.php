@@ -52,9 +52,8 @@ class DictionaryController extends Controller
         return $result;
     }
 
-    public function findDictionary()
-    {
-        $result = $this->dictionaryService->findDictionary();
+    public function findDictionary(){
+        $result = $this->dictionaryService->findDictionary($_GET);
         return $result;
     }
 

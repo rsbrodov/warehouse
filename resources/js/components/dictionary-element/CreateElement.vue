@@ -74,9 +74,6 @@
                 name: {required},
             }
         },
-        async mounted(){
-            console.log(this.dictionary_id)
-        }
     }
 </script>
 

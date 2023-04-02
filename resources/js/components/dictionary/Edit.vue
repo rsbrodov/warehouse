@@ -11,24 +11,24 @@
                 <div class="modal-body">
                      <div class="block">
                          <label for="name"><b class="text-danger">*</b><b>Наименование справочника</b></label>
-                         <input autocomplete="off" id="name" class="form-control" type="text" v-model="vv.name"
-                                :class="{invalid: (!$v.form_edit.name.required)}">
-                         <small class="helper-text invalid" v-if="!$v.form_edit.name.required">
+                         <input autocomplete="off" id="name" class="form-control" type="text" v-model="value.name"
+                                :class="{invalid: (!$v.value.name.required)}">
+                         <small class="helper-text invalid" v-if="!$v.value.name.required">
                              Необходимо заполнить «Наименование».
                          </small>
                      </div>
 
                      <div class="block">
                          <label for="api_url"><b class="text-danger">*</b><b>Код справочника:</b></label>
-                         <input autocomplete="off" id="api_url" class="form-control" type="text" v-model="vv.code"
-                                :class="{invalid: ($v.form_edit.code.$dirty && !$v.form_edit.code.required)}">
-                         <small class="helper-text invalid" v-if="$v.form_edit.code.$dirty && !$v.form_edit.code.required">
+                         <input autocomplete="off" id="api_url" class="form-control" type="text" v-model="value.code"
+                                :class="{invalid: ($v.value.code.$dirty && !$v.value.code.required)}">
+                         <small class="helper-text invalid" v-if="$v.value.code.$dirty && !$v.value.code.required">
                              Необходимо заполнить «Код».
                          </small>
                      </div>
                      <div class="block">
                          <label for="description"><b>Описание справочника:</b></label>
-                         <textarea autocomplete="off" name="description" v-model="vv.description" id="description" class="form-control"/>
+                         <textarea autocomplete="off" name="description" v-model="value.description" id="description" class="form-control"/>
                      </div>
                 </div>
                 <div class="modal-footer">
@@ -46,25 +46,14 @@
     import {mapActions, mapGetters} from "vuex";
     export default {
         name: "Edit",
-        props:['dictionary_id', 'dictionary_name', 'dictionary_code', 'dictionary_description'],
-        data:function(){
-            return {
-                form_edit:{
-                    id:null,
-                    name:null,
-                    code:null,
-                    description:null,
-                }
-            }
+        props: {
+            value: {
+                required: true,
+            },
         },
-        computed:{
-            vv(){
-                this.form_edit.id = this.dictionary_id;
-                this.form_edit.name = this.dictionary_name;
-                this.form_edit.code = this.dictionary_code;
-                this.form_edit.description = this.dictionary_description;
-                return this.form_edit;
-            }
+
+        data:function(){
+            return {}
         },
         methods: {
             ...mapActions(['updateDictionary']),
@@ -74,7 +63,7 @@
                 if (this.$v.$invalid) {
                     console.log('Form not subm')
                 } else {
-                    this.updateDictionary({id: this.form_edit.id, name: this.form_edit.name, code: this.form_edit.code, description: this.form_edit.description}
+                    this.updateDictionary({id: this.value.id, name: this.value.name, code: this.value.code, description: this.value.description}
                     ).then(response => {
                         this.$emit('close-modal');
                         this.flashMessage.success({
@@ -89,7 +78,7 @@
 
         },
         validations: {
-            form_edit:{
+            value:{
                 code: {required},
                 name: {required},
             }

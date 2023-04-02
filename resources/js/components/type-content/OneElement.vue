@@ -17,7 +17,7 @@
                 <div class="flex-cont">
                     <div class="flex-elem title-one"><b>{{ elementContentOne.typeContent.name }}</b></div>
                     <div class="flex-elem title-one">
-                        <a :href="'/api/v1/element-content/' +elementContentOne.typeContent.apiUrl+'/'+elementContentOne.typeContent.version.major+'/'+elementContentOne.typeContent.version.minor+'/'+ elementContentOne.apiUrl+'/'+elementContentOne.version.major+'/'+elementContentOne.version.minor" class="ml-1 btn btn-sm btn-outline-secondary form-control" style="width:50px; max-height:25px; line-height:1" target="_blank">API</a>
+                        <a :href="'/api/v1/element-content/' +elementContentOne.typeContent.apiUrl+'/'+elementContentOne.typeContent.version.major+'_'+elementContentOne.typeContent.version.minor+'/'+ elementContentOne.apiUrl+'/'+elementContentOne.version.major+'_'+elementContentOne.version.minor" class="ml-1 btn btn-sm btn-outline-secondary form-control" style="width:50px; max-height:25px; line-height:1" target="_blank">API</a>
                     </div>
                     <div class="flex-elem"><b>API URL: </b>{{ elementContentOne.api_url }}</div>
                     <div class="flex-elem"><b>Статус: </b>{{ elementContentOne.status | status }}</div>

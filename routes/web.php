@@ -145,5 +145,6 @@ Route::middleware(['auth:web'])->group(function () {
     Route::post('/upload-image', [ElementContentController::class, 'uploadImage'])->name('element-content.upload-image');
     Route::get('/element-content/new-version/{id}/{parametr}', [ElementContentController::class, 'createNewVersion']);
 
-    Route::get('/api/v1/element-content/{typeContentApiUrl}/{typeVersionMajor}/{typeVersionMinor}/{elementContentApiUrl}/{versionMajor}/{versionMinor}', [ElementContentController::class, 'getApiElement']);
+    Route::get('/api/v1/element-content/{typeContentApiUrl}/{typeVersion}/{elementContentApiUrl}/{elementVersion}', [ElementContentController::class, 'getApiElement']);
+    Route::get('/api/v1/element-content/{typeContentApiUrl}/{typeVersion}/{elementContentApiUrl}/{elementVersion}/explode', [ElementContentController::class, 'getApiElementExplode']);
 });
