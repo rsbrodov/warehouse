@@ -221,7 +221,7 @@
                 }
             },
             dateUpdated: function (element) {
-                return moment(element.updated_at).format('DD.MM.YYYY HH:II');
+                return moment(element.update_date).format('DD.MM.YYYY HH:II');
             },
         },
 

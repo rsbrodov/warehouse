@@ -40,8 +40,8 @@
 {{--                <td>{{$user->email}}</td>--}}
 {{--                <td>{{$user->status}}</td>--}}
 {{--                <td>{{$user->link}}</td>--}}
-{{--                <td>{{$user->created_at}}</td>--}}
-{{--                <td>{{$user->updated_at}}</td>--}}
+{{--                <td>{{$user->created_date}}</td>--}}
+{{--                <td>{{$user->update_date}}</td>--}}
 {{--            </tr>--}}
 {{--        @endforeach--}}
     </table>

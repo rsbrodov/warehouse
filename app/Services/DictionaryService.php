@@ -99,6 +99,7 @@ class DictionaryService
                         $query = $query->where('name', 'LIKE', '%'.$get['name'].'%');
                     }
                 $dictionary = $query->orderBy('created_at', 'asc')->get();
+                
                 return DictionaryResource::collection($dictionary);
             }else{
                 return response()->json(['error' => 'Unauthenticated.'], 401);
@@ -112,12 +113,12 @@ class DictionaryService
     {
         try {
             if (Auth::guard('web')->check()) {
-                $dictionaryElements = DictionaryElement::orderBy('created_at', 'asc')->get();
+                $dictionaryElements = DictionaryElement::orderBy('created_date', 'asc')->get();
                 $dictionaryId = [];
                 foreach ($dictionaryElements as $dictionaryElement) {
                     $dictionaryId[] = $dictionaryElement->dictionary_id;
                 }
-                $dictionary = Dictionary::where(['archive' => 0])->whereIn('id', array_unique($dictionaryId))->orderBy('created_at', 'asc')->get();
+                $dictionary = Dictionary::where(['archive' => 0])->whereIn('id', array_unique($dictionaryId))->orderBy('created_date', 'asc')->get();
                 return DictionaryResource::collection($dictionary);
             }else{
                 return response()->json(['error' => 'Unauthenticated.'], 401);
@@ -130,7 +131,7 @@ class DictionaryService
     public function findDictionaryID($id)
     {
         try {
-            $dictionary = Dictionary::find($id)->orderBy('created_at', 'asc')->get();
+            $dictionary = Dictionary::find($id)->orderBy('created_date', 'asc')->get();
             return DictionaryResource::collection($dictionary);
         } catch (\Exception $e) {
             return $e->getMessage();

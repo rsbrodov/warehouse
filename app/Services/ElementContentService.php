@@ -117,7 +117,7 @@ class ElementContentService
             $elementContents = ElementContent::
             whereIn('type_content_id', $typeContents)
                 ->with('typeContent')
-                ->orderBy('created_at', 'asc')
+                ->orderBy('created_date', 'asc')
                 ->get()
                 ->unique('id_global');
             return ElementContentResource::collection($elementContents);

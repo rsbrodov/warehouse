@@ -4,7 +4,7 @@ $ids = [];
 foreach ($typeContents as $typeContent) {
     $ids[] = \App\Models\TypeContent::where('id_global', $typeContent->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first()->id;
 }
-$typeContents = \App\Models\TypeContent::whereIn('id', $ids)->orderBy('created_at', 'asc')->get();
+$typeContents = \App\Models\TypeContent::whereIn('id', $ids)->orderBy('created_date', 'asc')->get();
 $currentPage = false;
 foreach ($typeContents as $typeContent) {
     if (request()->route('type_content_id') == $typeContent->id) {
