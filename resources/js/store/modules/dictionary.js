@@ -27,9 +27,9 @@ export default{
         },
     },
     actions: {
-        async getDictionary({commit}){
+        async getDictionary({commit}, params){
             commit('setLoading', true);
-            await axios.get(BASE_URL + 'dictionary/findDictionary')
+            await axios.get(BASE_URL + 'dictionary/findDictionary', params)
                 .then(response => {
                     commit('UPDATE', response.data.data)
                 })

@@ -21,10 +21,7 @@
         <div class="modal fade" id="dictionaryEdit" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <Edit
-                    :dictionary_id="dictionary.id"
-                    :dictionary_name="dictionary.name"
-                    :dictionary_code="dictionary.code"
-                    :dictionary_description="dictionary.description"
+                    v-model="dictionary"
                     @close-modal="closeModal('dictionaryEdit')"
                 />
             </div>
@@ -47,7 +44,7 @@
                                 <div class="col-4">
                                     <select id="archive" class="form-control" name="archive"
                                             v-model="filter_form.archive">
-                                        <option value=''>Все</option>
+                                        <option value='0,1'>Все</option>
                                         <option value='0'>Действующий</option>
                                         <option value='1'>Архивный</option>
                                     </select>
@@ -72,13 +69,13 @@
                 <th>Статус</th>
                 <th>Действия</th>
             </tr>
-            <tr v-if="filteredDictionary.length === 0 && getLoading === false">
+            <tr v-if="(!Dictionary || Dictionary.length === 0) && getLoading === false">
                 <td class="text-center text-danger" colspan="6"><b>Данные не найдены!</b></td>
             </tr>
             <tr v-else-if="getLoading === true" style="border:none">
                 <td class="text-center text-danger" colspan="6"><Loader/></td>
             </tr>
-            <tr v-else v-for="(dictionary, index) in filteredDictionary" :key="index">
+            <tr v-else v-for="(dictionary, index) in Dictionary" :key="index">
                 <td>{{dictionary.code}}</td>
                 <td>{{dictionary.name}}</td>
                 <td>{{dictionary.description}}</td>
@@ -88,8 +85,6 @@
                 <td nowrap>
                     <a class="btn btn-outline-primary btn-unbordered" @click="openModal('dictionaryEdit', dictionary)"><i
                         class="fa fa-pencil fa-lg"></i></a>
-<!--                    <button class="btn btn-danger del" @click="removeDictionary(dictionary.id)"><i-->
-<!--                        class="fa fa-trash fa-lg"></i></button>-->
                     <a class="btn btn-outline-primary btn-unbordered" @click="archDictionary(dictionary.id)"><i
                         class="fa fa-exchange fa-lg"></i></a>
                     <a class="btn btn-outline-primary btn-unbordered" @click="openModal('dictionaryElementCreate', dictionary)"><i
@@ -114,32 +109,21 @@
         components:{Loader, Create, CreateElement, Edit},
         data:function(){
             return {
-                dictionary:{
-                    id:null,
+                dictionary:{},
+                filter_form:{
+                    archive:null,
                     name:null,
                     code:null,
-                    description:null,
                 },
-                filter_form:{
-                    archive:'',
-                    name:'',
-                    code:'',
-                },
-                //pageOfItems: []
+                params:{
+                    name:null,
+                    code:null,
+                    archive:null,
+                }
             }
         },
-
         computed:{
             ...mapGetters(['Dictionary', 'getLoading']),
-            filteredDictionary: function () {
-                return this.Dictionary.filter((dictionary) => {
-                    return dictionary.name.toLowerCase().match(this.filter_form.name)
-                }).filter((dictionary) => {
-                    return dictionary.code.toLowerCase().match(this.filter_form.code);
-                })/*.filter((dictionary) => {
-                    return dictionary.archive.match(this.filter_form.archive);
-                })*/;
-            }
         },
 
         methods: {
@@ -166,10 +150,7 @@
                 }
                 if(id == 'dictionaryEdit') {
                     $('#dictionaryEdit').modal('show');
-                    this.dictionary.id = dictionary.id;
-                    this.dictionary.name = dictionary.name;
-                    this.dictionary.code = dictionary.code;
-                    this.dictionary.description = dictionary.description;
+                    this.dictionary = dictionary;
                 }
             },
             removeDictionary(id){
@@ -205,11 +186,17 @@
                     this.reset();
                 });
             },
-            /*onChangePage(pageOfItems) {
-            // update page of items
-            this.pageOfItems = pageOfItems;
-        }*/
         },
+        watch: {
+            'filter_form': {
+                handler: function (newValue, oldValue) {
+                    this.params = newValue;
+                    this.getDictionary({params: this.params})
+                },
+                deep: true
+            },
+        },
+
 
         filters: {
             dateUpdated: function (dictionary) {
@@ -235,9 +222,9 @@
 
         },
 
-        async mounted(){
+        async created(){
             $('.form').hide();
-            this.getDictionary();
+            this.getDictionary({params: this.params});
         }
     }
 </script>

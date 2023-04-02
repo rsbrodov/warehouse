@@ -83,13 +83,23 @@ class DictionaryService
         }
     }
 
-    public function findDictionary()
+    public function findDictionary($get)
     {
+
         try {
             if (Auth::guard('web')->check() || Auth::guard('api')->check()) {
-                $dictionary = Dictionary::where(['created_author' => Auth::guard('web')->user()->id ?? Auth::guard('api')->user()->id])
-                    ->orderBy('created_date', 'asc')
-                    ->get();
+                $query = Dictionary::query()->where(['created_author' => Auth::guard('web')->user()->id ?? Auth::guard('api')->user()->id]);
+                    if(isset($get['archive'])){
+                        $query = $query->whereIn('archive', explode(',',$get['archive']));
+                    }
+                    if(isset($get['code'])){
+                        $query = $query->where('code', 'LIKE', '%'.$get['code'].'%');
+                    }
+                    if(isset($get['name'])){
+                        $query = $query->where('name', 'LIKE', '%'.$get['name'].'%');
+                    }
+                $dictionary = $query->orderBy('created_at', 'asc')->get();
+                
                 return DictionaryResource::collection($dictionary);
             }else{
                 return response()->json(['error' => 'Unauthenticated.'], 401);
