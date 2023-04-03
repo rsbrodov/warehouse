@@ -132,10 +132,9 @@ class ElementContentService
                 if(isset($get['url'])){
                     $query = $query->where('api_url', 'LIKE', '%'.$get['url'].'%');
                 }
-                $elementContents = $query->orderBy('created_at', 'asc')
-                ->get()
-                ->unique('id_global');
-            return ElementContentResource::collection($elementContents);
+                $elementContents = $query->orderBy('created_at', 'asc')->get()
+                    ->unique('id_global');
+                return ElementContentResource::collection($elementContents);
         }
     }
 

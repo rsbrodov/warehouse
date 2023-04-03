@@ -108,7 +108,6 @@ class TypeContentService
                 foreach ($typeContents as $typeContent) {
                     $ids[] = TypeContent::where('id_global', $typeContent->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first()->id;
                 }
-
                 $query = TypeContent::query()->whereIn('id', $ids);
                 if(isset($get['status'])){
                     $query = $query->whereIn('status', explode(',',$get['status']));

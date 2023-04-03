@@ -71,7 +71,7 @@ class DictionaryElementService
     {
         try {
             if (Auth::guard('web')->check() || Auth::guard('api')->check()) {
-                $dictionaryElement = DictionaryElement::where(['dictionary_id' => $id])->orderBy('created_at', 'asc')->get();
+                $dictionaryElement = DictionaryElement::where(['dictionary_id' => $id])->orderBy('created_date', 'asc')->get();
                 return DictionaryElementResource::collection($dictionaryElement);
             }
         } catch (\Exception $e) {
