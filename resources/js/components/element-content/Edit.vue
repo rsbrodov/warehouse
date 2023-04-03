@@ -12,8 +12,8 @@
                     <div class="block col-6">
                         <label for="name"><b class="text-danger">*</b><b>Заголовок</b></label>
                         <input autocomplete="off" id="name" class="form-control" type="text" v-model="form_edit.label"
-                               :class="{invalid: ($v.vv.label.$dirty && !$v.vv.label.required)}">
-                            <small class="helper-text invalid" v-if="$v.vv.label.$dirty && !$v.vv.label.required">
+                               :class="{invalid: ($v.value.label.$dirty && !$v.value.label.required)}">
+                            <small class="helper-text invalid" v-if="$v.value.label.$dirty && !$v.value.label.required">
                                 Необходимо заполнить «Заголовок».
                             </small>
                     </div>
@@ -21,8 +21,8 @@
                     <div class="block col-6">
                         <label for="api_url"><b class="text-danger">*</b><b>API URL:</b></label>
                         <input autocomplete="off" id="api_url" class="form-control" type="text" v-model="form_edit.api_url"
-                               :class="{invalid: ($v.vv.api_url.$dirty && !$v.vv.api_url.required)}">
-                        <small class="helper-text invalid" v-if="$v.vv.api_url.$dirty && !$v.vv.api_url.required">
+                               :class="{invalid: ($v.value.apiUrl.$dirty && !$v.value.apiUrl.required)}">
+                        <small class="helper-text invalid" v-if="$v.value.apiUrl.$dirty && !$v.value.apiUrl.required">
                             Необходимо заполнить «API URL».
                         </small>
                         <a class="btn btn-warning btn-sm mt-1" @click="generateUrl()"><i class="fa fa-undo" aria-hidden="true"></i> Сгенерировать</a>
@@ -72,7 +72,14 @@
     export default {
         name: "Edit",
         components: {Datepicker},
-        props: ['id', 'api_url', 'status', 'description', 'status', 'active_from', 'active_after', 'label', 'type_content_id'],
+        props: {
+            value: {
+                required: true,
+            },
+            type_content_id: {
+                required: true,
+            },
+        },
         data:function(){
             return {
                 ru:ru,
@@ -86,19 +93,6 @@
                     description:null,
                     type_content_id:null,
                 }
-            }
-        },
-        computed:{
-            vv(){
-                this.form_edit.id = this.id
-                this.form_edit.label = this.label
-                this.form_edit.api_url = this.api_url
-                this.form_edit.active_from = this.active_from
-                this.form_edit.active_after = this.active_after
-                this.form_edit.description = this.description
-                this.form_edit.status = this.status
-                this.form_edit.type_content_id = this.type_content_id
-                return this.form_edit;
             }
         },
 
@@ -126,9 +120,9 @@
             },
         },
         validations: {
-            vv:{
+            value:{
                 label: {required},
-                api_url: {required},
+                apiUrl: {required},
             }
         },
     }

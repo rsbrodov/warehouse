@@ -37,18 +37,22 @@
                                     </select>
                                 </div>
                                 <div class="col-4">
-                                    <select id="owner" class="form-control" name="owner">
-                                        <option value='0'>Владелец</option>
+                                    <select id="owner" class="form-control" name="owner" v-model="filter_form.owner">
+                                        <option disabled selected value> -- Выберите пользователя -- </option>
+                                        <option value=''>Все</option>
+                                        <option v-for="(user, index) in users" :key="index" :value="user.id">
+                                            <i aria-hidden="true">{{user.name}}</i>
+                                        </option>
                                     </select>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <div class="col-4">
-                                    <input autocomplete="off" type="text" name="active_from" v-model="filter_form.active_from" placeholder="Период действия с" id="active_from" class="form-control datepicker-here">
+                                    <input autocomplete="off" type="date" name="active_from" v-model="filter_form.active_from" placeholder="Период действия с" id="active_from" class="form-control">
                                 </div>
                                 <div class="col-4">
-                                    <input  autocomplete="off" type="text" name="active_after" v-model="filter_form.active_after" placeholder="Период действия по" id="active_after" class="form-control datepicker-here">
+                                    <input  autocomplete="off" type="date" name="active_after" v-model="filter_form.active_after" placeholder="Период действия по" id="active_after" class="form-control">
                                 </div>
                             </div>
                         </form>
@@ -107,10 +111,11 @@
             return {
                 test: this.$BASE_URL,
                 filter_form:{
-                    status:'',
-                    name:'',
-                    active_from:'',
-                    active_after:'',
+                    status:null,
+                    name:null,
+                    owner:null,
+                    active_from:null,
+                    active_after:null,
                 },
                 type_content:{
                     id:null,
@@ -122,7 +127,15 @@
                     active_after:null,
                     active_from:null,
                     description:null
-                }
+                },
+                params:{
+                    status:null,
+                    name:null,
+                    owner:null,
+                    active_from:null,
+                    active_after:null,
+                },
+                users:null,
             }
         },
 
@@ -157,9 +170,25 @@
                 $( 'form' ).each(function(){
                     this.reset();
                 });
+                this.params = this.filter_form;
+                this.getTypeContents({params: this.params})
+            },
+            getUsers(){
+                axios.get('http://127.0.0.1:8000/users-list')
+                    .then(response => {
+                        this.users = response.data;
+                    });
             }
         },
-
+        watch: {
+            'filter_form': {
+                handler: function (newValue, oldValue) {
+                    this.params = newValue;
+                    this.getTypeContents({params: this.params})
+                },
+                deep: true
+            },
+        },
         filters: {
             date: function (type_content) {
                 if(!type_content.active_from && !type_content.active_after){
@@ -196,7 +225,8 @@
 
         async mounted(){
             $('.form').hide();
-            this.getTypeContents();
+            this.getUsers();
+            this.getTypeContents({params: this.params});
         }
     }
 </script>

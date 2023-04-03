@@ -5,7 +5,9 @@
         <!-- Modal Dictionary create -->
         <div class="modal fade" id="dictionaryCreate" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
-                <Create @close-modal="closeModal('dictionaryCreate', 1)"></Create>
+                <Create
+                    @close-modal="closeModal('dictionaryCreate', 1)"
+                    @get-dictionary-by-url="getDictionaryByUrl()"></Create>
             </div>
         </div>
 
@@ -13,7 +15,8 @@
         <div class="modal fade" id="dictionaryElementCreate" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <CreateElement :dictionary_id="dictionary.id"
-                               @close-modal="closeModal('dictionaryElementCreate')"></CreateElement>
+                               @close-modal="closeModal('dictionaryElementCreate')">
+                </CreateElement>
             </div>
         </div>
 
@@ -130,6 +133,7 @@
             ...mapActions(['getDictionary', 'deleteDictionary', 'archiveDictionary']),
             closeModal(id){
                 if(id == 'dictionaryCreate'){
+                    console.log('CLOSE MODAL')
                     $("#dictionaryCreate").modal("hide");
                 }
                 if(id == 'dictionaryElementCreate'){
@@ -186,12 +190,16 @@
                     this.reset();
                 });
             },
+            getDictionaryByUrl(){
+                console.log('GET DICTIONARY BY URL')
+                this.getDictionary({params: this.params})
+            },
         },
         watch: {
             'filter_form': {
                 handler: function (newValue, oldValue) {
                     this.params = newValue;
-                    this.getDictionary({params: this.params})
+                    this.getDictionaryByUrl();
                 },
                 deep: true
             },
@@ -224,7 +232,7 @@
 
         async created(){
             $('.form').hide();
-            this.getDictionary({params: this.params});
+            this.getDictionaryByUrl();
         }
     }
 </script>
