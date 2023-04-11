@@ -31,7 +31,7 @@ export default{
             commit('setLoading', true);
             await axios.get(BASE_URL + 'dictionary/findDictionary', params)
                 .then(response => {
-                    commit('UPDATE', response.data.data)
+                    commit('UPDATE', response.data)
                 })
                 .catch(err => {
                     console.log(err)

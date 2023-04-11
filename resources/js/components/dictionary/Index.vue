@@ -78,7 +78,7 @@
             <tr v-else-if="getLoading === true" style="border:none">
                 <td class="text-center text-danger" colspan="6"><Loader/></td>
             </tr>
-            <tr v-else v-for="(dictionary, index) in Dictionary" :key="index">
+            <tr v-else v-for="(dictionary, index) in Dictionary.data" :key="index">
                 <td>{{dictionary.code}}</td>
                 <td>{{dictionary.name}}</td>
                 <td>{{dictionary.description}}</td>
@@ -97,6 +97,15 @@
                 </td>
             </tr>
         </table>
+
+        <pagination
+            :total-pages="pages"
+            :total="pages"
+            :per-page="perPage"
+            :max-visible-buttons="5"
+            :page="page"
+            @pagechanged="onPageChange"
+        />
     </div>
 </template>
 
@@ -107,9 +116,10 @@
     import CreateElement from "../dictionary-element/CreateElement";
     import Edit from "./Edit";
     import Loader from "../helpers/Loader";
+    import Pagination from "../helpers/Pagination";
     import moment from 'moment'
     export default{
-        components:{Loader, Create, CreateElement, Edit},
+        components:{Loader, Create, CreateElement, Edit, Pagination},
         data:function(){
             return {
                 dictionary:{},
@@ -122,7 +132,11 @@
                     name:null,
                     code:null,
                     archive:null,
-                }
+                    page: null,
+                },
+                page: 1,
+                pages: 89, // всего страниц
+                perPage: 15, // кол-во результатов на странице
             }
         },
         computed:{
@@ -190,9 +204,13 @@
                     this.reset();
                 });
             },
-            getDictionaryByUrl(){
-                console.log('GET DICTIONARY BY URL')
-                this.getDictionary({params: this.params})
+            async getDictionaryByUrl(){
+                await this.getDictionary({params: this.params})
+            },
+            onPageChange(page) {
+                this.page = page;
+                this.params.page = this.page;
+                this.getDictionaryByUrl();
             },
         },
         watch: {
@@ -227,12 +245,10 @@
         },
 
         async created(){
-
-        },
-
-        async created(){
             $('.form').hide();
-            this.getDictionaryByUrl();
+            await this.getDictionaryByUrl();
+            //this.pages = this.Dictionary.pages
+            console.log(this.Dictionary);
         }
     }
 </script>
