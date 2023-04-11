@@ -117,7 +117,9 @@
     import Edit from "./Edit";
     import Loader from "../helpers/Loader";
     import Pagination from "../helpers/Pagination";
-    import moment from 'moment'
+    import moment from 'moment';
+    import {getUrlParams, updateUrl} from "../../helpers/tools";
+
     export default{
         components:{Loader, Create, CreateElement, Edit, Pagination},
         data:function(){
@@ -206,6 +208,17 @@
             },
             async getDictionaryByUrl(){
                 await this.getDictionary({params: this.params})
+                // очищаем урл строку чтобы пересобрать её заново
+                let urlObj = getUrlParams();
+                for (var key in urlObj) {
+                    updateUrl('delete', [key]);
+                }
+
+                for (var key of Object.keys(this.params)) {
+                    if(this.params[key] !== null) {
+                        updateUrl('set', key, this.params[key]);
+                    }
+                }
             },
             onPageChange(page) {
                 this.page = page;
@@ -218,6 +231,8 @@
                 handler: function (newValue, oldValue) {
                     this.params = newValue;
                     this.getDictionaryByUrl();
+                    console.log()
+                    //this.updateUrl('set', 'page', 1);
                 },
                 deep: true
             },
@@ -245,10 +260,12 @@
         },
 
         async created(){
+            let urlObj = getUrlParams();
+            for (var key in urlObj) {
+                this.filter_form[key] = urlObj[key];
+            }
             $('.form').hide();
             await this.getDictionaryByUrl();
-            //this.pages = this.Dictionary.pages
-            console.log(this.Dictionary);
         }
     }
 </script>
