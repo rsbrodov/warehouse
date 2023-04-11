@@ -34,9 +34,9 @@ export default{
         },
     },
     actions: {
-        async getTypeContents({commit}) {
+        async getTypeContents({commit}, params) {
             commit('setLoading', true);
-            await axios.get('http://127.0.0.1:8000/type-content/getListTypeContent')
+            await axios.get('http://127.0.0.1:8000/type-content/getListTypeContent', params)
                 .then(response => {
                     commit('updateTypeContents', response.data.data)
                 })

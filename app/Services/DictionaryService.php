@@ -98,9 +98,12 @@ class DictionaryService
                     if(isset($get['name'])){
                         $query = $query->where('name', 'LIKE', '%'.$get['name'].'%');
                     }
-                $dictionary = $query->orderBy('created_at', 'asc')->get();
-                
-                return DictionaryResource::collection($dictionary);
+                    $count = $query->count();
+                    if(isset($get['page']) && $get['page'] > 0){
+                        $query = $query->offset(($get['page']-1)*15);
+                    }
+                    $dictionary = $query->orderBy('created_at', 'asc')->limit(15)->get();
+                return self::prepareListing($dictionary, $count);
             }else{
                 return response()->json(['error' => 'Unauthenticated.'], 401);
             }
@@ -136,5 +139,14 @@ class DictionaryService
         } catch (\Exception $e) {
             return $e->getMessage();
         }
+    }
+
+    public static function prepareListing($data, $countData)
+    {
+        $result = [];
+        $result['pages'] = ceil($countData/15);
+        $result['countData'] = $countData;
+        $result['data'] = DictionaryResource::collection($data);
+        return $result;
     }
 }

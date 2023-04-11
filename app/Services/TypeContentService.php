@@ -99,7 +99,7 @@ class TypeContentService
     }
 
     //получение списка
-    public function getListTypeContent()
+    public function getListTypeContent($get)
     {
         try {
             if (Auth::guard('web')->check() || Auth::guard('api')->check()) {
@@ -108,7 +108,23 @@ class TypeContentService
                 foreach ($typeContents as $typeContent) {
                     $ids[] = TypeContent::where('id_global', $typeContent->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first()->id;
                 }
-                $typeContents = TypeContent::whereIn('id', $ids)->orderBy('created_date', 'asc')->get();
+                $query = TypeContent::query()->whereIn('id', $ids);
+                if(isset($get['status'])){
+                    $query = $query->whereIn('status', explode(',',$get['status']));
+                }
+                if(isset($get['name'])){
+                    $query = $query->where('name', 'LIKE', '%'.$get['name'].'%');
+                }
+                if(isset($get['active_from'])){
+                    $query = $query->where('active_from', '>=', $get['active_from']);
+                }
+                if(isset($get['active_after'])){
+                    $query = $query->where('active_after', '>=', $get['active_after']);
+                }
+                if(!empty($get['owner'])){
+                    $query = $query->where('owner', $get['owner']);
+                }
+                $typeContents = $query->orderBy('created_at', 'asc')->get();
                 return TypeContentResource::collection($typeContents);
             }else{
                 return response()->json(['error' => 'Unauthenticated.'], 401);

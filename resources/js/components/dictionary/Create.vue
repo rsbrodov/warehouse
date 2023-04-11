@@ -65,6 +65,7 @@
                         name: this.form.name, code: this.form.code, description: this.form.description,
                     }).then(response => {
                         this.$emit('close-modal');
+                        this.$emit('get-dictionary-by-url');
                         this.form.code = '';
                         this.form.name = '';
                         this.form.description = '';

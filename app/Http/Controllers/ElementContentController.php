@@ -58,7 +58,7 @@ class ElementContentController extends Controller
 
     public function findElementContentID($id)
     {
-        $result = $this->elementContentService->findElementContentID($id);
+        $result = $this->elementContentService->findElementContentID($id, $_GET);
         return $result;
     }
 

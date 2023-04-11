@@ -5,7 +5,9 @@
         <!-- Modal Dictionary create -->
         <div class="modal fade" id="dictionaryCreate" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
-                <Create @close-modal="closeModal('dictionaryCreate', 1)"></Create>
+                <Create
+                    @close-modal="closeModal('dictionaryCreate', 1)"
+                    @get-dictionary-by-url="getDictionaryByUrl()"></Create>
             </div>
         </div>
 
@@ -13,7 +15,8 @@
         <div class="modal fade" id="dictionaryElementCreate" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <CreateElement :dictionary_id="dictionary.id"
-                               @close-modal="closeModal('dictionaryElementCreate')"></CreateElement>
+                               @close-modal="closeModal('dictionaryElementCreate')">
+                </CreateElement>
             </div>
         </div>
 
@@ -75,7 +78,7 @@
             <tr v-else-if="getLoading === true" style="border:none">
                 <td class="text-center text-danger" colspan="6"><Loader/></td>
             </tr>
-            <tr v-else v-for="(dictionary, index) in Dictionary" :key="index">
+            <tr v-else v-for="(dictionary, index) in Dictionary.data" :key="index">
                 <td>{{dictionary.code}}</td>
                 <td>{{dictionary.name}}</td>
                 <td>{{dictionary.description}}</td>
@@ -94,6 +97,15 @@
                 </td>
             </tr>
         </table>
+
+        <pagination
+            :total-pages="pages"
+            :total="pages"
+            :per-page="perPage"
+            :max-visible-buttons="5"
+            :page="page"
+            @pagechanged="onPageChange"
+        />
     </div>
 </template>
 
@@ -104,9 +116,10 @@
     import CreateElement from "../dictionary-element/CreateElement";
     import Edit from "./Edit";
     import Loader from "../helpers/Loader";
+    import Pagination from "../helpers/Pagination";
     import moment from 'moment'
     export default{
-        components:{Loader, Create, CreateElement, Edit},
+        components:{Loader, Create, CreateElement, Edit, Pagination},
         data:function(){
             return {
                 dictionary:{},
@@ -119,7 +132,11 @@
                     name:null,
                     code:null,
                     archive:null,
-                }
+                    page: null,
+                },
+                page: 1,
+                pages: 89, // всего страниц
+                perPage: 15, // кол-во результатов на странице
             }
         },
         computed:{
@@ -130,6 +147,7 @@
             ...mapActions(['getDictionary', 'deleteDictionary', 'archiveDictionary']),
             closeModal(id){
                 if(id == 'dictionaryCreate'){
+                    console.log('CLOSE MODAL')
                     $("#dictionaryCreate").modal("hide");
                 }
                 if(id == 'dictionaryElementCreate'){
@@ -186,12 +204,20 @@
                     this.reset();
                 });
             },
+            async getDictionaryByUrl(){
+                await this.getDictionary({params: this.params})
+            },
+            onPageChange(page) {
+                this.page = page;
+                this.params.page = this.page;
+                this.getDictionaryByUrl();
+            },
         },
         watch: {
             'filter_form': {
                 handler: function (newValue, oldValue) {
                     this.params = newValue;
-                    this.getDictionary({params: this.params})
+                    this.getDictionaryByUrl();
                 },
                 deep: true
             },
@@ -219,12 +245,10 @@
         },
 
         async created(){
-
-        },
-
-        async created(){
             $('.form').hide();
-            this.getDictionary({params: this.params});
+            await this.getDictionaryByUrl();
+            //this.pages = this.Dictionary.pages
+            console.log(this.Dictionary);
         }
     }
 </script>

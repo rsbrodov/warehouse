@@ -34,9 +34,9 @@ export default{
         },
     },
     actions: {
-        async getElementContent(ctx, id){
+        async getElementContent(ctx, params){
             ctx.commit('setLoading', true);
-            await axios.get('http://127.0.0.1:8000/element-content/findElementContentID/'+id)
+            await axios.get('http://127.0.0.1:8000/element-content/findElementContentID/'+params.id, {params:params.params})
             .then(response => {
                 ctx.commit('UPDATE', response.data.data)
             })

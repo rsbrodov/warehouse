@@ -68,7 +68,7 @@ class TypeContentController extends Controller
     //получение списка
     public function getListTypeContent()
     {
-        $result = $this->typeContentService->getListTypeContent();
+        $result = $this->typeContentService->getListTypeContent($_GET);
         return $result;
     }
 

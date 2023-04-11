@@ -31,7 +31,7 @@ export default{
             commit('setLoading', true);
             await axios.get(BASE_URL + 'dictionary/findDictionary', params)
                 .then(response => {
-                    commit('UPDATE', response.data.data)
+                    commit('UPDATE', response.data)
                 })
                 .catch(err => {
                     console.log(err)
@@ -47,8 +47,8 @@ export default{
         },
         async newDictionary(ctx, form){
             const new_dictionary = await axios.post('http://127.0.0.1:8000/dictionary/store', form);
-            const dictionary = await axios.get('http://127.0.0.1:8000/dictionary/findDictionary');
-            ctx.commit('UPDATE', dictionary.data.data)
+            /*const dictionary = await axios.get('http://127.0.0.1:8000/dictionary/findDictionary');
+            ctx.commit('UPDATE', dictionary.data.data)*/
         },
         async updateDictionary(ctx, form){
             const new_dictionary = await axios.post('http://127.0.0.1:8000/dictionary/'+form.id, form);

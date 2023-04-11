@@ -13,13 +13,7 @@
         <div class="modal fade" id="elementContentEdit" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <Edit
-                    :id="element_content.id"
-                    :apiUrl="element_content.apiUrl"
-                    :label="element_content.label"
-                    :status="element_content.status"
-                    :activeFrom="element_content.activeFrom"
-                    :activeAfter="element_content.activeAfter"
-                    :description="element_content.description"
+                    v-model="element_content"
                     :type_content_id="id"
                     @close-modal="closeModal('elementContentEdit')"
                 />
@@ -42,7 +36,7 @@
                                 </div>
                                 <div class="col-4">
                                     <select id="status" class="form-control" name="status" v-model="filter_form.status">
-                                        <option value=''>Все</option>
+                                        <option value='Draft,Published,Archive,Destroy'>Все</option>
                                         <option value='Draft'>Черновик</option>
                                         <option value='Published'>Опубликовано</option>
                                         <option value='Archive'>В архиве</option>
@@ -53,10 +47,10 @@
 
                             <div class="form-group row">
                                 <div class="col-4">
-                                    <input autocomplete="off" type="text" name="active_from" v-model="filter_form.active_from" placeholder="Период действия с" id="active_from" class="form-control datepicker-here">
+                                    <input autocomplete="off" type="date" name="active_from" v-model="filter_form.active_from" placeholder="Период действия с" id="active_from" class="form-control">
                                 </div>
                                 <div class="col-4">
-                                    <input  autocomplete="off" type="text" name="active_after" v-model="filter_form.active_after" placeholder="Период действия по" id="active_after" class="form-control datepicker-here">
+                                    <input  autocomplete="off" type="date" name="active_after" v-model="filter_form.active_after" placeholder="Период действия по" id="active_after" class="form-control">
                                 </div>
                             </div>
                         </form>
@@ -79,7 +73,7 @@
                 <th>Автор последнего редактирования</th>
                 <th>Дата последнего редактирования</th>
             </tr>
-            <tr v-if="ElementContent.length === 0 && getLoading === false">
+            <tr v-if="(!ElementContent || ElementContent.length === 0) && getLoading === false">
                 <td class="text-center text-danger" colspan="6"><b>Данные не найдены!</b></td>
             </tr>
             <tr v-else-if="getLoading === true" style="border:none">
@@ -131,7 +125,14 @@
                     activeAfter:null,
                     activeFrom:null,
                     description:null
-                }
+                },
+                params:{
+                    label:null,
+                    api_url:null,
+                    status:null,
+                    active_from:null,
+                    active_after:null,
+                },
             }
         },
 
@@ -150,13 +151,7 @@
                     $('#ElementContentCreate').modal('show');
                 }
                 if(id == 'elementContentEdit') {
-                    this.element_content.id = element_content.id;
-                    this.element_content.api_url = element_content.api_url;
-                    this.element_content.label = element_content.label;
-                    this.element_content.status = element_content.status;
-                    this.element_content.active_after = element_content.active_after;
-                    this.element_content.active_from = element_content.active_from;
-                    this.element_content.description = element_content.description;
+                    this.element_content = element_content;
                     $('#elementContentEdit').modal('show');
                 }
             },
@@ -177,7 +172,6 @@
             },
             copyUrl(element){
                 try {
-                    console.log(element);
                     navigator.clipboard.writeText('http://127.0.0.1:8000/api/v1/element-content/' +element.type_contents.api_url+'/'+element.type_contents.version_major+'/'+element.type_contents.version_minor+'/'+ element.api_url+'/'+element.version_major+'/'+element.version_minor)
                     this.flashMessage.success({
                         message: 'Скопировано в буфер обмена',
@@ -191,7 +185,15 @@
                 }
             }
         },
-
+        watch: {
+            'filter_form': {
+                handler: function (newValue, oldValue) {
+                    this.params = newValue;
+                    this.getElementContent({id: this.id, params: this.params});
+                },
+                deep: true
+            },
+        },
         filters: {
             status: function (status) {
                 let status_array = {Draft: 'Черновик', Published: 'Опубликовано', Archive:'В архиве', Destroy:'Помечен на удаление'};
@@ -226,7 +228,7 @@
         },
 
         async created(){
-            this.getElementContent(this.id);
+            this.getElementContent({id: this.id, params: this.params});
         },
 
         async mounted(){
