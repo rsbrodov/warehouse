@@ -38,7 +38,7 @@ export default{
             ctx.commit('setLoading', true);
             await axios.get('http://127.0.0.1:8000/element-content/findElementContentID/'+params.id, {params:params.params})
             .then(response => {
-                ctx.commit('UPDATE', response.data.data)
+                ctx.commit('UPDATE', response.data)
             })
             .catch(err => {
                 console.log(err)
