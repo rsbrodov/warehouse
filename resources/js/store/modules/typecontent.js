@@ -38,7 +38,7 @@ export default{
             commit('setLoading', true);
             await axios.get('http://127.0.0.1:8000/type-content/getListTypeContent', params)
                 .then(response => {
-                    commit('updateTypeContents', response.data.data)
+                    commit('updateTypeContents', response.data)
                 })
                 .catch(err => {
                     console.log(err)

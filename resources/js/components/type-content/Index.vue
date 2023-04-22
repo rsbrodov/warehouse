@@ -82,7 +82,7 @@
             <tr v-else-if="getLoading === true" style="border:none">
                 <td class="text-center text-danger" colspan="6"><Loader/></td>
             </tr>
-            <tr v-else v-for="(type_content, index) in typeContents" :key="index" >
+            <tr v-else v-for="(type_content, index) in typeContents.data" :key="index" >
                 <td style="white-space: nowrap"><i :class="'fa ' + type_content.icon+ ' fa-lg'" aria-hidden="true"></i> {{type_content.name}}</td>
                 <td>{{type_content.description}}</td>
                 <td>{{type_content.version.major +'.'+ type_content.version.minor}}</td>

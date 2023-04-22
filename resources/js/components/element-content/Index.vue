@@ -79,7 +79,7 @@
             <tr v-else-if="getLoading === true" style="border:none">
                 <td class="text-center text-danger" colspan="6"><Loader/></td>
             </tr>
-            <tr v-else v-for="(element, index) in ElementContent" :key="index">
+            <tr v-else v-for="(element, index) in ElementContent.data" :key="index">
                 <td>{{element.label}}</td>
                 <td><p style="display:flex; justify-content: space-between; margin:0; padding:0">{{element.apiUrl}} <button class="btn btn-outline-primary btn-unbordered" @click="copyUrl(element)"><span class="fa fa-files-o fa-lg" aria-hidden="true"></span></button></p></td>
                 <td :class="element.status | statusColor"><b>{{ element.status | status }}</b></td>
