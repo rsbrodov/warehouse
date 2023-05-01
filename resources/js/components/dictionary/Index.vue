@@ -99,6 +99,7 @@
         </table>
 
         <pagination
+            v-if="Dictionary.pages > 1"
             :total-pages="pages"
             :total="pages"
             :per-page="perPage"
@@ -157,6 +158,7 @@
                 }
                 if(id == 'dictionaryEdit'){
                     $("#dictionaryEdit").modal("hide");
+                    this.getDictionaryByUrl();
                 }
 
             },
@@ -189,6 +191,7 @@
                             message: 'Статус справочника изменен',
                             time: 3000,
                         });
+                        this.getDictionaryByUrl();
                     });
             },
             toggleSearch(){
@@ -219,6 +222,7 @@
                         updateUrl('set', key, this.params[key]);
                     }
                 }
+                this.pages = this.Dictionary.pages;
             },
             onPageChange(page) {
                 this.page = page;

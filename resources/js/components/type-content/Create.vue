@@ -23,11 +23,7 @@
                         <label for="icon"><b>Иконка для отображения</b></label>
                         <select id="icon" class="form-control" v-model="form.icon">
                             <option disabled selected value> -- Выберите иконку -- </option>
-<!--                            <option selected value="fa fa-github">&#xf03e; Github</option>-->
-<!--                            <option v-for="(icon, index) in icons" :key="index" :value="icon.code">-->
                             <option v-for="(icon, index) in icons" :key="index" :value="icon.code" v-html="generateIcon(icon)"></option>
-<!--                                <i :class="'fa fa-book fa-lg'" aria-hidden="true">{{icon.name}}</i>-->
-<!--                            </option>-->
                         </select>
                     </div>
                 </div>

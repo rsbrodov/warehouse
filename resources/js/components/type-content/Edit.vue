@@ -11,7 +11,7 @@
                 <div class="row mb-3">
                     <div class="block col-6">
                         <label for="owner"><b>Владелец типа контента:</b></label>
-                        <select id="owner" class="form-control" v-model="value.owner">
+                        <select id="owner" class="form-control" v-model="localValue.owner">
                             <option disabled selected value> -- Выберите пользователя -- </option>
                             <option v-for="(user, index) in users" :key="index" :value="user.id">
                                 <i aria-hidden="true">{{user.name}}</i>
@@ -21,10 +21,9 @@
 
                     <div class="block col-6">
                         <label for="icon"><b>Иконка для отображения</b></label>
-                        <select id="icon" class="form-control" v-model="value.icon">
-                            <option v-for="(icon, index) in icons" :key="index" :value="icon.code">
-                                <i :class="'fa ' + icon.code+ ' fa-lg'" aria-hidden="true">{{icon.name}}</i>
-                            </option>
+                        <select id="icon" class="form-control" v-model="localValue.icon">
+                            <option disabled selected value> -- Выберите иконку -- </option>
+                            <option v-for="(icon, index) in icons" :key="index" :value="icon.code" v-html="generateIcon(icon)"></option>
                         </select>
                     </div>
                 </div>
@@ -32,18 +31,18 @@
                 <div class="row mb-3">
                     <div class="block col-6">
                         <label for="name"><b class="text-danger">*</b><b>Наименование типа контента</b></label>
-                        <input autocomplete="off" id="name" class="form-control" type="text" v-model="value.name"
-                               :class="{invalid: ($v.value.name.$dirty && !$v.value.name.required)}">
-                            <small class="helper-text invalid" v-if="$v.value.name.$dirty && !$v.value.name.required">
+                        <input autocomplete="off" id="name" class="form-control" type="text" v-model="localValue.name"
+                               :class="{invalid: ($v.localValue.name.$dirty && !$v.localValue.name.required)}">
+                            <small class="helper-text invalid" v-if="$v.localValue.name.$dirty && !$v.localValue.name.required">
                                 Необходимо заполнить «Наименование».
                             </small>
                     </div>
 
                     <div class="block col-6">
                         <label for="apiUrl"><b class="text-danger">*</b><b>API URL:</b></label>
-                        <input autocomplete="off" id="apiUrl" class="form-control" type="text" v-model="value.apiUrl"
-                               :class="{invalid: ($v.value.apiUrl.$dirty && !$v.value.apiUrl.required)}">
-                        <small class="helper-text invalid" v-if="$v.value.apiUrl.$dirty && !$v.value.apiUrl.required">
+                        <input autocomplete="off" id="apiUrl" class="form-control" type="text" v-model="localValue.apiUrl"
+                               :class="{invalid: ($v.localValue.apiUrl.$dirty && !$v.localValue.apiUrl.required)}">
+                        <small class="helper-text invalid" v-if="$v.localValue.apiUrl.$dirty && !$v.localValue.apiUrl.required">
                             Необходимо заполнить «API URL».
                         </small>
                         <a class="btn btn-warning btn-sm mt-1" @click="generateUrl()"><i class="fa fa-undo" aria-hidden="true"></i> Сгенерировать</a>
@@ -54,8 +53,8 @@
                     <div class="block col-6">
                         <label for="activeFrom"><b>Период действия с:</b></label>
                         <datepicker
-                            :id="value.activeFrom"
-                            v-model="value.activeFrom"
+                            :id="localValue.activeFrom"
+                            v-model="localValue.activeFrom"
                             :language="ru"
                             class="form-control">
                         </datepicker>
@@ -64,8 +63,8 @@
                     <div class="block col-6">
                         <label for="activeAfter"><b>Период действия по:</b></label>
                          <datepicker
-                            :id="value.activeAfter"
-                            v-model="value.activeAfter"
+                            :id="localValue.activeAfter"
+                            v-model="localValue.activeAfter"
                             :language="ru"
                             class="form-control">
                         </datepicker>
@@ -75,10 +74,9 @@
                 <div class="row">
                     <div class="block col-12">
                         <label for="description"><b>Описание:</b></label>
-                        <input autocomplete="off" type="textarea" name="description" v-model="value.description" id="description" class="form-control">
+                        <input autocomplete="off" type="textarea" name="description" v-model="localValue.description" id="description" class="form-control">
                     </div>
                 </div>
-{{value}}
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" @click="$emit('close-modal', 'editTypeContent')">Отмена</button>
@@ -109,6 +107,11 @@
                 users:null,
             }
         },
+        computed: {
+            localValue() {
+                return Object.assign({}, this.value);
+            }
+        },
         methods: {
             ...mapActions(['update']),
             async getIcons() {
@@ -117,14 +120,17 @@
                         this.icons = response.data;
                     });
             },
+            generateIcon(icon){
+                return '&#x' + icon.unicode + '; ' + icon.name;
+            },
             async updateTypeContent() {
                 this.$v.$touch();
                 if (this.$v.$invalid) {
                     console.log('Form not subm')
                 } else {
                     console.log(123);
-                    this.update({id: this.value.id, owner: this.value.owner, icon: this.value.icon, name: this.value.name, apiUrl: this.value.apiUrl,
-                        activeFrom: this.value.activeFrom, activeAfter: this.value.activeAfter, description: this.value.description, status: this.value.status}
+                    this.update({id: this.localValue.id, owner: this.localValue.owner, icon: this.localValue.icon, name: this.localValue.name, apiUrl: this.localValue.apiUrl,
+                        activeFrom: this.localValue.activeFrom, activeAfter: this.localValue.activeAfter, description: this.localValue.description, status: this.localValue.status}
                     ).then(response => {
                         this.$emit('close-modal');
                         this.flashMessage.success({
@@ -137,7 +143,7 @@
                 }
             },
             generateUrl(){
-                this.value.apiUrl =  url_slug(this.value.name)
+                this.localValue.apiUrl =  url_slug(this.localValue.name)
             },
             getUsers(){
                 axios.get('http://127.0.0.1:8000/users-list')
@@ -152,7 +158,7 @@
 
         },
         validations: {
-            value:{
+            localValue:{
                 name: {required},
                 apiUrl: {required},
             }
