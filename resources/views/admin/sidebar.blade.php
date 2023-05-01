@@ -92,8 +92,8 @@ foreach ($typeContents as $typeContent) {
                     >
                         @if($typeContents)
                             <li class="nav-item">
-                                <a href="#" class="nav-link
-                                    @if(request()->route('type_content_id') == $typeContent->id)
+                                <a href="/element-content" class="nav-link
+                                    @if(Route::current()->getName() == 'element-content.indexAll')
                                         active
                                     @endif
                                 ml-2"><p>Весь контент</p></a>

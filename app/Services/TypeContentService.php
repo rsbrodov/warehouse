@@ -38,7 +38,7 @@ class TypeContentService
                     'owner' => $request->owner,
                     'active_from' => date_create($request->activeFrom),
                     'active_after' => date_create($request->activeAfter),
-                    'status' => 'DRAFT',
+                    'status' => $request->status,
                     'version_major' => '1',
                     'version_minor' => '0',
                     'icon' => $request->icon,
@@ -264,6 +264,10 @@ class TypeContentService
     public function getIcons()
     {
         $icons = Icons::all();
+        $data = [];
+        /*foreach($icons as $icon){
+            $data[] = '<i class="fa "'.$icon->code.'" fa-lg" aria-hidden="true">' .$icon->name. '</i>';
+        }*/
         return response()->json($icons);
     }
 
@@ -352,7 +356,7 @@ class TypeContentService
                     'code' => 422,
                     'message' => 'The given data was invalid',
                     'errors' => [
-                        'api_url' => '«API URL» должен быть уникальным'
+                        'apiUrl' => '«API URL» должен быть уникальным'
                     ]
                 ];
             }
@@ -362,7 +366,7 @@ class TypeContentService
                     'code' => 422,
                     'message' => 'The given data was invalid',
                     'errors' => [
-                        'api_url' => '«API URL» должен быть уникальным'
+                        'apiUrl' => '«API URL» должен быть уникальным'
                     ]
                 ];
             }

@@ -92,7 +92,7 @@
                             </button>
                         </div>
                         <div class="p-2" v-if="typeContentOne.status == 'Draft'">
-                            <button class="btn btn-primary form-control text-left" @click="deleteTypeContent()">
+                            <button class="btn btn-primary form-control text-left" @click="deleteTypeContent(typeContentOne)">
                                 <i class="fa fa-trash fa-lg" aria-hidden="true"></i> Удалить тип
                             </button>
                         </div>
@@ -354,22 +354,24 @@ export default {
                     console.log(error);
                 })
         },
-        async deleteTypeContent() {
-            await axios.delete('http://127.0.0.1:8000/type-content/' + this.type_content_id)
-                .then(response => {
-                    if (response.status === 200) {
-                        this.flashMessage.success({
-                            message: 'Тип контента удален, Вы будете перенаправлены на страницу со списком типов контента через 3 секунды',
-                            time: 3000,
-                        });
-                        window.setTimeout(function () {
-                            window.location.href = "http://127.0.0.1:8000/type-content/index"
-                        }, 3000);
-                    }
-                })
-                .catch(error => {
-                    console.log(error);
-                })
+        async deleteTypeContent(typeContent) {
+            if (confirm('Вы уверены, что хотите удалить тип контента «' + typeContent.name + ' ' + typeContent.version.major + '.' + typeContent.version.minor + '»?')) {
+                await axios.delete('http://127.0.0.1:8000/type-content/' + this.type_content_id)
+                    .then(response => {
+                        if (response.status === 204) {
+                            this.flashMessage.success({
+                                message: 'Тип контента удален, Вы будете перенаправлены на страницу со списком типов контента через 3 секунды',
+                                time: 3000,
+                            });
+                            window.setTimeout(function () {
+                                window.location.href = "http://127.0.0.1:8000/type-content/index"
+                            }, 3000);
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
+            }
         },
 
         async getBody() {

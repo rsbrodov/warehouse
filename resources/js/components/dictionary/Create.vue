@@ -9,13 +9,16 @@
             </div>
             <form @submit.prevent="saveDictionary()">
                 <div class="modal-body">
-                     <div class="block">
+                    <div class="block">
                          <label for="name"><b class="text-danger">*</b><b>Наименование справочника</b></label>
                          <input autocomplete="off" id="name" class="form-control" type="text" v-model="form.name"
                                 :class="{invalid: ($v.form.name.$dirty && !$v.form.name.required)}">
                          <small class="helper-text invalid" v-if="$v.form.name.$dirty && !$v.form.name.required">
                              Необходимо заполнить «Наименование».
                          </small>
+                        <small class="helper-text invalid" v-if="errors.name">
+                            {{errors.name}}<br>
+                        </small>
                      </div>
 
                      <div class="block">
@@ -24,6 +27,9 @@
                                 :class="{invalid: ($v.form.code.$dirty && !$v.form.code.required)}">
                          <small class="helper-text invalid" v-if="$v.form.code.$dirty && !$v.form.code.required">
                              Необходимо заполнить «Код».
+                         </small>
+                         <small class="helper-text invalid" v-if="errors.code">
+                             {{errors.code}}<br>
                          </small>
                      </div>
                      <div class="block">
@@ -52,6 +58,7 @@
                     code:'',
                     description:'',
                 },
+                errors:{},
             }
         },
         methods: {
@@ -74,8 +81,16 @@
                             time: 3000,
                         });
                         console.log(23232);
-                    }).catch(errors => {
-                        console.log(errors);
+                    }).catch(error => {
+                        console.log('ошибуля');
+                        if (error.response.status === 422) {
+                            this.errors = error.response.data.errors || {};
+                        }else{
+                            this.flashMessage.error({
+                                message: 'Ошибка создания справочника',
+                                time: 3000,
+                            });
+                        }
                     });
                 }
             }
@@ -90,5 +105,14 @@
 </script>
 
 <style scoped>
-
+    select{
+        font-family: fontAwesome
+    }
+    .invalid {
+        border-color: red;
+        color: red;
+    }
+    small .invalid {
+        color: red;
+    }
 </style>

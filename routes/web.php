@@ -134,7 +134,9 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('/element-content/getAllVersionElementContent/{id}', [ElementContentController::class, 'getAllVersionElementContent']);
     Route::get('/element-content/api-url/{apiUrl}', [ElementContentController::class, 'getApiUrl']);
     Route::get('element-content/findElementContentID/{id}', [ElementContentController::class, 'findElementContentID']);
+    Route::get('element-content/findElementContentAll', [ElementContentController::class, 'findElementContentAll']);
     Route::get('/element-content/{type_content_id}', [ElementContentController::class, 'index'])->name('element-content.index');
+    Route::get('/element-content', [ElementContentController::class, 'indexAll'])->name('element-content.indexAll');
     Route::post('/element-content/store/{type_content_id}', [ElementContentController::class, 'store'])->name('element-content.store');
     Route::get('/element-content/{id}/edit', [ElementContentController::class, 'edit'])->name('element-content.edit');
     Route::post('/element-content/{id}', [ElementContentController::class, 'update'])->name('element-content.update');

@@ -20,6 +20,7 @@ Vue.component('Indexdictionary', require('./components/dictionary/Index.vue').de
 Vue.component('Indexdictionaryelement', require('./components/dictionary-element/Index.vue').default);
 Vue.component('Viewtype', require('./components/type-content/Viewtype.vue').default);
 Vue.component('Indexelementcontent', require('./components/element-content/Index.vue').default);
+Vue.component('Indexelementcontentall', require('./components/element-content/IndexAll.vue').default);
 Vue.component('Allversion', require('./components/type-content/Allversion.vue').default);
 Vue.component('Allversionelementcontent', require('./components/element-content/AllversionElementContent.vue').default);
 Vue.component('Enter', require('./components/type-content/Enter').default);

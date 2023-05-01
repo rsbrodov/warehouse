@@ -15,6 +15,8 @@ class DictionaryService
     {
         try {
             if (Auth::guard('web')->check() || Auth::guard('api')->check()) {
+                $checkCode = $this->checkingUnique($request);
+                if ($checkCode) return response()->json($checkCode, 422);
                 $newDictionary = Dictionary::create([
                     'code' => $request->code,
                     'name' => $request->name,
@@ -148,5 +150,23 @@ class DictionaryService
         $result['countData'] = $countData;
         $result['data'] = DictionaryResource::collection($data);
         return $result;
+    }
+
+    public function checkingUnique($dictionary)
+    {
+        $errors = [];
+        if (Dictionary::where('code', $dictionary->code)->first() !== null) {
+            $errors['code'] = '«Код справочника» должен быть уникальным';
+        }
+        if (Dictionary::where('name', $dictionary->name)->first() !== null) {
+            $errors['name'] = '«Наименование справочника» должно быть уникальным';
+        }
+        if(!empty($errors)){
+            return [
+                'code' => 422,
+                'message' => 'The given data was invalid',
+                'errors' => $errors
+            ];
+        }
     }
 }
