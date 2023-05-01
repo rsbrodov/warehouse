@@ -96,6 +96,7 @@
             </tr>
         </table>
         <pagination
+            v-if="typeContents.pages > 1"
             :total-pages="pages"
             :total="pages"
             :per-page="perPage"
@@ -161,6 +162,9 @@
             ...mapActions(['getTypeContents']),
             closeModal(id){
                 $("#"+id).modal("hide");
+                if(id == 'typeContentEdit') {
+                    this.getTypeContentByUrl();
+                }
 
             },
             openModal(id, type_content){
@@ -185,7 +189,7 @@
                     this.reset();
                 });
                 this.params = this.filter_form;
-                this.getTypeContents({params: this.params})
+                this.getTypeContentByUrl();
             },
             getUsers(){
                 axios.get('http://127.0.0.1:8000/users-list')
@@ -206,6 +210,7 @@
                         updateUrl('set', key, this.params[key]);
                     }
                 }
+                this.pages = this.typeContents.pages;
             },
             onPageChange(page) {
                 this.page = page;
@@ -217,7 +222,7 @@
             'filter_form': {
                 handler: function (newValue, oldValue) {
                     this.params = newValue;
-                    this.getTypeContents({params: this.params})
+                    this.getTypeContentByUrl();
                 },
                 deep: true
             },
@@ -259,7 +264,7 @@
         async mounted(){
             $('.form').hide();
             this.getUsers();
-            this.getTypeContents({params: this.params});
+            this.getTypeContentByUrl();
         }
     }
 </script>

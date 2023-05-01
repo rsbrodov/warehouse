@@ -84,105 +84,118 @@
 <script>
 
 export default {
-  name: 'pagination',
-  components: {
-  },
-  props: {
-    maxVisibleButtons: {
-      type: Number,
-      required: false,
-      default: 7
-    },
-    totalPages: {
-      type: Number,
-      required: true
-    },
-    total: {
-      type: Number,
-      required: true
-    },
-    perPage: {
-      type: Number,
-      required: true
-    },
-    page: {
-      type: Number,
-      required: true
-    },
+    name: 'pagination',
+    components: {},
+    props: {
+        maxVisibleButtons: {
+            type: Number,
+            required: false,
+            default: 7
+        },
+        totalPages: {
+            type: Number,
+            required: true
+        },
+        total: {
+            type: Number,
+            required: true
+        },
+        perPage: {
+            type: Number,
+            required: true
+        },
+        page: {
+            type: Number,
+            required: true
+        },
 
-  },
-  mounted() {
-    // window.paginApp = this;
     },
-  computed: {
-    currentPage(){
-      if(this.page > this.totalPages){
-        return this.totalPages
-      }else{
-        return  this.page
-      }
+    mounted() {
+        // window.paginApp = this;
     },
-    startPage() {
-      if (this.currentPage === 1) {
-        return 1;
-      }
-      if (this.currentPage === this.totalPages) {
-        return this.totalPages - this.maxVisibleButtons + 1;
-      }
-      return this.currentPage - 1;
+    computed: {
+        currentPage() {
+            if (this.page > this.totalPages) {
+                return this.totalPages
+            } else {
+                return this.page
+            }
+        },
+        startPage() {
+            if (this.currentPage === 1) {
+                return 1;
+            }
+            if (this.currentPage === this.totalPages) {
+                return this.totalPages - this.maxVisibleButtons + 1;
+            }
+            return this.currentPage - 1;
+        },
+        endPage() {
+            return Math.min(this.startPage + this.maxVisibleButtons - 1, this.totalPages);
+        },
+        pages() {
+            const range = [];
+            let startP = this.startPage;
+            if ((this.totalPages - startP) < this.maxVisibleButtons) {
+                startP = this.totalPages - this.maxVisibleButtons
+            }
+            console.log('startP', startP);
+            for (let i = startP; i <= this.endPage; i += 1) {
+                if (i > 0) {
+                    range.push({
+                        name: i,
+                        isDisabled: i === this.currentPage
+                    });
+                }
+            }
+            //if(this.maxVisibleButtons > this.totalPages && (this.totalPages - this.currentPage < this.maxVisibleButtons / 2)){ Версия до 26.04.2023
+            if (this.maxVisibleButtons < this.totalPages && (this.totalPages - this.currentPage < this.maxVisibleButtons / 2)) {
+                console.log('попали в обрезку pages');
+                return range.splice(this.maxVisibleButtons / 2, range.length);
+            } else {
+                return range;
+            }
+        },
+        /*firstPages() {
+          const range = [];
+          for (let i = 1; i <= this.maxVisibleButtons / 2; i+= 1 ) {
+            range.push({
+              name: i,
+              isDisabled: i === this.currentPage
+            });
+          }
+          return range;
+        }, */
+        isInFirstPage() {
+            return this.currentPage === 1;
+        },
+        isInLastPage() {
+            return this.currentPage === this.totalPages;
+        },
     },
-    endPage() {
-      return Math.min(this.startPage + this.maxVisibleButtons - 1, this.totalPages);
-    },
-    pages() {
-      const range = [];
-      let startP = this.startPage;
-      if((this.totalPages - startP) < this.maxVisibleButtons) {
-        startP = this.totalPages - this.maxVisibleButtons
-      }
-      for (let i = startP ; i <= this.endPage; i+= 1 ) {
-        if(i > 0){
-          range.push({
-            name: i,
-            isDisabled: i === this.currentPage
-          });
-        }
-      }
-      if(this.maxVisibleButtons > this.totalPages && (this.totalPages - this.currentPage < this.maxVisibleButtons / 2)){
-        return range.splice(this.maxVisibleButtons / 2, range.length);
-      }else{
-        return range;
-      }
-    },
-    isInFirstPage() {
-      return this.currentPage === 1;
-    },
-    isInLastPage() {
-      return this.currentPage === this.totalPages;
-    },
-  },
-  methods: {
-    onClickFirstPage() {
-      this.$emit('pagechanged', 1);
-    },
-    onClickPreviousPage() {
-      this.$emit('pagechanged', this.currentPage - 1);
-    },
-    onClickPage(page) {
-      this.$emit('pagechanged', page);
-    },
-    onClickNextPage() {
-      this.$emit('pagechanged', this.currentPage + 1);
-    },
-    onClickLastPage() {
-      this.$emit('pagechanged', this.totalPages);
-    },
-    isPageActive(page) {
-      return this.currentPage === page;
-    },
+    methods: {
+        onClickFirstPage() {
+            this.$emit('pagechanged', 1);
+        },
+        onClickPreviousPage() {
+            this.$emit('pagechanged', this.currentPage - 1);
+        },
+        onClickPage(page) {
+            this.$emit('pagechanged', page);
+        },
+        onClickNextPage() {
+            this.$emit('pagechanged', this.currentPage + 1);
+        },
+        onClickLastPage() {
+            this.$emit('pagechanged', this.totalPages);
+        },
+        isPageActive(page) {
+            return this.currentPage === page;
+        },
 
-  }
+    }
 }
+
 
 </script>
 
