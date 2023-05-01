@@ -24,7 +24,7 @@
         <div class="modal fade" id="dictionaryEdit" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <Edit
-                    v-model="dictionary"
+                    :dictionary="dictionary"
                     @close-modal="closeModal('dictionaryEdit')"
                 />
             </div>

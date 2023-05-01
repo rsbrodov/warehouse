@@ -55,14 +55,16 @@
 
             },
             removeDictionaryElement(id){
-                this.deleteDictionaryElement(id)
-                    .then(response => {
-                        this.flashMessage.success({
-                            message: 'Элемент справочника успешно удален',
-                            time: 3000,
+                if (confirm('Вы уверены, что хотите удалить элемент справочника?')) {
+                    this.deleteDictionaryElement(id)
+                        .then(response => {
+                            this.flashMessage.success({
+                                message: 'Элемент справочника успешно удален',
+                                time: 3000,
+                            });
                         });
-                    });
-                this.getDictionaryElement(this.id);
+                    this.getDictionaryElement(this.id);
+                }
             },
             openModal(id){
                 if(id == 'dictionaryElementCreate') {

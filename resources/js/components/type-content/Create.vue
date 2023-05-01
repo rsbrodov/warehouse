@@ -23,9 +23,11 @@
                         <label for="icon"><b>Иконка для отображения</b></label>
                         <select id="icon" class="form-control" v-model="form.icon">
                             <option disabled selected value> -- Выберите иконку -- </option>
-                            <option v-for="(icon, index) in icons" :key="index" :value="icon.code">
-                                <i :class="'fa ' + icon.code+ ' fa-lg'" aria-hidden="true">{{icon.name}}</i>
-                            </option>
+<!--                            <option selected value="fa fa-github">&#xf03e; Github</option>-->
+<!--                            <option v-for="(icon, index) in icons" :key="index" :value="icon.code">-->
+                            <option v-for="(icon, index) in icons" :key="index" :value="icon.code" v-html="generateIcon(icon)"></option>
+<!--                                <i :class="'fa fa-book fa-lg'" aria-hidden="true">{{icon.name}}</i>-->
+<!--                            </option>-->
                         </select>
                     </div>
                 </div>
@@ -121,6 +123,9 @@
 
         methods: {
             ...mapActions(['newTypeContents']),
+            generateIcon(icon){
+                return '&#x' + icon.unicode + '; ' + icon.name;
+            },
             async saveTypeContent() {
                 this.$v.form.$touch();
                 if(this.$v.form.$invalid){
@@ -128,7 +133,7 @@
                 }else {
                     this.newTypeContents({
                         icon: this.form.icon, name: this.form.name, owner: this.form.owner, apiUrl: this.form.apiUrl,
-                        activeFrom: this.form.activeFrom, activeAfter: this.form.activeAfter, description: this.form.description
+                        activeFrom: this.form.activeFrom, activeAfter: this.form.activeAfter, description: this.form.description, status: 'DRAFT'
                     }).then(response => {
                         this.$emit('close-modal');
                         this.form.icon = ''; this.form.name = ''; this.form.owner = ''; this.form.apiUrl = ''; this.form.activeFrom = ''; this.form.activeAfter = ''; this.form.description = '';
@@ -137,6 +142,7 @@
                             time: 3000,
                         });
                     }).catch(error => {
+                        console.log(4645646456456545645);
                         if (error.response.status === 422) {
                             this.errors = error.response.data.errors || {};
                         }

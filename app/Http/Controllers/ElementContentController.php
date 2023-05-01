@@ -31,6 +31,11 @@ class ElementContentController extends Controller
         return view('element_content.index');
     }
 
+    public function indexAll()
+    {
+        return view('element_content.index-all');
+    }
+
     public function store(ElementContentRequest $request)
     {
         $result = $this->elementContentService->store($request);
@@ -59,6 +64,12 @@ class ElementContentController extends Controller
     public function findElementContentID($id)
     {
         $result = $this->elementContentService->findElementContentID($id, $_GET);
+        return $result;
+    }
+
+    public function findElementContentAll()
+    {
+        $result = $this->elementContentService->findElementContentAll($_GET);
         return $result;
     }
 

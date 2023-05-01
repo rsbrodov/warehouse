@@ -2,6 +2,7 @@ export default{
     state: {
         element_content: [],
         element_content_one: null,
+        element_content_all: null,
         new_element_content: null,
         element_contents_all_version: [],
     },
@@ -14,6 +15,9 @@ export default{
         },
         elementContentOne(state){
             return state.element_content_one
+        },
+        ElementContentAll(state){
+            return state.element_content_all
         },
         elementContentsAllVersion(state){
             return state.element_contents_all_version
@@ -28,6 +32,9 @@ export default{
         },
         updateElementContentOne(state, element_content_one){
             state.element_content_one = element_content_one
+        },
+        updateElementContentAll(state, element_content_all){
+            state.element_content_all = element_content_all
         },
         updateElementContentsAllVersion(state, element_contents_all_version){
             state.element_contents_all_version = element_contents_all_version
@@ -58,6 +65,19 @@ export default{
             await axios.get('http://127.0.0.1:8000/element-content/getElementContentID/' + id)
                 .then(response => {
                     commit('updateElementContentOne', response.data.data)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            /*.finally(() => {
+                commit('setLoading', false);
+            });*/
+        },
+        async getElementContentAll({commit}) {
+            //commit('setLoading', true);
+            await axios.get('http://127.0.0.1:8000/element-content/findElementContentAll')
+                .then(response => {
+                    commit('updateElementContentAll', response.data.data)
                 })
                 .catch(err => {
                     console.log(err)

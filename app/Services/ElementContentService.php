@@ -138,6 +138,35 @@ class ElementContentService
         }
     }
 
+    public function findElementContentAll($get)
+    {
+        if (Auth::guard('web')->check()) {
+            $typeContent = TypeContent::all();
+            $typeContents = TypeContent::pluck('id');
+            $query = ElementContent::query()
+                ->whereIn('type_content_id', $typeContents)
+                ->with('typeContent');
+            if(isset($get['status'])){
+                $query = $query->whereIn('status', explode(',',$get['status']));
+            }
+            if(isset($get['label'])){
+                $query = $query->where('label', 'LIKE', '%'.$get['label'].'%');
+            }
+            if(isset($get['active_from'])){
+                $query = $query->where('active_from', '>=', $get['active_from']);
+            }
+            if(isset($get['active_after'])){
+                $query = $query->where('active_after', '>=', $get['active_after']);
+            }
+            if(isset($get['url'])){
+                $query = $query->where('api_url', 'LIKE', '%'.$get['url'].'%');
+            }
+            $elementContents = $query->orderBy('created_at', 'asc')->get()
+                ->unique('id_global');
+            return ElementContentResource::collection($elementContents);
+        }
+    }
+
     public function createNewVersion($id, $parametr)
     {
         $type = ElementContent::findOrFail($id);
