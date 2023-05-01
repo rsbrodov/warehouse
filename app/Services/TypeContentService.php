@@ -124,9 +124,13 @@ class TypeContentService
                 if(!empty($get['owner'])){
                     $query = $query->where('owner', $get['owner']);
                 }
-                $typeContents = $query->orderBy('created_at', 'asc')->get();
-                return TypeContentResource::collection($typeContents);
-            }else{
+                $count = $query->count();
+                if (isset($get['page']) && $get['page'] > 0) {
+                    $query = $query->offset(($get['page'] - 1) * 15);
+                }
+                $typeContentLimit = $query->orderBy('created_at', 'asc')->limit(15)->get();
+                return self::prepareListing($typeContentLimit, $count);
+            } else {
                 return response()->json(['error' => 'Unauthenticated.'], 401);
             }
         } catch (\Exception $e) {
@@ -392,5 +396,14 @@ class TypeContentService
                 ];
             }
         }
+    }
+
+    public static function prepareListing($data, $countData)
+    {
+        $result = [];
+        $result['pages'] = ceil($countData / 15);
+        $result['countData'] = $countData;
+        $result['data'] = TypeContentResource::collection($data);
+        return $result;
     }
 }

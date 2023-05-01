@@ -95,6 +95,14 @@
                 </td>
             </tr>
         </table>
+        <pagination
+            :total-pages="pages"
+            :total="pages"
+            :per-page="perPage"
+            :max-visible-buttons="5"
+            :page="page"
+            @pagechanged="onPageChange"
+        />
     </div>
 </template>
 
@@ -105,8 +113,10 @@
     import Edit from './Edit';
     import Loader from "../helpers/Loader";
     import moment from 'moment'
+    import Pagination from "../helpers/Pagination.vue";
+    import {getUrlParams, updateUrl} from "../../helpers/tools";
     export default{
-        components:{Create, Edit, Loader},
+        components:{Pagination, Create, Edit, Loader},
         data:function(){
             return {
                 test: this.$BASE_URL,
@@ -134,8 +144,12 @@
                     owner:null,
                     active_from:null,
                     active_after:null,
+                    page: null,
                 },
                 users:null,
+                page: 1,
+                pages: 89, // всего страниц
+                perPage: 15, // кол-во результатов на странице
             }
         },
 
@@ -178,7 +192,26 @@
                     .then(response => {
                         this.users = response.data;
                     });
-            }
+            },
+            async getTypeContentByUrl() {
+                await this.getTypeContents({params: this.params})
+                // очищаем урл строку чтобы пересобрать её заново
+                let urlObj = getUrlParams();
+                for (var key in urlObj) {
+                    updateUrl('delete', [key]);
+                }
+
+                for (var key of Object.keys(this.params)) {
+                    if(this.params[key] !== null) {
+                        updateUrl('set', key, this.params[key]);
+                    }
+                }
+            },
+            onPageChange(page) {
+                this.page = page;
+                this.params.page = this.page;
+                this.getTypeContentByUrl();
+            },
         },
         watch: {
             'filter_form': {
