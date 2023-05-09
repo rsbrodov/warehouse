@@ -82,7 +82,9 @@
                 <div class="col-3">
                     <div class="d-flex flex-column">
                         <div class="p-2" v-if="typeContentOne.status == 'Draft'">
-                            <button class="btn btn-primary form-control text-left" @click="saveBody()">
+                            <button class="btn form-control text-left"
+                                    :class="changeStatus === false ? 'btn-secondary disabled': 'btn-primary'"
+                                    @click="saveBody()">
                                 <i class="fa fa-save fa-lg" aria-hidden="true"></i> Сохранить черновик
                             </button>
                         </div>
@@ -179,6 +181,7 @@ export default {
     components: { draggable, Viewmodal, Editmodal, ContextMenu, Onetype },
     data() {
         return {
+            changeStatus: false,
             showContextMenu: false,
             type_content_id: window.location.href.split('/')[5],
             copy: null,
@@ -276,6 +279,7 @@ export default {
             this.$refs.menu.open(event);
         },
         handleClone(item) {
+            this.changeStatus = true;
             let cloneMe = JSON.parse(JSON.stringify(item));
             this.$set(cloneMe, 'title', '');
             this.$set(cloneMe, 'required', '');
@@ -292,6 +296,7 @@ export default {
             return cloneMe;
         },
         handleCloneColumn() {
+            this.changeStatus = true;
             let cloneMe = [];
             return cloneMe;
         },
@@ -300,11 +305,17 @@ export default {
         },
 
         deleteItem(row, column, element) {
-            this.clonedItems[row][column].splice(element, 1);
+            if (confirm('Вы уверены, что хотите удалить элемент?')) {
+                this.changeStatus = true;
+                this.clonedItems[row][column].splice(element, 1);
+            }
         },
         deleteRow(index) {
             if (this.clonedItems.length > 1) {
-                this.clonedItems.splice(index, 1);
+                if (confirm('Вы уверены, что хотите удалить строку?')) {
+                    this.changeStatus = true;
+                    this.clonedItems.splice(index, 1);
+                }
             } else {
                 this.flashMessage.error({
                     message: 'Нельзя удалить все блоки',
@@ -339,11 +350,13 @@ export default {
                 []
             ];
             this.clonedItems.push(dop_array);
+            this.changeStatus = true;
         },
         saveBody() {
             axios.post('http://127.0.0.1:8000/type-content/save-body', { id: this.type_content_id, body: this.clonedItems })
                 .then(response => {
                     if (response.status === 200) {
+                        this.changeStatus = false;
                         this.flashMessage.success({
                             message: 'Данные сохранены',
                             time: 3000,
@@ -424,6 +437,11 @@ export default {
             });
 
         },
+        preventNav(event) {
+            if (!this.changeStatus) return
+            event.preventDefault()
+            event.returnValue = "Вы не сохранили изменения. Вы уверены, что хотите покинуть страницу?"
+        }
     },
 
     async created() {
@@ -454,9 +472,17 @@ export default {
                 return status_array['Draft'];
             }
         },
-    }
+    },
+    beforeMount() {
+        window.addEventListener("beforeunload", this.preventNav)
+    },
+
+    beforeDestroy() {
+        window.removeEventListener("beforeunload", this.preventNav);
+    },
 
 }
+
 </script>
 
 <style scoped>

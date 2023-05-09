@@ -11,18 +11,18 @@
                 <div class="row mb-3">
                     <div class="block col-6">
                         <label for="name"><b class="text-danger">*</b><b>Заголовок</b></label>
-                        <input autocomplete="off" id="name" class="form-control" type="text" v-model="form_edit.label"
-                               :class="{invalid: ($v.value.label.$dirty && !$v.value.label.required)}">
-                            <small class="helper-text invalid" v-if="$v.value.label.$dirty && !$v.value.label.required">
+                        <input autocomplete="off" id="name" class="form-control" type="text" v-model="localValue.label"
+                               :class="{invalid: ($v.localValue.label.$dirty && !$v.localValue.label.required)}">
+                            <small class="helper-text invalid" v-if="$v.localValue.label.$dirty && !$v.localValue.label.required">
                                 Необходимо заполнить «Заголовок».
                             </small>
                     </div>
 
                     <div class="block col-6">
                         <label for="api_url"><b class="text-danger">*</b><b>API URL:</b></label>
-                        <input autocomplete="off" id="api_url" class="form-control" type="text" v-model="form_edit.api_url"
-                               :class="{invalid: ($v.value.apiUrl.$dirty && !$v.value.apiUrl.required)}">
-                        <small class="helper-text invalid" v-if="$v.value.apiUrl.$dirty && !$v.value.apiUrl.required">
+                        <input autocomplete="off" id="api_url" class="form-control" type="text" v-model="localValue.apiUrl"
+                               :class="{invalid: ($v.localValue.apiUrl.$dirty && !$v.localValue.apiUrl.required)}">
+                        <small class="helper-text invalid" v-if="$v.localValue.apiUrl.$dirty && !$v.localValue.apiUrl.required">
                             Необходимо заполнить «API URL».
                         </small>
                         <a class="btn btn-warning btn-sm mt-1" @click="generateUrl()"><i class="fa fa-undo" aria-hidden="true"></i> Сгенерировать</a>
@@ -33,16 +33,16 @@
                     <div class="block col-6">
                         <label for="active_from"><b>Период действия с:</b></label>
                         <input type="date"
-                               :id="form_edit.active_from"
-                               v-model="form_edit.active_from"
+                               :id="localValue.active_from"
+                               v-model="localValue.active_from"
                                class="form-control">
                     </div>
 
                     <div class="block col-6">
                         <label for="api_url"><b>Период действия по:</b></label>
                         <input type="date"
-                               :id="form_edit.active_after"
-                               v-model="form_edit.active_after"
+                               :id="localValue.active_after"
+                               v-model="localValue.active_after"
                                class="form-control">
                     </div>
                 </div>
@@ -50,7 +50,7 @@
                 <div class="row">
                     <div class="block col-12">
                         <label for="description"><b>Описание:</b></label>
-                        <input autocomplete="off" type="textarea" name="description" v-model="form_edit.description" id="description" class="form-control">
+                        <input autocomplete="off" type="textarea" name="description" v-model="localValue.description" id="description" class="form-control">
                     </div>
                 </div>
 
@@ -83,27 +83,21 @@
         data:function(){
             return {
                 ru:ru,
-                form_edit:{
-                    id:null,
-                    label:null,
-                    status:null,
-                    api_url:null,
-                    active_from:null,
-                    active_after:null,
-                    description:null,
-                    type_content_id:null,
-                }
             }
         },
-
+        computed: {
+            localValue() {
+                return Object.assign({}, this.value);
+            }
+        },
         methods: {
             ...mapActions(['updateElementContent']),
             async update() {
                 this.$v.$touch();
                 if (this.$v.$invalid) {
                 } else {
-                    this.updateElementContent({id: this.form_edit.id, label: this.form_edit.label, api_url: this.form_edit.api_url, active_from: this.form_edit.active_from,
-                        active_after: this.form_edit.active_after, description: this.form_edit.description, status: this.form_edit.status, type_content_id: this.form_edit.type_content_id}
+                    this.updateElementContent({id: this.localValue.id, label: this.localValue.label, api_url: this.localValue.apiUrl, active_from: this.localValue.active_from,
+                        active_after: this.localValue.active_after, description: this.localValue.description, status: this.localValue.status, type_content_id: this.localValue.type_content_id}
                     ).then(response => {
                         this.$emit('close-modal');
                         this.flashMessage.success({
@@ -116,11 +110,11 @@
                 }
             },
             generateUrl(){
-                this.form_edit.api_url =  url_slug(this.form_edit.name)
+                this.localValue.api_url =  url_slug(this.localValue.name)
             },
         },
         validations: {
-            value:{
+            localValue:{
                 label: {required},
                 apiUrl: {required},
             }

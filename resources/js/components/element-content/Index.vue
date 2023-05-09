@@ -96,6 +96,7 @@
             </tr>
         </table>
         <pagination
+            v-if="ElementContent.pages > 1"
             :total-pages="pages"
             :total="pages"
             :per-page="perPage"
@@ -158,7 +159,9 @@
             ...mapActions(['getElementContent', 'getLoading']),
             closeModal(id){
                 $("#"+id).modal("hide");
-
+                if(id == 'elementContentEdit') {
+                    this.getElementContentByUrl();
+                }
             },
             openModal(id, element_content){
                 if(id == 'ElementContentCreate') {
@@ -211,6 +214,7 @@
                         updateUrl('set', key, this.params[key]);
                     }
                 }
+                this.pages = this.ElementContent.pages;
             },
             onPageChange(page) {
                 this.page = page;
@@ -222,7 +226,7 @@
             'filter_form': {
                 handler: function (newValue, oldValue) {
                     this.params = newValue;
-                    this.getElementContent({id: this.id, params: this.params});
+                    this.getElementContentByUrl();
                 },
                 deep: true
             },
@@ -261,7 +265,7 @@
         },
 
         async created(){
-            this.getElementContent({id: this.id, params: this.params});
+            this.getElementContentByUrl();
         },
 
         async mounted(){
