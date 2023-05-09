@@ -88,8 +88,6 @@ export default{
         },
         async updateElementContent(ctx, form){
             await axios.post('http://127.0.0.1:8000/element-content/'+form.id, form);
-            const element_content = await axios.get('http://127.0.0.1:8000/element-content/findElementContentID/'+form.type_content_id);
-            ctx.commit('UPDATE', element_content.data.data)
         },
         async getElementContentsAllVersion({commit}, id) {
             commit('setLoading', true);
