@@ -42,24 +42,24 @@ export default{
 
         },
         async getDictionaryID(ctx, id){
-            const dictionary = await axios.get('http://127.0.0.1:8000/dictionary/findDictionaryID/'+id);
+            const dictionary = await axios.get(BASE_URL + 'dictionary/findDictionaryID/'+id);
             ctx.commit('ONE', dictionary.data.data)
         },
         async newDictionary(ctx, form){
-            const new_dictionary = await axios.post('http://127.0.0.1:8000/dictionary/store', form);
-            /*const dictionary = await axios.get('http://127.0.0.1:8000/dictionary/findDictionary');
+            const new_dictionary = await axios.post(BASE_URL + 'dictionary/store', form);
+            /*const dictionary = await axios.get(BASE_URL + 'dictionary/findDictionary');
             ctx.commit('UPDATE', dictionary.data.data)*/
         },
         async updateDictionary(ctx, form){
-            const new_dictionary = await axios.post('http://127.0.0.1:8000/dictionary/'+form.id, form);
+            const new_dictionary = await axios.post(BASE_URL + 'dictionary/'+form.id, form);
         },
         async deleteDictionary(ctx, id){
-            await axios.delete('http://127.0.0.1:8000/dictionary/'+id);
-            const dictionary = await axios.get('http://127.0.0.1:8000/dictionary/findDictionary');
+            await axios.delete(BASE_URL + 'dictionary/'+id);
+            const dictionary = await axios.get(BASE_URL + 'dictionary/findDictionary');
             ctx.commit('UPDATE', dictionary.data.data)
         },
         async archiveDictionary(ctx, id){
-            await axios.get('http://127.0.0.1:8000/dictionary/'+id+ '/archive');
+            await axios.get(BASE_URL + 'dictionary/'+id+ '/archive');
         },
     },
 }

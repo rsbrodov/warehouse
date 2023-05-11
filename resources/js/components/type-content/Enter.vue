@@ -205,7 +205,7 @@ export default {
             ],
             errors: [],
             dropzoneOptions: {
-                url: 'http://127.0.0.1:8000/upload-image',
+                url: BASE_URL + 'upload-image',
                 thumbnailWidth: 150,
                 maxFilesize: 5,
                 headers: { "My-Awesome-Header": "header value" },
@@ -233,7 +233,7 @@ export default {
             this.$refs.menu.open(event);
         },
         async getValueElementContent() {
-            await axios.get('http://127.0.0.1:8000/type-content/get-body-element-content/' + this.elementContentOne.id)
+            await axios.get(BASE_URL + 'type-content/get-body-element-content/' + this.elementContentOne.id)
                 .then(response => {
                     this.elementBody = response.data
                 })
@@ -242,7 +242,7 @@ export default {
                 })
         },
         saveBody() {
-            axios.post('http://127.0.0.1:8000/type-content/save-body-element', { id: this.element_content_id, body: this.elementBody })
+            axios.post(BASE_URL + 'type-content/save-body-element', { id: this.element_content_id, body: this.elementBody })
                 .then(response => {
                     if (response.status === 200) {
                         this.errors = [];
@@ -257,7 +257,7 @@ export default {
                 })
         },
         async deleteElementContent() {
-            await axios.delete('http://127.0.0.1:8000/element-content/' + this.element_content_id)
+            await axios.delete(BASE_URL + 'element-content/' + this.element_content_id)
                 .then(response => {
                     if (response.status === 200) {
                         this.flashMessage.success({
@@ -265,7 +265,7 @@ export default {
                             time: 3000,
                         });
                         window.setTimeout(function () {
-                            window.location.href = "http://127.0.0.1:8000/type-content/index"
+                            window.location.href = BASE_URL + "type-content/index"
                         }, 3000);
                     }
                 })
@@ -296,7 +296,7 @@ export default {
         },
 
         async createNewVersion(version) {
-            await axios.get('http://127.0.0.1:8000/element-content/new-version/' + this.element_content_id + '/' + version)
+            await axios.get(BASE_URL + 'element-content/new-version/' + this.element_content_id + '/' + version)
                 .then(response => {
                     if (response.status === 200) {
                         this.flashMessage.success({
@@ -315,7 +315,7 @@ export default {
                 })
         },
         async updateFields() {
-            await axios.get('http://127.0.0.1:8000/element-content/update-fields/' + this.element_content_id)
+            await axios.get(BASE_URL + 'element-content/update-fields/' + this.element_content_id)
                 .then(response => {
                     if (response.status === 200) {
                         this.flashMessage.success({
