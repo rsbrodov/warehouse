@@ -22,7 +22,7 @@
         <div class="row mt-4">
             <div class="header-block row">
                 <div class="search-form col-6">
-                    <div class="form">
+                    <div class="form" style="display: none;">
                         <form action="" method="post">
                             <div class="form-group row">
                                 <div class="col-4">
@@ -80,7 +80,7 @@
             <tr v-else-if="getLoading === true" style="border:none">
                 <td class="text-center text-danger" colspan="6"><Loader/></td>
             </tr>
-            <tr v-else v-for="(element, index) in ElementContentAll" :key="index">
+            <tr v-else v-for="(element, index) in ElementContentAll.data" :key="index">
                 <td>{{element.label}}</td>
                 <td style="white-space: nowrap"><i :class="'fa ' + element.typeContent.icon+ ' fa-lg'" aria-hidden="true"></i> {{element.typeContent.name}}</td>
                 <td><p style="display:flex; justify-content: space-between; margin:0; padding:0">{{element.apiUrl}} <button class="btn btn-outline-primary btn-unbordered" @click="copyUrl(element)"><span class="fa fa-files-o fa-lg" aria-hidden="true"></span></button></p></td>
@@ -97,6 +97,15 @@
                 </td>
             </tr>
         </table>
+        <pagination
+            v-if="ElementContentAll.pages > 1"
+            :total-pages="pages"
+            :total="pages"
+            :per-page="perPage"
+            :max-visible-buttons="5"
+            :page="page"
+            @pagechanged="onPageChange"
+        />
     </div>
 </template>
 
@@ -107,8 +116,10 @@
     import moment from 'moment'
     import Create from './create'
     import Edit from "./Edit";
+    import Pagination from "../helpers/Pagination.vue";
+    import {getUrlParams, updateUrl} from "../../helpers/tools";
     export default{
-        components:{Loader, moment, Create, Edit},
+        components:{Pagination, Loader, moment, Create, Edit},
         data:function(){
             return {
                 id: window.location.href.split('/').slice(-1)[0],
@@ -135,6 +146,9 @@
                     active_from:null,
                     active_after:null,
                 },
+                page: 1,
+                pages: 89, // всего страниц
+                perPage: 15, // кол-во результатов на странице
             }
         },
 
@@ -185,13 +199,33 @@
                         time: 3000,
                     });
                 }
-            }
+            },
+            async getElementContentAllByUrl() {
+                await this.getElementContentAll({params: this.params});
+                // очищаем урл строку чтобы пересобрать её заново
+                let urlObj = getUrlParams();
+                for (var key in urlObj) {
+                    updateUrl('delete', [key]);
+                }
+
+                for (var key of Object.keys(this.params)) {
+                    if(this.params[key] !== null) {
+                        updateUrl('set', key, this.params[key]);
+                    }
+                }
+                this.pages = this.ElementContentAll.pages;
+            },
+            onPageChange(page) {
+                this.page = page;
+                this.params.page = this.page;
+                this.getElementContentAllByUrl();
+            },
         },
         watch: {
             'filter_form': {
                 handler: function (newValue, oldValue) {
                     this.params = newValue;
-                    this.getElementContentAll({params: this.params});
+                    this.getElementContentAllByUrl();
                 },
                 deep: true
             },
@@ -230,7 +264,7 @@
         },
 
         async created(){
-            this.getElementContentAll({params: this.params});
+            await this.getElementContentAllByUrl();
             console.log(this.ElementContentAll);
         },
 

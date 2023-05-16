@@ -147,30 +147,38 @@ class ElementContentService
 
     public function findElementContentAll($get)
     {
-        if (Auth::guard('web')->check()) {
-            $typeContent = TypeContent::all();
-            $typeContents = TypeContent::pluck('id');
-            $query = ElementContent::query()
-                ->whereIn('type_content_id', $typeContents)
-                ->with('typeContent');
-            if(isset($get['status'])){
-                $query = $query->whereIn('status', explode(',',$get['status']));
+        try {
+            if (Auth::guard('web')->check()) {
+                $typeContent = TypeContent::all();
+                $typeContents = TypeContent::pluck('id');
+                $query = ElementContent::query()
+                    ->whereIn('type_content_id', $typeContents)
+                    ->with('typeContent');
+                if(isset($get['status'])){
+                    $query = $query->whereIn('status', explode(',',$get['status']));
+                }
+                if(isset($get['label'])){
+                    $query = $query->where('label', 'LIKE', '%'.$get['label'].'%');
+                }
+                if(isset($get['active_from'])){
+                    $query = $query->where('active_from', '>=', $get['active_from']);
+                }
+                if(isset($get['active_after'])){
+                    $query = $query->where('active_after', '>=', $get['active_after']);
+                }
+                if(isset($get['url'])){
+                    $query = $query->where('api_url', 'LIKE', '%'.$get['url'].'%');
+                }
+                $count = $query->count();
+                if (isset($get['page']) && $get['page'] > 0) {
+                    $query = $query->offset(($get['page'] - 1) * 15);
+                }
+                $elementContents = $query->orderBy('created_at', 'asc')->limit(15)->get()->unique('id_global');
+
+                return self::prepareListing($elementContents, $count);
             }
-            if(isset($get['label'])){
-                $query = $query->where('label', 'LIKE', '%'.$get['label'].'%');
-            }
-            if(isset($get['active_from'])){
-                $query = $query->where('active_from', '>=', $get['active_from']);
-            }
-            if(isset($get['active_after'])){
-                $query = $query->where('active_after', '>=', $get['active_after']);
-            }
-            if(isset($get['url'])){
-                $query = $query->where('api_url', 'LIKE', '%'.$get['url'].'%');
-            }
-            $elementContents = $query->orderBy('created_at', 'asc')->get()
-                ->unique('id_global');
-            return ElementContentResource::collection($elementContents);
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
     }
 

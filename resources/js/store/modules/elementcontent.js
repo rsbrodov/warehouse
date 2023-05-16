@@ -73,11 +73,11 @@ export default{
                 commit('setLoading', false);
             });*/
         },
-        async getElementContentAll({commit}) {
+        async getElementContentAll({commit}, params) {
             //commit('setLoading', true);
-            await axios.get(BASE_URL + 'element-content/findElementContentAll')
+            await axios.get(BASE_URL + 'element-content/findElementContentAll', params)
                 .then(response => {
-                    commit('updateElementContentAll', response.data.data)
+                    commit('updateElementContentAll', response.data)
                 })
                 .catch(err => {
                     console.log(err)
