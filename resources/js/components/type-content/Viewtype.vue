@@ -15,8 +15,11 @@
         <!-- Modal -->
         <div class="modal fade" id="createElement" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
-                <Viewmodal @close-modal="closeModal('createElement', $event)" :copy="copy" :clonedItems="clonedItems">
-                </Viewmodal>
+                <Viewmodal @close-modal="closeModal('createElement', $event)"
+                           :copy="copy"
+                           :clonedItems="clonedItems"
+                           :current-clone="currentClone"
+                />
             </div>
         </div>
         <!--End Modal -->
@@ -25,7 +28,10 @@
         <!-- Edit modal -->
         <div class="modal fade" id="editElement" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
-                <Editmodal @close-modal="closeModal('editElement', $event)" :copy="copy" :clonedItems="clonedItems">
+                <Editmodal @close-modal="closeModal('editElement', $event)"
+                           :copy="copy"
+                           :current-edit="currentEdit"
+                >
                 </Editmodal>
             </div>
         </div>
@@ -38,8 +44,9 @@
             <div class="row ">
                 <div class="col-9 left-block">
                     <FlashMessage :position="'right bottom'" style='z-index:20001;'></FlashMessage>
-
-                    <div class="left-block__layout" v-for="(row, row_index) in clonedItems" :key="row_index">
+                    <div class="left-block__layout"
+                         v-if="typeContentOne.status == 'Draft'"
+                         v-for="(row, row_index) in clonedItems" :key="row_index">
                         <!-- <transition-group type="transition" name="flip-list"> -->
 
                         <draggable
@@ -63,7 +70,7 @@
                                          :key="uuid(item)">
                                         <p class="pl-2 pt-3 text-secondary"><i :class="item.class"></i> {{ item.title }}</p>
                                         <div class="button-group" v-if="typeContentOne.status == 'Draft'">
-                                            <button class="btn btn-outline-primary mr-2" @click="EditItem(item.uid)"><i
+                                            <button class="btn btn-outline-primary mr-2" @click="EditItem(row_index, column_index, index_element)"><i
                                                     class="fa fa-pencil fa-sm"></i></button>
                                             <button class="btn btn-outline-primary mr-2" @click="deleteItem(row_index, column_index, index_element)"><i
                                                     class="fa fa-trash fa-sm"></i></button>
@@ -73,6 +80,28 @@
                                 </draggable>
                             </div>
                         </draggable>
+                        <i v-if="typeContentOne.status == 'Draft'"
+                           class="fa fa-trash mr-2 mt-2 text-primary lg" @click="deleteRow(row_index)"></i>
+                        <!-- </transition-group> -->
+                    </div>
+                    <!--undragable-->
+                    <div class="left-block__layout"
+                         v-if="typeContentOne.status != 'Draft'"
+                         v-for="(row, row_index) in clonedItems" :key="row_index">
+                        <div
+                            class="left-block__draggable-column"
+                            v-model="clonedItems[row_index]">
+                            <div class="clickable left-block__undraggable-layout__column"
+                                 v-for="(column, column_index) in row" :key="column_index">
+                                <div class="left-block__draggable-layout__undraggable-element">
+                                    <div class="clickable left-block__undraggable-layout__element"
+                                         v-for="(item, index_element) in column"
+                                         :key="uuid(item)">
+                                        <p class="pl-2 pt-3 text-secondary"><i :class="item.class"></i> {{ item.title }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <i v-if="typeContentOne.status == 'Draft'"
                            class="fa fa-trash mr-2 mt-2 text-primary lg" @click="deleteRow(row_index)"></i>
                         <!-- </transition-group> -->
@@ -89,7 +118,7 @@
                             </button>
                         </div>
                         <div class="p-2" v-if="typeContentOne.status == 'Draft'">
-                            <button class="btn btn-primary form-control text-left" @click="changeStatus('Published', 'Тип контента опубликован')">
+                            <button class="btn btn-primary form-control text-left" @click="changeStatusType('Published', 'Тип контента опубликован')">
                                 <i class="fa fa-check-circle fa-lg" aria-hidden="true"></i> Публикация типа
                             </button>
                         </div>
@@ -104,7 +133,7 @@
                             </button>
                         </div>
                         <div class="p-2" v-if="typeContentOne.status == 'Archive'">
-                            <button class="btn btn-primary form-control text-left" @click="changeStatus('Published', 'Тип контента восстановлен из архива')">
+                            <button class="btn btn-primary form-control text-left" @click="changeStatusType('Published', 'Тип контента восстановлен из архива')">
                                 <i class="fa fa-cloud-download fa-lg" aria-hidden="true"></i> Востановить из архива
                             </button>
                         </div>
@@ -127,7 +156,7 @@
                         </context-menu>
 
                         <div class="p-2" v-if="typeContentOne.status == 'Published'">
-                            <button class="btn btn-primary form-control text-left" @click="changeStatus('Archive', 'Тип контента отправлен в архив')">
+                            <button class="btn btn-primary form-control text-left" @click="changeStatusType('Archive', 'Тип контента отправлен в архив')">
                                 <i class="fa fa-trash fa-lg" aria-hidden="true"></i> Отправить в архив
                             </button>
                         </div>
@@ -138,6 +167,7 @@
                         </div>
 
                         <draggable
+                            v-if="typeContentOne.status == 'Draft'"
                             v-model="availableColumn"
                             :options="availableColumnOptions"
                             :clone="handleCloneColumn">
@@ -149,7 +179,8 @@
                         </draggable>
 
 
-                        <draggable v-model="availableItems"
+                        <draggable v-if="typeContentOne.status == 'Draft'"
+                                    v-model="availableItems"
                                    :options="availableItemOptions"
                                    :clone="handleClone"
                                     @end="moveAction"
@@ -161,6 +192,27 @@
                                 </a>
                             </div>
                         </draggable>
+                        <!--unndragable-->
+                        <div
+                            v-if="typeContentOne.status != 'Draft'"
+                            v-model="availableColumn">
+                            <div class="p-2" v-for="column in availableColumn" style="cursor: not-allowed!important;">
+                                <a class="btn btn-outline-secondary form-control text-left" style="cursor: not-allowed!important;">
+                                    <i :class="column.class" aria-hidden="true"></i> {{ column.name }}
+                                </a>
+                            </div>
+                        </div>
+
+
+                        <div v-if="typeContentOne.status != 'Draft'"
+                                   v-model="availableItems">
+                            <div class="p-2 right-drag-elem" v-for="item in availableItems" style="cursor: not-allowed!important;">
+                                <a class="btn btn-outline-secondary form-control text-left" style="cursor: not-allowed!important;">
+                                    <i :class="item.class" aria-hidden="true"></i> {{ item.name }}
+                                </a>
+                            </div>
+                        </div>
+                        <!--unndragable-->
                     </div>
                 </div>
             </div>
@@ -185,6 +237,8 @@ export default {
             showContextMenu: false,
             type_content_id: window.location.href.split('/')[5],
             copy: null,
+            currentClone: null,
+            currentEdit: null,
             data: null,
             clonedItems: [
                 [
@@ -293,6 +347,7 @@ export default {
             this.$set(cloneMe, "uid", key);
 
             this.copy = key;
+            this.currentClone = cloneMe;
             return cloneMe;
         },
         handleCloneColumn() {
@@ -301,7 +356,10 @@ export default {
             return cloneMe;
         },
         moveAction(item) {
-            this.openModal('createElement');
+            console.log('ITEM',item.pullMode);
+            if(item.pullMode === true){
+                this.openModal('createElement');
+            }
         },
 
         deleteItem(row, column, element) {
@@ -333,7 +391,28 @@ export default {
             return e.uid;
         },
 
-        closeModal(id) {
+        closeModal(id, localValue) {
+            $.each(this.clonedItems, function (index, clonedItem) {
+                $.each(clonedItem, function (index_column, column) {
+                    $.each(column, function (index_item, item) {
+                        if (item.uid === localValue.copy) {
+                            if (localValue.status === 'SET' || localValue.status === 'UPDATE') {
+                                item.title = localValue.localValue.title;
+                                item.required = localValue.localValue.required;
+                                item.dictionary_id = localValue.localValue.dictionary_id;
+                            }
+                        }
+                    });
+                });
+            });
+            if (localValue.status === 'REMOVE') {
+                this.changeStatus = true;
+                this.clonedItems[1][0].splice(1, 1);
+            }
+            if (localValue.status !== 'REMOVE') {
+                this.changeStatus = true;
+            }
+            console.log('localValue', localValue);
             $("#" + id).modal("hide");
 
         },
@@ -341,8 +420,8 @@ export default {
             $('#' + id).modal('show');
         },
 
-        EditItem(uid) {
-            this.copy = uid;
+        EditItem(rowIndex, columnIndex, itemIndex) {
+            this.currentEdit = this.clonedItems[rowIndex][columnIndex][itemIndex];
             this.openModal('editElement');
         },
         pushRow() {
@@ -420,7 +499,7 @@ export default {
                 })
         },
 
-        async changeStatus(status, message) {
+        async changeStatusType(status, message) {
             this.update({
                 id: this.typeContentOne.id, owner: this.typeContentOne.owner, icon: this.typeContentOne.icon, name: this.typeContentOne.name, apiUrl: this.typeContentOne.apiUrl,
                     activeFrom: this.typeContentOne.activeFrom, activeAfter: this.typeContentOne.activeAfter, description: this.typeContentOne.description, status: status,
@@ -520,9 +599,24 @@ export default {
     margin: 5px auto;
     cursor: move;
 }
+.left-block__undraggable-layout__column{
+    display: flex;
+    flex:1;
+    background-color: white;
+    min-height: 50px;
+    margin: 5px auto;
+}
 
 /*draggable элемента его div*/
 .left-block__draggable-layout__draggable-element {
+    background-color: #ededed;
+    border-radius: 5px;
+    width: 96%;
+    margin: 0 auto;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+.left-block__draggable-layout__undraggable-element {
     background-color: #ededed;
     border-radius: 5px;
     width: 96%;
@@ -542,6 +636,14 @@ export default {
     height: 45px;
     margin: 5px;
     cursor: move;
+    justify-content: space-between;
+    align-items: center;
+}
+.left-block__undraggable-layout__element {
+    display: flex;
+    background-color: white;
+    height: 45px;
+    margin: 5px;
     justify-content: space-between;
     align-items: center;
 }

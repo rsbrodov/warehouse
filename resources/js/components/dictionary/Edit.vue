@@ -2,13 +2,14 @@
     <div>
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Редактирование справочника23</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Редактирование справочника</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true" @click="$emit('close-modal')">&times;</span>
                 </button>
             </div>
             <form @submit.prevent="updDictionary()">
                 <div class="modal-body">
+                    {{errors}}
                      <div class="block">
                          <label for="name"><b class="text-danger">*</b><b>Наименование справочника</b></label>
                          <input autocomplete="off" id="name" class="form-control" type="text" v-model="localDictionary.name"
@@ -16,6 +17,9 @@
                          <small class="helper-text invalid" v-if="!$v.localDictionary.name.required">
                              Необходимо заполнить «Наименование».
                          </small>
+<!--                         <small class="helper-text invalid" v-if="errors.name">-->
+<!--                             {{errors.name}}<br>-->
+<!--                         </small>-->
                      </div>
 
                      <div class="block">
@@ -25,6 +29,9 @@
                          <small class="helper-text invalid" v-if="$v.localDictionary.code.$dirty && !$v.localDictionary.code.required">
                              Необходимо заполнить «Код».
                          </small>
+<!--                         <small class="helper-text invalid" v-if="errors.code">-->
+<!--                             {{errors.code}}<br>-->
+<!--                         </small>-->
                      </div>
                      <div class="block">
                          <label for="description"><b>Описание справочника:</b></label>
@@ -50,6 +57,11 @@
             dictionary: {
                 required: true,
             },
+            data:function(){
+                return {
+                    errors:{},
+                }
+            },
         },
         computed: {
             localDictionary() {
@@ -71,8 +83,11 @@
                             message: 'Справочник отредактирован',
                             time: 3000,
                         });
-                    }).catch(errors => {
-                        console.log(errors);
+                    }).catch(error => {
+                        console.log(error);
+                        /*if (error.response.status === 422) {
+                            console.log(error);//this.errors = error.response.data.errors || {};
+                        }*/
                     });
                 }
             },

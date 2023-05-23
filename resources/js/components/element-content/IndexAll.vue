@@ -67,6 +67,7 @@
         <table class="table table-bordered table-hover mt-4">
             <tr>
                 <th>Заголовок</th>
+                <th>Тип контента</th>
                 <th>URL контента</th>
                 <th>Статус</th>
                 <th>Период действия</th>
@@ -81,6 +82,7 @@
             </tr>
             <tr v-else v-for="(element, index) in ElementContentAll" :key="index">
                 <td>{{element.label}}</td>
+                <td style="white-space: nowrap"><i :class="'fa ' + element.typeContent.icon+ ' fa-lg'" aria-hidden="true"></i> {{element.typeContent.name}}</td>
                 <td><p style="display:flex; justify-content: space-between; margin:0; padding:0">{{element.apiUrl}} <button class="btn btn-outline-primary btn-unbordered" @click="copyUrl(element)"><span class="fa fa-files-o fa-lg" aria-hidden="true"></span></button></p></td>
                 <td :class="element.status | statusColor"><b>{{ element.status | status }}</b></td>
                 <td>{{ element | date }}</td>

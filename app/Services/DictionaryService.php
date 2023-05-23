@@ -38,6 +38,8 @@ class DictionaryService
     {
         try {
             if (Auth::guard('web')->check() || Auth::guard('api')->check()) {
+                $checkCode = $this->checkingUnique($request, $id);
+                if ($checkCode) return response()->json($checkCode, 422);
                 $dictionary = Dictionary::find($id);
                 $dictionary->name = $request->name;
                 $dictionary->description = $request->description;
@@ -152,15 +154,29 @@ class DictionaryService
         return $result;
     }
 
-    public function checkingUnique($dictionary)
+    public function checkingUnique($dictionary, $id = null)
     {
         $errors = [];
-        if (Dictionary::where('code', $dictionary->code)->first() !== null) {
-            $errors['code'] = '«Код справочника» должен быть уникальным';
+        if($id == null){
+            if (Dictionary::where('code', $dictionary->code)->first() !== null) {
+                $errors['code'] = '«Код справочника» должен быть уникальным';
+            }
+            if (Dictionary::where('name', $dictionary->name)->first() !== null) {
+                $errors['name'] = '«Наименование справочника» должно быть уникальным';
+            }
+        }else{
+            foreach (Dictionary::where('code', $dictionary->code)->get() as $d){
+                if($d->id !== $id){
+                    $errors['code'] = '«Код справочника» должен быть уникальным';
+                }
+            }
+            foreach (Dictionary::where('name', $dictionary->name)->get() as $d){
+                if($d->id !== $id){
+                    $errors['name'] = '«Наименование справочника» должно быть уникальным';
+                }
+            }
         }
-        if (Dictionary::where('name', $dictionary->name)->first() !== null) {
-            $errors['name'] = '«Наименование справочника» должно быть уникальным';
-        }
+
         if(!empty($errors)){
             return [
                 'code' => 422,

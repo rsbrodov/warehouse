@@ -131,6 +131,8 @@
                         icon: this.form.icon, name: this.form.name, owner: this.form.owner, apiUrl: this.form.apiUrl,
                         activeFrom: this.form.activeFrom, activeAfter: this.form.activeAfter, description: this.form.description, status: 'DRAFT'
                     }).then(response => {
+                        console.log(1111111111111);
+                        this.$emit('get-type-content-by-url');
                         this.$emit('close-modal');
                         this.form.icon = ''; this.form.name = ''; this.form.owner = ''; this.form.apiUrl = ''; this.form.activeFrom = ''; this.form.activeAfter = ''; this.form.description = '';
                         this.flashMessage.success({
@@ -138,9 +140,15 @@
                             time: 3000,
                         });
                     }).catch(error => {
-                        console.log(4645646456456545645);
+                        console.log('ошибуля');
+                        console.log(error);
                         if (error.response.status === 422) {
                             this.errors = error.response.data.errors || {};
+                        }else{
+                            this.flashMessage.error({
+                                message: 'Ошибка создания типа контента',
+                                time: 3000,
+                            });
                         }
                     });
                 }
