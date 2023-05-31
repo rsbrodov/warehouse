@@ -4,7 +4,10 @@
         <!-- Modal Create -->
         <div class="modal fade" id="typeContentCreate" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
-                <create @close-modal="closeModal('typeContentCreate')"></create>
+                <create
+                    @close-modal="closeModal('typeContentCreate')"
+                    @get-type-content-by-url="getTypeContentByUrl()"
+                />
             </div>
         </div>
 

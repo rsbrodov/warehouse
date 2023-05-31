@@ -21,9 +21,9 @@ class DictionaryResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'archive' => (bool)$this->archive,
-            'createdDate' => date('d.m.Y H:i:s', strtotime($this->created_date)),
+            'createdDate' => date('d.m.Y', strtotime($this->created_at)),
             'createdAuthor' => $this->whenLoaded('createdAuthor', new UserTruncatedResource($this->createdAuthor)),
-            'updatedDate' => date('d.m.Y H:i:s', strtotime($this->update_date)),
+            'updatedDate' => date('d.m.Y', strtotime($this->updated_at)),
             'updatedAuthor' => $this->whenLoaded('updatedAuthor', new UserTruncatedResource($this->updatedAuthor)),
         ];
     }
