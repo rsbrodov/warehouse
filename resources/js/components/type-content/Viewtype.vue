@@ -184,7 +184,7 @@
                                    :options="availableItemOptions"
                                    :clone="handleClone"
                                     @end="moveAction"
-                                   :group="{ name: 'column' }"
+                                   :group="{ name: 'column',  pull: 'clone', put: false}"
                         >
                             <div class="p-2 right-drag-elem" v-for="item in availableItems">
                                 <a class="btn btn-outline-secondary form-control text-left">
@@ -357,9 +357,9 @@ export default {
         },
         moveAction(item) {
             console.log('ITEM',item.pullMode);
-            if(item.pullMode === true){
+            //if(item.pullMode === true){
                 this.openModal('createElement');
-            }
+            //}
         },
 
         deleteItem(row, column, element) {

@@ -24,6 +24,7 @@ Vue.component('Indexelementcontentall', require('./components/element-content/In
 Vue.component('Allversion', require('./components/type-content/Allversion.vue').default);
 Vue.component('Allversionelementcontent', require('./components/element-content/AllversionElementContent.vue').default);
 Vue.component('Enter', require('./components/type-content/Enter').default);
+Vue.component('Sidebar', require('./components/helpers/Sidebar').default);
 
 Vue.use(Vuelidate)
 Vue.use( Moment );
