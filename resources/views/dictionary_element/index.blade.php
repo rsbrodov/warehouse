@@ -2,7 +2,9 @@
 @extends('admin.main')
 @section('content')
     <div id="app">
-        <Indexdictionaryelement/>
+        <Indexdictionaryelement
+        :id="'{{$id}}'"
+        />
     </div>
     <script src="{{mix('js/app.js')}}"></script>
 @endsection
