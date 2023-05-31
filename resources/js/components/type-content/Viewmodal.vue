@@ -74,7 +74,7 @@
         },
         methods:{
             async getDictionary() {
-                await axios.get('http://127.0.0.1:8000/dictionary/findDictionaryNotEmptyElement')
+                await axios.get(BASE_URL + 'dictionary/findDictionaryNotEmptyElement')
                     .then(response => {
                         this.Dictionary = response.data
                     })

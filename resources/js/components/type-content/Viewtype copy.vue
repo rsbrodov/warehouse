@@ -281,7 +281,7 @@ export default {
             this.clonedItems.push(dop_array);
         },
         saveBody() {
-            axios.post('http://127.0.0.1:8000/type-content/save-body', { id: this.type_content_id, body: this.clonedItems })
+            axios.post(BASE_URL + 'type-content/save-body', { id: this.type_content_id, body: this.clonedItems })
                 .then(response => {
                     if (response.status === 200) {
                         this.flashMessage.success({
@@ -295,7 +295,7 @@ export default {
                 })
         },
         async deleteTypeContent() {
-            await axios.delete('http://127.0.0.1:8000/type-content/' + this.type_content_id)
+            await axios.delete(BASE_URL + 'type-content/' + this.type_content_id)
                 .then(response => {
                     if (response.status === 200) {
                         this.flashMessage.success({
@@ -303,7 +303,7 @@ export default {
                             time: 3000,
                         });
                         window.setTimeout(function () {
-                            window.location.href = "http://127.0.0.1:8000/type-content/index"
+                            window.location.href = BASE_URL + "type-content/index"
                         }, 3000);
                     }
                 })
@@ -313,7 +313,7 @@ export default {
         },
 
         async getBody() {
-            await axios.get('http://127.0.0.1:8000/type-content/get-body/' + this.type_content_id)
+            await axios.get(BASE_URL + 'type-content/get-body/' + this.type_content_id)
                 .then(response => {
                     if (Object.keys(response.data).length === 0) {
                         this.clonedItems = [[]];
@@ -326,7 +326,7 @@ export default {
                 })
         },
         async createNewVersion(version) {
-            await axios.get('http://127.0.0.1:8000/type-content/new-version/' + this.type_content_id + '/' + version)
+            await axios.get(BASE_URL + 'type-content/new-version/' + this.type_content_id + '/' + version)
                 .then(response => {
                     if (response.status === 200) {
                         this.flashMessage.success({
