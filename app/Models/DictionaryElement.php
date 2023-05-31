@@ -10,6 +10,7 @@ class DictionaryElement extends Model
 {
     use HasFactory;
     use Uuids;
+    public $timestamps = false;
 
     protected $table = 'dictionary_element';
     protected $fillable = [
@@ -17,6 +18,8 @@ class DictionaryElement extends Model
         'value',
         'created_author',
         'updated_author',
+        'update_date',
+        'created_date',
     ];
 
     public function createdAuthor() {

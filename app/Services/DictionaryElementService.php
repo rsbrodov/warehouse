@@ -20,6 +20,8 @@ class DictionaryElementService
                     'dictionary_id' => $request->form['dictionary_id'],
                     'created_author' => Auth::guard('web')->user()->id ?? Auth::guard('api')->user()->id,
                     'updated_author' => Auth::guard('web')->user()->id ?? Auth::guard('api')->user()->id,
+                    'created_date' => Date('Y-m-d H:i:s'),
+                    'update_date' => Date('Y-m-d H:i:s'),
                 ]);
                 return new DictionaryElementResource($dictionaryElement);
             }
