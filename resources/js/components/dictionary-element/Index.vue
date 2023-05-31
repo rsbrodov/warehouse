@@ -36,9 +36,10 @@
     import CreateElement from "../dictionary-element/CreateElement";
     export default{
         components:{CreateElement},
-        data:function(){
-            return {
-                id: window.location.href.split('/').slice(-3)[0],
+        props: {
+            id: {
+                type: String,
+                default: 0
             }
         },
 

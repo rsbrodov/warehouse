@@ -18,10 +18,10 @@ class DictionaryElementController extends Controller
         $this->dictionaryElementService = $service;
     }
 
-    public function index()
+    public function index($id)
     {
         if(Auth::guard('web')->check()) {
-            return view('dictionary_element.index');
+            return view('dictionary_element.index')->with('id', $id);;
         }
     }
 
