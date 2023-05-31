@@ -146,7 +146,7 @@
                 }
             },
             async getIcons() {
-                axios.get('http://127.0.0.1:8000/type-content/icons')
+                axios.get(BASE_URL + 'type-content/icons')
                     .then(response => {
                         this.icons = response.data;
                     });
@@ -155,7 +155,7 @@
                 this.form.apiUrl =  url_slug(this.form.name)
             },
             getUsers(){
-                axios.get('http://127.0.0.1:8000/users-list')
+                axios.get(BASE_URL + 'users-list')
                     .then(response => {
                         this.users = response.data;
                     });

@@ -115,7 +115,7 @@
         methods: {
             ...mapActions(['update']),
             async getIcons() {
-                axios.get('http://127.0.0.1:8000/type-content/icons')
+                axios.get(BASE_URL + 'type-content/icons')
                     .then(response => {
                         this.icons = response.data;
                     });
@@ -146,7 +146,7 @@
                 this.localValue.apiUrl =  url_slug(this.localValue.name)
             },
             getUsers(){
-                axios.get('http://127.0.0.1:8000/users-list')
+                axios.get(BASE_URL + 'users-list')
                     .then(response => {
                         this.users = response.data;
                     });

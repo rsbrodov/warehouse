@@ -31,20 +31,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/tech/create', [TechController::class, 'create'])->name('tech.create');
-Route::get('/tech/index', [TechController::class, 'index'])->name('tech.index');
 Route::get('/users-list', [App\Http\Controllers\UsersController::class, 'usersList']);
-
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/home2', [App\Http\Controllers\HomeController::class, 'index2'])->name('home2');
-Route::get('/home3', [App\Http\Controllers\HomeController::class, 'index3'])->name('home3');
-Route::get('/gvt', [App\Http\Controllers\HomeController::class, 'gridViewTest'])->name('home-gvt');
-Route::get('/home-test', [App\Http\Controllers\HomeController::class, 'test'])->name('home-test');
-Route::get('/home-test2', [App\Http\Controllers\HomeController::class, 'test2'])->name('home-test2');
-Route::get('/home-delete-test10000TC', [App\Http\Controllers\HomeController::class, 'deleteTEST10000TC'])->name('home-delete-test10000TC');
-Route::get('/home-delete-test10000D', [App\Http\Controllers\HomeController::class, 'deleteTEST10000D'])->name('home-delete-test10000D');
-Route::post('/home-image-upload', [App\Http\Controllers\HomeController::class, 'imageUpload'])->name('image.upload');
-Route::get('/home-image-show', [App\Http\Controllers\HomeController::class, 'imageShow'])->name('image.show');
 
 //Route::get('/users/link/{data}', [UsersController::class, 'linkHandler'])->name('link.handler');
 
