@@ -63,7 +63,7 @@ export default{
 
         },
         async newTypeContents(ctx, form){
-            const new_dish = await axios.post('http://127.0.0.1:8000/type-content/store', form);
+            const new_dish = await axios.post(BASE_URL + 'type-content/store', form);
         },
         async getTypeContentOne({commit}, id) {
             //commit('setLoading', true);
