@@ -5,7 +5,11 @@
         <!-- Modal Dictionary create -->
         <div class="modal fade" id="ElementContentCreate" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
-                <Create @close-modal="closeModal('ElementContentCreate', 1)"></Create>
+                <Create
+                    @close-modal="closeModal('ElementContentCreate', 1)"
+                    @get-element-content-by-url="getElementContentByUrl()"
+                >
+                </Create>
             </div>
         </div>
 
