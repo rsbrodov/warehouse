@@ -56,9 +56,6 @@ export default{
         },
         async newElementContents(ctx, form){
             const new_element_content = await axios.post(BASE_URL + 'element-content/store/'+ form.type_content_id, form);
-            ctx.commit('NEW', new_element_content.data.data);
-            const element_content = await axios.get(BASE_URL + 'element-content/findElementContentID/'+form.type_content_id);
-            ctx.commit('UPDATE', element_content.data.data)
         },
         async getElementContentOne({commit}, id) {
             //commit('setLoading', true);
