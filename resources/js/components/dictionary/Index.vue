@@ -32,7 +32,7 @@
         <div class="row mt-4">
             <div class="header-block row">
                 <div class="search-form col-6">
-                    <div class="form">
+                    <div class="form" style="display: none;">
                         <form action="" method="post">
                             <div class="form-group row">
                                 <div class="col-4">
@@ -57,8 +57,8 @@
                     </div>
                 </div>
                 <div class="create col-6 text-right">
-                    <button id="hideshow" class="btn btn-outline-primary btn-unbordered" @click="toggleSearch()"><span class="fa fa-search fa-lg" aria-hidden="true"></span></button>
-                    <button id="clean" class="btn btn-outline-primary btn-unbordered" style="display: none;"  @click="cleanSearch()"><span class="fa fa-paint-brush fa-lg" aria-hidden="true"></span> Очистить</button>
+                    <button id="search-btn" class="btn btn-outline-primary btn-unbordered" @click="toggleSearch()"><span class="fa fa-search fa-lg" aria-hidden="true"></span></button>
+                    <button id="clear-btn" class="btn btn-outline-primary btn-unbordered" style="display: none;"  @click="cleanSearch()"><span class="fa fa-paint-brush fa-lg" aria-hidden="true"></span> Очистить</button>
                     <button type="button" class="btn-create btn btn-outline-primary btn-unbordered" @click="openModal('dictionaryCreate')"><span class="fa fa-plus-circle fa-lg"></span></button>
                 </div>
             </div>
@@ -196,12 +196,12 @@
             },
             toggleSearch(){
                 $('.form').toggle('show');
-                $('#clean').toggle('show');
-                $('#hideshow').toggleClass('btn-primary btn-secondary');
-                if( $('#hideshow').hasClass('btn-primary')){
-                    $('#hideshow').html('<span class="fa fa-search fa-lg"></span>');
-                } else if( $('#hideshow').hasClass('btn-secondary')){
-                    $('#hideshow').html('Свернуть');
+                $('#clear-btn').toggle('show');
+                $('#search-btn').toggleClass('btn-primary btn-secondary');
+                if( $('#search-btn').hasClass('btn-primary')){
+                    $('#search-btn').html('<span class="fa fa-search fa-lg"></span>');
+                } else if( $('#search-btn').hasClass('btn-secondary')){
+                    $('#search-btn').html('Свернуть');
                 }
             },
             cleanSearch(){
