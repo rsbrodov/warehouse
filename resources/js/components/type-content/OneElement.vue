@@ -12,34 +12,36 @@
 </style>
 <template>
     <div id="app">
-        <div class="row">
-            <div class="col-9">
-                <div class="flex-cont">
-                    <div class="flex-elem title-one"><b>{{ elementContentOne.typeContent.name }}</b></div>
-                    <div class="flex-elem title-one">
-                        <a :href="'/api/v1/element-content/' +elementContentOne.typeContent.apiUrl+'/'+elementContentOne.typeContent.version.major+'_'+elementContentOne.typeContent.version.minor+'/'+ elementContentOne.apiUrl+'/'+elementContentOne.version.major+'_'+elementContentOne.version.minor" class="ml-1 btn btn-sm btn-outline-secondary form-control" style="width:50px; max-height:25px; line-height:1" target="_blank">API</a>
-                    </div>
-                    <div class="flex-elem"><b>API URL: </b>{{ elementContentOne.api_url }}</div>
-                    <div class="flex-elem"><b>Статус: </b>{{ elementContentOne.status | status }}</div>
-                    <div class="flex-elem"><b>Версия:
-                    </b>{{ elementContentOne.version.major }}.{{ elementContentOne.version.minor }}</div>
-                    <div class="flex-elem">
-                        <b>Период действия: </b>{{ elementContentOne.status | date }}
+        <div v-if="elementContentOne" class="content">
+            <div class="row">
+                <div class="col-9">
+                    <div class="flex-cont">
+                        <div class="flex-elem title-one"><b>{{ elementContentOne.typeContent.name }}</b></div>
+                        <div class="flex-elem title-one">
+                            <a :href="'/api/v1/element-content/' +elementContentOne.typeContent.apiUrl+'/'+elementContentOne.typeContent.version.major+'_'+elementContentOne.typeContent.version.minor+'/'+ elementContentOne.apiUrl+'/'+elementContentOne.version.major+'_'+elementContentOne.version.minor" class="ml-1 btn btn-sm btn-outline-secondary form-control" style="width:50px; max-height:25px; line-height:1" target="_blank">API</a>
+                        </div>
+                        <div class="flex-elem"><b>API URL: </b>{{ elementContentOne.api_url }}</div>
+                        <div class="flex-elem"><b>Статус: </b>{{ elementContentOne.status | status }}</div>
+                        <div class="flex-elem"><b>Версия:
+                        </b>{{ elementContentOne.version.major }}.{{ elementContentOne.version.minor }}</div>
+                        <div class="flex-elem">
+                            <b>Период действия: </b>{{ elementContentOne.status | date }}
+                        </div>
                     </div>
                 </div>
+                <div class="col-3 text-right"><a href="#" class="btn btn-outline-secondary"><i class="fa fa-pencil fa-lg"
+                                                                                               aria-hidden="true"></i></a></div>
             </div>
-            <div class="col-3 text-right"><a href="#" class="btn btn-outline-secondary"><i class="fa fa-pencil fa-lg"
-                        aria-hidden="true"></i></a></div>
-        </div>
-        <nav class="mt-3">
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <a :class="setClass('enter-vue')" :href="'/element/enter-vue/'+elementContentOne.id">Контент</a>
-                <a :class="setClass('nav-link')" >Доступ</a>
-                <a :class="setClass('all-version-element-content')" :href="'/element-content/all-version-element-content/' + elementContentOne.id">История изменений</a>
-            </div>
-        </nav>
-        <div class="tab-content" id="nav-tabContent">
+            <nav class="mt-3">
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a :class="setClass('enter-vue')" :href="'/element/enter-vue/'+elementContentOne.id">Контент</a>
+                    <a :class="setClass('nav-link')" >Доступ</a>
+                    <a :class="setClass('all-version-element-content')" :href="'/element-content/all-version-element-content/' + elementContentOne.id">История изменений</a>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
 
+            </div>
         </div>
     </div>
 </template>
@@ -70,7 +72,7 @@ export default {
         }
     },
 
-    async created() {
+    async mounted() {
         await this.getElementContentOne(this.element_content_id);
     },
     filters: {

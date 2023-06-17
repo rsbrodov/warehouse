@@ -120,13 +120,13 @@ class DictionaryService
     {
         try {
             if (Auth::guard('web')->check()) {
-                $dictionaryElements = DictionaryElement::orderBy('created_date', 'asc')->get();
+                $dictionaryElements = DictionaryElement::/*orderBy('created_date', 'asc')->*/all();
                 $dictionaryId = [];
                 foreach ($dictionaryElements as $dictionaryElement) {
                     $dictionaryId[] = $dictionaryElement->dictionary_id;
                 }
-                $dictionary = Dictionary::where(['archive' => 0])->whereIn('id', array_unique($dictionaryId))->orderBy('created_date', 'asc')->get();
-                return DictionaryResource::collection($dictionary);
+                $dictionary = Dictionary::where(['archive' => 0])->whereIn('id', array_unique($dictionaryId))/*->orderBy('created_date', 'asc')*/->get();
+                return $dictionary;
             }else{
                 return response()->json(['error' => 'Unauthenticated.'], 401);
             }

@@ -242,12 +242,7 @@ export default {
             data: null,
             clonedItems: [
                 [
-                    [
-                    ],
-                    [
-                    ],
                     []
-
                 ],
             ],
             availableColumn: [
@@ -469,11 +464,13 @@ export default {
         async getBody() {
             await axios.get(BASE_URL + 'type-content/get-body/' + this.type_content_id)
                 .then(response => {
-                    if (Object.keys(response.data).length === 0) {
-                        this.clonedItems = [[]];
+                    if (Object.keys(response.data).length === 0 || response.data.length === 0) {
+                        console.log('response.data123');
+                        this.clonedItems = [[[]]];
                     } else {
                         this.clonedItems = response.data
                     }
+                    console.log('response.data', response.data);
                 })
                 .catch(error => {
                     console.log(error);

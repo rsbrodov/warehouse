@@ -274,18 +274,20 @@ export default {
                 })
         },
         async changeStatus(status, message) {
-            this.updateElementContent({
-                    id: this.elementContentOne.id, label: this.elementContentOne.label, api_url: this.elementContentOne.api_url,
-                    active_from: this.elementContentOne.active_from, active_after: this.elementContentOne.active_after, description: this.elementContentOne.description, status: status,
-                    type_content_id: this.elementContentOne.type_contents.id,
-                }
+            this.updateElementContent({id: this.elementContentOne.id,
+                label: this.elementContentOne.label,
+                api_url: this.elementContentOne.apiUrl,
+                active_from: this.elementContentOne.active_from,
+                active_after: this.elementContentOne.active_after,
+                description: this.elementContentOne.description,
+                status: status,
+                type_content_id: this.elementContentOne.type_content_id}
             ).then(response => {
-                this.$emit('close-modal');
+                this.getElementContentOne(this.element_content_id);
                 this.flashMessage.success({
                     message: message,
                     time: 3000,
                 });
-                this.getElementContentOne(this.element_content_id);
             }).catch(errors => {
                 console.log(errors);
             });

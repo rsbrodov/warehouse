@@ -83,8 +83,9 @@ export default{
                 commit('setLoading', false);
             });*/
         },
-        async updateElementContent(ctx, form){
-            await axios.post(BASE_URL + 'element-content/'+form.id, form);
+        async updateElementContent(ctx, form, id){
+            console.log('updateElementContent', form)
+            await axios.post(BASE_URL + 'element-content/'+id, form);
         },
         async getElementContentsAllVersion({commit}, id) {
             commit('setLoading', true);
