@@ -31,7 +31,7 @@ Vue.use( Moment );
 Vue.use(BootstrapVue);
 Vue.use(FlashMessage);
 Vue.use(Sortable)
-window.BASE_URL = 'http://127.0.0.1:8000/';
+window.BASE_URL = process.env.MIX_BASE_URL;
 const app = new Vue({
     el: '#app',
     store,
