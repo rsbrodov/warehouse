@@ -31,7 +31,7 @@ Vue.use( Moment );
 Vue.use(BootstrapVue);
 Vue.use(FlashMessage);
 Vue.use(Sortable)
-window.BASE_URL = process.env.MIX_BASE_URL;
+window.BASE_URL = 'http://www.ct41666.tw1.ru/';
 const app = new Vue({
     el: '#app',
     store,
