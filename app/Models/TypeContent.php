@@ -12,6 +12,7 @@ class TypeContent extends Model
     use Uuids;
     use HasFactory;
     protected $table = 'type_contents';
+    public $timestamps = false;
 
     protected $fillable = [
         'id_global',
@@ -28,6 +29,8 @@ class TypeContent extends Model
         'version_minor',
         'created_author',
         'updated_author',
+        'update_date',
+        'created_date',
     ];
 
     public function createdAuthor()

@@ -22,6 +22,8 @@ class DictionaryService
                     'name' => $request->name,
                     'description' => $request->description,
                     'archive' => 0,
+                    'created_date' => Date('Y-m-d H:i:s'),
+                    'update_date' => Date('Y-m-d H:i:s'),
                     'created_author' => Auth::guard('web')->user()->id ?? Auth::guard('api')->user()->id,
                     'updated_author' => Auth::guard('web')->user()->id ?? Auth::guard('api')->user()->id
                 ]);
@@ -45,6 +47,7 @@ class DictionaryService
                 $dictionary->description = $request->description;
                 $dictionary->code = $request->code;
                 $dictionary->updated_author = Auth::guard('web')->user()->id ?? Auth::guard('api')->user()->id;
+                $dictionary->update_date = Date('Y-m-d H:i:s');
                 $dictionary->save();
                 return new DictionaryResource($dictionary);
             }else{
@@ -77,6 +80,7 @@ class DictionaryService
             if (Auth::guard('web')->check() || Auth::guard('api')->check()) {
                 $dictionary = Dictionary::findOrFail($id);
                 $dictionary->archive = $dictionary->archive == 1 ? false : true;
+                $dictionary->update_date = Date('Y-m-d H:i:s');
                 $dictionary->save();
                 return response()->noContent();
             }else{
@@ -106,7 +110,7 @@ class DictionaryService
                     if(isset($get['page']) && $get['page'] > 0){
                         $query = $query->offset(($get['page']-1)*15);
                     }
-                    $dictionary = $query->orderBy('created_at', 'asc')->limit(15)->get();
+                    $dictionary = $query->orderBy('update_date', 'desc')->limit(15)->get();
                 return self::prepareListing($dictionary, $count);
             }else{
                 return response()->json(['error' => 'Unauthenticated.'], 401);

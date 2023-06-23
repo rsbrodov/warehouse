@@ -255,7 +255,7 @@ export default {
                 {
                     class: "fa fa-code fa-lg",
                     name: "HTML редактор",
-                    type: "textarea",
+                    type: "html",
                 },
                 {
                     class: "fa fa-caret-down fa-lg",
@@ -281,6 +281,11 @@ export default {
                     class: "fa fa-text-height fa-lg",
                     name: "Текстовое поле",
                     type: "text",
+                },
+                {
+                    class: "fa fa-pencil-square-o fa-lg",
+                    name: "Текстовая область",
+                    type: "textarea",
                 },
                 {
                     class: "fa fa-check-square-o fa-lg",
