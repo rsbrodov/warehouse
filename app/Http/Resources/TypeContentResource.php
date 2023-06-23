@@ -31,9 +31,9 @@ class TypeContentResource extends JsonResource
             'activeFrom' => $this->active_from,
             'activeBefore' => $this->active_before,
             'basedType' => $this->based_type,
-            'createdDate' => date('d.m.Y H:i:s', strtotime($this->created_date)),
+            'createdDate' => date('d.m.Y', strtotime($this->created_date)),
             'createdAuthor' => $this->whenLoaded('createdAuthor', new UserTruncatedResource($this->createdAuthor)),
-            'updatedDate' => date('d.m.Y H:i:s', strtotime($this->update_date)),
+            'updatedDate' => date('d.m.Y', strtotime($this->update_date)),
             'updatedAuthor' => $this->whenLoaded('updatedAuthor', new UserTruncatedResource($this->updatedAuthor)),
         ];
     }

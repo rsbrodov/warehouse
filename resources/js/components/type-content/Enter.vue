@@ -99,6 +99,10 @@ import draggable from "vuedraggable";
                                     <small class="helper-text invalid" v-if="errors[element.uid]">
                                         {{errors[element.uid]}}<br>
                                     </small>
+                                    <div v-else-if="element.type == 'html'">
+                                        <ckeditor :editor="editor" v-model="element.value" :config="editorConfig"></ckeditor>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -186,12 +190,16 @@ import Datepicker from 'vuejs-datepicker';
 import {ru} from "vuejs-datepicker/dist/locale";
 import vue2Dropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 export default {
     name: "Enter",
-    components: { OneElement, ContextMenu, Datepicker, vueDropzone: vue2Dropzone },
+    components: { OneElement, ContextMenu, Datepicker, vueDropzone: vue2Dropzone, ClassicEditor },
     data() {
         return {
+            editor: ClassicEditor,
+            editorData: '<p><b>Content of the editor.</b></p>',
+            editorConfig: {},
             upload_url: null,
             ru:ru,
             showContextMenu: false,

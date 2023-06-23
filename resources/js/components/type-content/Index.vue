@@ -91,7 +91,7 @@
                 <td>{{type_content.version.major +'.'+ type_content.version.minor}}</td>
                 <td :class="type_content.status | statusColor"><b>{{ type_content.status | status }}</b></td>
                 <td>{{ type_content | date }}</td>
-                <td>{{ type_content | dateUpdated }}</td>
+                <td>{{ type_content.updatedDate }}</td>
                 <td nowrap>
                     <a class="btn btn-outline-primary btn-unbordered" @click="openModal('typeContentEdit', type_content)"><i class="fa fa-pencil fa-lg"></i></a>
                     <a :href="'/type-content/view-new/'+type_content.id" class="btn btn-outline-primary btn-unbordered"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a>
@@ -243,9 +243,7 @@
                 }
 
             },
-            dateUpdated: function (type_content) {
-                return moment(type_content.update_date).format('DD.MM.YYYY HH:II');
-            },
+
             status: function (status) {
                 let status_array = {Draft: 'Черновик', Published: 'Опубликовано', Archive:'В архиве'};
                 if(status){

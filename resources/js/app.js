@@ -9,7 +9,9 @@ import Moment from 'vue-moment';
 import BootstrapVue from 'bootstrap-vue';
 import FlashMessage from '@smartweb/vue-flash-message';
 import Sortable from 'vue-sortable'
+import CKEditor from '@ckeditor/ckeditor5-vue2';
 
+Vue.use( CKEditor );
 
 import store from './store/index'
 import JwPagination from 'jw-vue-pagination';
@@ -26,11 +28,11 @@ Vue.component('Allversionelementcontent', require('./components/element-content/
 Vue.component('Enter', require('./components/type-content/Enter').default);
 Vue.component('Sidebar', require('./components/helpers/Sidebar').default);
 
-Vue.use(Vuelidate)
+Vue.use(Vuelidate);
 Vue.use( Moment );
 Vue.use(BootstrapVue);
 Vue.use(FlashMessage);
-Vue.use(Sortable)
+Vue.use(Sortable);
 window.BASE_URL = 'http://www.ct41666.tw1.ru/';
 const app = new Vue({
     el: '#app',

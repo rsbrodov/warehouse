@@ -44,6 +44,8 @@ class TypeContentService
                     'icon' => $request->icon,
                     'api_url' => $request->apiUrl,
                     'based_type' => null,
+                    'created_date' => Date('Y-m-d H:i:s'),
+                    'update_date' => Date('Y-m-d H:i:s'),
                     'created_author' => Auth::guard('web')->user()->id ?? Auth::guard('api')->user()->id,
                     'updated_author' => Auth::guard('web')->user()->id ?? Auth::guard('api')->user()->id
                 ]);
@@ -75,6 +77,7 @@ class TypeContentService
             $type->icon = $request->icon;
             $type->status = $request->status;
             $type->owner = $request->owner;
+            $type->update_date = Date('Y-m-d H:i:s');
             $type->updated_author = Auth::guard('web')->user()->id ?? Auth::guard('api')->user()->id;
             $type->save();
             return new TypeContentResource($type);
@@ -128,7 +131,7 @@ class TypeContentService
                 if (isset($get['page']) && $get['page'] > 0) {
                     $query = $query->offset(($get['page'] - 1) * 15);
                 }
-                $typeContentLimit = $query->orderBy('created_at', 'asc')->limit(15)->get();
+                $typeContentLimit = $query->orderBy('update_date', 'desc')->limit(15)->get();
                 return self::prepareListing($typeContentLimit, $count);
             } else {
                 return response()->json(['error' => 'Unauthenticated.'], 401);

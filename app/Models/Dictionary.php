@@ -12,6 +12,7 @@ class Dictionary extends Model
     use HasFactory;
     use Uuids;
     protected $table = 'dictionary';
+    public $timestamps = false;
     protected $fillable = [
         'name',
         'code',
@@ -19,6 +20,8 @@ class Dictionary extends Model
         'archive',
         'created_author',
         'updated_author',
+        'update_date',
+        'created_date',
     ];
     public function createdAuthor() {
         return $this->belongsTo(User::class, 'created_author');
