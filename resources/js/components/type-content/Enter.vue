@@ -82,19 +82,40 @@ import draggable from "vuedraggable";
                                                 v-model="element.value"
                                                 :language="ru">
                                     </datepicker>
-                                    <div v-else-if="element.type == 'file'"
-                                         class="block-img"  >
-
-                                        <vue-dropzone v-if="!elementContentOne.body"
-                                            ref="myVueDropzone"
-                                            id="dropzone"
-                                            :options="dropzoneOptions"
-                                            @vdropzone-complete="afterUploadComplete(element.uid)"></vue-dropzone>
-                                        <img v-else
-                                             :id="element.uid"
-                                             :src="elementBody.value"
-                                             class="p-2"
-                                             style="width:90%; height: auto"/>
+                                    <div v-else-if="element.type == 'file'">
+                                        <div class="img-container">
+                                            <div class="image-upload-wrap">
+                                                <input class="file-upload-input"
+                                                       type="file"
+                                                       :disabled="elementContentOne.status != 'Draft'"
+                                                       :class="{invalid: (errors[element.uid])}"
+                                                       @change="handleFileChange($event, element.uid)"
+                                                       accept="image/*"
+                                                >
+                                                <div id="drag-text">
+                                                    <div id="drag-text__image" v-show="element.value || file">
+                                                        <img :src="'/storage/'+element.value" width="300">
+                                                    </div>
+                                                    <div v-if="file === null && !element.value" class="drag-block">
+                                                        <button class="btn btn-outline-primary btn-unbordered form-control"
+                                                                onclick="$('.file-upload-input').trigger( 'click' )">
+                                                            <i class="fa fa-cloud-upload fa-lg" aria-hidden="true"></i>
+                                                        </button>
+                                                        <p>Перетащите в область или загрузите изображение</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="file-upload-content" v-if="element.value || file">
+                                                <div class="btn-manager-image">
+                                                    <button class="file-remove-btn btn btn-outline-danger btn-unbordered form-control text-left" @click="removeUploadImage(element.uid)">
+                                                        <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                                                    </button>
+                                                    <button class="file-upload-btn btn btn-outline-primary btn-unbordered form-control text-left" onclick="$('.file-upload-input').trigger( 'click' )">
+                                                        <i class="fa fa-cloud-upload fa-lg" aria-hidden="true"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <small class="helper-text invalid" v-if="errors[element.uid]">
                                         {{errors[element.uid]}}<br>
@@ -188,15 +209,15 @@ import ContextMenu from "../helpers/ContextMenu";
 import {mapActions, mapGetters} from "vuex";
 import Datepicker from 'vuejs-datepicker';
 import {ru} from "vuejs-datepicker/dist/locale";
-import vue2Dropzone from 'vue2-dropzone'
-import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 export default {
     name: "Enter",
-    components: { OneElement, ContextMenu, Datepicker, vueDropzone: vue2Dropzone, ClassicEditor },
+    components: { OneElement, ContextMenu, Datepicker, ClassicEditor },
     data() {
         return {
+            file: null,
+            uidElement: '',
             editor: ClassicEditor,
             editorData: '<p><b>Content of the editor.</b></p>',
             editorConfig: {},
@@ -212,23 +233,6 @@ export default {
                 {id: 3, value: 'Вариант 3'},
             ],
             errors: [],
-            dropzoneOptions: {
-                url: BASE_URL + 'upload-image',
-                thumbnailWidth: 150,
-                maxFilesize: 5,
-                headers: { "My-Awesome-Header": "header value" },
-                parallelUploads: 1,
-                maxFiles: 1,
-                //autoProcessQueue: false,//автоматическая отправка на бэк после загрузки
-                addRemoveLinks: true,
-                init: function() {
-                    this.on("success", function(file, responseText) {
-                        console.log(responseText);
-                        localStorage.setItem('lastUpload', responseText.message)
-                        //this.elementBody[element.uid].value
-                    });
-                }
-            }
         };
     },
     computed: {
@@ -237,6 +241,36 @@ export default {
 
     methods: {
         ...mapActions(['getElementContentOne', 'updateElementContent']),
+        handleFileChange(event, elementUid){
+            this.file = event.target.files[0];
+            this.uidElement = elementUid;
+            console.log('11', this.file);
+            var image=URL.createObjectURL(event.target.files[0]);
+            var imagediv= document.getElementById('drag-text__image');
+            var newimg=document.createElement('img');
+            console.log(imagediv);
+            imagediv.innerHTML='';
+            newimg.src=image;
+            newimg.width="300";
+            imagediv.appendChild(newimg);
+        },
+        removeUploadImage(elementUid){
+            this.file = null;
+            var imagediv= document.getElementById('drag-text__image');
+            imagediv.innerHTML='';
+            console.log('elementUid', elementUid);
+            console.log('elementBody', this.elementBody);
+            for (var indexRow = this.elementBody.length - 1; indexRow >= 0; --indexRow) {
+                for (var indexColumn = this.elementBody[indexRow].length - 1; indexColumn >= 0; --indexColumn) {
+                    for (var indexItem = this.elementBody[indexRow][indexColumn].length - 1; indexItem >= 0; --indexItem) {
+                        if(this.elementBody[indexRow][indexColumn][indexItem]['uid'] == elementUid){
+                            console.log('indexItemUU', this.elementBody[indexRow][indexColumn][indexItem]);
+                            this.elementBody[indexRow][indexColumn][indexItem]['value'] = '';
+                        }
+                    }
+                }
+            }
+        },
         openContextMenu(event) {
             this.$refs.menu.open(event);
         },
@@ -262,7 +296,33 @@ export default {
                 })
                 .catch(error => {
                    this.errors = error.response.data.message;
-                })
+                });
+
+            if(this.file !== ''){
+                const config = {
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    }
+                };
+                let data = new FormData();
+                data.append('id', this.element_content_id);
+                data.append('uidElement', this.uidElement);
+                data.append('file', this.file);
+                console.log('!!!!', this.file);
+                axios.post(BASE_URL + 'upload-image', data, config)
+                    .then(response => {
+                        if (response.status === 200) {
+                            this.errors = [];
+                            this.flashMessage.success({
+                                message: 'Данные сохранены',
+                                time: 3000,
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        this.errors = error.response.data.message;
+                    })
+            }
         },
         async deleteElementContent() {
             await axios.delete(BASE_URL + 'element-content/' + this.element_content_id)
@@ -391,4 +451,111 @@ export default {
     border-radius: 5px;
     text-align: center;
 }
+
+
+
+
+
+
+/**/
+
+
+.file-upload-btn:hover {
+    cursor: pointer;
+}
+
+
+.image-upload-wrap {
+    margin-top: 20px;
+    border: 2px dashed #3fa5d1;
+    position: relative;
+    min-height: 200px;
+    border-radius: 5px;
+}
+
+.image-dropping,
+.image-upload-wrap:hover {
+    background-color: #dbdbdb;
+    border:none;
+}
+
+.image-title-wrap {
+    padding: 0 15px 15px 15px;
+    color: #222;
+}
+
+#drag-text {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:200px;
+
+}
+
+#drag-text p {
+    text-transform: uppercase;
+    color: #5c5c5c;
+    font-size: 18px;
+}
+
+.file-upload-image {
+    margin: auto;
+    padding: 20px;
+
+}
+
+.remove-image {
+    width: 200px;
+    margin: 0;
+    color: #fff;
+    background: #cd4535;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    border-bottom: 4px solid #b02818;
+    transition: all .2s ease;
+    outline: none;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.remove-image:hover {
+    background: #c13b2a;
+    color: #ffffff;
+    transition: all .2s ease;
+    cursor: pointer;
+}
+
+.remove-image:active {
+    border: 0;
+    transition: all .2s ease;
+}
+
+.file-upload-input {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    outline: none;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.btn-manager-image{
+    display: flex;
+    justify-content:center;
+    padding:0 5px;
+}
+.file-upload-btn, .file-remove-btn {
+    width: 46px;
+    margin: 0 5px;
+}
+
+
+    .img-container{
+        border: 1px solid rgba(0, 0, 0, 0.30);
+        border-radius: 5px;
+        padding:5px;
+    }
 </style>
