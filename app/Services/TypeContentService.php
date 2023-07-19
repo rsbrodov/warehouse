@@ -8,8 +8,10 @@ use App\Models\DictionaryElement;
 use App\Models\ElementContent;
 use App\Models\Icons;
 use App\Models\TypeContent;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class TypeContentService
@@ -292,13 +294,6 @@ class TypeContentService
 
     public function saveBodyElement(Request $request)
     {
-        $elementContent = ElementContent::find($request->id);
-        /*$errors = $elementContent->validateElementContent($elementContent->type_content_id, $request->body);
-        if($errors){
-            return response()->json([
-                'message' => $errors
-            ], 400);
-        }*/
         $elementContent = ElementContent::find($request->id);
         if (!empty($elementContent)) {
             $elementContent->body = json_encode($request->body);

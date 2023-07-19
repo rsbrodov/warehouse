@@ -104,19 +104,38 @@ class ElementContentController extends Controller
 
     public function uploadImage(Request $request)
     {
+
+
         if ($request->file('file')){
             $image = $request->file('file');
-           // $path = $request->file('file')->store('uploads', 'public');
             $name = md5(Carbon::now().'_'.$image->getClientOriginalName()).'.'.$image->getClientOriginalExtension();
             $filePath = Storage::disk('public')->putFileAs('/images', $image, $name);
+
+            /**назаначение маршрута элементу контента**/
+            $elementContent = ElementContent::find($request->id);
+            $body = json_decode($elementContent->body);
+            foreach ($body as $row) {
+                foreach ($row as $column) {
+                    foreach ($column as $element) {
+                        if ($element->uid == $request->uidElement) {
+                            $element->value = $filePath;
+                        }
+                    }
+                }
+            }
+            $elementContent->body = json_encode($body);
+            $elementContent->save();
+            /**назаначение маршрута элементу контента**/
+
+
+
+
             return response()->json(['message' => url('/storage/'.$filePath)]);
-            /*if($path){
-                return response()->json(['message' => $path]);
-            }*/
         }else{
             return response()->json(['message' => 'error uploaded file'], 503);
         }
     }
+
     public function updateFields($id)
     {
         $elementContentData = [];
