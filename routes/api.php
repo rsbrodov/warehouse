@@ -55,3 +55,4 @@ Route::group(['middleware' => 'auth:api'], function ($router) {
     Route::get('/template/getAllVersionTypeContent/{idGlobal}', [App\Http\Controllers\TypeContentController::class, 'getAllVersionTypeContent'])->middleware('auth:api');
 
 });
+Route::get('/type-content/find-all-element-body/{id}', [App\Http\Controllers\TypeContentController::class, 'allElementByTypeContent']);

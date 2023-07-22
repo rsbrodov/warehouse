@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TypeContentRequest;
+use App\Models\ElementContent;
+use App\Models\TypeContent;
 use Illuminate\Http\Request;
 use App\Services\TypeContentService;
 use Illuminate\Support\Facades\Auth;
@@ -163,5 +165,28 @@ class TypeContentController extends Controller
         }else{
             return $result;
         }
+    }
+
+    public function allElementByTypeContent($id)
+    {
+        $typeContent = TypeContent::findOrFail($id);
+        $typeContents = TypeContent::where('id_global', $typeContent->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->get();
+        foreach ($typeContents as $typeContent) {
+            $ids[] = $typeContent->id;
+        }
+        //$query = TypeContent::query()->whereIn('id', $ids);
+        $elementsContent = ElementContent::where('status', 'Published')->whereIn('type_content_id', $ids)->get();
+        $result =[];
+        foreach ($elementsContent as $elementContent){
+            $body = json_decode($elementContent->body);
+            foreach ($body as $row) {
+                foreach ($row as $column) {
+                    foreach ($column as $element) {
+                        $result[$elementContent->id][$element->uid] = $element->value;
+                    }
+                }
+            }
+        }
+        return $result;
     }
 }
