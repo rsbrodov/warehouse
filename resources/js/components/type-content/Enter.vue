@@ -84,10 +84,12 @@ import draggable from "vuedraggable";
                                     </datepicker>
                                     <div v-else-if="element.type == 'file'">
                                         <div class="img-container">
-                                            <div class="image-upload-wrap">
+                                            <div class="image-upload-wrap"
+                                                :class="elementContentOne.status != 'Draft' ? 'img-hovered' : ''">
                                                 <input class="file-upload-input"
                                                        type="file"
                                                        :disabled="elementContentOne.status != 'Draft'"
+                                                       :style="elementContentOne.status != 'Draft' ? 'cursor:not-allowed' : ''"
                                                        :class="{invalid: (errors[element.uid])}"
                                                        @change="handleFileChange($event, element.uid)"
                                                        accept="image/*"
@@ -96,17 +98,17 @@ import draggable from "vuedraggable";
                                                     <div id="drag-text__image" v-show="element.value || file">
                                                         <img :src="'/storage/'+element.value" width="300">
                                                     </div>
-                                                    <div v-if="file === null && !element.value" class="drag-block">
+                                                    <div v-if="file === null && !element.value && elementContentOne.status == 'Draft'" class="drag-block">
                                                         <button class="btn btn-outline-primary btn-unbordered form-control"
                                                                 onclick="$('.file-upload-input').trigger( 'click' )">
                                                             <i class="fa fa-cloud-upload fa-lg" aria-hidden="true"></i>
                                                         </button>
-                                                        <p>Перетащите в область или загрузите изображение</p>
+                                                        <p v-if="elementContentOne.status == 'Draft'">Перетащите в область или загрузите изображение</p>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="file-upload-content" v-if="element.value || file">
-                                                <div class="btn-manager-image">
+                                                <div v-if="elementContentOne.status == 'Draft'" class="btn-manager-image">
                                                     <button class="file-remove-btn btn btn-outline-danger btn-unbordered form-control text-left" @click="removeUploadImage(element.uid)">
                                                         <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
                                                     </button>
@@ -327,7 +329,7 @@ export default {
         async deleteElementContent() {
             await axios.delete(BASE_URL + 'element-content/' + this.element_content_id)
                 .then(response => {
-                    if (response.status === 200) {
+                    if (response.status === 204) {
                         this.flashMessage.success({
                             message: 'Элемент контента удален, Вы будете перенаправлены на страницу со списком элементов контента через 3 секунды',
                             time: 3000,
@@ -477,6 +479,10 @@ export default {
 .image-upload-wrap:hover {
     background-color: #dbdbdb;
     border:none;
+}
+
+.img-hovered{
+    background-color: #dbdbdb;
 }
 
 .image-title-wrap {
