@@ -27,7 +27,6 @@ class DictionaryElementController extends Controller
 
     public function store(Request $request)
     {
-        return 123;
         $result = $this->dictionaryElementService->store($request);
         return $result;
     }

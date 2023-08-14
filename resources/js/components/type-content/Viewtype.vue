@@ -227,6 +227,7 @@ import Editmodal from "./Editmodal";
 import { mapActions, mapGetters } from "vuex";
 import ContextMenu from "../helpers/ContextMenu.vue"
 import Onetype from './Onetype.vue';
+import {url_slug} from "cyrillic-slug";
 
 export default {
     name: "Viewtype",
@@ -337,6 +338,7 @@ export default {
             let cloneMe = JSON.parse(JSON.stringify(item));
             this.$set(cloneMe, 'title', '');
             this.$set(cloneMe, 'required', '');
+            this.$set(cloneMe, 'alias', '');
 
             if (cloneMe.type == 'select' || cloneMe.type == 'radio') {
                 this.$set(cloneMe, 'dictionary_id', null);
@@ -398,6 +400,7 @@ export default {
                         if (item.uid === localValue.copy) {
                             if (localValue.status === 'SET' || localValue.status === 'UPDATE') {
                                 item.title = localValue.localValue.title;
+                                item.alias = url_slug(localValue.localValue.title)
                                 item.required = localValue.localValue.required;
                                 item.dictionary_id = localValue.localValue.dictionary_id;
                             }
@@ -522,7 +525,7 @@ export default {
             if (!this.changeStatus) return
             event.preventDefault()
             event.returnValue = "Вы не сохранили изменения. Вы уверены, что хотите покинуть страницу?"
-        }
+        },
     },
 
     async created() {
