@@ -76,7 +76,7 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('dictionary/{id}/dictionary-element/', [DictionaryElementController::class, 'index'])->name('dictionary-element.index');
     Route::get('dictionary/findElementDictionaryID/{id}', [DictionaryElementController::class, 'findElementDictionaryID']);
     Route::get('dictionary/findID/{id}', [DictionaryElementController::class, 'findID']);
-
+    Route::post('dictionary-element/create', [DictionaryElementController::class, 'store']);
     Route::get('dictionary-element/{id}', [DictionaryElementController::class, 'show'])->name('dictionary-element.show');
     Route::get('dictionary-element/{id}/edit', [DictionaryElementController::class, 'edit'])->name('dictionary-element.edit');
     Route::put('dictionary-element/{id}', [DictionaryElementController::class, 'update'])->name('dictionary-element.update');
