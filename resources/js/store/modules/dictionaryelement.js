@@ -25,7 +25,7 @@ export default{
             ctx.commit('UPDATE', dictionary_element.data.data)
         },
         async newDictionaryElement(ctx, form){
-            await axios.post(BASE_URL + 'dictionary-element/create/', form);
+            await axios.post(BASE_URL + 'dictionary-element/create', form);
             const dictionary_elements = await axios.get(BASE_URL + 'dictionary/findElementDictionaryID/' + form.form.dictionary_id);
             ctx.commit('UPDATE', dictionary_elements.data.data)
         },
