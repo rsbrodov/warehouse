@@ -63,8 +63,8 @@
                                 message: 'Элемент справочника успешно удален',
                                 time: 3000,
                             });
+                            this.getDictionaryElement(this.id);
                         });
-                    this.getDictionaryElement(this.id);
                 }
             },
             openModal(id){
