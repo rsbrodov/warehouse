@@ -15,6 +15,7 @@
         <div class="modal fade" id="dictionaryElementCreate" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <CreateElement :dictionary_id="dictionary.id"
+                               :load-list="false"
                                @close-modal="closeModal('dictionaryElementCreate')">
                 </CreateElement>
             </div>
@@ -168,7 +169,7 @@
                 }
                 if(id == 'dictionaryElementCreate') {
                     $('#dictionaryElementCreate').modal('show');
-                    this.dictionary_id = dictionary.id;
+                    this.dictionary = dictionary;
                 }
                 if(id == 'dictionaryEdit') {
                     $('#dictionaryEdit').modal('show');

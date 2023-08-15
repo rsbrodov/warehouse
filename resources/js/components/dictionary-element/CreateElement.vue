@@ -35,7 +35,7 @@
     import {mapActions} from "vuex";
     export default {
         name: "CreateElement",
-        props:['dictionary_id'],
+        props:['dictionary_id', 'loadList'],
         data:function(){
             return {
                 form:{
@@ -53,7 +53,8 @@
                     this.newDictionaryElement({
                         form: {
                             value: this.form.name,
-                            dictionary_id: this.dictionary_id
+                            dictionary_id: this.dictionary_id,
+                            load_list: this.loadList === false ? false : true
                         }
 
                     }).then(response => {
