@@ -31,7 +31,7 @@ class ElementContentShortResource extends JsonResource
             'basedElement' => $this->based_element,
             'createdDate' => date('d.m.Y H:i:s', strtotime($this->created_at)),
             'createdAuthor' => $this->whenLoaded('createdAuthor', new UserTruncatedResource($this->createdAuthor)),
-            'updatedDate' => date('d.m.Y H:i:s', strtotime($this->updated_at)),
+            'updatedDate' => date('d.m.Y H:i:s', strtotime($this->update_at)),
             'updatedAuthor' => $this->whenLoaded('updatedAuthor', new UserTruncatedResource($this->updatedAuthor)),
         ];
     }

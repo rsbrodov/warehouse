@@ -89,7 +89,7 @@
                 <td :class="element.status | statusColor"><b>{{ element.status | status }}</b></td>
                 <td>{{ element | date }}</td>
                 <td>{{element.updatedAuthor.name}}</td>
-                <td>{{ element | dateUpdated }}</td>
+                <td>{{ element.updatedDate }}</td>
                 <!-- :href нужно убрать когда будут добавлены компоненты -->
                 <td nowrap>
 <!--                    <a :href="'/element-content/'+ element.id +'/edit'" class="btn btn-outline-primary btn-unbordered" @click="openModal('typeContentEdit', type_content)"><i class="fa fa-pencil fa-lg"></i></a>-->
@@ -262,9 +262,6 @@
                 }else{
                     return moment(element.active_from).format('DD.MM.YYYY') + " - " + moment(element.active_after).format('DD.MM.YYYY');
                 }
-            },
-            dateUpdated: function (element) {
-                return moment(element.update_date).format('DD.MM.YYYY HH:II');
             },
         },
 

@@ -18,22 +18,38 @@
                         </small>
                     </div>
                     <div class="block col-6">
-                        <label for="name"><b>Алиас:</b></label>
-                        <input autocomplete="off" id="alias" class="form-control" type="text" v-model="localValue.alias">
-                        <a class="btn btn-warning btn-sm mt-1" @click="generateUrl()"><i class="fa fa-undo" aria-hidden="true"></i> Сгенерировать</a>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <div class="block col-6">
                         <label for="name"><b>Тип поля:</b></label>
                         <input autocomplete="off" id="name" class="form-control" type="text" v-model="localValue.name" disabled="true">
                     </div>
+<!--                    <div class="block col-6">-->
+<!--                        <label for="name"><b>Алиас:</b></label>-->
+<!--                        <input autocomplete="off" id="alias" class="form-control" type="text" v-model="localValue.alias">-->
+<!--                        <a class="btn btn-warning btn-sm mt-1" @click="generateUrl()"><i class="fa fa-undo" aria-hidden="true"></i> Сгенерировать</a>-->
+<!--                    </div>-->
+                </div>
+
+                <div class="row mb-3">
+<!--                    <div class="block col-6">-->
+<!--                        <label for="name"><b>Тип поля:</b></label>-->
+<!--                        <input autocomplete="off" id="name" class="form-control" type="text" v-model="localValue.name" disabled="true">-->
+<!--                    </div>-->
                     <div class="block col-6">
                         <label for="required"><b>Обязательно к заполнению:</b></label>
                         <select id="required" class="form-control" v-model="localValue.required">
                             <option value="1">Да</option>
                             <option value="0">Нет</option>
+                        </select>
+                    </div>
+                    <div v-if="localValue.dictionary_id" class="block col-6">
+                        <label for="dictionary_id"><b>Справочник:</b></label>
+                        <select id="dictionary_id" class="form-control"
+                                v-model="localValue.dictionary_id">
+                            <option v-for="(dic, index) in Dictionary.data"
+                                    :key="index"
+                                    :value="dic.id"
+                            >
+                                {{dic.name}}
+                            </option>
                         </select>
                     </div>
                 </div>
