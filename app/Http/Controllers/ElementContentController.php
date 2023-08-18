@@ -9,6 +9,7 @@ use App\Models\Dictionary;
 use App\Models\DictionaryElement;
 use App\Models\ElementContent;
 use App\Models\TypeContent;
+use App\Services\TypeContentService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -104,36 +105,33 @@ class ElementContentController extends Controller
 
     public function uploadImage(Request $request)
     {
+        $body = ElementContentService::getElementBodyById($request->id);
+        foreach ($body as $key => $item){
+            if ($request->file('file'.$key)){
+                $image = $request->file('file'.$key);
+                $name = md5(Carbon::now().'_'.$image->getClientOriginalName()).'.'.$image->getClientOriginalExtension();
+                $filePath = Storage::disk('public')->putFileAs('/images', $image, $name);
 
 
-        if ($request->file('file')){
-            $image = $request->file('file');
-            $name = md5(Carbon::now().'_'.$image->getClientOriginalName()).'.'.$image->getClientOriginalExtension();
-            $filePath = Storage::disk('public')->putFileAs('/images', $image, $name);
-
-            /**назаначение маршрута элементу контента**/
-            $elementContent = ElementContent::find($request->id);
-            $body = json_decode($elementContent->body);
-            foreach ($body as $row) {
-                foreach ($row as $column) {
-                    foreach ($column as $element) {
-                        if ($element->uid == $request->uidElement) {
-                            $element->value = $filePath;
+                /**назаначение маршрута элементу контента**/
+                $elementContent = ElementContent::find($request->id);
+                $b = json_decode($elementContent->body);
+                foreach ($b as $row) {
+                    foreach ($row as $column) {
+                        foreach ($column as $element) {
+                            if ($element->uid == $key) {
+                                $element->value = $filePath;
+                            }
                         }
                     }
                 }
+                $elementContent->body = json_encode($b);
+                $elementContent->save();
+                /**назаначение маршрута элементу контента**/
+
             }
-            $elementContent->body = json_encode($body);
-            $elementContent->save();
-            /**назаначение маршрута элементу контента**/
-
-
-
-
-            return response()->json(['message' => url('/storage/'.$filePath)]);
-        }else{
-            return response()->json(['message' => 'error uploaded file'], 503);
         }
+        return response()->json(['message' => 1]);
     }
 
     public function updateFields($id)
