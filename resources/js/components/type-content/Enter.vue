@@ -1,4 +1,3 @@
-import draggable from "vuedraggable";
 <style>
 .flex-cont {
     display: inline-flex;
@@ -86,7 +85,8 @@ import draggable from "vuedraggable";
                                         <div class="img-container">
                                             <div class="image-upload-wrap"
                                                 :class="elementContentOne.status != 'Draft' ? 'img-hovered' : ''">
-                                                <input class="file-upload-input"
+                                                <input :id="'file-upload-input'+element.uid"
+                                                       class="file-upload-input"
                                                        type="file"
                                                        :disabled="elementContentOne.status != 'Draft'"
                                                        :style="elementContentOne.status != 'Draft' ? 'cursor:not-allowed' : ''"
@@ -95,24 +95,24 @@ import draggable from "vuedraggable";
                                                        accept="image/*"
                                                 >
                                                 <div id="drag-text">
-                                                    <div id="drag-text__image" v-show="element.value || file">
+                                                    <div :id="'drag-text__image'+element.uid" v-show="element.value || checkFileArray(element.uid)">
                                                         <img :src="'/storage/'+element.value" width="300">
                                                     </div>
-                                                    <div v-if="file === null && !element.value && elementContentOne.status == 'Draft'" class="drag-block">
+                                                    <div v-if="!checkFileArray(element.uid) && !element.value && elementContentOne.status == 'Draft'" class="drag-block">
                                                         <button class="btn btn-outline-primary btn-unbordered form-control"
-                                                                onclick="$('.file-upload-input').trigger( 'click' )">
+                                                                onclick="$('#file-upload-input'+element.uid).trigger( 'click' )">
                                                             <i class="fa fa-cloud-upload fa-lg" aria-hidden="true"></i>
                                                         </button>
                                                         <p v-if="elementContentOne.status == 'Draft'">Перетащите в область или загрузите изображение</p>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="file-upload-content" v-if="element.value || file">
+                                            <div class="file-upload-content" v-if="element.value || checkFileArray(element.uid)">
                                                 <div v-if="elementContentOne.status == 'Draft'" class="btn-manager-image">
                                                     <button class="file-remove-btn btn btn-outline-danger btn-unbordered form-control text-left" @click="removeUploadImage(element.uid)">
                                                         <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
                                                     </button>
-                                                    <button class="file-upload-btn btn btn-outline-primary btn-unbordered form-control text-left" onclick="$('.file-upload-input').trigger( 'click' )">
+                                                    <button class="file-upload-btn btn btn-outline-primary btn-unbordered form-control text-left" onclick="$('#file-upload-input'+element.uid).trigger( 'click' )">
                                                         <i class="fa fa-cloud-upload fa-lg" aria-hidden="true"></i>
                                                     </button>
                                                 </div>
@@ -218,7 +218,8 @@ export default {
     components: { OneElement, ContextMenu, Datepicker, ClassicEditor },
     data() {
         return {
-            file: null,
+            file: [],
+            img: null,
             uidElement: '',
             editor: ClassicEditor,
             editorData: '<p><b>Content of the editor.</b></p>',
@@ -244,11 +245,13 @@ export default {
     methods: {
         ...mapActions(['getElementContentOne', 'updateElementContent']),
         handleFileChange(event, elementUid){
-            this.file = event.target.files[0];
+            this.deleteFileArray(elementUid);
+            this.file.push({uid: elementUid, file: event.target.files[0]});
+            this.img = event.target.files[0];
             this.uidElement = elementUid;
             console.log('11', this.file);
             var image=URL.createObjectURL(event.target.files[0]);
-            var imagediv= document.getElementById('drag-text__image');
+            var imagediv= document.getElementById('drag-text__image'+elementUid);
             var newimg=document.createElement('img');
             console.log(imagediv);
             imagediv.innerHTML='';
@@ -257,8 +260,8 @@ export default {
             imagediv.appendChild(newimg);
         },
         removeUploadImage(elementUid){
-            this.file = null;
-            var imagediv= document.getElementById('drag-text__image');
+            this.deleteFileArray(elementUid);
+            var imagediv= document.getElementById('drag-text__image'+elementUid);
             imagediv.innerHTML='';
             console.log('elementUid', elementUid);
             console.log('elementBody', this.elementBody);
@@ -300,7 +303,7 @@ export default {
                    this.errors = error.response.data.message;
                 });
 
-            if(this.file !== ''){
+            if(this.file !== []){
                 const config = {
                     headers: {
                         'content-type': 'multipart/form-data'
@@ -309,16 +312,19 @@ export default {
                 let data = new FormData();
                 data.append('id', this.element_content_id);
                 data.append('uidElement', this.uidElement);
-                data.append('file', this.file);
+                this.file.forEach(i => {
+                    data.append('file'+i.uid, i.file);
+                });
+                data.append('file', this.img);
                 console.log('!!!!', this.file);
                 axios.post(BASE_URL + 'upload-image', data, config)
                     .then(response => {
                         if (response.status === 200) {
                             this.errors = [];
-                            this.flashMessage.success({
+                            /*this.flashMessage.success({
                                 message: 'Данные сохранены',
                                 time: 3000,
-                            });
+                            });*/
                         }
                     })
                     .catch(error => {
@@ -403,6 +409,26 @@ export default {
                         time: 3000,
                     });
                 })
+        },
+        checkFileArray(uidElement){
+            var status = false;
+            console.log('checkFileArray', uidElement);
+            this.file.forEach((element) => {
+                if(element.uid === uidElement){
+                    console.log('checkFileArraytrue', uidElement);
+                    status = true;
+                }
+            });
+            console.log('checkFileArrayfalse', uidElement);
+            return status;
+        },
+        deleteFileArray(uidElement){
+            var status = false;
+            this.file.forEach((element) => {
+                if(element.uid === uidElement){
+                    this.file.splice(element,1);
+                }
+            });
         }
     },
 

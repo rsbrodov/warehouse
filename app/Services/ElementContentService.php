@@ -350,4 +350,20 @@ class ElementContentService
         $result['data'] = ElementContentResource::collection($data);
         return $result;
     }
+
+    public static function getElementBodyById($id)
+    {
+        $elementContent = ElementContent::findOrFail($id);
+        $result =[];
+        $body = json_decode($elementContent->body);
+        foreach ($body as $row) {
+            foreach ($row as $column) {
+                foreach ($column as $element) {
+                    $result[$element->uid] = $element->value;
+                }
+            }
+        }
+
+        return $result;
+    }
 }
