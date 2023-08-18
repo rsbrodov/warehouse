@@ -12,6 +12,7 @@ class ElementContent extends Model
     use Uuids;
     use HasFactory;
     protected $table = 'element_contents';
+    public $timestamps = false;
 
     protected $fillable = [
         'id_global',
@@ -28,6 +29,8 @@ class ElementContent extends Model
         'based_element',
         'created_author',
         'updated_author',
+        'update_date',
+        'created_date',
     ];
 
     public function createdAuthor()

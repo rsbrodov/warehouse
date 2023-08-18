@@ -33,8 +33,8 @@ Vue.use( Moment );
 Vue.use(BootstrapVue);
 Vue.use(FlashMessage);
 Vue.use(Sortable);
-window.BASE_URL = 'http://www.ct41666.tw1.ru/';
-//window.BASE_URL = 'http://127.0.0.1:8000/';
+//window.BASE_URL = 'http://www.ct41666.tw1.ru/';
+window.BASE_URL = 'http://127.0.0.1:8000/';
 const app = new Vue({
     el: '#app',
     store,

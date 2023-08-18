@@ -53,6 +53,8 @@ class ElementContentService
                     'body'  => json_encode($bodyForElement),
                     'created_author' => Auth::guard('web')->user()->id,
                     'updated_author' => Auth::guard('web')->user()->id,
+                    'created_date' => Date('Y-m-d H:i:s'),
+                    'update_date' => Date('Y-m-d H:i:s'),
                 ]
             );
 
@@ -88,6 +90,7 @@ class ElementContentService
             $element->status = $request->status;
             $element->description = $request->description;
             $element->updated_author = Auth::guard('web')->user()->id;
+            $element->update_date = Date('Y-m-d H:i:s');
             $element->save();
 
             return new ElementContentResource($element);
@@ -137,7 +140,7 @@ class ElementContentService
                 if (isset($get['page']) && $get['page'] > 0) {
                     $query = $query->offset(($get['page'] - 1) * 15);
                 }
-                $elementContent = $query->orderBy('created_at', 'asc')->limit(15)->get()->unique('id_global');
+                $elementContent = $query->orderBy('update_date', 'desc')->limit(15)->get()->unique('id_global');
                 return self::prepareListing($elementContent, $count);
             }
         } catch (\Exception $e) {
@@ -173,7 +176,7 @@ class ElementContentService
                 if (isset($get['page']) && $get['page'] > 0) {
                     $query = $query->offset(($get['page'] - 1) * 15);
                 }
-                $elementContents = $query->orderBy('created_at', 'asc')->limit(15)->get()->unique('id_global');
+                $elementContents = $query->orderBy('update_date', 'desc')->limit(15)->get()->unique('id_global');
 
                 return self::prepareListing($elementContents, $count);
             }
