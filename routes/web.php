@@ -30,6 +30,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/home/calculate-time', [App\Http\Controllers\HomeController::class, 'calculateTime']);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/users-list', [App\Http\Controllers\UsersController::class, 'usersList']);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

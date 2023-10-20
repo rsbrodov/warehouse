@@ -12,6 +12,17 @@
 </style>
 <template>
     <div id="app">
+        <!-- Modal edit ElemetnContent-->
+        <div class="modal fade" id="elementContentEdit" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <Edit
+                    v-model="elementContentOne"
+                    :type_content_id="id"
+                    @close-modal="closeModal('elementContentEdit')"
+                />
+            </div>
+        </div>
+
         <div v-if="elementContentOne" class="content">
             <div class="row">
                 <div class="col-9">
@@ -29,7 +40,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-3 text-right"><a href="#" class="btn btn-outline-secondary"><i class="fa fa-pencil fa-lg"
+                <div class="col-3 text-right" style="padding-right: 15px; padding-top: 10px;" @click="openModal('elementContentEdit', elementContentOne)"><a href="#" class="btn btn-outline-secondary"><i class="fa fa-pencil fa-lg"
                                                                                                aria-hidden="true"></i></a></div>
             </div>
             <nav class="mt-3">
@@ -48,8 +59,10 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import Edit from "../element-content/Edit";
 
 export default {
+    components:{Edit},
     name: "Onetype",
     data() {
         return {
@@ -69,7 +82,18 @@ export default {
             }else{
                 return 'nav-link';
             }
-        }
+        },
+        openModal(id, element_content){
+            if(id == 'elementContentEdit') {
+                $('#elementContentEdit').modal('show');
+            }
+        },
+        async closeModal(id){
+            $("#"+id).modal("hide");
+            if(id == 'elementContentEdit') {
+                await this.getElementContentOne(this.element_content_id);
+            }
+        },
     },
 
     async mounted() {

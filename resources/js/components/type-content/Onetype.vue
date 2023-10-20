@@ -14,6 +14,16 @@
     <div id="app">
         <div v-if="typeContentOne" class="content">
             <!-- Stack the columns on mobile by making one full-width and the other half-width -->
+            <!-- Modal edit typeContent -->
+            <div class="modal fade" id="typeContentEdit" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <Edit
+                            v-model="typeContentOne"
+                            @close-modal="closeModal('typeContentEdit')"
+                    />
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col">
                     <div style="display: flex">
@@ -38,7 +48,7 @@
                         </b>{{ typeContentOne.version.major }}.{{ typeContentOne.version.minor }}</div>
                     </div>
                 </div>
-                <div class="col-3 text-right"><a href="#" class="btn btn-outline-secondary"><i class="fa fa-pencil fa-lg"
+                <div class="col-3 text-right" style="padding-right: 15px;"><a href="#" class="btn btn-outline-secondary" @click="openModal('typeContentEdit', typeContentOne)"><i class="fa fa-pencil fa-lg"
                                                                                                aria-hidden="true"></i></a></div>
             </div>
             <nav class="mt-3">
@@ -57,9 +67,11 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import Edit from './Edit';
 
 export default {
     name: "Onetype",
+    components:{Edit},
     data() {
         return {
             type_content_id: window.location.href.split('/')[5],
@@ -78,7 +90,17 @@ export default {
             }else{
                 return 'nav-link';
             }
-        }
+        },
+        openModal(id, type_content){
+            $('#'+id).modal('show');
+        },
+        async closeModal(id){
+            $("#"+id).modal("hide");
+            if(id == 'typeContentEdit') {
+                await this.getTypeContentOne(this.type_content_id);
+            }
+
+        },
     },
 
     async created() {

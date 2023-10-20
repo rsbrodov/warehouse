@@ -43,8 +43,8 @@ class ElementContentService
                     'type_content_id'=> request('type_content_id'),
                     'label'          => $request->label,
                     'description'          => $request->description,
-                    'active_from'    => $request->active_from ? date_create($request->active_from) : null,
-                    'active_after'   => $request->active_after ? date_create($request->active_after) : null,
+                    'active_from'    => $request->active_from ? date('Y-m-d H:m:s', strtotime($request->active_from)) : null,
+                    'active_after'   => $request->active_after ? date('Y-m-d H:m:s', strtotime($request->active_after)) : null,
                     'status'         => 'DRAFT',
                     'version_major'  => '1',
                     'version_minor'  => '0',
@@ -85,8 +85,8 @@ class ElementContentService
 
             $element->label = $request->label;
             $element->api_url = $request->api_url;
-            $element->active_from = $request->active_from;
-            $element->active_after = $request->active_after;
+            $element->active_from = $request->active_from ? date('Y-m-d H:m:s', strtotime($request->active_from)) : null;
+            $element->active_after = $request->active_after ? date('Y-m-d H:m:s', strtotime($request->active_after)) : null;
             $element->status = $request->status;
             $element->description = $request->description;
             $element->updated_author = Auth::guard('web')->user()->id;

@@ -52,22 +52,20 @@
                 <div class="row mb-3">
                     <div class="block col-6">
                         <label for="activeFrom"><b>Период действия с:</b></label>
-                        <datepicker
-                            :id="localValue.activeFrom"
-                            v-model="localValue.activeFrom"
-                            :language="ru"
-                            class="form-control">
-                        </datepicker>
+                        <input type="date"
+                               :id="localValue.activeFrom"
+                               :value="localValue.activeFrom"
+                               @input="localValue.activeFrom = $event.target.valueAsDate"
+                               class="form-control">
                     </div>
 
                     <div class="block col-6">
                         <label for="activeAfter"><b>Период действия по:</b></label>
-                         <datepicker
-                            :id="localValue.activeAfter"
-                            v-model="localValue.activeAfter"
-                            :language="ru"
-                            class="form-control">
-                        </datepicker>
+                        <input type="date"
+                               :id="localValue.activeAfter"
+                               :value="localValue.activeAfter"
+                               @input="localValue.activeAfter = $event.target.valueAsDate"
+                               class="form-control">
                     </div>
                 </div>
 
@@ -143,7 +141,9 @@
                 }
             },
             generateUrl(){
-                this.localValue.apiUrl =  url_slug(this.localValue.name)
+                let v = this.localValue.name;
+                console.log('generate url', this.value.apiUrl);
+                this.value.apiUrl =  url_slug(this.value.name)
             },
             getUsers(){
                 axios.get(BASE_URL + 'users-list')
