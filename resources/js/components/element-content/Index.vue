@@ -253,14 +253,15 @@
                 }
             },
             date: function (element) {
-                if(!element.active_from && !element.active_after){
+                if(!element.activeFrom && !element.activeAfter){
                     return "Не задан";
-                }else if(!element.active_from && element.active_after){
-                    return "До "+ moment(type_content.active_after).format('DD.MM.YYYY');
-                } else if(element.active_from && !element.active_after){
-                    return moment(element.active_from).format('DD.MM.YYYY') + " - бессрочно";
+                }else if(!element.activeFrom && element.activeAfter){
+                    //return "До "+ moment(type_content.active_after).format('DD.MM.YYYY');
+                    return "До "+ element.activeAfter;
+                } else if(element.activeFrom && !element.activeAfter){
+                    return element.activeFrom + " - бессрочно";
                 }else{
-                    return moment(element.active_from).format('DD.MM.YYYY') + " - " + moment(element.active_after).format('DD.MM.YYYY');
+                    return element.activeFrom + " - " + element.activeAfter;
                 }
             },
         },

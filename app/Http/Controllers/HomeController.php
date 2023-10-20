@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Dictionary;
 use App\Models\DictionaryElement;
+use App\Models\ElementContent;
+use App\Models\TypeContent;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -333,5 +335,30 @@ class HomeController extends Controller
         $images = Storage::disk('public')->allFiles('uploads');
         //dd($images);
         return view('image-show', ['images' => $images]);
+    }
+
+    public function calculateTime(){
+        $count = 0;
+        $elementContents = ElementContent::where('status', 'Published')->get();
+        $typeContents = TypeContent::where('status', 'Published')->get();
+        foreach ($elementContents as $elementContent){
+            if (strtotime(date('Y-m-d H:m:s')) < strtotime($elementContent->active_from) || strtotime(date('Y-m-d H:m:s')) > strtotime($elementContent->active_after)){
+                $elementContent->status = 'Archive';
+                $elementContent->save();
+                print_r('Элемент контента '.$elementContent->id.' Отправлен в архив <br>');
+                $count++;
+            }
+        }
+        foreach ($typeContents as $typeContent){
+            if (strtotime(date('Y-m-d H:m:s')) < strtotime($typeContent->active_from) || strtotime(date('Y-m-d H:m:s')) > strtotime($typeContent->active_after)){
+                $typeContent->status = 'Archive';
+                $typeContent->save();
+                print_r('Тип контента '.$typeContent->id.' отправлен в архив <br>');
+                $count++;
+            }
+        }
+        if($count > 0){
+            print_r('ИТОГО: '.$count);
+        }
     }
 }

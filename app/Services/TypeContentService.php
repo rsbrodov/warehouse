@@ -38,8 +38,8 @@ class TypeContentService
                     'name' => $request->name,
                     'description' => $request->description,
                     'owner' => $request->owner,
-                    'active_from' => date_create($request->activeFrom),
-                    'active_after' => date_create($request->activeAfter),
+                    'active_from' => $request->activeFrom ? date('Y-m-d H:m:s', strtotime($request->activeFrom)) : null,
+                    'active_after' => $request->activeAfter ? date('Y-m-d H:m:s', strtotime($request->activeAfter)): null,
                     'status' => $request->status,
                     'version_major' => '1',
                     'version_minor' => '0',
@@ -74,8 +74,9 @@ class TypeContentService
             $type->name = $request->name;
             $type->api_url = $request->apiUrl;
             $type->description = $request->description;
-            $type->active_from = date_format(date_create($request->activeFrom), 'Y-m-d H:m:s');
-            $type->active_after = date_format(date_create($request->activeAfter), 'Y-m-d H:m:s');
+            $type->active_from = $request->activeFrom ? date('Y-m-d H:m:s', strtotime($request->activeFrom)) : null;
+            $type->active_after = $request->activeAfter ? date('Y-m-d H:m:s', strtotime($request->activeAfter)) : null;
+
             $type->icon = $request->icon;
             $type->status = $request->status;
             $type->owner = $request->owner;

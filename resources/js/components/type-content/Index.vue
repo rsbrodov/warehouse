@@ -232,14 +232,14 @@
         },
         filters: {
             date: function (type_content) {
-                if(!type_content.active_from && !type_content.active_after){
+                if(type_content.activeFrom === null && type_content.activeAfter === null){
                     return "Не задан";
-                }else if(!type_content.active_from && type_content.active_after){
-                    return "До "+ moment(type_content.active_after).format('DD.MM.YYYY');
-                } else if(type_content.active_from && !type_content.active_after){
-                    return moment(type_content.active_from).format('DD.MM.YYYY') + " - бессрочно";
+                }else if(type_content.activeFrom === null && type_content.activeAfter != null){
+                    return "До "+ type_content.activeAfter;
+                } else if(type_content.activeFrom !== null && type_content.activeAfter === null){
+                    return type_content.activeFrom + " - бессрочно";
                 }else{
-                    return moment(type_content.active_from).format('DD.MM.YYYY') + " - " + moment(type_content.active_after).format('DD.MM.YYYY');
+                    return type_content.activeFrom + " - " + type_content.activeAfter;
                 }
 
             },
