@@ -253,12 +253,11 @@
                 }
             },
             date: function (element) {
-                if(!element.activeFrom && !element.activeAfter){
+                if(element.activeFrom === null && element.activeAfter === null){
                     return "Не задан";
-                }else if(!element.activeFrom && element.activeAfter){
-                    //return "До "+ moment(type_content.active_after).format('DD.MM.YYYY');
+                }else if(element.activeFrom === null && element.activeAfter != null){
                     return "До "+ element.activeAfter;
-                } else if(element.activeFrom && !element.activeAfter){
+                } else if(element.activeFrom !== null && element.activeAfter === null){
                     return element.activeFrom + " - бессрочно";
                 }else{
                     return element.activeFrom + " - " + element.activeAfter;

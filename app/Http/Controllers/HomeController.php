@@ -341,20 +341,24 @@ class HomeController extends Controller
         $count = 0;
         $elementContents = ElementContent::where('status', 'Published')->get();
         $typeContents = TypeContent::where('status', 'Published')->get();
-        foreach ($elementContents as $elementContent){
-            if (strtotime(date('Y-m-d H:m:s')) < strtotime($elementContent->active_from) || strtotime(date('Y-m-d H:m:s')) > strtotime($elementContent->active_after)){
-                $elementContent->status = 'Archive';
-                $elementContent->save();
-                print_r('Элемент контента '.$elementContent->id.' Отправлен в архив <br>');
-                $count++;
+        if(count($elementContents) != 0){
+            foreach ($elementContents as $elementContent){
+                if ((!empty($elementContent->active_from) && strtotime(date('Y-m-d H:m:s')) < strtotime($elementContent->active_from)) || (!empty($elementContent->active_after) && strtotime(date('Y-m-d H:m:s')) > strtotime($elementContent->active_after))){
+                    $elementContent->status = 'Archive';
+                    $elementContent->save();
+                    print_r('Элемент контента '.$elementContent->id.' Отправлен в архив <br>');
+                    $count++;
+                }
             }
         }
-        foreach ($typeContents as $typeContent){
-            if (strtotime(date('Y-m-d H:m:s')) < strtotime($typeContent->active_from) || strtotime(date('Y-m-d H:m:s')) > strtotime($typeContent->active_after)){
-                $typeContent->status = 'Archive';
-                $typeContent->save();
-                print_r('Тип контента '.$typeContent->id.' отправлен в архив <br>');
-                $count++;
+        if(count($typeContents) != 0){
+            foreach ($typeContents as $typeContent){
+                if ((!empty($typeContent->active_from) && strtotime(date('Y-m-d H:m:s')) < strtotime($typeContent->active_from)) || (!empty($typeContent->active_after) && strtotime(date('Y-m-d H:m:s')) > strtotime($typeContent->active_after))){
+                    $typeContent->status = 'Archive';
+                    $typeContent->save();
+                    print_r('Тип контента '.$typeContent->id.' отправлен в архив <br>');
+                    $count++;
+                }
             }
         }
         if($count > 0){
