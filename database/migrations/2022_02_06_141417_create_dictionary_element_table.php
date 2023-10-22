@@ -15,14 +15,13 @@ class CreateDictionaryElementTable extends Migration
     {
         Schema::create('dictionary_element', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            //$table->uuid('dictionary_id')->unsigned()->index();
             $table->uuid('dictionary_id')->nullable(false);
             $table->foreign('dictionary_id')->references('id')->on('dictionary')->onDelete('cascade');
             $table->string('value', 250);
-            $table->dateTime('created_at');
+            $table->dateTime('created_date');
             $table->bigInteger('created_author')->unsigned()->index();
             $table->foreign('created_author')->references('id')->on('users');
-            $table->dateTime('updated_at');
+            $table->dateTime('update_date');
             $table->bigInteger('updated_author')->unsigned()->index();
             $table->foreign('updated_author')->references('id')->on('users');
         });

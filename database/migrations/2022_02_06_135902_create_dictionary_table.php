@@ -19,10 +19,10 @@ class CreateDictionaryTable extends Migration
             $table->string('name', 150);
             $table->string('description', 500);
             $table->boolean('archive');
-            $table->dateTime('created_at');
+            $table->dateTime('created_date');
             $table->bigInteger('created_author')->unsigned()->index();
             $table->foreign('created_author')->references('id')->on('users');
-            $table->dateTime('updated_at');
+            $table->dateTime('update_date');
             $table->bigInteger('updated_author')->unsigned()->index();
             $table->foreign('updated_author')->references('id')->on('users');
         });

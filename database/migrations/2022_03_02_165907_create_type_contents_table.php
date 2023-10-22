@@ -25,13 +25,13 @@ class CreateTypeContentsTable extends Migration
             $table->enum('status', ['Draft', 'Published', 'Archive'])->default('Draft');
             $table->integer('version_major')->default('1');
             $table->integer('version_minor')->default('0');
-            $table->string('api_url', 150)->unique();
+            $table->string('api_url', 150);
             $table->string('body', 1000)->nullable();
             $table->uuid('based_type')->nullable();
-            $table->dateTime('created_at');
+            $table->dateTime('created_date');
             $table->bigInteger('created_author')->unsigned()->index();
             $table->foreign('created_author')->references('id')->on('users');
-            $table->dateTime('updated_at');
+            $table->dateTime('update_date');
             $table->bigInteger('updated_author')->unsigned()->index();
             $table->foreign('updated_author')->references('id')->on('users');
         });

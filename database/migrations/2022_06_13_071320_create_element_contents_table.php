@@ -28,10 +28,10 @@ class CreateElementContentsTable extends Migration
             $table->integer('version_minor')->default('0');
             $table->string('body', 1000);
             $table->uuid('based_element')->nullable();
-            $table->dateTime('created_at');
+            $table->dateTime('created_date');
             $table->bigInteger('created_author')->unsigned()->index();
             $table->foreign('created_author')->references('id')->on('users');
-            $table->dateTime('updated_at');
+            $table->dateTime('update_date');
             $table->bigInteger('updated_author')->unsigned()->index();
             $table->foreign('updated_author')->references('id')->on('users');
         });
