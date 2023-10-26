@@ -29,7 +29,7 @@ export default{
     actions: {
         async getDictionary({commit}, params){
             commit('setLoading', true);
-            await axios.get(BASE_URL + 'dictionary/findDictionary', params)
+            await axios.get('/dictionary/findDictionary', params)
                 .then(response => {
                     commit('UPDATE', response.data)
                 })
@@ -42,24 +42,24 @@ export default{
 
         },
         async getDictionaryID(ctx, id){
-            const dictionary = await axios.get(BASE_URL + 'dictionary/findDictionaryID/'+id);
+            const dictionary = await axios.get('/dictionary/findDictionaryID/'+id);
             ctx.commit('ONE', dictionary.data.data)
         },
         async newDictionary(ctx, form){
-            const new_dictionary = await axios.post(BASE_URL + 'dictionary/store', form);
-            /*const dictionary = await axios.get(BASE_URL + 'dictionary/findDictionary');
+            const new_dictionary = await axios.post('/dictionary/store', form);
+            /*const dictionary = await axios.get('/dictionary/findDictionary');
             ctx.commit('UPDATE', dictionary.data.data)*/
         },
         async updateDictionary(ctx, form){
-            const new_dictionary = await axios.post(BASE_URL + 'dictionary/'+form.id, form);
+            const new_dictionary = await axios.post('/dictionary/'+form.id, form);
         },
         async deleteDictionary(ctx, id){
-            await axios.delete(BASE_URL + 'dictionary/'+id);
-            const dictionary = await axios.get(BASE_URL + 'dictionary/findDictionary');
+            await axios.delete('/dictionary/'+id);
+            const dictionary = await axios.get('/dictionary/findDictionary');
             ctx.commit('UPDATE', dictionary.data.data)
         },
         async archiveDictionary(ctx, id){
-            await axios.get(BASE_URL + 'dictionary/'+id+ '/archive');
+            await axios.get('/dictionary/'+id+ '/archive');
         },
     },
 }
