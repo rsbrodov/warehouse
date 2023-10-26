@@ -195,7 +195,7 @@
                 this.getTypeContentByUrl();
             },
             getUsers(){
-                axios.get(BASE_URL + 'users-list')
+                axios.get('/users-list')
                     .then(response => {
                         this.users = response.data;
                     });

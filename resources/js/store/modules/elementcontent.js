@@ -43,7 +43,7 @@ export default{
     actions: {
         async getElementContent(ctx, params){
             ctx.commit('setLoading', true);
-            await axios.get(BASE_URL + 'element-content/findElementContentID/'+params.id, {params:params.params})
+            await axios.get('/element-content/findElementContentID/'+params.id, {params:params.params})
             .then(response => {
                 ctx.commit('UPDATE', response.data)
             })
@@ -55,11 +55,11 @@ export default{
             });
         },
         async newElementContents(ctx, form){
-            const new_element_content = await axios.post(BASE_URL + 'element-content/store/'+ form.type_content_id, form);
+            const new_element_content = await axios.post('/element-content/store/'+ form.type_content_id, form);
         },
         async getElementContentOne({commit}, id) {
             //commit('setLoading', true);
-            await axios.get(BASE_URL + 'element-content/getElementContentID/' + id)
+            await axios.get('/element-content/getElementContentID/' + id)
                 .then(response => {
                     commit('updateElementContentOne', response.data.data)
                 })
@@ -72,7 +72,7 @@ export default{
         },
         async getElementContentAll({commit}, params) {
             //commit('setLoading', true);
-            await axios.get(BASE_URL + 'element-content/findElementContentAll', params)
+            await axios.get('/element-content/findElementContentAll', params)
                 .then(response => {
                     commit('updateElementContentAll', response.data)
                 })
@@ -85,11 +85,11 @@ export default{
         },
         async updateElementContent(ctx, form, id){
             console.log('updateElementContent', form)
-            await axios.post(BASE_URL + 'element-content/'+id, form);
+            await axios.post('/element-content/'+id, form);
         },
         async getElementContentsAllVersion({commit}, id) {
             commit('setLoading', true);
-            await axios.get(BASE_URL + 'element-content/getAllVersionElementContent/'+id)
+            await axios.get('/element-content/getAllVersionElementContent/'+id)
                 .then(response => {
                     commit('updateElementContentsAllVersion', response.data.data)
                 })

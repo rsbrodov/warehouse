@@ -36,7 +36,7 @@ export default{
     actions: {
         async getTypeContents({commit}, params) {
             commit('setLoading', true);
-            await axios.get(BASE_URL + 'type-content/getListTypeContent', params)
+            await axios.get('/type-content/getListTypeContent', params)
                 .then(response => {
                     commit('updateTypeContents', response.data)
                 })
@@ -50,7 +50,7 @@ export default{
         },
         async getTypeContentsAllVersion({commit}, id) {
             commit('setLoading', true);
-            await axios.get(BASE_URL + 'type-content/getAllVersionTypeContent/'+id)
+            await axios.get('/type-content/getAllVersionTypeContent/'+id)
                 .then(response => {
                     commit('updateTypeContentsAllVersion', response.data.data)
                 })
@@ -63,11 +63,11 @@ export default{
 
         },
         async newTypeContents(ctx, form){
-            const new_dish = await axios.post(BASE_URL + 'type-content/store', form);
+            const new_dish = await axios.post('/type-content/store', form);
         },
         async getTypeContentOne({commit}, id) {
             //commit('setLoading', true);
-            await axios.get(BASE_URL + 'type-content/getTypeContentID/'+id)
+            await axios.get('/type-content/getTypeContentID/'+id)
                 .then(response => {
                     commit('updateTypeContentOne', response.data.data)
                 })
@@ -81,7 +81,7 @@ export default{
 
         },
         async update(ctx, form, id){
-            const type_content = await axios.post(BASE_URL + 'type-content/'+id, form);
+            const type_content = await axios.post('/type-content/'+id, form);
         },
     },
 }

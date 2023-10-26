@@ -154,7 +154,7 @@
                 }
             },
             async getIcons() {
-                axios.get(BASE_URL + 'type-content/icons')
+                axios.get('/type-content/icons')
                     .then(response => {
                         this.icons = response.data;
                     });
@@ -163,7 +163,7 @@
                 this.form.apiUrl =  url_slug(this.form.name)
             },
             getUsers(){
-                axios.get(BASE_URL + 'users-list')
+                axios.get('/users-list')
                     .then(response => {
                         this.users = response.data;
                     });

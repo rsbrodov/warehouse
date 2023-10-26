@@ -435,7 +435,7 @@ export default {
             this.changeStatus = true;
         },
         saveBody() {
-            axios.post(BASE_URL + 'type-content/save-body', { id: this.type_content_id, body: this.clonedItems })
+            axios.post('/type-content/save-body', { id: this.type_content_id, body: this.clonedItems })
                 .then(response => {
                     if (response.status === 200) {
                         this.changeStatus = false;
@@ -451,7 +451,7 @@ export default {
         },
         async deleteTypeContent(typeContent) {
             if (confirm('Вы уверены, что хотите удалить тип контента «' + typeContent.name + ' ' + typeContent.version.major + '.' + typeContent.version.minor + '»?')) {
-                await axios.delete(BASE_URL + 'type-content/' + this.type_content_id)
+                await axios.delete('/type-content/' + this.type_content_id)
                     .then(response => {
                         if (response.status === 204) {
                             this.flashMessage.success({
@@ -459,7 +459,7 @@ export default {
                                 time: 3000,
                             });
                             window.setTimeout(function () {
-                                window.location.href = BASE_URL + "type-content/index"
+                                window.location.href = "/type-content/index"
                             }, 3000);
                         }
                     })
@@ -470,7 +470,7 @@ export default {
         },
 
         async getBody() {
-            await axios.get(BASE_URL + 'type-content/get-body/' + this.type_content_id)
+            await axios.get('/type-content/get-body/' + this.type_content_id)
                 .then(response => {
                     if (Object.keys(response.data).length === 0 || response.data.length === 0) {
                         console.log('response.data123');
@@ -485,7 +485,7 @@ export default {
                 })
         },
         async createNewVersion(version) {
-            await axios.get(BASE_URL + 'type-content/new-version/' + this.type_content_id + '/' + version)
+            await axios.get('/type-content/new-version/' + this.type_content_id + '/' + version)
                 .then(response => {
                     if (response.status === 200) {
                         this.flashMessage.success({

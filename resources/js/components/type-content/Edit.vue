@@ -113,7 +113,7 @@
         methods: {
             ...mapActions(['update']),
             async getIcons() {
-                axios.get(BASE_URL + 'type-content/icons')
+                axios.get('/type-content/icons')
                     .then(response => {
                         this.icons = response.data;
                     });
@@ -146,7 +146,7 @@
                 this.value.apiUrl =  url_slug(this.value.name)
             },
             getUsers(){
-                axios.get(BASE_URL + 'users-list')
+                axios.get('/users-list')
                     .then(response => {
                         this.users = response.data;
                     });
