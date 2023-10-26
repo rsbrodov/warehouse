@@ -193,7 +193,7 @@
             },
             copyUrl(element){
                 try {
-                    navigator.clipboard.writeText(BASE_URL + 'api/v1/element-content/' +element.type_contents.api_url+'/'+element.type_contents.version_major+'/'+element.type_contents.version_minor+'/'+ element.api_url+'/'+element.version_major+'/'+element.version_minor)
+                    navigator.clipboard.writeText('/api/v1/element-content/' +element.type_contents.api_url+'/'+element.type_contents.version_major+'/'+element.type_contents.version_minor+'/'+ element.api_url+'/'+element.version_major+'/'+element.version_minor)
                     this.flashMessage.success({
                         message: 'Скопировано в буфер обмена',
                         time: 3000,
