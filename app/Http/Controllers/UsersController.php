@@ -53,7 +53,9 @@ class UsersController extends Controller
                 'email' => $request->input('email'),
                 'password' => Hash::make($request->input('password')),
                 'status' => 'MODERATED',
-                'parent_id' => Auth::id()
+                'parent_id' => Auth::id(),
+                'created_date' => Date('Y-m-d H:i:s'),
+                'update_date' => Date('Y-m-d H:i:s'),
             ]);
             if ($user->hasRole('Admin')) {
                 $newUser->assignRole($request->input('role')); //назначить роль юзеру
@@ -87,6 +89,7 @@ class UsersController extends Controller
                 $editUser = User::where('id', $id)->first();
                 $editUser->name = $request->input('name');
                 $editUser->email = $request->input('email');
+                $editUser->update_date = Date('Y-m-d H:i:s');
                 $editUser->save();
                 return redirect()->route('users.index')->with('success', 'Пользователь ' . $editUser->name . ' успешно отредактирован');
             }
