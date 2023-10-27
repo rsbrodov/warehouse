@@ -1,5 +1,8 @@
 #INSTALL Project
 
+При первом запуске на сервере выполнить:
+<p>php artisan db:seed --class=RoleSeeder</p>
+<p>php artisan make:seeder AdminUserSeeder</p>
 <p>git clone https://github.com/rsbrodov/cms.git</p>
 <p>composer update</p>
 <p>npm install</p>
