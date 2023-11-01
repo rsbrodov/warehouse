@@ -34,7 +34,11 @@
                      </div>
                      <div class="block">
                          <label for="description"><b>Описание справочника:</b></label>
-                         <textarea autocomplete="off" name="description" v-model="form.description" id="description" class="form-control"/>
+                         <textarea autocomplete="off" name="description" v-model="form.description" id="description" class="form-control"
+                                   :class="{invalid: ($v.form.description.$dirty && !$v.form.description.required)}"/>
+                         <small class="helper-text invalid" v-if="$v.form.description.$dirty && !$v.form.description.required">
+                             Необходимо заполнить «Описание».
+                         </small>
                      </div>
                 </div>
                 <div class="modal-footer">
@@ -99,6 +103,7 @@
             form:{
                 name: {required},
                 code: {required},
+                description: {required},
             }
         },
     }

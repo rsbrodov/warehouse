@@ -51,12 +51,14 @@
 
                 <div class="row mb-3">
                     <div class="block col-6">
-                        <label for="activeFrom"><b>Период действия с:</b></label>
-                        <input type="date"
-                               :id="localValue.activeFrom"
-                               :value="localValue.activeFrom"
-                               @input="localValue.activeFrom = $event.target.valueAsDate"
-                               class="form-control">
+                        <label for="activeFrom"><b>Период действия с:</b></label><br>
+<!--                        <Datepicker :value="localValue.activeFrom" :language="lang" :format="dd-mm-YYYY"></Datepicker>-->
+                        <date-picker v-model="time1" :lang="lang" :format-locale="ru" :format="'DD.MM.YYYY'"></date-picker>
+<!--                        <input type="date"-->
+<!--                               :id="localValue.activeFrom"-->
+<!--                               :value="localValue.activeFrom"-->
+<!--                               @input="localValue.activeFrom = $event.target.valueAsDate"-->
+<!--                               class="form-control">-->
                     </div>
 
                     <div class="block col-6">
@@ -87,12 +89,13 @@
 <script>
     import {mapGetters, mapActions} from 'vuex'
     import {required} from "vuelidate/lib/validators";
-    import Datepicker from 'vuejs-datepicker';
-    import {ru} from 'vuejs-datepicker/dist/locale'
+    import DatePicker from 'vue2-datepicker';
+    import { ru } from 'date-fns/locale';
+    import 'vue2-datepicker/index.css';
     import { url_slug } from 'cyrillic-slug'
     export default {
         name: "Edit",
-        components: {Datepicker},
+        components: {DatePicker},
         props: {
             value: {
                 required: true,
@@ -101,8 +104,16 @@
         data:function(){
             return {
                 ru:ru,
+                lang: {
+                    formatLocale: {
+                        firstDayOfWeek: 1,
+                    },
+                    monthBeforeYear: false,
+                    language: ru
+                },
                 icons:null,
                 users:null,
+                time1: new Date(1995, 6, 2),
             }
         },
         computed: {
@@ -173,6 +184,9 @@
     .invalid {
         border-color: red;
         color: red;
+    }
+    .mx-datepicker {
+        width: 100%!important;
     }
     small .invalid {
         color: red;

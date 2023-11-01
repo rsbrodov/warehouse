@@ -74,7 +74,8 @@
                 <th>Действия</th>
             </tr>
             <tr v-if="(!Dictionary || Dictionary.length === 0) && getLoading === false">
-                <td class="text-center text-danger" colspan="6"><b>Данные не найдены!</b></td>
+                <td v-if="dictionaryErrors === null" class="text-center text-danger" colspan="6"><b>Данные не найдены!</b></td>
+                <td v-else class="text-center text-danger" colspan="6"><b style="color: red!important">{{dictionaryErrors.code}}</b></td>
             </tr>
             <tr v-else-if="getLoading === true" style="border:none">
                 <td class="text-center text-danger" colspan="6"><Loader/></td>
@@ -144,7 +145,7 @@
             }
         },
         computed:{
-            ...mapGetters(['Dictionary', 'getLoading']),
+            ...mapGetters(['Dictionary', 'getLoading', 'dictionaryErrors']),
         },
 
         methods: {
@@ -238,6 +239,17 @@
                     this.getDictionaryByUrl();
                     console.log()
                     //this.updateUrl('set', 'page', 1);
+                },
+                deep: true
+            },
+            'dictionaryErrors': {
+                handler: function (newValue, oldValue) {
+                    if(newValue !== null && newValue !== oldValue){
+                        this.flashMessage.error({
+                            message: newValue.status + ' ' + newValue.code,
+                            time: 3000,
+                        });
+                    }
                 },
                 deep: true
             },
