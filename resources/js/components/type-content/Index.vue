@@ -80,7 +80,8 @@
                 <th>Действия</th>
             </tr>
             <tr v-if="(!typeContents || typeContents.length === 0) && getLoading === false">
-                <td class="text-center text-danger" colspan="7"><b>Данные не найдены!</b></td>
+                <td v-if="typeContentErrors === null" class="text-center text-danger" colspan="7"><b>Данные не найдены!</b></td>
+                <td v-else class="text-center text-danger" colspan="7"><b style="color: red!important">{{typeContentErrors.code}}</b></td>
             </tr>
             <tr v-else-if="getLoading === true" style="border:none">
                 <td class="text-center text-danger" colspan="6"><Loader/></td>
@@ -158,7 +159,7 @@
         },
 
         computed:{
-            ...mapGetters(['typeContents', 'getLoading']),
+            ...mapGetters(['typeContents', 'getLoading', 'typeContentErrors']),
         },
 
         methods: {
@@ -226,6 +227,17 @@
                 handler: function (newValue, oldValue) {
                     this.params = newValue;
                     this.getTypeContentByUrl();
+                },
+                deep: true
+            },
+            'typeContentErrors': {
+                handler: function (newValue, oldValue) {
+                    if(newValue !== null && newValue !== oldValue){
+                        this.flashMessage.error({
+                            message: newValue.status + ' ' + newValue.code,
+                            time: 3000,
+                        });
+                    }
                 },
                 deep: true
             },

@@ -3,6 +3,7 @@ export default{
         dictionary: [],
         new_dictionary: '',
         one_dictionary: '',
+        dictionary_errors: null
     },
     getters: {
         Dictionary(state){
@@ -13,6 +14,9 @@ export default{
         },
         oneDictionary(state){
             return state.one_dictionary
+        },
+        dictionaryErrors(state){
+            return state.dictionary_errors
         },
     },
     mutations: {
@@ -25,6 +29,9 @@ export default{
         ONE(state, one_dictionary){
             state.one_dictionary = one_dictionary
         },
+        D_ERRORS(state, errors){
+            state.dictionary_errors = errors
+        },
     },
     actions: {
         async getDictionary({commit}, params){
@@ -32,9 +39,12 @@ export default{
             await axios.get('/dictionary/findDictionary', params)
                 .then(response => {
                     commit('UPDATE', response.data)
+                    commit('D_ERRORS', null)
                 })
                 .catch(err => {
                     console.log(err)
+                    commit('D_ERRORS', {status: err.response.status, code: err.response.data.message})
+                    commit('UPDATE', [])
                 })
                 .finally(() => {
                     commit('setLoading', false);

@@ -4,6 +4,7 @@ export default{
         new_type_contents: '',
         type_content_one: null,
         type_contents_all_version: [],
+        type_content_errors: null
     },
     getters: {
         typeContents(state){
@@ -17,6 +18,9 @@ export default{
         },
         typeContentsAllVersion(state){
             return state.type_contents_all_version
+        },
+        typeContentErrors(state){
+            return state.type_content_errors
         },
     },
     mutations: {
@@ -32,6 +36,9 @@ export default{
         addingTypeContents(state, newTypeContents){
             state.type_contents.unshift(newTypeContents)
         },
+        TP_ERRORS(state, errors){
+            state.type_content_errors = errors
+        },
     },
     actions: {
         async getTypeContents({commit}, params) {
@@ -39,9 +46,12 @@ export default{
             await axios.get('/type-content/getListTypeContent', params)
                 .then(response => {
                     commit('updateTypeContents', response.data)
+                    commit('TP_ERRORS', null)
                 })
                 .catch(err => {
-                    console.log(err)
+                    console.log(err.response)
+                    commit('TP_ERRORS', {status: err.response.status, code: err.response.data.message})
+                    commit('updateTypeContents', [])
                 })
                 .finally(() => {
                     commit('setLoading', false);
