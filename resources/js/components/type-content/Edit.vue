@@ -53,21 +53,20 @@
                     <div class="block col-6">
                         <label for="activeFrom"><b>Период действия с:</b></label><br>
 <!--                        <Datepicker :value="localValue.activeFrom" :language="lang" :format="dd-mm-YYYY"></Datepicker>-->
-                        <date-picker v-model="time1" :lang="lang" :format-locale="ru" :format="'DD.MM.YYYY'"></date-picker>
-<!--                        <input type="date"-->
-<!--                               :id="localValue.activeFrom"-->
-<!--                               :value="localValue.activeFrom"-->
-<!--                               @input="localValue.activeFrom = $event.target.valueAsDate"-->
-<!--                               class="form-control">-->
+                        <date-picker v-model="value.activeFrom"
+                                     :lang="lang"
+                                     :format-locale="ru"
+                                     :format="'DD.MM.YYYY'"
+                                     :valueType="'format'"/>
                     </div>
 
                     <div class="block col-6">
                         <label for="activeAfter"><b>Период действия по:</b></label>
-                        <input type="date"
-                               :id="localValue.activeAfter"
-                               :value="localValue.activeAfter"
-                               @input="localValue.activeAfter = $event.target.valueAsDate"
-                               class="form-control">
+                        <date-picker v-model="value.activeAfter"
+                                     :lang="lang"
+                                     :format-locale="ru"
+                                     :format="'DD.MM.YYYY'"
+                                     :valueType="'format'"/>
                     </div>
                 </div>
 
@@ -113,7 +112,6 @@
                 },
                 icons:null,
                 users:null,
-                time1: new Date(1995, 6, 2),
             }
         },
         computed: {
@@ -139,7 +137,7 @@
                 } else {
                     console.log(123);
                     this.update({id: this.localValue.id, owner: this.localValue.owner, icon: this.localValue.icon, name: this.localValue.name, apiUrl: this.localValue.apiUrl,
-                        activeFrom: this.localValue.activeFrom, activeAfter: this.localValue.activeAfter, description: this.localValue.description, status: this.localValue.status}
+                        activeFrom: this.value.activeFrom, activeAfter: this.value.activeAfter, description: this.localValue.description, status: this.localValue.status}
                     ).then(response => {
                         this.$emit('close-modal');
                         this.flashMessage.success({
