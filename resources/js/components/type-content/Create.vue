@@ -59,18 +59,18 @@
                 <div class="row mb-3">
                     <div class="block col-6">
                         <label for="activeFrom"><b>Период действия с:</b></label>
-                        <input type="date"
-                               :id="form.activeFrom"
-                               v-model="form.activeFrom"
-                               class="form-control">
+                        <date-picker v-model="form.activeFrom"
+                                     :lang="lang"
+                                     :format="'DD.MM.YYYY'"
+                                     :valueType="'format'"/>
                     </div>
 
                     <div class="block col-6">
                         <label for="activeAfter"><b>Период действия по:</b></label>
-                        <input type="date"
-                               :id="form.activeAfter"
-                               v-model="form.activeAfter"
-                               class="form-control">
+                        <date-picker v-model="form.activeAfter"
+                                     :lang="lang"
+                                     :format="'DD.MM.YYYY'"
+                                     :valueType="'format'"/>
                     </div>
                 </div>
 
@@ -93,18 +93,18 @@
 <script>
     import {mapGetters, mapActions} from 'vuex'
     import {required} from "vuelidate/lib/validators";
-    import Datepicker from 'vuejs-datepicker';
-    import {ru} from 'vuejs-datepicker/dist/locale'
+    import DatePicker from 'vue2-datepicker';
+    import 'vue2-datepicker/index.css';
+    import 'vue2-datepicker/locale/ru';
     import { url_slug } from 'cyrillic-slug'
     export default {
         name: "Create",
-         components: {Datepicker},
+         components: {DatePicker},
         data:function(){
             return {
                 icons:null,
                 errors:{},
                 users:null,
-                ru:ru,
                 form:{
                     icon:'',
                     name:'',
@@ -113,7 +113,13 @@
                     activeFrom:'',
                     activeAfter:'',
                     description:'',
-                }
+                },
+                lang: {
+                    formatLocale: {
+                        firstDayOfWeek: 1,
+                    },
+                    monthBeforeYear: false,
+                },
             }
         },
 

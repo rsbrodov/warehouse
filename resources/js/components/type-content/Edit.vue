@@ -55,7 +55,6 @@
 <!--                        <Datepicker :value="localValue.activeFrom" :language="lang" :format="dd-mm-YYYY"></Datepicker>-->
                         <date-picker v-model="value.activeFrom"
                                      :lang="lang"
-                                     :format-locale="ru"
                                      :format="'DD.MM.YYYY'"
                                      :valueType="'format'"/>
                     </div>
@@ -64,7 +63,6 @@
                         <label for="activeAfter"><b>Период действия по:</b></label>
                         <date-picker v-model="value.activeAfter"
                                      :lang="lang"
-                                     :format-locale="ru"
                                      :format="'DD.MM.YYYY'"
                                      :valueType="'format'"/>
                     </div>
@@ -89,8 +87,8 @@
     import {mapGetters, mapActions} from 'vuex'
     import {required} from "vuelidate/lib/validators";
     import DatePicker from 'vue2-datepicker';
-    import { ru } from 'date-fns/locale';
     import 'vue2-datepicker/index.css';
+    import 'vue2-datepicker/locale/ru';
     import { url_slug } from 'cyrillic-slug'
     export default {
         name: "Edit",
@@ -102,13 +100,11 @@
         },
         data:function(){
             return {
-                ru:ru,
                 lang: {
                     formatLocale: {
                         firstDayOfWeek: 1,
                     },
                     monthBeforeYear: false,
-                    language: ru
                 },
                 icons:null,
                 users:null,

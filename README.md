@@ -13,3 +13,4 @@
 <p>php artisan key:generate</p>
 <p>php artisan serve</p>
 <p>Скопировать ссылку из консоли в браузер</p>
+Если не загружаются картинки нужно настроить storage в корне проекта: php artisan storage:link 

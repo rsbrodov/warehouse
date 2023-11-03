@@ -39,32 +39,18 @@
                 <div class="row mb-3">
                     <div class="block col-6">
                         <label for="active_from"><b>Период действия с:</b></label>
-                        <input type="date"
-                               :id="form.active_from"
-                               v-model="form.active_from"
-                               :language="ru"
-                               class="form-control">
-<!--                        <datepicker-->
-<!--                            :id="form.active_from"-->
-<!--                            v-model="form.active_from"-->
-<!--                            :language="ru"-->
-<!--                            class="form-control">-->
-<!--                        </datepicker>-->
+                        <date-picker v-model="form.active_from"
+                                     :lang="lang"
+                                     :format="'DD.MM.YYYY'"
+                                     :valueType="'format'"/>
                     </div>
 
                     <div class="block col-6">
                         <label for="api_url"><b>Период действия по:</b></label>
-                        <input type="date"
-                               :id="form.active_after"
-                               v-model="form.active_after"
-                               :language="ru"
-                               class="form-control">
-<!--                        <datepicker-->
-<!--                            :id="form.active_after"-->
-<!--                            v-model="form.active_after"-->
-<!--                            :language="ru"-->
-<!--                            class="form-control">-->
-<!--                        </datepicker>-->
+                        <date-picker v-model="form.active_after"
+                                     :lang="lang"
+                                     :format="'DD.MM.YYYY'"
+                                     :valueType="'format'"/>
                     </div>
                 </div>
 
@@ -87,16 +73,16 @@
 <script>
     import {mapGetters, mapActions} from 'vuex'
     import {required} from "vuelidate/lib/validators";
-    import Datepicker from 'vuejs-datepicker';
-    import {ru} from 'vuejs-datepicker/dist/locale'
     import { url_slug } from 'cyrillic-slug'
+    import DatePicker from 'vue2-datepicker';
+    import 'vue2-datepicker/index.css';
+    import 'vue2-datepicker/locale/ru';
     export default {
         name: "Create",
-         components: {Datepicker},
+         components: {DatePicker},
         data:function(){
             return {
                 errors:{},
-                ru:ru,
                 type_content_id: window.location.href.split('/').slice(-1)[0],
                 form:{
                     label:'',
@@ -104,7 +90,13 @@
                     active_from:'',
                     active_after:'',
                     description:'',
-                }
+                },
+                lang: {
+                    formatLocale: {
+                        firstDayOfWeek: 1,
+                    },
+                    monthBeforeYear: false,
+                },
             }
         },
 
