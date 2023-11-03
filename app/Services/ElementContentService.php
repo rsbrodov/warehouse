@@ -131,10 +131,10 @@ class ElementContentService
                     $query = $query->where('label', 'LIKE', '%' . $get['label'] . '%');
                 }
                 if (isset($get['active_from'])) {
-                    $query = $query->where('active_from', '>=', $get['active_from']);
+                    $query = $query->where('active_from', '>=', date('Y-m-d', strtotime($get['active_from'])));
                 }
                 if (isset($get['active_after'])) {
-                    $query = $query->where('active_after', '>=', $get['active_after']);
+                    $query = $query->where('active_after', '>=', date('Y-m-d', strtotime($get['active_after'])));
                 }
                 if (isset($get['url'])) {
                     $query = $query->where('api_url', 'LIKE', '%' . $get['url'] . '%');

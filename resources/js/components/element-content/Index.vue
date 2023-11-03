@@ -51,10 +51,18 @@
 
                             <div class="form-group row">
                                 <div class="col-4">
-                                    <input autocomplete="off" type="date" name="active_from" v-model="filter_form.active_from" placeholder="Период действия с" id="active_from" class="form-control">
+                                    <date-picker v-model="filter_form.active_from"
+                                                 :lang="lang"
+                                                 placeholder="Период действия с"
+                                                 :format="'DD.MM.YYYY'"
+                                                 :valueType="'format'"/>
                                 </div>
                                 <div class="col-4">
-                                    <input  autocomplete="off" type="date" name="active_after" v-model="filter_form.active_after" placeholder="Период действия по" id="active_after" class="form-control">
+                                    <date-picker v-model="filter_form.active_after"
+                                                 :lang="lang"
+                                                 placeholder="Период действия с"
+                                                 :format="'DD.MM.YYYY'"
+                                                 :valueType="'format'"/>
                                 </div>
                             </div>
                         </form>
@@ -119,9 +127,12 @@
     import moment from 'moment'
     import Create from './create'
     import Edit from "./Edit";
+    import DatePicker from 'vue2-datepicker';
+    import 'vue2-datepicker/index.css';
+    import 'vue2-datepicker/locale/ru';
     import {getUrlParams, updateUrl} from "../../helpers/tools";
     export default{
-        components:{Loader, moment, Create, Edit, Pagination},
+        components:{Loader, moment, Create, Edit, Pagination, DatePicker},
         data:function(){
             return {
                 id: window.location.href.split('/').slice(-1)[0],
@@ -151,7 +162,13 @@
                 },
                 page: 1,
                 pages: 89, // всего страниц
-                perPage: 15, // кол-во результатов на странице
+                perPage: 15, // кол-во результатов на странице\
+                lang: {
+                    formatLocale: {
+                        firstDayOfWeek: 1,
+                    },
+                    monthBeforeYear: false,
+                },
             }
         },
 
