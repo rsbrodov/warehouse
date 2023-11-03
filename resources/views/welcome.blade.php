@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Headless CMS</title>
+    <title>Rider CMS</title>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;600&display=swap" rel="stylesheet">
@@ -60,20 +60,16 @@
     @if (Route::has('login'))
         <div class="top-right links">
             @auth
-                <a href="{{ url('/home') }}">Home</a>
+                <a href="{{ url('/home') }}">Домой</a>
             @else
                 <a href="{{ route('login') }}">Личный кабинет</a>
-
-                @if (Route::has('register'))
-                    <a href="{{ route('register') }}">Регистрация</a>
-                @endif
             @endauth
         </div>
     @endif
 
     <div class="content">
         <div class="title m-b-md">
-            HEADLESS CMS
+            RIDER CMS
         </div>
     </div>
 </div>
