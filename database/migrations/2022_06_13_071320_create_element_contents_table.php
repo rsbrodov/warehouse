@@ -26,7 +26,7 @@ class CreateElementContentsTable extends Migration
             $table->enum('status', ['Draft', 'Published', 'Archive', 'Destroy'])->default('Draft');
             $table->integer('version_major')->default('1');
             $table->integer('version_minor')->default('0');
-            $table->string('body', 1000);
+            $table->text('body');
             $table->uuid('based_element')->nullable();
             $table->dateTime('created_date');
             $table->bigInteger('created_author')->unsigned()->index();
