@@ -26,7 +26,7 @@ class CreateTypeContentsTable extends Migration
             $table->integer('version_major')->default('1');
             $table->integer('version_minor')->default('0');
             $table->string('api_url', 150);
-            $table->string('body', 1000)->nullable();
+            $table->text('body')->nullable();
             $table->uuid('based_type')->nullable();
             $table->dateTime('created_date');
             $table->bigInteger('created_author')->unsigned()->index();
