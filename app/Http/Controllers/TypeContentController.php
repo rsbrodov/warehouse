@@ -189,4 +189,10 @@ class TypeContentController extends Controller
         }
         return $result;
     }
+
+    public function getActiveTypeContent()
+    {
+        $typeContents = TypeContent::where('status', 'Published')->orderBy('update_date', 'desc')->get();
+        return $typeContents;
+    }
 }

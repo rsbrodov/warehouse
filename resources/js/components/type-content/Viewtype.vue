@@ -235,6 +235,7 @@ export default {
     data() {
         return {
             changeStatus: false,
+            activeTypeContent: [],
             showContextMenu: false,
             type_content_id: window.location.href.split('/')[5],
             copy: null,
@@ -516,10 +517,24 @@ export default {
                     time: 3000,
                 });
                 this.getTypeContentOne(this.type_content_id);
+
+                /****/
+                this.getActiveTypeContent();
+                /****/
             }).catch(errors => {
                 console.log(errors);
             });
 
+        },
+
+        async getActiveTypeContent() {
+            await axios.get('/type-content/getActiveTypeContent/')
+                .then(response => {
+                    this.activeTypeContent = response.data;
+                })
+                .catch(error => {
+                    alert(321);
+                })
         },
         preventNav(event) {
             if (!this.changeStatus) return
@@ -527,7 +542,21 @@ export default {
             event.returnValue = "Вы не сохранили изменения. Вы уверены, что хотите покинуть страницу?"
         },
     },
-
+    watch: {
+        'activeTypeContent': {
+            handler: function (newValue, oldValue) {
+                let el = document.getElementsByClassName('element-content-sidebar-pull')[0];
+                el.innerText = '';
+                if(newValue.length){
+                    el.insertAdjacentHTML("beforeend", '<li class="nav-item"><a href="/element-content" class="nav-link ml-2"><p>Весь контент</p></a></li>');
+                }
+                for (let i = 0; i < newValue.length; i++) {
+                    el.insertAdjacentHTML("beforeend", '<li class="nav-item"><a href="/element-content/'+ newValue[i].id +'" class="nav-link ml-2"><i class="fa '+ newValue[i].icon +' fa-lg"></i> <p>'+ newValue[i].name +'</p></a></li>');
+                }
+            },
+            deep: true
+        },
+    },
     async created() {
         await this.getBody();
         await this.getTypeContentOne(this.type_content_id);

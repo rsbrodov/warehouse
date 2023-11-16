@@ -4,7 +4,7 @@ $ids = [];
 foreach ($typeContents as $typeContent) {
     $ids[] = \App\Models\TypeContent::where('id_global', $typeContent->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->first()->id;
 }
-$typeContents = \App\Models\TypeContent::whereIn('id', $ids)/*->orderBy('created_date', 'asc')*/->get();
+$typeContents = \App\Models\TypeContent::whereIn('id', $ids)->orderBy('update_date', 'desc')->get();
 $currentPage = false;
 foreach ($typeContents as $typeContent) {
     if (request()->route('type_content_id') == $typeContent->id) {
@@ -85,12 +85,14 @@ foreach ($typeContents as $typeContent) {
                             <i class="fa fa-angle-left right"></i>
                         </p>
                     </a>
-                    <ul class="nav nav-treeview"
+                    <ul class="nav nav-treeview element-content-sidebar-pull"
                         @if($currentPage == true)
                             style="display: block;"
                         @endif
                     >
-                        @if($typeContents)
+
+
+                        @if(!empty($typeContents))
                             <li class="nav-item">
                                 <a href="/element-content" class="nav-link
                                     @if(Route::current()->getName() == 'element-content.indexAll')
@@ -99,6 +101,7 @@ foreach ($typeContents as $typeContent) {
                                 ml-2"><p>Весь контент</p></a>
                             </li>
                         @endif
+
                         @foreach($typeContents as $typeContent)
                             <li class="nav-item">
                                 <a href="/element-content/{{$typeContent->id}}" class="nav-link
@@ -109,6 +112,7 @@ foreach ($typeContents as $typeContent) {
                                     <p>{{$typeContent->name}}</p></a>
                             </li>
                         @endforeach
+
                     </ul>
                 </li>
 
