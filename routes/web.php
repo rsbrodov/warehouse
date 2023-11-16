@@ -105,6 +105,7 @@ Route::middleware(['auth:web'])->group(function () {
     Route::post('/type-content/', [TypeContentController::class, 'store'])->name('type-content.store');
     Route::get('/type-content/{id}/edit', [TypeContentController::class, 'edit'])->name('type-content.edit');
     Route::get('/type-content/getAllVersionTypeContent/{id}', [TypeContentController::class, 'getAllVersionTypeContentWeb']);
+    Route::get('/type-content/getActiveTypeContent', [TypeContentController::class, 'getActiveTypeContent']);
     Route::get('/type-content/all-version-type-content/{id}', [TypeContentController::class, 'getAllVersion'])->name('type-content.all-version');
     Route::get('/descript-version-type-content/{id}', [TypeContentController::class, 'getShowDescription'])->name('type-content.descript-version');
     //Route::get('/type-content/{id}/{type}', [TypeContentController::class, 'createElemen'])->name('type-content.create-elemen');
