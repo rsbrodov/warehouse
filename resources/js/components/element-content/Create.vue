@@ -114,6 +114,7 @@
                         this.$emit('get-element-content-by-url');
                         this.$emit('close-modal');
                         this.form.icon = ''; this.form.name = ''; this.form.owner = ''; this.form.api_url = ''; this.form.active_from = ''; this.form.active_after = ''; this.form.description = '';
+                        this.$v.$reset()
                         this.flashMessage.success({
                             message: 'Элемент контента успешно создан',
                             time: 3000,

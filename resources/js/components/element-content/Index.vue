@@ -85,7 +85,7 @@
                 <th>Автор последнего редактирования</th>
                 <th>Дата последнего редактирования</th>
             </tr>
-            <tr v-if="(!ElementContent || ElementContent.length === 0) && getLoading === false">
+            <tr v-if="(!ElementContent.data || ElementContent.data.length === 0) && getLoading === false">
                 <td class="text-center text-danger" colspan="6"><b>Данные не найдены!</b></td>
             </tr>
             <tr v-else-if="getLoading === true" style="border:none">
@@ -173,11 +173,11 @@
         },
 
         computed:{
-            ...mapGetters(['ElementContent']),
+            ...mapGetters(['ElementContent', 'getLoading']),
         },
 
         methods: {
-            ...mapActions(['getElementContent', 'getLoading']),
+            ...mapActions(['getElementContent']),
             closeModal(id){
                 $("#"+id).modal("hide");
                 if(id == 'elementContentEdit') {
