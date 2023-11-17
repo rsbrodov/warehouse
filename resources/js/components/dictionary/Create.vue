@@ -80,6 +80,7 @@
                         this.form.code = '';
                         this.form.name = '';
                         this.form.description = '';
+                        this.$v.$reset()
                         this.flashMessage.success({
                             message: 'Справочник успешно создан',
                             time: 3000,

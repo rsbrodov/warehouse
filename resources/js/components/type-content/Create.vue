@@ -141,6 +141,7 @@
                         this.$emit('get-type-content-by-url');
                         this.$emit('close-modal');
                         this.form.icon = ''; this.form.name = ''; this.form.owner = ''; this.form.apiUrl = ''; this.form.activeFrom = ''; this.form.activeAfter = ''; this.form.description = '';
+                        this.$v.$reset()
                         this.flashMessage.success({
                             message: 'Тик контента успешно создан',
                             time: 3000,

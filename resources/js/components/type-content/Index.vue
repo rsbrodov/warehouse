@@ -87,7 +87,7 @@
                 <th>Дата последнего<br> редактирования</th>
                 <th>Действия</th>
             </tr>
-            <tr v-if="(!typeContents || typeContents.length === 0) && getLoading === false">
+            <tr v-if="(!typeContents.data || typeContents.data.length === 0) && getLoading === false">
                 <td v-if="typeContentErrors === null" class="text-center text-danger" colspan="7"><b>Данные не найдены!</b></td>
                 <td v-else class="text-center text-danger" colspan="7"><b style="color: red!important">{{typeContentErrors.code}}</b></td>
             </tr>

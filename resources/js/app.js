@@ -34,6 +34,13 @@ Vue.use(BootstrapVue);
 Vue.use(FlashMessage);
 Vue.use(Sortable);
 const app = new Vue({
+    directives: {
+        focus: {
+            inserted: function (el) {
+                el.focus()
+            }
+        }
+    },
     el: '#app',
     store,
 });

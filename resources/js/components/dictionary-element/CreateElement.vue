@@ -60,6 +60,7 @@
                     }).then(response => {
                         this.$emit('close-modal');
                         this.form.name = '';
+                        this.$v.$reset()
                         this.flashMessage.success({
                             message: 'Элемент справочника успешно добавлен',
                             time: 3000,
@@ -68,7 +69,7 @@
                         console.log(errors);
                     });
                 }
-            }
+            },
         },
         validations: {
             form:{

@@ -73,7 +73,7 @@
                 <th>Статус</th>
                 <th>Действия</th>
             </tr>
-            <tr v-if="(!Dictionary || Dictionary.length === 0) && getLoading === false">
+            <tr v-if="(!Dictionary.data || Dictionary.data.length === 0) && getLoading === false">
                 <td v-if="dictionaryErrors === null" class="text-center text-danger" colspan="6"><b>Данные не найдены!</b></td>
                 <td v-else class="text-center text-danger" colspan="6"><b style="color: red!important">{{dictionaryErrors.code}}</b></td>
             </tr>
