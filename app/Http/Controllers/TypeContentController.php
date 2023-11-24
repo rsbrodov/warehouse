@@ -174,7 +174,6 @@ class TypeContentController extends Controller
         foreach ($typeContents as $typeContent) {
             $ids[] = $typeContent->id;
         }
-        //$query = TypeContent::query()->whereIn('id', $ids);
         $elementsContent = ElementContent::where('status', 'Published')->whereIn('type_content_id', $ids)->get();
         $result =[];
         foreach ($elementsContent as $elementContent){
@@ -194,5 +193,34 @@ class TypeContentController extends Controller
     {
         $typeContents = TypeContent::where('status', 'Published')->orderBy('update_date', 'desc')->get();
         return $typeContents;
+    }
+
+    public function getApiPage($id)
+    {
+        $result = $this->typeContentService->getTypeContentID($id);
+
+
+        $typeContent = TypeContent::findOrFail($id);
+        $r = [];$r['id'] = $result->id;$r['idGlobal'] = $result->id_global;$r['name'] = $result->name;$r['apiUrl'] = $result->api_url;$r['icon'] = $result->api_url;$r['icon'] = $result->description;$r['owner'] = $result->owner;$r['basedType'] = $result->based_type;$r['activeFrom'] = $result->active_from;$r['activeAfter'] = $result->active_after;$r['status'] = $result->status;$r['versionMajor'] = $result->version_major;$r['versionMinor'] = $result->version_minor;$r['createdAuthors'] = $result->created_authors;$r['updatedAuthors'] = $result->updated_authors;
+        $typeContents = TypeContent::where('id_global', $typeContent->id_global)->orderBy('version_major', 'desc')->orderBy('version_minor', 'desc')->get();
+        foreach ($typeContents as $typeContent) {
+            $ids[] = $typeContent->id;
+        }
+        //$query = TypeContent::query()->whereIn('id', $ids);
+        $elementsContent = ElementContent::where('status', 'Published')->whereIn('type_content_id', $ids)->get();
+        $result =[];
+        foreach ($elementsContent as $elementContent){
+            $body = json_decode($elementContent->body);
+            foreach ($body as $row) {
+                foreach ($row as $column) {
+                    foreach ($column as $element) {
+                        $result[$elementContent->id][$element->alias] = $element->value;
+                    }
+                }
+            }
+        }
+
+
+        return view('type_content.api-page')->with(['typeContent' => $r, 'result' => $result]);;
     }
 }
