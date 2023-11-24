@@ -29,7 +29,7 @@
         </p>
         <p><b>Объект:</b></p>
         {<br>
-        <?foreach($result as $resultKey => $r){?>
+        <?print_r($result);exit;foreach($result as $resultKey => $r){?>
         &nbsp;&nbsp;&nbsp;&nbsp;"<?php echo $resultKey?>"<br>
         &nbsp;&nbsp;&nbsp;&nbsp;{<br>
             <?foreach($r as $rKey => $i){?>
