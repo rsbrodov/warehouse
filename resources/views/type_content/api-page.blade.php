@@ -28,9 +28,15 @@
             <a href="/api/type-content/find-all-element-body/{{$typeContent['id']}}" class="ml-3 mt-2 btn btn-sm btn-outline-secondary form-control pb-1" style="width:100px; max-height:25px; line-height:1;margin-bottom: 5px;" target="_blank">Перейти</a>
         </p>
         <p><b>Объект:</b></p>
-        <?$json_pretty_result = json_encode($result, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
-        $json_pretty_result = "<pre>" . $json_pretty_result . "<pre/>";?>
-        <?print_r($json_pretty_result) ?>
-
+        {<br>
+        <?foreach($result as $resultKey => $r){?>
+        &nbsp;&nbsp;&nbsp;&nbsp;"{{$resultKey}}"<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;{<br>
+            <?foreach($r as $rKey => $i){?>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"{{$rKey}}": "{{$i}}",<br>
+            <?}?>
+        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+        <?}?>
+        }
     </div>
 @endsection
