@@ -17,22 +17,22 @@
                             Необходимо заполнить «Наименование».
                         </small>
                     </div>
-                    <div class="block col-6">
-                        <label for="name"><b>Тип поля:</b></label>
-                        <input autocomplete="off" id="name" class="form-control" type="text" v-model="localValue.name" disabled="true">
-                    </div>
-<!--                    <div class="block col-6">-->
-<!--                        <label for="name"><b>Алиас:</b></label>-->
-<!--                        <input autocomplete="off" id="alias" class="form-control" type="text" v-model="localValue.alias">-->
-<!--                        <a class="btn btn-warning btn-sm mt-1" @click="generateUrl()"><i class="fa fa-undo" aria-hidden="true"></i> Сгенерировать</a>-->
-<!--                    </div>-->
-                </div>
-
-                <div class="row mb-3">
 <!--                    <div class="block col-6">-->
 <!--                        <label for="name"><b>Тип поля:</b></label>-->
 <!--                        <input autocomplete="off" id="name" class="form-control" type="text" v-model="localValue.name" disabled="true">-->
 <!--                    </div>-->
+                    <div class="block col-6">
+                        <label for="name"><b>Алиас:</b></label>
+                        <input autocomplete="off" id="alias" class="form-control" type="text" v-model="localValue.alias">
+<!--                        <a class="btn btn-warning btn-sm mt-1" @click="generateUrl()"><i class="fa fa-undo" aria-hidden="true"></i> Сгенерировать</a>-->
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="block col-6">
+                        <label for="name"><b>Тип поля:</b></label>
+                        <input autocomplete="off" id="name" class="form-control" type="text" v-model="localValue.name" disabled="true">
+                    </div>
                     <div class="block col-6">
                         <label for="required"><b>Обязательно к заполнению:</b></label>
                         <select id="required" class="form-control" v-model="localValue.required">

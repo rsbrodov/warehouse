@@ -114,6 +114,7 @@ Route::middleware(['auth:web'])->group(function () {
     Route::delete('/type-content/{id}', [TypeContentController::class, 'destroy'])->name('type-content.destroy');
     //Route::get('/type-content/dropdownlistby/{id}', [TypeContentController::class, 'getDropdownListById'])->name('type-content.getDropdownListById');
     Route::get('/select/dropdownlistby/{id}', [TypeContentController::class, 'getDropdownListById'])->name('type-content.getDropdownListById');
+    Route::get('/type-content/api-page/{id}', [TypeContentController::class, 'getApiPage']);
 });
 
 // ЭЛЕМЕНТЫ КОНТЕНТА
