@@ -27,35 +27,19 @@
             <div class="row">
                 <div class="col">
                     <div style="display: flex">
-                        <b><h2>{{ typeContentOne.name }}</h2></b>
+                        <b><h2>Настройка склада</h2></b>
 <!--                        <a :href="'/api/template/GetTypeContentId/' + typeContentOne.id" class="ml-3 mt-2 btn btn-sm btn-outline-secondary form-control pb-1" style="width:50px; max-height:25px; line-height:1" target="_blank">API</a>-->
-                        <a :href="'/type-content/api-page/' + typeContentOne.id" class="ml-3 mt-2 btn btn-sm btn-outline-secondary form-control pb-1" style="width:50px; max-height:25px; line-height:1" target="_blank">API</a>
+<!--                        <a :href="'/type-content/api-page/' + typeContentOne.id" class="ml-3 mt-2 btn btn-sm btn-outline-secondary form-control pb-1" style="width:50px; max-height:25px; line-height:1" target="_blank">API</a>-->
                     </div>
                 </div>
                 <div class="col"></div>
             </div>
             <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
-            <div class="row">
-                <div class="col-9">
-                    <div class="flex-cont">
-                        <div class="flex-elem"><b>Идентификатор: </b>{{ typeContentOne.id }}</div>
-                        <div class="flex-elem"><b>API URL: </b>{{ typeContentOne.apiUrl }}</div>
-                        <div class="flex-elem"><b>Владелец: </b> Admin</div>
-                        <div class="flex-elem">
-                            <b>Период действия: </b>{{ typeContentOne.status | date }}
-                        </div>
-                        <div class="flex-elem"><b>Статус: </b>{{ typeContentOne.status | status }}</div>
-                        <div class="flex-elem"><b>Версия:
-                        </b>{{ typeContentOne.version.major }}.{{ typeContentOne.version.minor }}</div>
-                    </div>
-                </div>
-                <div class="col-3 text-right" style="padding-right: 15px;"><a href="#" class="btn btn-outline-secondary" @click="openModal('typeContentEdit', typeContentOne)"><i class="fa fa-pencil fa-lg"
-                                                                                               aria-hidden="true"></i></a></div>
-            </div>
             <nav class="mt-3">
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <a :class="setClass('view-new')" :href="'/type-content/view-new/' + typeContentOne.id">Состав полей</a>
-                    <a :class="setClass('nav-link')" >Доступ</a>
+                    <a :class="setClass('view-new')" :href="'/type-content/view-new/' + typeContentOne.id">Основные данные</a>
+                    <a :class="setClass('nav-link')" >Подключение</a>
+                    <a :class="setClass('nav-link')" >Контакты</a>
                     <a :class="setClass('all-version-type-content')" :href="'/type-content/all-version-type-content/' + typeContentOne.id">История изменений</a>
                 </div>
             </nav>

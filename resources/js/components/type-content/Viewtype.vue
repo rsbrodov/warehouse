@@ -41,7 +41,7 @@
             <Onetype />
             <hr>
             <br>
-            <div class="row ">
+            <div class="row" style="min-height: 900px!important; resize: both; border: 1px solid black">
                 <div class="col-9 left-block">
                     <FlashMessage :position="'right bottom'" style='z-index:20001;'></FlashMessage>
                     <div class="left-block__layout"
@@ -114,24 +114,24 @@
                             <button class="btn form-control text-left"
                                     :class="changeStatus === false ? 'btn-secondary disabled': 'btn-primary'"
                                     @click="saveBody()">
-                                <i class="fa fa-save fa-lg" aria-hidden="true"></i> Сохранить черновик
+                                <i class="fa fa-save fa-lg" aria-hidden="true"></i> Сохранить изменения
                             </button>
                         </div>
-                        <div class="p-2" v-if="typeContentOne.status == 'Draft'">
-                            <button class="btn btn-primary form-control text-left" @click="changeStatusType('Published', 'Тип контента опубликован')">
-                                <i class="fa fa-check-circle fa-lg" aria-hidden="true"></i> Публикация типа
-                            </button>
-                        </div>
+<!--                        <div class="p-2" v-if="typeContentOne.status == 'Draft'">-->
+<!--                            <button class="btn btn-primary form-control text-left" @click="changeStatusType('Published', 'Тип контента опубликован')">-->
+<!--                                <i class="fa fa-check-circle fa-lg" aria-hidden="true"></i> Публикация типа-->
+<!--                            </button>-->
+<!--                        </div>-->
                         <div class="p-2" v-if="typeContentOne.status == 'Draft'">
                             <button class="btn btn-primary form-control text-left" @click="deleteTypeContent(typeContentOne)">
-                                <i class="fa fa-trash fa-lg" aria-hidden="true"></i> Удалить тип
+                                <i class="fa fa-trash fa-lg" aria-hidden="true"></i> Удалить
                             </button>
                         </div>
-                        <div class="p-2" v-if="typeContentOne.status == 'Published'">
-                            <button class="btn btn-primary form-control text-left" @click='openContextMenu($event)'>
-                                <i class="fa fa-refresh fa-lg" aria-hidden="true"></i> Выпустить новую версию
-                            </button>
-                        </div>
+<!--                        <div class="p-2" v-if="typeContentOne.status == 'Published'">-->
+<!--                            <button class="btn btn-primary form-control text-left" @click='openContextMenu($event)'>-->
+<!--                                <i class="fa fa-refresh fa-lg" aria-hidden="true"></i> Выпустить новую версию-->
+<!--                            </button>-->
+<!--                        </div>-->
                         <div class="p-2" v-if="typeContentOne.status == 'Archive'">
                             <button class="btn btn-primary form-control text-left" @click="changeStatusType('Published', 'Тип контента восстановлен из архива')">
                                 <i class="fa fa-cloud-download fa-lg" aria-hidden="true"></i> Востановить из архива
@@ -163,7 +163,7 @@
                         <hr>
                         <div class="p-2">
                             <button @click="pushRow()" class="btn btn-outline-secondary form-control text-left"><i
-                                    class="fa fa-bars fa-lg" aria-hidden="true"></i> Добавить строку</button>
+                                    class="fa fa-bars fa-lg" aria-hidden="true"></i> Добавить ряд</button>
                         </div>
 
                         <draggable
@@ -255,44 +255,9 @@ export default {
             ],
             availableItems: [
                 {
-                    class: "fa fa-code fa-lg",
-                    name: "HTML редактор",
-                    type: "html",
-                },
-                {
-                    class: "fa fa-caret-down fa-lg",
-                    name: "Выпадающий список",
-                    type: "select",
-                },
-                {
-                    class: "fa fa-calendar fa-lg",
-                    name: "Дата/Время",
-                    type: "datetime",
-                },
-                {
-                    class: "fa fa-image fa-lg",
-                    name: "Изображение",
-                    type: "file",
-                },
-                {
                     class: "fa fa-list fa-lg",
-                    name: "Радио-группа",
+                    name: "Элемент склада",
                     type: "radio",
-                },
-                {
-                    class: "fa fa-text-height fa-lg",
-                    name: "Текстовое поле",
-                    type: "text",
-                },
-                {
-                    class: "fa fa-pencil-square-o fa-lg",
-                    name: "Текстовая область",
-                    type: "textarea",
-                },
-                {
-                    class: "fa fa-check-square-o fa-lg",
-                    name: "Чек-лист",
-                    type: "checkbox",
                 },
             ],
 
@@ -720,4 +685,10 @@ export default {
 ._vue-flash-msg-container_right-bottom {
     z-index: 10000000 !important;
 }
+
+
+
+    .clickable left-block__draggable-layout__element{
+        resize: both;
+    }
 </style>
