@@ -76,31 +76,34 @@
                 </div>
             </div>
         </div>
-
         <table class="table table-bordered table-hover mt-4">
             <tr>
-                <th style="white-space: nowrap">Тип контента</th>
-                <th>Описание</th>
-                <th>Версия</th>
+                <th style="white-space: nowrap">Наименование</th>
+                <th>ИНН</th>
                 <th>Статус</th>
-                <th style="white-space: nowrap">Период действия</th>
-                <th>Дата последнего<br> редактирования</th>
+                <th>Тариф</th>
+                <th style="white-space: nowrap">Оплата</th>
+                <th>Баланс</th>
+                <th>Платеж</th>
+                <th>Дата оплаты</th>
                 <th>Действия</th>
             </tr>
             <tr v-if="(!typeContents.data || typeContents.data.length === 0) && getLoading === false">
                 <td v-if="typeContentErrors === null" class="text-center text-danger" colspan="7"><b>Данные не найдены!</b></td>
                 <td v-else class="text-center text-danger" colspan="7"><b style="color: red!important">{{typeContentErrors.code}}</b></td>
             </tr>
-            <tr v-else-if="getLoading === true" style="border:none">
-                <td class="text-center text-danger" colspan="6"><Loader/></td>
-            </tr>
+<!--            <tr v-else-if="getLoading === true" style="border:none">-->
+<!--                <td class="text-center text-danger" colspan="6"><Loader/></td>-->
+<!--            </tr>-->
             <tr v-else v-for="(type_content, index) in typeContents.data" :key="index" >
-                <td style="white-space: nowrap"><i :class="'fa ' + type_content.icon+ ' fa-lg'" aria-hidden="true"></i> {{type_content.name}}</td>
-                <td>{{type_content.description}}</td>
-                <td>{{type_content.version.major +'.'+ type_content.version.minor}}</td>
+                <td style="white-space: nowrap">{{type_content.clientName}}</td>
+                <td style="white-space: nowrap">{{type_content.innClient}}</td>
                 <td :class="type_content.status | statusColor"><b>{{ type_content.status | status }}</b></td>
+                <td style="white-space: nowrap">{{type_content.tariff}}</td>
+                <td style="white-space: nowrap">Оплачено</td>
+                <td style="white-space: nowrap">7000</td>
+                <td style="white-space: nowrap">12000</td>
                 <td>{{ type_content | date }}</td>
-                <td>{{ type_content.updatedDate }}</td>
                 <td nowrap>
                     <a class="btn btn-outline-primary btn-unbordered" @click="openModal('typeContentEdit', type_content)"><i class="fa fa-pencil fa-lg"></i></a>
                     <a :href="'/type-content/view-new/'+type_content.id" class="btn btn-outline-primary btn-unbordered"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a>
@@ -260,20 +263,11 @@
         },
         filters: {
             date: function (type_content) {
-                if(type_content.activeFrom === null && type_content.activeAfter === null){
-                    return "Не задан";
-                }else if(type_content.activeFrom === null && type_content.activeAfter != null){
-                    return "До "+ type_content.activeAfter;
-                } else if(type_content.activeFrom !== null && type_content.activeAfter === null){
-                    return type_content.activeFrom + " - бессрочно";
-                }else{
-                    return type_content.activeFrom + " - " + type_content.activeAfter;
-                }
-
+                return type_content.updatedDate;
             },
 
             status: function (status) {
-                let status_array = {Draft: 'Черновик', Published: 'Опубликовано', Archive:'В архиве'};
+                let status_array = {Draft: 'Черновик', Active: 'Действующий', Archive:'В архиве'};
                 if(status){
                     return status_array[status];
                 }else{
@@ -281,7 +275,7 @@
                 }
             },
             statusColor: function (status) {
-                let status_array = {Draft: 'text-dark', Published: 'text-success', Archive:'text-warning'};
+                let status_array = {Draft: 'text-dark', Active: 'text-success', Archive:'text-warning'};
                 if(status){
                     return status_array[status];
                 }else{

@@ -42,11 +42,14 @@ export default{
     },
     actions: {
         async getTypeContents({commit}, params) {
+            console.log('updateTypeContents')
             commit('setLoading', true);
-            await axios.get('/type-content/getListTypeContent', params)
+            await axios.get('/clients/getListClients', params)
                 .then(response => {
                     commit('updateTypeContents', response.data)
                     commit('TP_ERRORS', null)
+                    commit('setLoading', false);
+
                 })
                 .catch(err => {
                     console.log(err.response)

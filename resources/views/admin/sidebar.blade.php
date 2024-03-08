@@ -16,9 +16,9 @@ foreach ($typeContents as $typeContent) {
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="/home" class="brand-link">
-        <img src="https://cdn0.iconfinder.com/data/icons/shipping-and-logistic/110/Icons__stock-1024.png" alt="Склад"
+        <img src="http://rider-cms.ru/images/logo.jpg" alt="RIDER ADMIN"
              class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">СКЛАД</span>
+        <span class="brand-text font-weight-light">RIDER ADMIN</span>
     </a>
 
     <!-- Sidebar -->
@@ -103,34 +103,22 @@ foreach ($typeContents as $typeContent) {
 {{--                </li>--}}
 
                 <li class="nav-item mt-3">
-                    <a href="/type-content/view-new/adb57810-6a94-4255-bb04-c0d839559636" class="nav-link">
-                        <i class="fa fa-home fa-lg" aria-hidden="true"></i>
-                        <p>Настройки склада{{--<i class="right fas fa-angle-left"></i>--}}
+                    <a href="/type-content/index" class="nav-link">
+                        <i class="fa fa-address-book-o fa-lg" aria-hidden="true"></i>
+                        <p>Клиенты{{--<i class="right fas fa-angle-left"></i>--}}
                         </p>
                     </a>
                 </li>
-
-                {{-- <li class="nav-header">НАСТРОЙКИ</li> --}}
-{{--                <li class="nav-item">--}}
-{{--                    <a href="{{ route('users.roles-create-view') }}" class="nav-link">--}}
-{{--                        <i class="fa fa-universal-access fa-lg" aria-hidden="true"></i>--}}
-{{--                        <p>Роли/полномочия</p>--}}
-{{--                    </a>--}}
-{{--                </li>--}}
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fa fa-list fa-lg" aria-hidden="true"></i>
-                        <p>
-                            Продукты
-                        </p>
+                <li class="nav-item mt-3">
+                    <a href="/type-content/index3" class="nav-link">
+                        <i class="fa fa-money fa-lg" aria-hidden="true"></i>
+                        <p>Тарифы</p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fa fa-comment-o fa-lg" aria-hidden="true"></i>
-                        <p>
-                            Пользователи
-                        </p>
+                <li class="nav-item mt-3">
+                    <a href="/type-content/index2" class="nav-link">
+                        <i class="fa fa-desktop fa-lg" aria-hidden="true"></i>
+                        <p>Мониторинг</p>
                     </a>
                 </li>
             </ul>
