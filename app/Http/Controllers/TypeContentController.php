@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TypeContentRequest;
+use App\Models\Clients;
 use App\Models\ElementContent;
 use App\Models\TypeContent;
 use Illuminate\Http\Request;
@@ -125,8 +126,16 @@ class TypeContentController extends Controller
 
     public function saveBody(Request $request)
     {
-        $result = $this->typeContentService->saveBody($request);
-        return $result;
+        $client = Clients::findOrFail($request['data']['id']);
+        $client->inn = $request['data']['innClient'];
+        $client->host = $request['data']['host'];
+        $client->mail = $request['data']['mail'];
+        $client->contract = $request['data']['contract'];
+        $client->description = $request['data']['description'];
+        $client->save();
+        return $client;
+        /*$result = $this->typeContentService->saveBody($request);
+        return $result;*/
     }
 
     public function saveBodyElement(Request $request)

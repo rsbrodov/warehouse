@@ -1,218 +1,294 @@
-<style>
-.flex-cont {
-    display: inline-flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    width: 66.66%;
-}
-
-.flex-elem {
-    margin: 5px
-}
-</style>
 <template>
     <div id="app">
-        <!-- Modal -->
-        <div class="modal fade" id="createElement" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <Viewmodal @close-modal="closeModal('createElement', $event)"
-                           :copy="copy"
-                           :clonedItems="clonedItems"
-                           :current-clone="currentClone"
-                />
-            </div>
-        </div>
-        <!--End Modal -->
-
-
-        <!-- Edit modal -->
-        <div class="modal fade" id="editElement" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <Editmodal @close-modal="closeModal('editElement', $event)"
-                           :copy="copy"
-                           :current-edit="currentEdit"
-                >
-                </Editmodal>
-            </div>
-        </div>
-        <!--End Modal -->
-
         <div class="container-fluid">
             <Onetype />
+            <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
+            <nav class="mt-3">
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-link" :class="{active : activeTab === 'general'}" @click="setActiveTab('general')">Основные данные</a>
+                    <a class="nav-link" :class="{active : activeTab === 'contacts'}" @click="setActiveTab('contacts')">Контакты</a>
+                    <a class="nav-link" :class="{active : activeTab === 'connect'}" @click="setActiveTab('connect')">Подключение</a>
+                    <a class="nav-link" :class="{active : activeTab === 'historyChange'}" @click="setActiveTab('historyChange')">История изменений</a>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+
+            </div>
             <hr>
             <br>
-            <div class="row" style="min-height: 900px!important; resize: both; border: 1px solid black">
+            <div class="row" style="min-height: 700px!important; resize: both;">
                 <div class="col-9 left-block">
-                    <FlashMessage :position="'right bottom'" style='z-index:20001;'></FlashMessage>
-                    <div class="left-block__layout"
-                         v-if="typeContentOne.status == 'Draft'"
-                         v-for="(row, row_index) in clonedItems" :key="row_index">
-                        <!-- <transition-group type="transition" name="flip-list"> -->
-
-                        <draggable
-                            class="left-block__draggable-column"
-                            ghost-class="ghost_column"
-                            v-model="clonedItems[row_index]"
-                            :options="clonedColumnOptions"
-                            tag="v-layout">
-                            <div class="clickable left-block__draggable-layout__column"
-                                 v-for="(column, column_index) in row" :key="column_index">
-                                <draggable
-                                    class="left-block__draggable-layout__draggable-element"
-                                    ghost-class="ghost"
-                                    :list="clonedItems[row_index][column_index]"
-                                    :options="clonedItemOptions"
-                                    tag="v-layout"
-                                    :group="{ name: 'column' }">
-                                    <div class="clickable left-block__draggable-layout__element"
-
-                                        v-for="(item, index_element) in column"
-                                         :key="uuid(item)">
-                                        <p class="pl-2 pt-3 text-secondary"><i :class="item.class"></i> {{ item.title }}</p>
-                                        <div class="button-group" v-if="typeContentOne.status == 'Draft'">
-                                            <button class="btn btn-outline-primary mr-2" @click="EditItem(row_index, column_index, index_element)"><i
-                                                    class="fa fa-pencil fa-sm"></i></button>
-                                            <button class="btn btn-outline-primary mr-2" @click="deleteItem(row_index, column_index, index_element)"><i
-                                                    class="fa fa-trash fa-sm"></i></button>
-                                        </div>
-
+                    <div class="left-block__layout">
+                        <!--TAB GENERAL-->
+                        <div v-if="activeTab === 'general'" class="left-block__undraggable-layout__column">
+                            <div class="left-block__draggable-column">
+                                <div class="item">
+                                    <div class="label">
+                                        <label for="clientName"><span class="text-danger">*</span>Наименование клиента</label>
                                     </div>
-                                </draggable>
+                                    <input autocomplete="off"
+                                           v-model="typeContentOne.clientName"
+                                           type="text"
+                                           class="form-control"
+                                           id="clientName"
+                                           name="clientName">
+                                </div>
+                                <div class="item">
+                                    <div class="label">
+                                        <label for="clientName"><span class="text-danger">*</span>ИНН</label>
+                                    </div>
+                                    <input autocomplete="off"
+                                           v-model="typeContentOne.innClient"
+                                           type="text"
+                                           class="form-control"
+                                           id="innClient"
+                                           name="innClient">
+                                </div>
                             </div>
-                        </draggable>
-                        <i v-if="typeContentOne.status == 'Draft'"
-                           class="fa fa-trash mr-2 mt-2 text-primary lg" @click="deleteRow(row_index)"></i>
-                        <!-- </transition-group> -->
-                    </div>
-                    <!--undragable-->
-                    <div class="left-block__layout"
-                         v-if="typeContentOne.status != 'Draft'"
-                         v-for="(row, row_index) in clonedItems" :key="row_index">
-                        <div
-                            class="left-block__draggable-column"
-                            v-model="clonedItems[row_index]">
-                            <div class="clickable left-block__undraggable-layout__column"
-                                 v-for="(column, column_index) in row" :key="column_index">
-                                <div class="left-block__draggable-layout__undraggable-element">
-                                    <div class="clickable left-block__undraggable-layout__element"
-                                         v-for="(item, index_element) in column"
-                                         :key="uuid(item)">
-                                        <p class="pl-2 pt-3 text-secondary"><i :class="item.class"></i> {{ item.title }}</p>
+                            <div class="left-block__draggable-column">
+                                <div class="item">
+                                    <div class="label">
+                                        <label for="tariff"><span class="text-danger">*</span>Тариф</label>
                                     </div>
+                                    <input autocomplete="off"
+                                           v-model="typeContentOne.tariff"
+                                           type="text"
+                                           class="form-control"
+                                           id="tariff"
+                                           name="tariff">
+                                </div>
+                                <div class="item">
+                                    <div class="label">
+                                        <label for="paymentState"><span class="text-danger">*</span>Статус оплаты</label>
+                                    </div>
+                                    <input autocomplete="off"
+                                           v-model="typeContentOne.paymentState"
+                                           type="text"
+                                           class="form-control"
+                                           id="paymentState"
+                                           name="paymentState">
+                                </div>
+                            </div>
+                            <div class="left-block__draggable-column">
+                                <div class="item">
+                                    <div class="label">
+                                        <label for="accessFrom"><span class="text-danger">*</span>Доступ С</label>
+                                    </div>
+                                    <input autocomplete="off"
+                                           v-model="typeContentOne.accessFrom"
+                                           type="text"
+                                           class="form-control"
+                                           id="accessFrom"
+                                           name="accessFrom">
+                                </div>
+                                <div class="item">
+                                    <div class="label">
+                                        <label for="paymentState"><span class="text-danger">*</span>Дата последнего платежа</label>
+                                    </div>
+                                    <input autocomplete="off"
+                                           type="text"
+                                           class="form-control"
+                                           id="lastPay"
+                                           disabled="disabled"
+                                           value="10.12.2023"
+                                           name="lastPay">
+                                </div>
+                            </div>
+                            <div class="left-block__draggable-column">
+                                <div class="item">
+                                    <div class="label">
+                                        <label for="nextPayFrom"><span class="text-danger">*</span>Дата следующего платежа С</label>
+                                    </div>
+                                    <input autocomplete="off"
+                                           value="10.12.2023"
+                                           type="text"
+                                           class="form-control"
+                                           disabled="disabled"
+                                           id="nextPayFrom"
+                                           name="nextPayFrom">
+                                </div>
+                                <div class="item">
+                                    <div class="label">
+                                        <label for="nextPayTo"><span class="text-danger">*</span>Дата следующего платежа По</label>
+                                    </div>
+                                    <input autocomplete="off"
+                                           type="text"
+                                           class="form-control"
+                                           id="nextPayTo"
+                                           disabled="disabled"
+                                           value="10.12.2023"
+                                           name="nextPayTo">
+                                </div>
+                            </div>
+                            <div class="left-block__draggable-column">
+                                <div class="item">
+                                    <div class="label">
+                                        <label for="contract"><span class="text-danger">*</span>Номер и дата договора</label>
+                                    </div>
+                                    <input autocomplete="off"
+                                           v-model="typeContentOne.contract"
+                                           type="text"
+                                           class="form-control"
+                                           id="contract"
+                                           name="contract">
+                                </div>
+                                <div class="item">
+                                    <div class="label">
+                                        <label for="mail"><span class="text-danger">*</span>Email для уведомлений</label>
+                                    </div>
+                                    <input autocomplete="off"
+                                           v-model="typeContentOne.mail"
+                                           type="text"
+                                           class="form-control"
+                                           id="mail"
+                                           name="mail">
+                                </div>
+                            </div>
+                            <div class="left-block__draggable-column">
+                                <div class="item">
+                                    <div class="label">
+                                        <label for="description"><span class="text-danger">*</span>Описание</label>
+                                    </div>
+                                    <textarea autocomplete="off"
+                                           v-model="typeContentOne.description"
+                                           type="text"
+                                           class="form-control"
+                                           id="description"
+                                              name="description"></textarea>
                                 </div>
                             </div>
                         </div>
-                        <i v-if="typeContentOne.status == 'Draft'"
-                           class="fa fa-trash mr-2 mt-2 text-primary lg" @click="deleteRow(row_index)"></i>
-                        <!-- </transition-group> -->
+                        <!--TAB CONTACTS-->
+                        <div v-if="activeTab === 'contacts'" class="left-block__undraggable-layout__column">
+                            <div class="left-block__draggable-column">
+                                <div class="item">
+                                    <div class="label">
+                                        <label for="fio"><span class="text-danger">*</span>ФИО</label>
+                                    </div>
+                                    <input autocomplete="off"
+                                           type="text"
+                                           value="Сидоров Михаил Иванович"
+                                           class="form-control"
+                                           id="fio"
+                                           name="fio">
+                                </div>
+                                <div class="item">
+                                    <div class="label">
+                                        <label for="position"><span class="text-danger">*</span>Адрес</label>
+                                    </div>
+                                    <input autocomplete="off"
+                                           type="text"
+                                           value="Москва, 1-я Мелитопольская ул., 32А"
+                                           class="form-control"
+                                           id="position"
+                                           name="position">
+                                </div>
+                            </div>
+                            <div class="left-block__draggable-column">
+                                <div class="item">
+                                    <div class="label">
+                                        <label for="phone"><span class="text-danger">*</span>Телефон</label>
+                                    </div>
+                                    <input autocomplete="off"
+                                           type="text"
+                                           value="8-923-703-37-76"
+                                           class="form-control"
+                                           id="phone"
+                                           name="phone">
+                                </div>
+                                <div class="item">
+                                    <div class="label">
+                                        <label for="mail"><span class="text-danger">*</span>Email</label>
+                                    </div>
+                                    <input autocomplete="off"
+                                           type="text"
+                                           value="sidiriv_miha@mail.ru"
+                                           class="form-control"
+                                           id="mail"
+                                           name="mail">
+                                </div>
+                            </div>
+                        </div>
+                        <!--TAB CONNECT-->
+                        <div v-if="activeTab === 'connect'" class="left-block__undraggable-layout__column">
+                            <div class="left-block__draggable-column">
+                                <div class="item">
+                                    <div class="label">
+                                        <label for="host"><span class="text-danger">*</span>URL</label>
+                                    </div>
+                                    <input autocomplete="off"
+                                           type="text"
+                                           v-model="typeContentOne.host"
+                                           class="form-control"
+                                           id="host"
+                                           name="host">
+                                </div>
+                                <div class="item">
+                                    <div class="label">
+                                        <label for="ip"><span class="text-danger">*</span>IP-адрес</label>
+                                    </div>
+                                    <input autocomplete="off"
+                                           type="text"
+                                           value="194.226.171.196"
+                                           class="form-control"
+                                           id="ip"
+                                           name="ip">
+                                </div>
+                            </div>
+                            <div class="left-block__draggable-column">
+                                <div class="item">
+                                    <div class="label">
+                                        <label for="port"><span class="text-danger">*</span>Порт</label>
+                                    </div>
+                                    <input autocomplete="off"
+                                           type="text"
+                                           value="80"
+                                           class="form-control"
+                                           id="port"
+                                           name="port">
+                                </div>
+                                <div class="item">
+                                    <div class="label">
+                                        <label for="login"><span class="text-danger">*</span>Login</label>
+                                    </div>
+                                    <input autocomplete="off"
+                                           type="text"
+                                           value="cmsuser@mail.ru"
+                                           class="form-control"
+                                           id="login"
+                                           name="login">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
+
+
+
                 <div class="col-3">
                     <div class="d-flex flex-column">
-                        <div class="p-2" v-if="typeContentOne.status == 'Draft'">
-                            <button class="btn form-control text-left"
-                                    :class="changeStatus === false ? 'btn-secondary disabled': 'btn-primary'"
-                                    @click="saveBody()">
+                        <div class="p-2">
+                            <button class="btn btn-primary form-control text-left"
+                                    @click="saveClient()">
                                 <i class="fa fa-save fa-lg" aria-hidden="true"></i> Сохранить изменения
                             </button>
                         </div>
-<!--                        <div class="p-2" v-if="typeContentOne.status == 'Draft'">-->
-<!--                            <button class="btn btn-primary form-control text-left" @click="changeStatusType('Published', 'Тип контента опубликован')">-->
-<!--                                <i class="fa fa-check-circle fa-lg" aria-hidden="true"></i> Публикация типа-->
-<!--                            </button>-->
-<!--                        </div>-->
-                        <div class="p-2" v-if="typeContentOne.status == 'Draft'">
+                        <div class="p-2">
                             <button class="btn btn-primary form-control text-left" @click="deleteTypeContent(typeContentOne)">
                                 <i class="fa fa-trash fa-lg" aria-hidden="true"></i> Удалить
                             </button>
                         </div>
-<!--                        <div class="p-2" v-if="typeContentOne.status == 'Published'">-->
-<!--                            <button class="btn btn-primary form-control text-left" @click='openContextMenu($event)'>-->
-<!--                                <i class="fa fa-refresh fa-lg" aria-hidden="true"></i> Выпустить новую версию-->
-<!--                            </button>-->
-<!--                        </div>-->
-                        <div class="p-2" v-if="typeContentOne.status == 'Archive'">
+                        <div class="p-2">
                             <button class="btn btn-primary form-control text-left" @click="changeStatusType('Published', 'Тип контента восстановлен из архива')">
                                 <i class="fa fa-cloud-download fa-lg" aria-hidden="true"></i> Востановить из архива
                             </button>
                         </div>
-
-                        <context-menu :display="showContextMenu" ref="menu">
-                            <ul>
-                                <div>
-                                    <button class="btn btn-primary form-control text-left btn-sm"
-                                        @click='createNewVersion("major")'>
-                                        <i class="fa fa-refresh" aria-hidden="true"></i> Версия первого порядка (x+1.0)
-                                    </button>
-                                </div>
-                                <div class="mt-2">
-                                    <button class="btn btn-primary form-control text-left btn-sm"
-                                        @click='createNewVersion("minor")'>
-                                        <i class="fa fa-refresh" aria-hidden="true"></i> Версия второго порядка (x.y+1)
-                                    </button>
-                                </div>
-                            </ul>
-                        </context-menu>
-
                         <div class="p-2" v-if="typeContentOne.status == 'Published'">
                             <button class="btn btn-primary form-control text-left" @click="changeStatusType('Archive', 'Тип контента отправлен в архив')">
                                 <i class="fa fa-trash fa-lg" aria-hidden="true"></i> Отправить в архив
                             </button>
                         </div>
-                        <hr>
-                        <div class="p-2">
-                            <button @click="pushRow()" class="btn btn-outline-secondary form-control text-left"><i
-                                    class="fa fa-bars fa-lg" aria-hidden="true"></i> Добавить ряд</button>
-                        </div>
-
-                        <draggable
-                            v-if="typeContentOne.status == 'Draft'"
-                            v-model="availableColumn"
-                            :options="availableColumnOptions"
-                            :clone="handleCloneColumn">
-                            <div class="p-2" v-for="column in availableColumn">
-                                <a href="" class="btn btn-outline-secondary form-control text-left">
-                                    <i :class="column.class" aria-hidden="true"></i> {{ column.name }}
-                                </a>
-                            </div>
-                        </draggable>
-
-
-                        <draggable v-if="typeContentOne.status == 'Draft'"
-                                    v-model="availableItems"
-                                   :options="availableItemOptions"
-                                   :clone="handleClone"
-                                    @end="moveAction"
-                                   :group="{ name: 'column',  pull: 'clone', put: false}"
-                        >
-                            <div class="p-2 right-drag-elem" v-for="item in availableItems">
-                                <a class="btn btn-outline-secondary form-control text-left">
-                                    <i :class="item.class" aria-hidden="true"></i> {{ item.name }}
-                                </a>
-                            </div>
-                        </draggable>
-                        <!--unndragable-->
-                        <div
-                            v-if="typeContentOne.status != 'Draft'"
-                            v-model="availableColumn">
-                            <div class="p-2" v-for="column in availableColumn" style="cursor: not-allowed!important;">
-                                <a class="btn btn-outline-secondary form-control text-left" style="cursor: not-allowed!important;">
-                                    <i :class="column.class" aria-hidden="true"></i> {{ column.name }}
-                                </a>
-                            </div>
-                        </div>
-
-
-                        <div v-if="typeContentOne.status != 'Draft'"
-                                   v-model="availableItems">
-                            <div class="p-2 right-drag-elem" v-for="item in availableItems" style="cursor: not-allowed!important;">
-                                <a class="btn btn-outline-secondary form-control text-left" style="cursor: not-allowed!important;">
-                                    <i :class="item.class" aria-hidden="true"></i> {{ item.name }}
-                                </a>
-                            </div>
-                        </div>
-                        <!--unndragable-->
                     </div>
                 </div>
             </div>
@@ -221,19 +297,17 @@
 </template>
 
 <script>
-import draggable from 'vuedraggable'
-import Viewmodal from "./Viewmodal";
-import Editmodal from "./Editmodal";
+
 import { mapActions, mapGetters } from "vuex";
-import ContextMenu from "../helpers/ContextMenu.vue"
 import Onetype from './Onetype.vue';
 import {url_slug} from "cyrillic-slug";
 
 export default {
     name: "Viewtype",
-    components: { draggable, Viewmodal, Editmodal, ContextMenu, Onetype },
+    components: {Onetype },
     data() {
         return {
+            activeTab: 'general',
             changeStatus: false,
             activeTypeContent: [],
             showContextMenu: false,
@@ -247,46 +321,6 @@ export default {
                     []
                 ],
             ],
-            availableColumn: [
-                {
-                    class: "fa fa-columns fa-lg",
-                    name: "Добавить колонку",
-                },
-            ],
-            availableItems: [
-                {
-                    class: "fa fa-list fa-lg",
-                    name: "Элемент склада",
-                    type: "radio",
-                },
-            ],
-
-
-            clonedItemOptions: {
-                group: "items"
-            },
-
-            availableItemOptions: {
-                group: {
-                    name: "items",
-                    pull: "clone",
-                    put: false
-                },
-                sort: false
-            },
-
-            clonedColumnOptions: {
-                group: "columns"
-            },
-
-            availableColumnOptions: {
-                group: {
-                    name: "columns",
-                    pull: "clone",
-                    put: false
-                },
-                sort: false
-            },
         };
     },
     computed: {
@@ -295,113 +329,9 @@ export default {
     },
 
     methods: {
-        ...mapActions(['getTypeContentOne', 'update']),
-        openContextMenu(event) {
-            this.$refs.menu.open(event);
-        },
-        handleClone(item) {
-            this.changeStatus = true;
-            let cloneMe = JSON.parse(JSON.stringify(item));
-            this.$set(cloneMe, 'title', '');
-            this.$set(cloneMe, 'required', '');
-            this.$set(cloneMe, 'alias', '');
-
-            if (cloneMe.type == 'select' || cloneMe.type == 'radio') {
-                this.$set(cloneMe, 'dictionary_id', null);
-            }
-
-            //делаем ключик в момент клонирования
-            const key = Math.random().toString(16).slice(2);
-            this.$set(cloneMe, "uid", key);
-
-            this.copy = key;
-            this.currentClone = cloneMe;
-            return cloneMe;
-        },
-        handleCloneColumn() {
-            this.changeStatus = true;
-            let cloneMe = [];
-            return cloneMe;
-        },
-        moveAction(item) {
-            console.log('ITEM',item.pullMode);
-            //if(item.pullMode === true){
-                this.openModal('createElement');
-            //}
-        },
-
-        deleteItem(row, column, element) {
-            if (confirm('Вы уверены, что хотите удалить элемент?')) {
-                this.changeStatus = true;
-                this.clonedItems[row][column].splice(element, 1);
-            }
-        },
-        deleteRow(index) {
-            if (this.clonedItems.length > 1) {
-                if (confirm('Вы уверены, что хотите удалить строку?')) {
-                    this.changeStatus = true;
-                    this.clonedItems.splice(index, 1);
-                }
-            } else {
-                this.flashMessage.error({
-                    message: 'Нельзя удалить все блоки',
-                    time: 3000,
-                });
-            }
-
-        },
-        uuid(e) {
-            if (e.uid) return e.uid;
-            const key = Math.random()
-                .toString(16)
-                .slice(2);
-            this.$set(e, "uid", key);
-            return e.uid;
-        },
-
-        closeModal(id, localValue) {
-            $.each(this.clonedItems, function (index, clonedItem) {
-                $.each(clonedItem, function (index_column, column) {
-                    $.each(column, function (index_item, item) {
-                        if (item.uid === localValue.copy) {
-                            if (localValue.status === 'SET' || localValue.status === 'UPDATE') {
-                                item.title = localValue.localValue.title;
-                                item.alias = url_slug(localValue.localValue.title)
-                                item.required = localValue.localValue.required;
-                                item.dictionary_id = localValue.localValue.dictionary_id;
-                            }
-                        }
-                    });
-                });
-            });
-            if (localValue.status === 'REMOVE') {
-                this.changeStatus = true;
-                this.clonedItems[1][0].splice(1, 1);
-            }
-            if (localValue.status !== 'REMOVE') {
-                this.changeStatus = true;
-            }
-            console.log('localValue', localValue);
-            $("#" + id).modal("hide");
-
-        },
-        openModal(id) {
-            $('#' + id).modal('show');
-        },
-
-        EditItem(rowIndex, columnIndex, itemIndex) {
-            this.currentEdit = this.clonedItems[rowIndex][columnIndex][itemIndex];
-            this.openModal('editElement');
-        },
-        pushRow() {
-            let dop_array = [
-                []
-            ];
-            this.clonedItems.push(dop_array);
-            this.changeStatus = true;
-        },
-        saveBody() {
-            axios.post('/type-content/save-body', { id: this.type_content_id, body: this.clonedItems })
+        ...mapActions(['getTypeContentOne']),
+        saveClient() {
+            axios.post('/type-content/save-body', { data: this.typeContentOne})
                 .then(response => {
                     if (response.status === 200) {
                         this.changeStatus = false;
@@ -435,40 +365,7 @@ export default {
             }
         },
 
-        async getBody() {
-            await axios.get('/type-content/get-body/' + this.type_content_id)
-                .then(response => {
-                    if (Object.keys(response.data).length === 0 || response.data.length === 0) {
-                        console.log('response.data123');
-                        this.clonedItems = [[[]]];
-                    } else {
-                        this.clonedItems = response.data
-                    }
-                    console.log('response.data', response.data);
-                })
-                .catch(error => {
-                    console.log(error);
-                })
-        },
-        async createNewVersion(version) {
-            await axios.get('/type-content/new-version/' + this.type_content_id + '/' + version)
-                .then(response => {
-                    if (response.status === 200) {
-                        this.flashMessage.success({
-                            message: 'Новая версия создана',
-                            time: 3000,
-                        });
-                        this.$refs.menu.close();
-                        //$('._vue-flash-msg-body__text').append('<a href="http://127.0.0.1:8000/type-content/view-new/'+response.data.id+'">Ссылка</a>');
-                    }
-                })
-                .catch(error => {
-                    this.flashMessage.error({
-                        message: error.response.data.errors.version_error,
-                        time: 3000,
-                    });
-                })
-        },
+
 
         async changeStatusType(status, message) {
             this.update({
@@ -492,38 +389,13 @@ export default {
 
         },
 
-        async getActiveTypeContent() {
-            await axios.get('/type-content/getActiveTypeContent/')
-                .then(response => {
-                    this.activeTypeContent = response.data;
-                })
-                .catch(error => {
-                    alert(321);
-                })
+        setActiveTab(param){
+            this.activeTab = param;
         },
-        preventNav(event) {
-            if (!this.changeStatus) return
-            event.preventDefault()
-            event.returnValue = "Вы не сохранили изменения. Вы уверены, что хотите покинуть страницу?"
-        },
+
     },
-    watch: {
-        'activeTypeContent': {
-            handler: function (newValue, oldValue) {
-                let el = document.getElementsByClassName('element-content-sidebar-pull')[0];
-                el.innerText = '';
-                if(newValue.length){
-                    el.insertAdjacentHTML("beforeend", '<li class="nav-item"><a href="/element-content" class="nav-link ml-2"><p>Весь контент</p></a></li>');
-                }
-                for (let i = 0; i < newValue.length; i++) {
-                    el.insertAdjacentHTML("beforeend", '<li class="nav-item"><a href="/element-content/'+ newValue[i].id +'" class="nav-link ml-2"><i class="fa '+ newValue[i].icon +' fa-lg"></i> <p>'+ newValue[i].name +'</p></a></li>');
-                }
-            },
-            deep: true
-        },
-    },
+
     async created() {
-        await this.getBody();
         await this.getTypeContentOne(this.type_content_id);
     },
     filters: {
@@ -577,83 +449,24 @@ export default {
     max-height: 11000px;
     text-align: right;
     padding-bottom: 10px;
-    margin-top: 20px;
-    display: flex;
 
 }
 /*draggable column*/
 .left-block__draggable-column{
-    display: flex;
-    flex:1;
+    display:flex;
+    margin: 5px -10px;
     background-color: white;
     min-height: 50px;
-    margin: 5px auto;
 }
-/*column*/
-.left-block__draggable-layout__column{
-    display: flex;
-    flex:1;
-    background-color: white;
-    min-height: 50px;
-    margin: 5px auto;
-    cursor: move;
+.item{
+    flex: 1 1 auto;
+    margin: 5px 10px;
 }
+
 .left-block__undraggable-layout__column{
-    display: flex;
-    flex:1;
-    background-color: white;
-    min-height: 50px;
-    margin: 5px auto;
+    margin:10px;
 }
 
-/*draggable элемента его div*/
-.left-block__draggable-layout__draggable-element {
-    background-color: #ededed;
-    border-radius: 5px;
-    width: 96%;
-    margin: 0 auto;
-    padding-bottom: 10px;
-    padding-top: 10px;
-}
-.left-block__draggable-layout__undraggable-element {
-    background-color: #ededed;
-    border-radius: 5px;
-    width: 96%;
-    margin: 0 auto;
-    padding-bottom: 10px;
-    padding-top: 10px;
-}
-/*column наведение*/
-.left-block__draggable-layout__draggable-element:hover{
-    border:1px solid #007bff;
-}
-
-/*элемент инпут*/
-.left-block__draggable-layout__element {
-    display: flex;
-    background-color: white;
-    height: 45px;
-    margin: 5px;
-    cursor: move;
-    justify-content: space-between;
-    align-items: center;
-}
-.left-block__undraggable-layout__element {
-    display: flex;
-    background-color: white;
-    height: 45px;
-    margin: 5px;
-    justify-content: space-between;
-    align-items: center;
-}
-/*элемент инпут наведение*/
-.left-block__draggable-layout__element:hover {
-    border:1px solid #007bff;
-}
-
-.left-block__draggable-layout__element:active {
-    cursor: grabbing;
-}
 
 .left-block__draggable-layout__draggable-parent__item>.button-group {
     display: flex;
@@ -664,31 +477,31 @@ export default {
     color: black;
     font-size: 18px;
 }
-
-
-.right-drag-elem{
-    cursor: move;
-}
-
-/*это класс от транзишина он дает задержку*/
-.flip-list-move {
-    transition: transform 0.5s;
-}
-
-/*это класс от драгабла он дает тень прозрачность и подцветку*/
-.ghost {
-    border-left: 6px solid rgb(0, 183, 255);
-    box-shadow: 10px 10px 5px -1px rgb(0, 0, 0, 0.14);
-    opacity: .7;
-}
-
-._vue-flash-msg-container_right-bottom {
-    z-index: 10000000 !important;
+.label{
+    text-align: left;
 }
 
 
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+    color: #414141;
+    background-color: #E1E1E1;
+    border-color: #E1E1E1;
+    min-width: 175px;
+    border-radius: 0px;
+}
 
-    .clickable left-block__draggable-layout__element{
-        resize: both;
-    }
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link {
+    color: #414141;
+    background-color: #FFFFFF;
+    border-color: #E1E1E1;
+    min-width: 175px;
+    border-radius: 0px;
+}
+
+.nav-tabs {
+    border-bottom: 0px !important;
+    cursor: pointer;
+}
 </style>

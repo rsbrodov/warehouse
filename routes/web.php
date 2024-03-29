@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\DictionaryController;
 use App\Http\Controllers\DictionaryElementController;
 use App\Http\Controllers\TypeContentController;
@@ -48,6 +49,8 @@ Route::post('/users/roles-assign/', [UsersController::class, 'assignRole'])->nam
 Route::middleware(['auth:web'])->group(function () {
     Route::get('/users/', [UsersController::class, 'index'])->name('users.index');
     Route::get('/users/create', [UsersController::class, 'create'])->name('users.create');
+    Route::get('/clients/create', [ClientsController::class, 'create'])->name('clients.create');
+    Route::post('/clients/', [UsersController::class, 'store'])->name('clients.store');
     Route::post('/users/', [UsersController::class, 'store'])->name('users.store');
     Route::get('/users/profile/', [UsersController::class, 'profile'])->name('users.profile');
     Route::put('/users/profile/{id}', [UsersController::class, 'profileUpdate'])->name('users.profile-update');
@@ -94,6 +97,7 @@ Route::middleware(['auth:web'])->group(function () {
     Route::post('/type-content/save-body/', [TypeContentController::class, 'saveBody']);
     Route::post('/type-content/save-body-element/', [TypeContentController::class, 'saveBodyElement']);
     Route::get('/type-content/getTypeContentID/{id}', [TypeContentController::class, 'getTypeContentID']);
+    Route::get('/clients/getClientByID/{id}', [ClientsController::class, 'getClientByID']);
     Route::get('/type-content/get-body/{id}', [TypeContentController::class, 'getBody']);
     Route::get('/type-content/get-body-element-content/{id}', [TypeContentController::class, 'getBodyElementContent']);
     Route::post('/type-content/store/', [App\Http\Controllers\TypeContentController::class, 'store']);

@@ -29,8 +29,17 @@
                         <form>
                             <div class="form-group row">
                                 <div class="col-4">
-                                    <input autocomplete="off" type="text" name="name" placeholder="Наименование типа" id="name" class="form-control" v-model="filter_form.name">
+                                    <input autocomplete="off" type="text" name="name" placeholder="Наименование" id="name" class="form-control" v-model="filter_form.name">
                                 </div>
+                                <div class="col-4">
+                                    <input autocomplete="off" type="text" name="host" placeholder="Хост" id="host" class="form-control" v-model="filter_form.host">
+                                </div>
+                                <div class="col-4">
+                                    <input autocomplete="off" type="text" name="inn" placeholder="ИНН" id="inn" class="form-control" v-model="filter_form.inn">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
                                 <div class="col-4">
                                     <select id="status" class="form-control" name="status" v-model="filter_form.status">
                                         <option value='Draft,Published,Archive'>Все</option>
@@ -38,32 +47,6 @@
                                         <option value='Published'>Опубликовано</option>
                                         <option value='Archive'>В архиве</option>
                                     </select>
-                                </div>
-                                <div class="col-4">
-                                    <select id="owner" class="form-control" name="owner" v-model="filter_form.owner">
-                                        <option disabled selected value> -- Выберите пользователя -- </option>
-                                        <option value=''>Все</option>
-                                        <option v-for="(user, index) in users" :key="index" :value="user.id">
-                                            <i aria-hidden="true">{{user.name}}</i>
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <div class="col-4">
-                                    <date-picker v-model="filter_form.active_from"
-                                                 :lang="lang"
-                                                 placeholder="Период действия с"
-                                                 :format="'DD.MM.YYYY'"
-                                                 :valueType="'format'"/>
-                                </div>
-                                <div class="col-4">
-                                    <date-picker v-model="filter_form.active_after"
-                                                 :lang="lang"
-                                                 placeholder="Период действия по"
-                                                 :format="'DD.MM.YYYY'"
-                                                 :valueType="'format'"/>
                                 </div>
                             </div>
                         </form>
@@ -79,6 +62,7 @@
         <table class="table table-bordered table-hover mt-4">
             <tr>
                 <th style="white-space: nowrap">Наименование</th>
+                <th>Хост</th>
                 <th>ИНН</th>
                 <th>Статус</th>
                 <th>Тариф</th>
@@ -89,7 +73,7 @@
                 <th>Действия</th>
             </tr>
             <tr v-if="(!typeContents.data || typeContents.data.length === 0) && getLoading === false">
-                <td v-if="typeContentErrors === null" class="text-center text-danger" colspan="7"><b>Данные не найдены!</b></td>
+                <td v-if="typeContentErrors === null" class="text-center text-danger" colspan="10"><b>Данные не найдены!</b></td>
                 <td v-else class="text-center text-danger" colspan="7"><b style="color: red!important">{{typeContentErrors.code}}</b></td>
             </tr>
 <!--            <tr v-else-if="getLoading === true" style="border:none">-->
@@ -97,6 +81,7 @@
 <!--            </tr>-->
             <tr v-else v-for="(type_content, index) in typeContents.data" :key="index" >
                 <td style="white-space: nowrap">{{type_content.clientName}}</td>
+                <td style="white-space: nowrap">{{type_content.host}}</td>
                 <td style="white-space: nowrap">{{type_content.innClient}}</td>
                 <td :class="type_content.status | statusColor"><b>{{ type_content.status | status }}</b></td>
                 <td style="white-space: nowrap">{{type_content.tariff}}</td>
@@ -105,8 +90,7 @@
                 <td style="white-space: nowrap">12000</td>
                 <td>{{ type_content | date }}</td>
                 <td nowrap>
-                    <a class="btn btn-outline-primary btn-unbordered" @click="openModal('typeContentEdit', type_content)"><i class="fa fa-pencil fa-lg"></i></a>
-                    <a :href="'/type-content/view-new/'+type_content.id" class="btn btn-outline-primary btn-unbordered"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a>
+                    <a :href="'/type-content/view-new/'+type_content.id" class="btn btn-outline-primary btn-unbordered"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
                 </td>
             </tr>
         </table>
@@ -141,9 +125,8 @@
                 filter_form:{
                     status:null,
                     name:null,
-                    owner:null,
-                    active_from:null,
-                    active_after:null,
+                    host:null,
+                    inn:null,
                 },
                 type_content:{
                     id:null,

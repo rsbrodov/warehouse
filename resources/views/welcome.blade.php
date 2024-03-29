@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>WAREHOUSE</title>
+    <title>АДМИНИСТРИРОВАНИЕ RIDER-CMS</title>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;600&display=swap" rel="stylesheet">
@@ -60,7 +60,7 @@
     @if (Route::has('login'))
         <div class="top-right links">
             @auth
-                <a href="{{ url('/home') }}">Домой</a>
+                <a href="{{ url('/home') }}">Кабинет</a>
             @else
                 <a href="{{ route('login') }}">Личный кабинет</a>
             @endauth
@@ -69,7 +69,7 @@
 
     <div class="content">
         <div class="title m-b-md">
-            WAREHOUSE
+            АДМИНИСТРИРОВАНИЕ RIDER-CMS
         </div>
     </div>
 </div>

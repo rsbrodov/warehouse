@@ -30,6 +30,12 @@ class ClientsService
                 if(isset($get['name'])){
                     $query = $query->where('name', 'LIKE', '%'.$get['name'].'%');
                 }
+                if(isset($get['inn'])){
+                    $query = $query->where('inn', 'LIKE', '%'.$get['inn'].'%');
+                }
+                if(isset($get['host'])){
+                    $query = $query->where('host', 'LIKE', '%'.$get['host'].'%');
+                }
                 $count = $query->count();
                 if (isset($get['page']) && $get['page'] > 0) {
                     $query = $query->offset(($get['page'] - 1) * 15);
@@ -39,6 +45,16 @@ class ClientsService
             } else {
                 return response()->json(['error' => 'Unauthenticated.'], 401);
             }
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function getClientByID($id)
+    {
+        try {
+            $client = Clients::findOrFail($id);
+            return new ClientResource($client);
         } catch (\Exception $e) {
             return $e->getMessage();
         }

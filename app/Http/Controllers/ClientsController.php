@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Services\ClientsService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ClientsController extends Controller
 {
@@ -21,6 +22,18 @@ class ClientsController extends Controller
     public function getListClients()
     {
         $result = $this->clientsService->getListClient($_GET);
+        return $result;
+    }
+    public function create()
+    {
+        if (Auth::guard('web')->check()) {
+            return view('clients.create');
+        }
+    }
+
+    public function getClientByID($id)
+    {
+        $result = $this->clientsService->getClientByID($id);
         return $result;
     }
 }

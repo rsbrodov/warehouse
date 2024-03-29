@@ -80,7 +80,7 @@ export default{
         },
         async getTypeContentOne({commit}, id) {
             //commit('setLoading', true);
-            await axios.get('/type-content/getTypeContentID/'+id)
+            await axios.get('/clients/getClientByID/'+id)
                 .then(response => {
                     commit('updateTypeContentOne', response.data.data)
                 })

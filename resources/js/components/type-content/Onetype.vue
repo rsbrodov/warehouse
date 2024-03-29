@@ -13,38 +13,22 @@
 <template>
     <div id="app">
         <div v-if="typeContentOne" class="content">
-            <!-- Stack the columns on mobile by making one full-width and the other half-width -->
-            <!-- Modal edit typeContent -->
-            <div class="modal fade" id="typeContentEdit" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                    <Edit
-                            v-model="typeContentOne"
-                            @close-modal="closeModal('typeContentEdit')"
-                    />
-                </div>
-            </div>
-
             <div class="row">
                 <div class="col">
                     <div style="display: flex">
-                        <b><h2>Настройка склада</h2></b>
-<!--                        <a :href="'/api/template/GetTypeContentId/' + typeContentOne.id" class="ml-3 mt-2 btn btn-sm btn-outline-secondary form-control pb-1" style="width:50px; max-height:25px; line-height:1" target="_blank">API</a>-->
-<!--                        <a :href="'/type-content/api-page/' + typeContentOne.id" class="ml-3 mt-2 btn btn-sm btn-outline-secondary form-control pb-1" style="width:50px; max-height:25px; line-height:1" target="_blank">API</a>-->
+                        <b><h2>{{typeContentOne.clientName}}</h2></b>
                     </div>
                 </div>
                 <div class="col"></div>
             </div>
-            <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
-            <nav class="mt-3">
-                <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <a :class="setClass('view-new')" :href="'/type-content/view-new/' + typeContentOne.id">Основные данные</a>
-                    <a :class="setClass('nav-link')" >Подключение</a>
-                    <a :class="setClass('nav-link')" >Контакты</a>
-                    <a :class="setClass('all-version-type-content')" :href="'/type-content/all-version-type-content/' + typeContentOne.id">История изменений</a>
+            <div class="row">
+                <div class="col-9">
+                    <div class="flex-cont">
+                        <div class="flex-elem"><b>Статус: </b>{{ typeContentOne.status | status}}</div>
+                        <div class="flex-elem"><b>Баланс: </b> 8000</div>
+                        <div class="flex-elem"><b>Платеж: </b> 5000</div>
+                    </div>
                 </div>
-            </nav>
-            <div class="tab-content" id="nav-tabContent">
-
             </div>
         </div>
     </div>
@@ -104,17 +88,23 @@ export default {
             }
 
         },
-        dateUpdated: function (type_content) {
-            return moment(type_content.update_date).format('DD.MM.YYYY HH:II');
-        },
+
         status: function (status) {
-            let status_array = { Draft: 'Черновик', Published: 'Опубликовано', Archive: 'В архиве' };
-            if (status) {
+            let status_array = {Draft: 'Черновик', Active: 'Действующий', Archive:'В архиве'};
+            if(status){
                 return status_array[status];
-            } else {
+            }else{
                 return status_array['Draft'];
             }
         },
+        statusColor: function (status) {
+            let status_array = {Draft: 'text-dark', Active: 'text-success', Archive:'text-warning'};
+            if(status){
+                return status_array[status];
+            }else{
+                return status_array['Draft'];
+            }
+        }
     }
 
 }
