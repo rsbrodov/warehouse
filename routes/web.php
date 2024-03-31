@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DictionaryController;
 use App\Http\Controllers\DictionaryElementController;
+use App\Http\Controllers\TariffsController;
 use App\Http\Controllers\TypeContentController;
 use App\Http\Controllers\ElementContentController;
 use App\Http\Controllers\UsersController;
@@ -65,10 +66,12 @@ Route::middleware(['auth:web'])->group(function () {
 // СПРАВОЧНИКИ
 Route::middleware(['auth:web'])->group(function () {
     Route::get('/dictionary/findDictionary', [DictionaryController::class, 'findDictionary']);
+    Route::get('/tariffs/getListTariffs', [TariffsController::class, 'getListTariffs'])->name('clients.getListTariffs');
     Route::get('/dictionary/findDictionaryNotEmptyElement', [DictionaryController::class, 'findDictionaryNotEmptyElement']);
     Route::post('/dictionary/store/', [DictionaryController::class, 'store']);
     Route::get('/dictionary/', [DictionaryController::class, 'index'])->name('dictionary.index');
     Route::post('/dictionary/{id}', [DictionaryController::class, 'update'])->name('dictionary.update');
+    Route::post('/tariffs/{id}', [TariffsController::class, 'update'])->name('tariff.update');
     Route::delete('/dictionary/{id}', [DictionaryController::class, 'destroy'])->name('dictionary.destroy');
     Route::get('/dictionary/{id}/archive', [DictionaryController::class, 'archive'])->name('dictionary.archive');
 });

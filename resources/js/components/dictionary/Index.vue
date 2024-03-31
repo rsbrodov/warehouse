@@ -66,10 +66,8 @@
         </div>
         <table class="table table-bordered table-hover mt-4">
             <tr>
-                <th>Код справочника</th>
-                <th>Наименование справочника</th>
-                <th>Описание справочника</th>
-                <th>Последнее изменение</th>
+                <th>Наименование</th>
+                <th>Описание</th>
                 <th>Статус</th>
                 <th>Действия</th>
             </tr>
@@ -81,7 +79,6 @@
                 <td class="text-center text-danger" colspan="6"><Loader/></td>
             </tr>
             <tr v-else v-for="(dictionary, index) in Dictionary.data" :key="index">
-                <td>{{dictionary.code}}</td>
                 <td>{{dictionary.name}}</td>
                 <td>{{dictionary.description}}</td>
                 <td>{{ dictionary.updatedDate }}</td>

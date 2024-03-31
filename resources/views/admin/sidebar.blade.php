@@ -110,7 +110,7 @@ foreach ($typeContents as $typeContent) {
                     </a>
                 </li>
                 <li class="nav-item mt-3">
-                    <a href="/type-content/index3" class="nav-link">
+                    <a href="/dictionary/" class="nav-link">
                         <i class="fa fa-money fa-lg" aria-hidden="true"></i>
                         <p>Тарифы</p>
                     </a>
