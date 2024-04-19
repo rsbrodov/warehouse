@@ -2,7 +2,7 @@
     <div>
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Редактирование справочника</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Редактирование тарифа</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true" @click="$emit('close-modal')">&times;</span>
                 </button>
@@ -11,7 +11,7 @@
                 <div class="modal-body">
                     {{errors}}
                      <div class="block">
-                         <label for="name"><b class="text-danger">*</b><b>Наименование справочника</b></label>
+                         <label for="name"><b class="text-danger">*</b><b>Наименование тарифа</b></label>
                          <input autocomplete="off" id="name" class="form-control" type="text" v-model="localDictionary.name"
                                 :class="{invalid: (!$v.localDictionary.name.required)}">
                          <small class="helper-text invalid" v-if="!$v.localDictionary.name.required">
@@ -21,20 +21,8 @@
 <!--                             {{errors.name}}<br>-->
 <!--                         </small>-->
                      </div>
-
                      <div class="block">
-                         <label for="api_url"><b class="text-danger">*</b><b>Код справочника:</b></label>
-                         <input autocomplete="off" id="api_url" class="form-control" type="text" v-model="localDictionary.code"
-                                :class="{invalid: ($v.localDictionary.code.$dirty && !$v.localDictionary.code.required)}">
-                         <small class="helper-text invalid" v-if="$v.localDictionary.code.$dirty && !$v.localDictionary.code.required">
-                             Необходимо заполнить «Код».
-                         </small>
-<!--                         <small class="helper-text invalid" v-if="errors.code">-->
-<!--                             {{errors.code}}<br>-->
-<!--                         </small>-->
-                     </div>
-                     <div class="block">
-                         <label for="description"><b>Описание справочника:</b></label>
+                         <label for="description"><b>Описание тарифа:</b></label>
                          <textarea autocomplete="off" name="description" v-model="localDictionary.description" id="description" class="form-control"/>
                      </div>
                 </div>
@@ -80,7 +68,7 @@
                     ).then(response => {
                         this.$emit('close-modal');
                         this.flashMessage.success({
-                            message: 'Справочник отредактирован',
+                            message: 'Тариф отредактирован',
                             time: 3000,
                         });
                     }).catch(error => {

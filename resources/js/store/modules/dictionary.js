@@ -36,7 +36,7 @@ export default{
     actions: {
         async getDictionary({commit}, params){
             commit('setLoading', true);
-            await axios.get('/dictionary/findDictionary', params)
+            await axios.get('/tariffs/getListTariffs', params)
                 .then(response => {
                     commit('UPDATE', response.data)
                     commit('D_ERRORS', null)
@@ -61,7 +61,7 @@ export default{
             ctx.commit('UPDATE', dictionary.data.data)*/
         },
         async updateDictionary(ctx, form){
-            const new_dictionary = await axios.post('/dictionary/'+form.id, form);
+            const new_dictionary = await axios.post('/tariffs/'+form.id, form);
         },
         async deleteDictionary(ctx, id){
             await axios.delete('/dictionary/'+id);

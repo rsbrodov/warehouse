@@ -15,7 +15,15 @@ class CreateTariffsTable extends Migration
     {
         Schema::create('tariffs', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->timestamps();
+            $table->string('name', 150);
+            $table->string('description', 500)->nullable();
+            $table->enum('status', ['Active', 'Inactive'])->default('Active');
+            $table->dateTime('created_date');
+            $table->bigInteger('created_author')->unsigned()->index();
+            $table->foreign('created_author')->references('id')->on('users');
+            $table->dateTime('update_date');
+            $table->bigInteger('updated_author')->unsigned()->index();
+            $table->foreign('updated_author')->references('id')->on('users');
         });
     }
 

@@ -1,0 +1,26 @@
+version: '3.9'
+
+x-containers: &container
+  restart: ${RESTART_POLICY:-always}
+  env_file:
+    - .env
+  networks:
+    - admin_cms-network
+
+services:
+
+  db:
+    <<: *container
+    image: 'mysql:5.6'
+    ports:
+      - '${DB_PORT_FORWARD:-3306}:${DB_PORT}'
+    volumes:
+      - mysql-data:/var/lib/mysql/data
+    environment:
+      MYSQL_DATABASE: '${DB_DATABASE}'
+      MYSQL_PASSWORD: '${DB_PASSWORD:-secret}'
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD:-secret}'
+
+volumes:
+  mysql-data:
+    name: admin_cms_db-data

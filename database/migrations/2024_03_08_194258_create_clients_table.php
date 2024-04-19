@@ -20,10 +20,15 @@ class CreateClientsTable extends Migration
             $table->uuid('tariff_id');
             $table->foreign('tariff_id')->references('id')->on('tariffs');
             $table->string('payment_state', 255);
+            $table->string('host', 255);
             $table->dateTime('access_from');
             $table->string('contract', 255);
             $table->string('mail', 255);
             $table->string('description', 255);
+            $table->string('agent_fio', 255);
+            $table->string('agent_position', 255);
+            $table->string('agent_phone', 255);
+            $table->string('agent_mail', 255);
             $table->dateTime('created_date');
             $table->bigInteger('created_author')->unsigned()->index();
             $table->foreign('created_author')->references('id')->on('users');

@@ -8,15 +8,25 @@ use Illuminate\Database\Eloquent\Model;
 
 class Clients extends Model
 {
+
     use HasFactory;
     use Uuids;
     protected $table = 'clients';
     public $timestamps = false;
     protected $fillable = [
         'name',
-        'code',
+        'inn',
+        'tariff_id',
+        'payment_state',
+        'host',
+        'access_from',
+        'contract',
+        'mail',
+        'agent_fio',
+        'agent_position',
+        'agent_phone',
+        'agent_mail',
         'description',
-        'archive',
         'created_author',
         'updated_author',
         'update_date',
