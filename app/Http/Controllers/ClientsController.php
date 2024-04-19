@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Clients;
 use App\Services\ClientsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,5 +36,13 @@ class ClientsController extends Controller
     {
         $result = $this->clientsService->getClientByID($id);
         return $result;
+    }
+
+    public function monitoring()
+    {
+        if (Auth::guard('web')->check()) {
+            $clients = Clients::query()->orderBy('update_date', 'desc')->get();
+            return view('clients.monitoring')->with('clients', $clients);;
+        }
     }
 }

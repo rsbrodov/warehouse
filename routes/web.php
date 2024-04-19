@@ -109,6 +109,7 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('/type-content/index', [TypeContentController::class, 'index'])->name('type-content.index');
     Route::get('/type-content/getListTypeContent', [TypeContentController::class, 'getListTypeContent'])->name('type-content.getListTypeContent');
     Route::get('/clients/getListClients', [\App\Http\Controllers\ClientsController::class, 'getListClients'])->name('clients.getListClients');
+    Route::get('/clients/monitoring', [\App\Http\Controllers\ClientsController::class, 'monitoring'])->name('clients.monitoring');
     Route::get('/type-content/create', [TypeContentController::class, 'create'])->name('type-content.create');
     Route::post('/type-content/', [TypeContentController::class, 'store'])->name('type-content.store');
     Route::get('/type-content/{id}/edit', [TypeContentController::class, 'edit'])->name('type-content.edit');

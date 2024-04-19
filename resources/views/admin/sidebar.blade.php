@@ -116,7 +116,7 @@ foreach ($typeContents as $typeContent) {
                     </a>
                 </li>
                 <li class="nav-item mt-3">
-                    <a href="/type-content/index2" class="nav-link">
+                    <a href="/clients/monitoring" class="nav-link">
                         <i class="fa fa-desktop fa-lg" aria-hidden="true"></i>
                         <p>Мониторинг</p>
                     </a>
