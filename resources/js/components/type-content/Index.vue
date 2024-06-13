@@ -6,7 +6,6 @@
             <div class="modal-dialog modal-lg" role="document">
                 <create
                     @close-modal="closeModal('typeContentCreate')"
-                    @get-type-content-by-url="getTypeContentByUrl()"
                 />
             </div>
         </div>
@@ -86,7 +85,7 @@
                 <td :class="type_content.status | statusColor"><b>{{ type_content.status | status }}</b></td>
                 <td style="white-space: nowrap">{{type_content.tariff}}</td>
                 <td style="white-space: nowrap">Оплачено</td>
-                <td style="white-space: nowrap">7000</td>
+                <td style="white-space: nowrap">{{type_content.balance}}</td>
                 <td style="white-space: nowrap">12000</td>
                 <td>{{ type_content | date }}</td>
                 <td nowrap>

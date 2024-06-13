@@ -25,7 +25,7 @@
                 <div class="col-9">
                     <div class="flex-cont">
                         <div class="flex-elem"><b>Статус: </b>{{ typeContentOne.status | status}}</div>
-                        <div class="flex-elem"><b>Баланс: </b> 8000</div>
+                        <div class="flex-elem"><b>Баланс: </b> {{ typeContentOne.balance}}</div>
                         <div class="flex-elem"><b>Платеж: </b> 5000</div>
                     </div>
                 </div>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\DictionaryController;
 use App\Http\Controllers\DictionaryElementController;
+use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\TariffsController;
 use App\Http\Controllers\TypeContentController;
 use App\Http\Controllers\ElementContentController;
@@ -48,6 +49,8 @@ Route::post('/users/roles-create-form/{type_action}', [UsersController::class, '
 Route::post('/users/roles-assign/', [UsersController::class, 'assignRole'])->name('users.roles-assign');
 
 Route::middleware(['auth:web'])->group(function () {
+    Route::post('/payments/store', [\App\Http\Controllers\PaymentsController::class, 'store'])->name('payments.store');
+    Route::get('/payments/findPayments', [PaymentsController::class, 'findPayments'])->name('findPayments');
     Route::get('/users/', [UsersController::class, 'index'])->name('users.index');
     Route::get('/users/create', [UsersController::class, 'create'])->name('users.create');
     Route::get('/clients/create', [ClientsController::class, 'create'])->name('clients.create');
@@ -61,6 +64,7 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('/users/{id}/edit', [UsersController::class, 'edit'])->name('users.edit');
     Route::put('/users/{id}', [UsersController::class, 'update'])->name('users.update'); // put работает, если в форму добавить @method('PUT')
     Route::delete('/users/{id}', [UsersController::class, 'destroy'])->name('users.destroy');
+    Route::delete('/payments/{id}', [\App\Http\Controllers\PaymentsController::class, 'destroy'])->name('payments.destroy');
     Route::get('/users/{id}/activate', [UsersController::class, 'activate'])->name('users.activate');
     Route::get('/users/{id}/block', [UsersController::class, 'block'])->name('users.block');
     Route::get('/users/{id}/delete', [UsersController::class, 'delete'])->name('users.delete');

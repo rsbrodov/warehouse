@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Payments;
 use App\Models\Tariffs;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -23,6 +24,7 @@ class ClientResource extends JsonResource
             'innClient'      => $this->inn,
             'status'         => 'Active',
             'tariff'         => Tariffs::find($this->tariff_id)->name,
+            'balance'         => (int)Payments::where(['user_id' => $this->id, 'up_down' => 'up'])->sum('amount') - (int)Payments::where(['user_id' => $this->id, 'up_down' => 'down'])->sum('amount'),
             'paymentState'   => $this->payment_state,
             'host'           => $this->host,
             'accessFrom'     => $this->access_from,

@@ -1,5 +1,13 @@
 <template>
     <div id="app">
+        <!-- Modal Create -->
+        <div class="modal fade" id="createPayment" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <create-element
+                    @close-modal="closeModal('createPayment')"
+                />
+            </div>
+        </div>
         <div class="container-fluid">
             <Onetype />
             <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
@@ -8,6 +16,7 @@
                     <a class="nav-link" :class="{active : activeTab === 'general'}" @click="setActiveTab('general')">Основные данные</a>
                     <a class="nav-link" :class="{active : activeTab === 'contacts'}" @click="setActiveTab('contacts')">Контакты</a>
                     <a class="nav-link" :class="{active : activeTab === 'connect'}" @click="setActiveTab('connect')">Подключение</a>
+                    <a class="nav-link" :class="{active : activeTab === 'payment'}" @click="setActiveTab('payment')">Платежи</a>
                     <a class="nav-link" :class="{active : activeTab === 'historyChange'}" @click="setActiveTab('historyChange')">История изменений</a>
                 </div>
             </nav>
@@ -35,14 +44,15 @@
                                 </div>
                                 <div class="item">
                                     <div class="label">
-                                        <label for="clientName"><span class="text-danger">*</span>ИНН</label>
+                                        <label for="id"><span class="text-danger"></span>ID клиента</label>
                                     </div>
                                     <input autocomplete="off"
-                                           v-model="typeContentOne.innClient"
+                                           v-model="typeContentOne.id"
                                            type="text"
                                            class="form-control"
-                                           id="innClient"
-                                           name="innClient">
+                                           disabled="disabled"
+                                           id="id"
+                                           name="id">
                                 </div>
                             </div>
                             <div class="left-block__draggable-column">
@@ -142,6 +152,19 @@
                                            class="form-control"
                                            id="mail"
                                            name="mail">
+                                </div>
+                            </div>
+                            <div class="left-block__draggable-column">
+                                <div class="item">
+                                    <div class="label">
+                                        <label for="clientName"><span class="text-danger">*</span>ИНН</label>
+                                    </div>
+                                    <input autocomplete="off"
+                                           v-model="typeContentOne.innClient"
+                                           type="text"
+                                           class="form-control"
+                                           id="innClient"
+                                           name="innClient">
                                 </div>
                             </div>
                             <div class="left-block__draggable-column">
@@ -259,6 +282,47 @@
                                            name="login">
                                 </div>
                             </div>
+                            <div class="left-block__draggable-column">
+                                <div class="item">
+                                    <div class="token">
+                                        <label for="token"><span class="text-danger">*</span>Токен</label>
+                                    </div>
+                                    <input autocomplete="off"
+                                           type="text"
+                                           value="923-strereg-1093-bo9iejola-sd"
+                                           class="form-control"
+                                           disabled="disabled"
+                                           id="token"
+                                           name="token">
+                                </div>
+                            </div>
+                        </div>
+                        <!--TAB CONNECT-->
+                        <div v-if="activeTab === 'payment'" class="left-block__undraggable-layout__column">
+                            <div class="left-block__draggable-column" style="display:flex; justify-content:center; ">
+                                <table class="table table-bordered mt-4" style="width:90%">
+                                    <tr style="text-align: center">
+                                        <th>Сумма</th>
+                                        <th>Вид оплаты</th>
+                                        <th>Дата оплаты</th>
+                                        <th>Действие</th>
+                                    </tr>
+                                    <tr v-for="(payment, index) in payments.data" :key="index"
+                                        style="text-align: center">
+                                        <td :class="payment.up_down | statusColor">{{payment.up_down === 'up' ? '+' : '-'}}{{payment.amount}}</td>
+                                        <td>{{payment.type}}</td>
+                                        <td>{{payment.date}}</td>
+                                        <td class="text-center" nowrap>
+                                            <button class="btn btn-danger del" @click="removePayment(payment.id)"><i class="fa fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="p-2">
+                                <button class="btn btn-primary form-control" @click="openModal('createPayment')">
+                                    <i class="fa fa-dollar fa-lg" aria-hidden="true"></i> Добавить платеж
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -301,15 +365,17 @@
 import { mapActions, mapGetters } from "vuex";
 import Onetype from './Onetype.vue';
 import {url_slug} from "cyrillic-slug";
+import CreateElement from "../dictionary-element/CreateElement";
 
 export default {
     name: "Viewtype",
-    components: {Onetype },
+    components: {CreateElement, Onetype },
     data() {
         return {
             activeTab: 'general',
             changeStatus: false,
             activeTypeContent: [],
+            payments: [],
             showContextMenu: false,
             type_content_id: window.location.href.split('/')[5],
             copy: null,
@@ -365,6 +431,45 @@ export default {
             }
         },
 
+        closeModal(id){
+            $("#"+id).modal("hide");
+            if(id == 'createPayment') {
+                this.getPayments();
+            }
+
+        },
+        openModal(id){
+            $('#'+id).modal('show');
+        },
+
+        async getPayments() {
+            await axios.get('/payments/findPayments?user_id='+this.type_content_id)
+                .then(response => {
+                    this.payments = response.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+
+        async removePayment(id) {
+            if (confirm('Вы уверены, что хотите удалить платеж?')) {
+                await axios.delete('/payments/' + id)
+                    .then(response => {
+                        if (response.status === 204) {
+                            this.flashMessage.success({
+                                message: 'Платеж удален',
+                                time: 3000,
+                            });
+                        }
+                        this.getPayments();
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
+            }
+        },
+
 
 
         async changeStatusType(status, message) {
@@ -397,6 +502,7 @@ export default {
 
     async created() {
         await this.getTypeContentOne(this.type_content_id);
+        await this.getPayments();
     },
     filters: {
         date: function (type_content) {
@@ -422,6 +528,14 @@ export default {
                 return status_array['Draft'];
             }
         },
+        statusColor: function (status) {
+            let status_array = {up: 'text-success', down: 'text-danger'};
+            if(status){
+                return status_array[status];
+            }else{
+                return status_array['up'];
+            }
+        }
     },
     beforeMount() {
         window.addEventListener("beforeunload", this.preventNav)
@@ -436,6 +550,9 @@ export default {
 </script>
 
 <style scoped>
+    .del {
+        background-color: #dc3545!important;
+    }
 .left-block {
     z-index: 1;
     background-color: #ededed;
