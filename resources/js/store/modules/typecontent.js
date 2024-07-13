@@ -3,6 +3,7 @@ export default{
         type_contents: [],
         new_type_contents: '',
         type_content_one: null,
+        tariffs_list: null,
         type_contents_all_version: [],
         type_content_errors: null
     },
@@ -12,6 +13,9 @@ export default{
         },
         typeContentOne(state){
             return state.type_content_one
+        },
+        tariffList(state){
+            return state.tariffs_list
         },
         newTypeContents(state){
             return state.new_type_contents
@@ -95,6 +99,23 @@ export default{
         },
         async update(ctx, form, id){
             const type_content = await axios.post('/type-content/'+id, form);
+        },
+        async getTariffsList({commit}, params){
+            commit('setLoading', true);
+            await axios.get('/tariffs/getListTariffs', params)
+                .then(response => {
+                    console.log(response)
+                    commit('UPDATE', response.data)
+                    commit('D_ERRORS', null)
+                })
+                .catch(err => {
+                    console.log(err)
+                    commit('D_ERRORS', {status: err.response.status, code: err.response.data.message})
+                    commit('UPDATE', [])
+                })
+                .finally(() => {
+                    commit('setLoading', false);
+                });
         },
     },
 }

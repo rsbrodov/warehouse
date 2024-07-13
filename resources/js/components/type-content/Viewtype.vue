@@ -66,6 +66,10 @@
                                            class="form-control"
                                            id="tariff"
                                            name="tariff">
+<!--                                    <select id="tariff" class="form-control">-->
+<!--                                        <option disabled value> &#45;&#45; Выберите &#45;&#45; </option>-->
+<!--                                        <option v-for="option in options" v-bind:value="option.id" :selected="typeContentOne.tariffId">{{ option.name }}</option>-->
+<!--                                    </select>-->
                                 </div>
                                 <div class="item">
                                     <div class="label">
@@ -390,12 +394,12 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(['typeContentOne']),
+        ...mapGetters(['typeContentOne', 'tariffList']),
 
     },
 
     methods: {
-        ...mapActions(['getTypeContentOne']),
+        ...mapActions(['getTypeContentOne', 'getTariffsList']),
         saveClient() {
             axios.post('/type-content/save-body', { data: this.typeContentOne})
                 .then(response => {
@@ -503,6 +507,7 @@ export default {
     async created() {
         await this.getTypeContentOne(this.type_content_id);
         await this.getPayments();
+        await this.getTariffsList();
     },
     filters: {
         date: function (type_content) {
