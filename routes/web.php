@@ -48,9 +48,11 @@ Route::get('/users/permissions/{id}/delete', [UsersController::class, 'deletePer
 Route::post('/users/roles-create-form/{type_action}', [UsersController::class, 'rolesCreateForm'])->name('users.roles-create-form');
 Route::post('/users/roles-assign/', [UsersController::class, 'assignRole'])->name('users.roles-assign');
 
+Route::get('/payments/findPayments', [PaymentsController::class, 'findPayments'])->name('findPayments');
+Route::get('/payments/storeGet', [\App\Http\Controllers\PaymentsController::class, 'storeGet'])->name('payments.store-get');
+
 Route::middleware(['auth:web'])->group(function () {
     Route::post('/payments/store', [\App\Http\Controllers\PaymentsController::class, 'store'])->name('payments.store');
-    Route::get('/payments/findPayments', [PaymentsController::class, 'findPayments'])->name('findPayments');
     Route::get('/users/', [UsersController::class, 'index'])->name('users.index');
     Route::get('/users/create', [UsersController::class, 'create'])->name('users.create');
     Route::get('/clients/create', [ClientsController::class, 'create'])->name('clients.create');

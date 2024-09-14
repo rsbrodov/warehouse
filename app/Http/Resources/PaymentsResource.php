@@ -20,6 +20,7 @@ class PaymentsResource extends JsonResource
             'amount' => $this->amount,
             'type' => $this->type,
             'up_down' => $this->up_down,
+            'params' => $this->params,
             'createdDate' => date('d.m.Y', strtotime($this->created_date)),
             'date' => date('d.m.Y', strtotime($this->date)),
         ];

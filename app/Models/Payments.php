@@ -14,6 +14,7 @@ class Payments extends Model
         'amount',
         'type',
         'up_down',
+        'params',
         'user_id',
         'date',
         'created_date',

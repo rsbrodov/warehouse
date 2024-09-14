@@ -304,6 +304,7 @@
                                     <tr style="text-align: center">
                                         <th>Сумма</th>
                                         <th>Вид оплаты</th>
+                                        <th>Кем оплачено</th>
                                         <th>Дата оплаты</th>
                                         <th>Действие</th>
                                     </tr>
@@ -311,6 +312,7 @@
                                         style="text-align: center">
                                         <td :class="payment.up_down | statusColor">{{payment.up_down === 'up' ? '+' : '-'}}{{payment.amount}}</td>
                                         <td>{{payment.type}}</td>
+                                        <td>{{payment.params ? 'По карте клиента' : 'Администратор'}}</td>
                                         <td>{{payment.date}}</td>
                                         <td class="text-center" nowrap>
                                             <button class="btn btn-danger del" @click="removePayment(payment.id)"><i class="fa fa-trash"></i></button>

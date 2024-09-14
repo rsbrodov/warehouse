@@ -12,19 +12,16 @@ class PaymentsService
     public function store(PaymentsRequest $request)
     {
         try {
-            if (Auth::guard('web')->check() || Auth::guard('api')->check()) {
                 $newPayments = Payments::create([
                     'user_id' => $request->user_id,
                     'amount' => $request->amount,
                     'type' => $request->type,
                     'up_down' => $request->up_down,
+                    'params' => $request->params ? $request->params : NULL,
                     'date' => Date('Y-m-d H:i:s', strtotime($request->date)),
                     'created_at' => Date('Y-m-d H:i:s'),
                 ]);
                 return new PaymentsResource($newPayments);
-            }else{
-                return response()->json(['error' => 'Unauthenticated.'], 401);
-            }
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -50,13 +47,13 @@ class PaymentsService
     {
 
         try {
-            if (Auth::guard('web')->check() || Auth::guard('api')->check()) {
+            //if (Auth::guard('web')->check() || Auth::guard('api')->check()) {
                 $query = Payments::query()->where(['user_id' => $get['user_id']]);
                 $payments = $query->orderBy('created_at', 'asc')->get();
                 return self::prepareListing($payments, 1);
-            }else{
+            /*}else{
                 return response()->json(['error' => 'Unauthenticated.'], 401);
-            }
+            }*/
         } catch (\Exception $e) {
             return $e->getMessage();
         }
