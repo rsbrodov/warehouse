@@ -22,7 +22,7 @@ class ClientResource extends JsonResource
             'id'             => $this->id,
             'clientName'     => $this->name,
             'innClient'      => $this->inn,
-            'status'         => 'Active',
+            'status'         => $this->status,
             'tariff'         => Tariffs::find($this->tariff_id)->name,
             'balance'         => (int)Payments::where(['user_id' => $this->id, 'up_down' => 'up'])->sum('amount') - (int)Payments::where(['user_id' => $this->id, 'up_down' => 'down'])->sum('amount'),
             'paymentState'   => $this->payment_state,

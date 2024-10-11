@@ -296,6 +296,17 @@
                                            name="token">
                                 </div>
                             </div>
+                            <div class="left-block__draggable-column">
+                                <div class="item">
+                                    <div class="label">
+                                        <label for="status"><span class="text-danger">*</span>Статус</label>
+                                    </div>
+                                    <select id="status" class="form-control" v-model="typeContentOne.status">
+                                        <option disabled selected value> -- Выберите статус -- </option>
+                                        <option v-for="(status, index) in statuses" :key="index" :value="status.value">{{status.title}}</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <!--TAB CONNECT-->
                         <div v-if="activeTab === 'payment'" class="left-block__undraggable-layout__column">
@@ -389,6 +400,11 @@ export default {
                     []
                 ],
             ],
+            statuses: [
+                { value: 2, title: 'Активирован' },
+                { value: 3, title: 'Отключен за неуплату' },
+                { value: 4, title: 'Нарушение правил использования' },
+            ]
         };
     },
     computed: {

@@ -20,6 +20,7 @@ class Clients extends Model
         'payment_state',
         'host',
         'access_from',
+        'status',
         'contract',
         'mail',
         'agent_fio',

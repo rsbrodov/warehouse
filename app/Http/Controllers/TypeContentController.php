@@ -127,13 +127,27 @@ class TypeContentController extends Controller
     public function saveBody(Request $request)
     {
         $client = Clients::findOrFail($request['data']['id']);
+        $client->name = $request['data']['clientName'];
         $client->inn = $request['data']['innClient'];
         $client->host = $request['data']['host'];
         $client->mail = $request['data']['mail'];
         $client->contract = $request['data']['contract'];
         $client->description = $request['data']['description'];
+        $client->status = $request['data']['status'];
         $client->save();
-        return $client;
+
+        $ch = curl_init($client->host . 'settings/change-status');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_POST, true); // Указываем, что это POST-запрос
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(['status_access' => $client->status])); // Передаем параметры
+
+        $html = curl_exec($ch);
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        return $html;
         /*$result = $this->typeContentService->saveBody($request);
         return $result;*/
     }
